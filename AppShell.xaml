@@ -1,0 +1,19 @@
+﻿<Window x:Class="DamasChinas_Client.AppShell"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Damas Chinas"
+        Width="1280" Height="720"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource SurfaceBrush}">
+
+    <!-- ===== Frame principal ===== -->
+    <Frame x:Name="MainFrame"
+           Source="MainWindow.xaml"
+           NavigationUIVisibility="Hidden"
+           Background="Transparent"/>
+</Window>
+

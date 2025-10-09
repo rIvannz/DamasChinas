@@ -1,0 +1,78 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                  
+
+
+    <sys:String x:Key="back">Back</sys:String>
+    <sys:String x:Key="sound">Sound</sys:String>
+    <sys:String x:Key="gameTitle">CHINESE CHECKERS</sys:String>
+    <sys:String x:Key="firstName">Name</sys:String>
+    <sys:String x:Key="lastName">Last Name</sys:String>
+    <sys:String x:Key="databaseError">Connection error. Please try again.</sys:String>
+    <sys:String x:Key="email">Email</sys:String>
+    <sys:String x:Key="emailError">The email address must contain a valid format.</sys:String>
+    <sys:String x:Key="emailExists">Email is already registered.</sys:String>
+    <sys:String x:Key="emptyCredentials">Fields can’t be empty.</sys:String>
+    <sys:String x:Key="english">English</sys:String>
+    <sys:String x:Key="exit">Exit</sys:String>
+    <sys:String x:Key="fullName">Full Name</sys:String>
+    <sys:String x:Key="hello">Hello</sys:String>
+    <sys:String x:Key="instructionLanguage">Select a language and press Apply Language.</sys:String>
+    <sys:String x:Key="language">Language</sys:String>
+    <sys:String x:Key="loadMain">Load Main</sys:String>
+    <sys:String x:Key="login">Log in</sys:String>
+    <sys:String x:Key="loginErrorMessage">Username or password is incorrect.</sys:String>
+    <sys:String x:Key="ok">OK</sys:String>
+    <sys:String x:Key="password">Password</sys:String>
+    <sys:String x:Key="confirmPassword">Confirm your password</sys:String>
+    <sys:String x:Key="passwordDontMatchErrorMessage">Passwords don’t match.</sys:String>
+    <sys:String x:Key="passwordMax10Error">Password must be 10 characters or fewer.</sys:String>
+    <sys:String x:Key="passwordMax10Rule">Password must not exceed 10 characters.</sys:String>
+    <sys:String x:Key="registerMessage">Register in DAMAS CHINAS</sys:String>
+    <sys:String x:Key="rewritePassword">Rewrite Password</sys:String>
+    <sys:String x:Key="selectLanguage">Select Language</sys:String>
+    <sys:String x:Key="signin">Sign in</sys:String>
+    <sys:String x:Key="spanish">Spanish</sys:String>
+    <sys:String x:Key="success">Success</sys:String>
+    <sys:String x:Key="unexpectedError">An unexpected error occurred. Please try again.</sys:String>
+    <sys:String x:Key="userCreatedSuccesfully">User created successfully.</sys:String>
+    <sys:String x:Key="username">Username</sys:String>
+    <sys:String x:Key="usernameExists">Username is already taken.</sys:String>
+    <sys:String x:Key="welcome">Welcome to CHINESE CHECKERS</sys:String>
+    <sys:String x:Key="applyLanguage">Apply Language</sys:String>
+    <sys:String x:Key="playasGuest">Play as Guest</sys:String>
+    <sys:String x:Key="forgotPassword">Forgot your password?</sys:String>
+    <sys:String x:Key="createAccount">Create Account</sys:String>
+    <sys:String x:Key="createGame">Create Game</sys:String>
+    <sys:String x:Key="joinParty">Join a Party</sys:String>
+    <sys:String x:Key="howToPlay">How to Play</sys:String>
+    <sys:String x:Key="profile">Profile</sys:String>
+    <sys:String x:Key="friends">Friends</sys:String>
+    <sys:String x:Key="statistics">Statistics</sys:String>
+    <sys:String x:Key="guestUser">GUEST1</sys:String>
+    <sys:String x:Key="configuration">Configuration</sys:String>
+    <sys:String x:Key="fillFields">Fill in each of the fields</sys:String>
+    <sys:String x:Key="volume">Volume</sys:String>
+    <sys:String x:Key="music">Music</sys:String>
+    <sys:String x:Key="effects">Sound Effects</sys:String>
+    <sys:String x:Key="confirm">Confirm</sys:String>
+    <sys:String x:Key="yourProfile">YOUR PROFILE</sys:String>
+    <sys:String x:Key="fullname">Full Name</sys:String>
+    <sys:String x:Key="socialmedia">Social Media</sys:String>
+    <sys:String x:Key="changeData">CHANGE DATA</sys:String>
+    <sys:String x:Key="logout">LOG OUT</sys:String>
+    <sys:String x:Key="matchesPlayed">MATCHED PLAYED</sys:String>
+    <sys:String x:Key="wins">WINS</sys:String>
+    <sys:String x:Key="loses">LOSES</sys:String>
+
+
+
+
+
+
+
+
+
+
+</ResourceDictionary>

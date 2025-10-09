@@ -1,0 +1,65 @@
+﻿## --- Build / artifacts ---
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+TestResults/
+publish/
+*.Publish.xml
+
+## --- Visual Studio / Rider / VS Code ---
+.vs/
+*.user
+*.suo
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+.idea/
+.vscode/
+*.code-workspace
+_ReSharper*/
+*.DotSettings.user
+
+## --- NuGet ---
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+project.lock.json
+artifacts/
+
+## --- Coverage / Analyzers / Cache ---
+*.coverage
+*.coveragexml
+*.sarif
+*.cache
+*.ilk
+*.ipch
+*.obj
+*.pch
+
+## --- ClickOnce / Publish ---
+*.application
+*.manifest
+
+## --- DB / Local data / Temp ---
+*.mdf
+*.ldf
+*.dbmdl
+*.sqlite
+*.db
+*.bak
+
+## --- OS files ---
+[Dd]esktop.ini
+Thumbs.db
+ehthumbs.db
+
+## --- User/Local config que no quieres versionar ---
+*.csproj.user
+*.pubxml.user
+*.rsuser
+
+## --- WPF assets ---
+# (No ignores aquí: tus PNG/JPG que uses sí se versionan)
