@@ -10,10 +10,10 @@
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource SurfaceBrush}">
 
-    <!-- ===== Frame principal ===== -->
     <Frame x:Name="MainFrame"
-           Source="MainWindow.xaml"
-           NavigationUIVisibility="Hidden"
-           Background="Transparent"/>
+       Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Pages/MainWindow.xaml"
+       NavigationUIVisibility="Hidden"
+       Background="Transparent"/>
+
 </Window>
 

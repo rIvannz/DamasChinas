@@ -1,4 +1,4 @@
-﻿<Page x:Class="DamasChinas_Client.MenuRegisteredPlayer"
+﻿<Page x:Class="DamasChinas_Client.MenuGuest"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,13 +9,13 @@
     <Grid>
         <!-- ===== Fondo del tablero ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
         </Grid.Background>
 
-        <!-- ===== Capa de oscurecimiento total ===== -->
+        <!-- ===== Capa de oscurecimiento ===== -->
         <Rectangle Fill="#66000000"
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch"
@@ -32,7 +32,25 @@
                 <!-- Parte inferior -->
             </Grid.RowDefinitions>
 
-            <!-- ===== AVATAR Y USERNAME ===== -->
+            <!-- ===== BACK ICON (arriba a la izquierda) ===== -->
+            <Button Width="70" Height="70"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                Cursor="Hand"
+                Margin="20,20,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="OnBackClick"
+                ToolTip="{DynamicResource back}">
+                <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/backIcon.png"
+                Width="44" Height="44"
+                Stretch="Uniform"
+                RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Button>
+
+
+            <!-- ===== AVATAR Y USERNAME (Invitado) ===== -->
             <StackPanel Orientation="Vertical"
                         Grid.Row="0"
                         HorizontalAlignment="Right"
@@ -42,15 +60,14 @@
                         Background="Transparent"
                         BorderBrush="Transparent"
                         BorderThickness="0"
-                        Cursor="Hand"
-                        Click="OnAvatarClick">
-                    <Image Source="pack://application:,,,/Assets/Icons/avatarIcon.png"
+                        Cursor="Arrow">
+                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/avatarIcon.png"
                            Width="54" Height="54"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
 
-                <TextBlock Text="{DynamicResource username}"
+                <TextBlock Text="{DynamicResource guestUser}"
                            Foreground="White"
                            FontSize="20"
                            FontWeight="Bold"
@@ -67,7 +84,7 @@
                 <!-- ===== Título principal ===== -->
                 <Grid HorizontalAlignment="Center" Margin="0,0,0,40">
                     <TextBlock Text="{DynamicResource gameTitle}"
-                               FontFamily="/Assets/Fonts/#Oups"
+                               FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
                                FontSize="56"
                                FontWeight="Bold"
                                Foreground="Black"
@@ -79,80 +96,55 @@
                         </TextBlock.Effect>
                     </TextBlock>
                     <TextBlock Text="{DynamicResource gameTitle}"
-                               FontFamily="/Assets/Fonts/#Oups"
+                               FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
                                FontSize="56"
                                FontWeight="Bold"
                                Foreground="White"
                                TextAlignment="Center"/>
                 </Grid>
+                
+                
 
-                <!-- ===== Botones principales ===== -->
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,0,0,25">
-                    <Button Style="{DynamicResource BaseGameButton}"
-                            Content="{DynamicResource createGame}"
-                            Width="220" Height="64"
-                            Margin="0,0,20,0"
-                            Click="OnCreateGameClick"/>
-                    <Button Style="{DynamicResource BaseGameButton}"
-                            Content="{DynamicResource joinParty}"
-                            Width="220" Height="64"
-                            Click="OnJoinPartyClick"/>
-                </StackPanel>
+                <!-- ===== Botones principales (solo Join y How to Play) ===== -->
+                <Button Style="{DynamicResource BaseGameButton}"
+                        Content="{DynamicResource joinParty}"
+                        Width="220" Height="64"
+                        Margin="0,0,0,25"
+                        Click="OnJoinPartyClick"/>
 
-                <!-- ===== How to Play ===== -->
                 <Button Style="{DynamicResource BaseGameButton}"
                         Content="{DynamicResource howToPlay}"
                         Width="220" Height="64"
                         HorizontalAlignment="Center"
-                        Margin="0,0,0,40"
                         Click="OnHowToPlayClick"/>
             </StackPanel>
 
-            <!-- ===== ICONOS INFERIORES (agrandados) ===== -->
+            <!-- ===== ICONOS INFERIORES (solo estadísticas, idioma y sonido) ===== -->
             <Grid Grid.Row="2"
                   Margin="40,0,40,40"
                   VerticalAlignment="Bottom">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <!-- Centro -->
                     <ColumnDefinition Width="Auto"/>
-                    <!-- Derecha -->
                 </Grid.ColumnDefinitions>
 
-                <!-- ===== CENTRO: Íconos amigos y estadísticas ===== -->
+                <!-- ===== CENTRO: Estadísticas ===== -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
-                            Margin="0,0,0,0">
+                            VerticalAlignment="Bottom">
                     <Button Width="80" Height="80"
                             Background="Transparent"
                             BorderBrush="Transparent"
                             BorderThickness="0"
                             Cursor="Hand"
                             Click="OnStatisticsClick">
-                        <Image Source="pack://application:,,,/Assets/Icons/stadisticsIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/stadisticsIcon.png"
                                Width="48" Height="48"
                                Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"
                                Opacity="0.9"/>
                     </Button>
-
-                    <Button Width="60" Height="60"
-                            Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
-                            ToolTip="{DynamicResource friends}"
-                            Cursor="Hand"
-                            Click="OnFriendsClick">
-                        <Image Source="pack://application:,,,/Assets/Icons/friendsIcon.png"
-                                Width="40" Height="40"
-                                Stretch="Uniform"
-                                RenderOptions.BitmapScalingMode="HighQuality"/>
-                    </Button>
-
                 </StackPanel>
 
                 <!-- ===== DERECHA: idioma y sonido ===== -->
@@ -167,7 +159,7 @@
                             BorderThickness="0"
                             Cursor="Hand"
                             Click="OnSoundClick">
-                        <Image Source="pack://application:,,,/Assets/Icons/soundIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
                                Width="40" Height="40"
                                Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"
@@ -180,7 +172,7 @@
                             BorderThickness="0"
                             Cursor="Hand"
                             Click="OnLanguageClick">
-                        <Image Source="pack://application:,,,/Assets/Icons/languageIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
                                Width="40" Height="40"
                                Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"
@@ -191,4 +183,3 @@
         </Grid>
     </Grid>
 </Page>
-

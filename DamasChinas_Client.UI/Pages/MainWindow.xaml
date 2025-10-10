@@ -10,7 +10,7 @@
     <Grid>
         <!-- ===== Fondo adaptativo ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
@@ -38,7 +38,7 @@
                 <!-- Título principal -->
                 <Grid HorizontalAlignment="Center" Margin="0,0,0,40">
                     <TextBlock Text="{DynamicResource welcome}"
-                               FontFamily="/Assets/Fonts/#Oups"
+                               FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
                                FontSize="64"
                                FontWeight="Bold"
                                Foreground="Black"
@@ -51,7 +51,7 @@
                     </TextBlock>
 
                     <TextBlock Text="{DynamicResource welcome}"
-                               FontFamily="/Assets/Fonts/#Oups"
+                               FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
                                FontSize="64"
                                FontWeight="Bold"
                                Foreground="White"
@@ -105,7 +105,7 @@
                         ToolTip="{DynamicResource sound}"
                         Cursor="Hand"
                         Click="OnSoundClick">
-                    <Image Source="pack://application:,,,/Assets/Icons/soundIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
                            Width="54" Height="58"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -123,7 +123,7 @@
                         ToolTip="{DynamicResource language}"
                         Cursor="Hand"
                         Click="OnLanguageClick">
-                    <Image Source="pack://application:,,,/Assets/Icons/languageIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
                            Width="32" Height="32"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>

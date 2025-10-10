@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,44 +15,39 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 
-namespace DamasChinas_Client
+namespace DamasChinas_Client.Pages
 {
-    public partial class ProfileUser : Page
+    public partial class ProfilePlayer : Page
     {
-        public ProfileUser()
+        public ProfilePlayer()
         {
             InitializeComponent();
         }
 
+        // ===== Botón Back =====
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.GoBack();
+            NavigationService?.Navigate(new MenuRegisteredPlayer());
         }
 
+        // ===== Botón Change Data =====
+        private void OnChangeDataClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new ChangeData());
+        }
+
+        // ===== Botón Sonido =====
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
 
+        // ===== Botón Idioma =====
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new SelectLanguage());
         }
-
-        private void OnDeleteFriendClick(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Friend removed successfully.",
-                            "Info",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-        }
-
-        private void OnSendMessageClick(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Chat feature coming soon!",
-                            "Info",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-        }
     }
 }
+
+

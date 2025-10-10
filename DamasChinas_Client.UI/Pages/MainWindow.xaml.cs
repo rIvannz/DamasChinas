@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ using System.Windows.Shapes;
 namespace DamasChinas_Client
 {
     /// <summary>
-    /// Interaction logic for MainPage.xaml.
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Page
     {
@@ -25,35 +26,48 @@ namespace DamasChinas_Client
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Cierra completamente la aplicación.
+        /// </summary>
         private void OnExitClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Navega a la página de inicio de sesión.
+        /// </summary>
         private void OnGoToLoginClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new Login());
         }
 
+        /// <summary>
+        /// Navega a la página de registro.
+        /// </summary>
         private void OnGoToSignInClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new SignIn());
         }
 
+        /// <summary>
+        /// Inicia el modo invitado.
+        /// </summary>
         private void OnPlayAsGuestClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new MenuGuest());
         }
 
+        /// <summary>
+        /// Abre la configuración de sonido.
+        /// </summary>
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
 
-
         /// <summary>
-        /// Handles the click event for the "Language" icon.
-        /// Navigates to the SelectLanguage page.
+        /// Maneja el clic en el ícono de idioma.
         /// </summary>
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -63,11 +77,9 @@ namespace DamasChinas_Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while opening language settings: {ex.Message}",
+                MessageBox.Show($"Error al abrir la configuración de idioma: {ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
     }
 }
-

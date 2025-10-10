@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,12 +39,14 @@ namespace DamasChinas_Client
         {
             try
             {
-                MessageBox.Show("Feature available only for registered users.", "Guest Access", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Feature available only for registered users.",
+                                "Guest Access", MessageBoxButton.OK, MessageBoxImage.Information);
                 // Example: NavigationService?.Navigate(new JoinPartyPage());
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An unexpected error occurred while joining a party: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An unexpected error occurred while joining a party: {ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -55,12 +58,14 @@ namespace DamasChinas_Client
         {
             try
             {
-                MessageBox.Show("Tutorial available soon.", "How to Play", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Tutorial available soon.",
+                                "How to Play", MessageBoxButton.OK, MessageBoxImage.Information);
                 // Example: NavigationService?.Navigate(new HowToPlayPage());
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading tutorial: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading tutorial: {ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -72,19 +77,24 @@ namespace DamasChinas_Client
         {
             try
             {
-                MessageBox.Show("Guest statistics are not available.", "Statistics", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Guest statistics are not available.",
+                                "Statistics", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while accessing statistics: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred while accessing statistics: {ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the "Sound" icon.
+        /// Opens the sound configuration page.
+        /// </summary>
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
-
 
         /// <summary>
         /// Handles the click event for the "Back" icon.
@@ -98,12 +108,11 @@ namespace DamasChinas_Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error returning to the main menu: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error returning to the main menu: {ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-
-       
         /// <summary>
         /// Handles the click event for the "Language" icon.
         /// Navigates to the SelectLanguage page.
@@ -120,7 +129,5 @@ namespace DamasChinas_Client
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
     }
 }
-

@@ -14,11 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 
-namespace DamasChinas_Client
+namespace DamasChinas_Client.UI.Pages
 {
-    public partial class ChangeData : Page
+    public partial class Friends : Page
     {
-        public ChangeData()
+        public Friends()
         {
             InitializeComponent();
         }
@@ -28,12 +28,18 @@ namespace DamasChinas_Client
             NavigationService?.GoBack();
         }
 
-        private void OnSaveChangesClick(object sender, RoutedEventArgs e)
+        private void OnViewProfileClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Your changes have been saved successfully.",
-                            "Success",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+            NavigationService?.Navigate(new ProfileUser());
+        }
+
+        private void OnChatClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(
+                "Chat functionality not yet implemented.",
+                "Information",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
@@ -47,4 +53,5 @@ namespace DamasChinas_Client
         }
     }
 }
+
 

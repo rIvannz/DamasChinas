@@ -65,6 +65,11 @@
     <sys:String x:Key="matchesPlayed">MATCHED PLAYED</sys:String>
     <sys:String x:Key="wins">WINS</sys:String>
     <sys:String x:Key="loses">LOSES</sys:String>
+    <sys:String x:Key="changeDataInstruction">Enter the new data in the corresponding fields.</sys:String>
+    <sys:String x:Key="saveChanges">Save Changes</sys:String>
+    <sys:String x:Key="chat">Chat</sys:String>
+    <sys:String x:Key="viewProfile">View Profile</sys:String>
+
 
 
 

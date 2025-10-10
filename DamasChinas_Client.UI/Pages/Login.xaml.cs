@@ -14,9 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 
-
-
-namespace DamasChinas_Client
+namespace DamasChinas_Client.UI.Pages
 {
     public partial class Login : Page
     {
@@ -30,10 +28,8 @@ namespace DamasChinas_Client
         /// <summary>
         /// Maneja el clic en el botón "Log in".
         /// </summary>
-           // Acción temporal del botón Log in 
         private void OnLoginClick(object sender, RoutedEventArgs e)
         {
- 
             // Navegar directamente al menú registrado sin validar credenciales.
             NavigationService?.Navigate(new MenuRegisteredPlayer());
         }
@@ -50,8 +46,7 @@ namespace DamasChinas_Client
         }
 
         /// <summary>
-        /// Handles the click event for the "Language" icon.
-        /// Navigates to the SelectLanguage page.
+        /// Maneja el clic en el ícono "Language" para cambiar el idioma.
         /// </summary>
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -61,11 +56,10 @@ namespace DamasChinas_Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while opening language settings: {ex.Message}",
+                MessageBox.Show($"Error al abrir la configuración de idioma: {ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
         /// <summary>
         /// Maneja el clic en el enlace "¿Olvidaste tu contraseña?".
@@ -75,13 +69,14 @@ namespace DamasChinas_Client
             MessageBox.Show("Aquí se mostrará la recuperación de contraseña.");
         }
 
+        /// <summary>
+        /// Maneja el clic en el ícono de sonido.
+        /// </summary>
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
-
-
-
     }
 }
+
 

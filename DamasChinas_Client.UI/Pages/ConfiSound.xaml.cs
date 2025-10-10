@@ -14,8 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DamasChinas_Client.Utilities;
 
-
-namespace DamasChinas_Client
+namespace DamasChinas_Client.UI.Pages
 {
     public partial class ConfiSound : Page
     {
@@ -25,32 +24,23 @@ namespace DamasChinas_Client
         {
             InitializeComponent();
 
-            // Cargar el volumen actual desde SoundManager
+            // Cargar volumen actual desde SoundManager
             _pendingVolume = SoundManager.MusicVolume;
             MusicSlider.Value = _pendingVolume * 100;
 
-            // Escuchar cambios dinámicos de volumen
+            // Escuchar cambios dinámicos
             MusicSlider.ValueChanged += OnMusicVolumeChanged;
         }
 
-        /// <summary>
-        /// Se ejecuta cada vez que se mueve el slider.
-        /// Permite escuchar los cambios de volumen en tiempo real.
-        /// </summary>
         private void OnMusicVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             _pendingVolume = e.NewValue / 100;
             SoundManager.ApplyVolume(_pendingVolume);
         }
 
-        /// <summary>
-        /// Se ejecuta cuando el usuario presiona Confirmar.
-        /// Guarda el valor de volumen aplicado en SoundManager.
-        /// </summary>
         private void OnConfirmClick(object sender, RoutedEventArgs e)
         {
             SoundManager.ApplyVolume(_pendingVolume);
-
             MessageBox.Show(
                 "Sound settings updated successfully.",
                 "Sound",
@@ -58,9 +48,6 @@ namespace DamasChinas_Client
                 MessageBoxImage.Information);
         }
 
-        /// <summary>
-        /// Botón de retroceso: vuelve a la ventana anterior.
-        /// </summary>
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)

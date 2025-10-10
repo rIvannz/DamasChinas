@@ -1,4 +1,4 @@
-﻿<Page x:Class="DamasChinas_Client.Friends"
+﻿<Page x:Class="DamasChinas_Client.UI.Pages.Friends"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,24 +10,19 @@
     <Grid>
         <!-- ===== FONDO DE MADERA ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
         </Grid.Background>
 
-        <!-- CAPA OSCURA -->
         <Rectangle Fill="#66000000"/>
 
-        <!-- ===== ESTRUCTURA GENERAL ===== -->
         <Grid Margin="40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Header -->
                 <RowDefinition Height="*"/>
-                <!-- Contenido -->
                 <RowDefinition Height="Auto"/>
-                <!-- Iconos inferiores -->
             </Grid.RowDefinitions>
 
             <!-- ===== ENCABEZADO ===== -->
@@ -45,7 +40,7 @@
                         ToolTip="{DynamicResource back}"
                         Cursor="Hand"
                         Click="OnBackClick">
-                    <Image Source="pack://application:,,,/Assets/Icons/backIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/backIcon.png"
                            Width="40" Height="40"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -54,11 +49,12 @@
                 <!-- Título -->
                 <TextBlock Grid.Column="1"
                            Text="{DynamicResource friends}"
-                           FontFamily="/Assets/Fonts/#Oups"
+                           FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
                            Foreground="White"
-                           FontSize="42"
-                           VerticalAlignment="Center"
-                           Margin="15,0,0,0"/>
+                           FontSize="58"
+                           FontWeight="Bold"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"/>
             </Grid>
 
             <!-- ===== CONTENIDO ===== -->
@@ -72,8 +68,6 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="10">
-
-                        <!-- === AMIGO DE EJEMPLO === -->
                         <Border Background="#44222222"
                                 BorderBrush="#666"
                                 BorderThickness="1"
@@ -83,31 +77,23 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- Estado -->
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- Avatar -->
                                     <ColumnDefinition Width="*"/>
-                                    <!-- Nombre -->
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- Ver perfil -->
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- Chat -->
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Estado -->
                                 <Ellipse Width="16" Height="16"
                                          Fill="LimeGreen"
                                          VerticalAlignment="Center"
                                          Margin="5,0,10,0"/>
 
-                                <!-- Avatar -->
                                 <Image Grid.Column="1"
-                                       Source="pack://application:,,,/Assets/Icons/avatarIcon.png"
+                                       Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/avatarIcon.png"
                                        Width="45" Height="45"
                                        Stretch="Uniform"
                                        RenderOptions.BitmapScalingMode="HighQuality"/>
 
-                                <!-- Nombre de usuario -->
                                 <TextBlock Grid.Column="2"
                                            Text="panchito12"
                                            Foreground="White"
@@ -115,29 +101,26 @@
                                            VerticalAlignment="Center"
                                            Margin="15,0,0,0"/>
 
-                                <!-- Botón Ver Perfil -->
                                 <Button Grid.Column="3"
-                                        Style="{DynamicResource BaseGameButton}"
-                                        Content="View Profile"
+                                        Style="{StaticResource BaseGameButton}"
+                                        Content="{DynamicResource viewProfile}"
                                         Width="130" Height="40"
                                         Margin="10,0,10,0"
                                         Click="OnViewProfileClick"/>
 
-                                <!-- Icono Chat -->
                                 <Button Grid.Column="4"
                                         Background="Transparent"
                                         BorderThickness="0"
-                                        ToolTip="Chat"
+                                        ToolTip="{DynamicResource chat}"
                                         Cursor="Hand"
                                         Click="OnChatClick">
-                                    <Image Source="pack://application:,,,/Assets/Icons/chatIcon.png"
+                                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/chatIcon.png"
                                            Width="30" Height="30"
                                            Stretch="Uniform"
                                            RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
                             </Grid>
                         </Border>
-
                     </StackPanel>
                 </ScrollViewer>
             </Border>
@@ -153,19 +136,18 @@
                         BorderThickness="0"
                         ToolTip="{DynamicResource sound}"
                         Click="OnSoundClick">
-                    <Image Source="pack://application:,,,/Assets/Icons/soundIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
                            Width="26" Height="26"/>
                 </Button>
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
                         ToolTip="{DynamicResource language}"
-                    Click="OnLanguageClick">
-                    <Image Source="pack://application:,,,/Assets/Icons/languageIcon.png"
+                        Click="OnLanguageClick">
+                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
                            Width="26" Height="26"/>
                 </Button>
             </StackPanel>
         </Grid>
     </Grid>
 </Page>
-

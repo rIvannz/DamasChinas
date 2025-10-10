@@ -1,4 +1,4 @@
-﻿<Page x:Class="DamasChinas_Client.SignIn"
+﻿<Page x:Class="DamasChinas_Client.UI.Pages.SignIn"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
     <Grid>
         <!-- ===== Fondo del tablero ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
@@ -29,7 +29,7 @@
                 ToolTip="{DynamicResource back}"
                 Cursor="Hand"
                 Click="OnBackClick">
-            <Image Source="pack://application:,,,/Assets/Icons/backIcon.png"
+            <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/backIcon.png"
                    Width="32" Height="32"
                    Stretch="Uniform"
                    RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -56,7 +56,7 @@
                     </TextBlock.Effect>
                 </TextBlock>
                 <TextBlock Text="{DynamicResource signin}"
-                           FontFamily="/Assets/Fonts/#Oups"
+                           FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
                            FontSize="60"
                            FontWeight="Bold"
                            Foreground="White"
@@ -138,7 +138,7 @@
                     ToolTip="{DynamicResource sound}"
                     Cursor="Hand"
                     Click="OnSoundClick">
-                <Image Source="pack://application:,,,/Assets/Icons/soundIcon.png"
+                <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
                        Width="47" Height="45"
                        Stretch="Uniform"
                        RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -156,7 +156,7 @@
                     ToolTip="{DynamicResource language}"
                     Cursor="Hand"
                     Click="OnLanguageClick">
-                <Image Source="pack://application:,,,/Assets/Icons/languageIcon.png"
+                <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
                        Width="32" Height="32"
                        Stretch="Uniform"
                        RenderOptions.BitmapScalingMode="HighQuality"/>

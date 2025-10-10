@@ -15,6 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
+  <!-- Configuraciones de compilación -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <!-- Referencias -->
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -50,122 +52,89 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
+  <!-- Archivos fuente -->
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="AppShell.xaml.cs">
+    <!-- App y Shell -->
+    <ApplicationDefinition Include="DamasChinas_Client.UI\App.xaml" />
+    <Compile Include="DamasChinas_Client.UI\App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Page Include="DamasChinas_Client.UI\AppShell.xaml" />
+    <Compile Include="DamasChinas_Client.UI\AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChangeData.xaml.cs">
+    <!-- Páginas -->
+    <Page Include="DamasChinas_Client.UI\Pages\ChangeData.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\ChangeData.xaml.cs">
       <DependentUpon>ChangeData.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfiSound.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\ConfiSound.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\ConfiSound.xaml.cs">
       <DependentUpon>ConfiSound.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Friends.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\Friends.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Login.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\Login.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\MainWindow.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MenuGuest.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\MenuGuest.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\MenuGuest.xaml.cs">
       <DependentUpon>MenuGuest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MenuRegisteredPlayer.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\MenuRegisteredPlayer.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\MenuRegisteredPlayer.xaml.cs">
       <DependentUpon>MenuRegisteredPlayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProfilePlayer.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\ProfilePlayer.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\ProfilePlayer.xaml.cs">
       <DependentUpon>ProfilePlayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProfileUser.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\ProfileUser.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\ProfileUser.xaml.cs">
       <DependentUpon>ProfileUser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SelectLanguage.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\SelectLanguage.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\SelectLanguage.xaml.cs">
       <DependentUpon>SelectLanguage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SignIn.xaml.cs">
+    <Page Include="DamasChinas_Client.UI\Pages\SignIn.xaml" />
+    <Compile Include="DamasChinas_Client.UI\Pages\SignIn.xaml.cs">
       <DependentUpon>SignIn.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\LanguageManager.cs" />
-    <Compile Include="Utilities\SoundManager.cs" />
-    <Page Include="AppShell.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChangeData.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ConfiSound.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Friends.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Login.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MenuGuest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MenuRegisteredPlayer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ProfilePlayer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ProfileUser.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Lang.en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Lang.es.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SelectLanguage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SignIn.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Buttons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Theme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <!-- Recursos -->
+    <Page Include="DamasChinas_Client.UI\Resources\Lang.en.xaml" />
+    <Page Include="DamasChinas_Client.UI\Resources\Lang.es.xaml" />
+    <!-- Estilos -->
+    <Page Include="DamasChinas_Client.UI\Styles\Buttons.xaml" />
+    <Page Include="DamasChinas_Client.UI\Styles\Theme.xaml" />
+    <!-- Utilidades -->
+    <Compile Include="DamasChinas_Client.UI\Utilities\LanguageManager.cs" />
+    <Compile Include="DamasChinas_Client.UI\Utilities\SoundManager.cs" />
   </ItemGroup>
+  <!-- Recursos y fuentes -->
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Resource Include="DamasChinas_Client.UI\Assets\Backgrounds\board-background.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Backgrounds\wood-texture.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\avatarIcon.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\backIcon.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\chatIcon.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\friendsIcon.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\languageIcon.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\soundIcon.png" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Icons\stadisticsIcon.png" />
+    <Content Include="DamasChinas_Client.UI\Assets\Sounds\background_music.mp3" />
+    <Resource Include="DamasChinas_Client.UI\Assets\Fonts\Oups.otf" />
+  </ItemGroup>
+  <!-- Configuración y propiedades -->
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -176,43 +145,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <Resource Include="Assets\Fonts\Oups.otf" />
-    <None Include="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <None Include="Properties\Settings.settings" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Logos\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Backgrounds\wood-texture.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Backgrounds\board-background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Icons\avatarIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Icons\backIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Icons\friendsIcon.png" />
-    <Resource Include="Assets\Icons\languageIcon.png" />
-    <Resource Include="Assets\Icons\soundIcon.png" />
-    <Resource Include="Assets\Icons\stadisticsIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Icons\chatIcon.png" />
-    <Content Include="Assets\Sounds\background_music.mp3" />
+    <Folder Include="DamasChinas_Client.Logic\" />
+    <Folder Include="DamasChinas_Client.UI\Assets\Logos\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

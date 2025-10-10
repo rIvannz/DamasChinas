@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 
 
-namespace DamasChinas_Client
+namespace DamasChinas_Client.UI.Pages
 {
     public partial class SignIn : Page
     {
@@ -34,7 +34,12 @@ namespace DamasChinas_Client
             string email = txtEmail.Text;
             string user = txtUsername.Text;
 
-            MessageBox.Show($"Account created for: {first} {last}\nEmail: {email}\nUsername: {user}", "Create Account");
+            MessageBox.Show(
+                $"Account created for: {first} {last}\nEmail: {email}\nUsername: {user}",
+                "Create Account",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
@@ -48,15 +53,16 @@ namespace DamasChinas_Client
                 MessageBox.Show("No previous page found.");
         }
 
+        /// <summary>
+        /// Maneja el clic en el ícono de sonido.
+        /// </summary>
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
 
-
         /// <summary>
-        /// Handles the click event for the "Language" icon.
-        /// Navigates to the SelectLanguage page.
+        /// Maneja el clic en el ícono de idioma.
         /// </summary>
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -66,11 +72,13 @@ namespace DamasChinas_Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while opening language settings: {ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error while opening language settings: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
-
     }
 }
-

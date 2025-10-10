@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows;
 
+
 namespace DamasChinas_Client.Utilities
 {
     /// <summary>
@@ -26,14 +27,19 @@ namespace DamasChinas_Client.Utilities
                 switch (cultureCode)
                 {
                     case "es-MX":
-                        newLangDict.Source = new Uri("/Resources/Lang.es.xaml", UriKind.Relative);
+                        newLangDict.Source = new Uri(
+                            "pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Resources/Lang.es.xaml",
+                            UriKind.Absolute);
                         break;
+
                     default:
-                        newLangDict.Source = new Uri("/Resources/Lang.en.xaml", UriKind.Relative);
+                        newLangDict.Source = new Uri(
+                            "pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Resources/Lang.en.xaml",
+                            UriKind.Absolute);
                         break;
                 }
 
-                // Busca si ya hay un diccionario de idioma cargado y reemplázalo
+
                 ResourceDictionary existingLangDict = null;
 
                 foreach (var dict in Application.Current.Resources.MergedDictionaries)
@@ -57,7 +63,6 @@ namespace DamasChinas_Client.Utilities
                     Application.Current.Resources.MergedDictionaries.Add(newLangDict);
                 }
 
-                // Actualiza la cultura del hilo
                 var culture = new CultureInfo(cultureCode);
                 CultureInfo.DefaultThreadCurrentCulture = culture;
                 CultureInfo.DefaultThreadCurrentUICulture = culture;
@@ -68,6 +73,8 @@ namespace DamasChinas_Client.Utilities
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
     }
 }
+
 

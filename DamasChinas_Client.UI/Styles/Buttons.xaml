@@ -14,7 +14,7 @@
         <!-- Fondo con textura de madera -->
         <Setter Property="Background">
             <Setter.Value>
-                <ImageBrush ImageSource="pack://application:,,,/Assets/Backgrounds/wood-texture.png"
+                <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/wood-texture.png"
                     Stretch="UniformToFill"
                     TileMode="Tile"
                     Viewport="0,0,0.3,0.3"
@@ -22,6 +22,7 @@
                     Opacity="0.9"/>
             </Setter.Value>
         </Setter>
+
 
         <Setter Property="BorderBrush" Value="{DynamicResource BoardEdgeBrush}"/>
 
