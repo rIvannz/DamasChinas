@@ -9,7 +9,7 @@
     <Grid>
         <!-- ===== Fondo del tablero ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
@@ -44,7 +44,7 @@
                         BorderThickness="0"
                         Cursor="Hand"
                         Click="OnAvatarClick">
-                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/avatarIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/avatarIcon.png"
                            Width="54" Height="54"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -67,7 +67,7 @@
                 <!-- ===== Título principal ===== -->
                 <Grid HorizontalAlignment="Center" Margin="0,0,0,40">
                     <TextBlock Text="{DynamicResource gameTitle}"
-                               FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
+                               FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                                FontSize="56"
                                FontWeight="Bold"
                                Foreground="Black"
@@ -79,7 +79,7 @@
                         </TextBlock.Effect>
                     </TextBlock>
                     <TextBlock Text="{DynamicResource gameTitle}"
-                               FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
+                               FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                                FontSize="56"
                                FontWeight="Bold"
                                Foreground="White"
@@ -133,7 +133,7 @@
                             BorderThickness="0"
                             Cursor="Hand"
                             Click="OnStatisticsClick">
-                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/stadisticsIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/stadisticsIcon.png"
                                Width="48" Height="48"
                                Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"
@@ -147,7 +147,7 @@
                             ToolTip="{DynamicResource friends}"
                             Cursor="Hand"
                             Click="OnFriendsClick">
-                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/friendsIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/friendsIcon.png"
                                 Width="40" Height="40"
                                 Stretch="Uniform"
                                 RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -167,7 +167,7 @@
                             BorderThickness="0"
                             Cursor="Hand"
                             Click="OnSoundClick">
-                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                                Width="40" Height="40"
                                Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"
@@ -180,7 +180,7 @@
                             BorderThickness="0"
                             Cursor="Hand"
                             Click="OnLanguageClick">
-                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
                                Width="40" Height="40"
                                Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"

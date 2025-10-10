@@ -1,4 +1,4 @@
-﻿## --- Build / artifacts ---
+﻿## --- Build / Artifacts ---
 [Bb]in/
 [Oo]bj/
 [Ll]og/
@@ -51,15 +51,24 @@ artifacts/
 *.db
 *.bak
 
-## --- OS files ---
+## --- OS Files ---
 [Dd]esktop.ini
 Thumbs.db
 ehthumbs.db
 
-## --- User/Local config que no quieres versionar ---
+## --- User / Local Config (no versionar) ---
 *.csproj.user
 *.pubxml.user
 *.rsuser
 
-## --- WPF assets ---
-# (No ignores aquí: tus PNG/JPG que uses sí se versionan)
+## --- WPF Assets ---
+# (No ignores aquí: tus PNG/JPG/Fuentes/Sonidos sí deben versionarse)
+# Solo se ignoran binarios generados, no recursos del proyecto.
+
+## --- Extras ---
+# Archivos temporales o generados por herramientas de terceros
+*.tmp
+*.temp
+*.bak
+*.log
+*.cache

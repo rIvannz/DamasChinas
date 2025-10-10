@@ -10,7 +10,7 @@
     <Grid>
         <!-- ===== Fondo con oscurecimiento ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
@@ -39,7 +39,7 @@
                         ToolTip="{DynamicResource back}"
                         Cursor="Hand"
                         Click="OnBackClick">
-                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/backIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
                            Width="40" Height="40"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -48,7 +48,7 @@
                 <!-- Título -->
                 <TextBlock Grid.Column="1"
                            Text="{DynamicResource configuration}"
-                           FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            Foreground="White"
                            FontSize="42"
                            VerticalAlignment="Center"
@@ -80,7 +80,7 @@
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Center"
                                 Margin="0,10,0,0">
-                        <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
+                        <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                                Width="40" Height="40"
                                RenderOptions.BitmapScalingMode="HighQuality"
                                Margin="0,20,0,0"/>
@@ -117,7 +117,7 @@
                                    Margin="0,10,0,6"/>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
+                            <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                                    Width="26" Height="26"
                                    VerticalAlignment="Center"
                                    Margin="0,0,8,0"
@@ -149,7 +149,7 @@
                                    Margin="0,25,0,6"/>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
+                            <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                                    Width="26" Height="26"
                                    VerticalAlignment="Center"
                                    Margin="0,0,8,0"

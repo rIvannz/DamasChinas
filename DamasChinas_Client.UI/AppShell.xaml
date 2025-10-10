@@ -11,7 +11,7 @@
         Background="{DynamicResource SurfaceBrush}">
 
     <Frame x:Name="MainFrame"
-       Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Pages/MainWindow.xaml"
+       Source="pack://application:,,,/DamasChinas_Client.UI;component/Pages/MainWindow.xaml"
        NavigationUIVisibility="Hidden"
        Background="Transparent"/>
 

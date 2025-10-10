@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using DamasChinas_Client.Utilities;
 
-namespace DamasChinas_Client
+namespace DamasChinas_Client.UI
 {
     public partial class App : Application
     {

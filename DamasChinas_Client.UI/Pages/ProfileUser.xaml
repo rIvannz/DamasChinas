@@ -10,7 +10,7 @@
     <Grid>
         <!-- ===== FONDO ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"/>
         </Grid.Background>
         <Rectangle Fill="#66000000"/>
@@ -41,7 +41,7 @@
                         ToolTip="{DynamicResource back}"
                         Cursor="Hand"
                         Click="OnBackClick">
-                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/backIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
                            Width="40" Height="40"
                            Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -50,7 +50,7 @@
                 <!-- Título -->
                 <TextBlock Grid.Column="1"
                            Text="{DynamicResource profile}"
-                           FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            Foreground="White"
                            FontSize="42"
                            VerticalAlignment="Center"
@@ -126,7 +126,7 @@
                                     VerticalAlignment="Center"
                                     Margin="0,0,10,0"
                                     Width="220">
-                            <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/avatarIcon.png"
+                            <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/avatarIcon.png"
                                    Width="120" Height="120"
                                    Margin="0,0,0,16"
                                    Stretch="Uniform"
@@ -197,7 +197,7 @@
                         BorderThickness="0"
                         ToolTip="{DynamicResource sound}"
                         Click="OnSoundClick">
-                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                            Width="26" Height="26"/>
                 </Button>
                 <Button Width="44" Height="44"
@@ -205,7 +205,7 @@
                         BorderThickness="0"
                         ToolTip="{DynamicResource language}"
                         Click="OnLanguageClick">
-                    <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
                            Width="26" Height="26"/>
                 </Button>
             </StackPanel>

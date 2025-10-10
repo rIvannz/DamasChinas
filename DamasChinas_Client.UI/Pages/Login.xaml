@@ -9,7 +9,7 @@
     <Grid>
         <!-- ===== Fondo ===== -->
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Backgrounds/board-background.png"
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"
                         AlignmentX="Center"
                         AlignmentY="Center"/>
@@ -29,7 +29,7 @@
                 ToolTip="{DynamicResource back}"
                 Cursor="Hand"
                 Click="OnBackClick">
-            <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/backIcon.png"
+            <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
                    Width="32" Height="32"
                    Stretch="Uniform"
                    RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -44,7 +44,7 @@
             <!-- ===== Título ===== -->
             <Grid HorizontalAlignment="Center" Margin="0,0,0,40">
                 <TextBlock Text="{DynamicResource login}"
-                           FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            FontSize="58"
                            FontWeight="Bold"
                            Foreground="Black"
@@ -56,7 +56,7 @@
                     </TextBlock.Effect>
                 </TextBlock>
                 <TextBlock Text="{DynamicResource login}"
-                           FontFamily="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Fonts/#Oups"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            FontSize="58"
                            FontWeight="Bold"
                            Foreground="White"
@@ -121,7 +121,7 @@
                     ToolTip="{DynamicResource sound}"
                     Cursor="Hand"
                     Click="OnSoundClick">
-                <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/soundIcon.png"
+                <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                        Width="45" Height="50"
                        Stretch="Uniform"
                        RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -139,7 +139,7 @@
                     ToolTip="{DynamicResource language}"
                     Cursor="Hand"
                     Click="OnLanguageClick">
-                <Image Source="pack://application:,,,/DamasChinas_Client;component/DamasChinas_Client.UI/Assets/Icons/languageIcon.png"
+                <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
                        Width="32" Height="32"
                        Stretch="Uniform"
                        RenderOptions.BitmapScalingMode="HighQuality"/>
