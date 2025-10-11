@@ -69,6 +69,22 @@
     <sys:String x:Key="saveChanges">Save Changes</sys:String>
     <sys:String x:Key="chat">Chat</sys:String>
     <sys:String x:Key="viewProfile">View Profile</sys:String>
+    <sys:String x:Key="errorTitle">Error</sys:String>
+    <sys:String x:Key="codeHint">Enter verification code</sys:String>
+    <sys:String x:Key="currentData">Current Data</sys:String>
+    <sys:String x:Key="changeUsername">Change Username</sys:String>
+    <sys:String x:Key="saveUsername">Save Username</sys:String>
+    <sys:String x:Key="changePassword">Change Password</sys:String>
+    <sys:String x:Key="passwordInstruction">To change your password, a verification code will be sent to your email.</sys:String>
+    <sys:String x:Key="sendCode">Send Code</sys:String>
+    <sys:String x:Key="savePassword">Save Password</sys:String>
+    <sys:String x:Key="usernameUpdated">Username updated successfully.</sys:String>
+    <sys:String x:Key="passwordUpdated">Password updated successfully.</sys:String>
+    <sys:String x:Key="codeSentMessage">Verification code sent to your email.</sys:String>
+    <sys:String x:Key="newUsername">New Username</sys:String>
+    <sys:String x:Key="codePassword">Verification Code</sys:String>
+
+
 
 
 

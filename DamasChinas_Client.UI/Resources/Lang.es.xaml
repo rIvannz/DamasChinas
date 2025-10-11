@@ -68,6 +68,22 @@
     <sys:String x:Key="saveChanges">Guardar cambios</sys:String>
     <sys:String x:Key="chat">Chat</sys:String>
     <sys:String x:Key="viewProfile">Ver perfil</sys:String>
+    <sys:String x:Key="errorTitle">Error</sys:String>
+    <sys:String x:Key="codeHint">Ingresa el código de verificación</sys:String>
+    <sys:String x:Key="currentData">Datos actuales</sys:String>
+    <sys:String x:Key="changeUsername">Cambiar nombre de usuario</sys:String>
+    <sys:String x:Key="saveUsername">Guardar nombre de usuario</sys:String>
+    <sys:String x:Key="changePassword">Cambiar contraseña</sys:String>
+    <sys:String x:Key="passwordInstruction">Para cambiar tu contraseña, se enviará un código de verificación a tu correo.</sys:String>
+    <sys:String x:Key="sendCode">Enviar código</sys:String>
+    <sys:String x:Key="savePassword">Guardar contraseña</sys:String>
+    <sys:String x:Key="usernameUpdated">Nombre de usuario actualizado correctamente.</sys:String>
+    <sys:String x:Key="passwordUpdated">Contraseña actualizada correctamente.</sys:String>
+    <sys:String x:Key="codeSentMessage">Código de verificación enviado a tu correo electrónico.</sys:String>
+    <sys:String x:Key="newUsername">Nuevo nombre de usuario</sys:String>
+    <sys:String x:Key="codePassword">Código de verificación</sys:String>
+
+
 
 
 

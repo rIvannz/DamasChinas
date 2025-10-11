@@ -13,10 +13,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 
 namespace DamasChinas_Client.UI.Pages
 {
+    /// <summary>
+    /// Interaction logic for ChangeData.xaml
+    /// </summary>
     public partial class ChangeData : Page
     {
         public ChangeData()
@@ -35,16 +39,94 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al regresar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{TryFindResource("unexpectedError")}\n{ex.Message}",
+                    TryFindResource("errorTitle")?.ToString() ?? "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         /// <summary>
-        /// Guarda los cambios realizados por el usuario (pendiente de implementación real).
+        /// Envía un código de verificación al correo electrónico del usuario.
         /// </summary>
-        private void OnSaveChangesClick(object sender, RoutedEventArgs e)
+        private void OnSendCodeClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Cambios guardados correctamente.", "Confirmación", MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                // Simulación de envío del código
+                MessageBox.Show(TryFindResource("codeSentMessage")?.ToString() ?? "Code sent successfully.",
+                    TryFindResource("success")?.ToString() ?? "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{TryFindResource("unexpectedError")}\n{ex.Message}",
+                    TryFindResource("errorTitle")?.ToString() ?? "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Guarda el nuevo nombre de usuario ingresado.
+        /// </summary>
+        private void OnSaveUsernameClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtUsername.Text))
+                {
+                    MessageBox.Show(TryFindResource("emptyCredentials")?.ToString(),
+                        TryFindResource("errorTitle")?.ToString() ?? "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MessageBox.Show(TryFindResource("usernameUpdated")?.ToString() ?? "Username updated successfully.",
+                    TryFindResource("success")?.ToString() ?? "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{TryFindResource("unexpectedError")}\n{ex.Message}",
+                    TryFindResource("errorTitle")?.ToString() ?? "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Guarda la nueva contraseña ingresada (previa verificación del código).
+        /// </summary>
+        private void OnSavePasswordClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtCode.Text) ||
+                    string.IsNullOrWhiteSpace(txtPassword.Password) ||
+                    string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
+                {
+                    MessageBox.Show(TryFindResource("emptyCredentials")?.ToString(),
+                        TryFindResource("errorTitle")?.ToString() ?? "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (txtPassword.Password != txtConfirmPassword.Password)
+                {
+                    MessageBox.Show(TryFindResource("passwordDontMatchErrorMessage")?.ToString(),
+                        TryFindResource("errorTitle")?.ToString() ?? "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MessageBox.Show(TryFindResource("passwordUpdated")?.ToString() ?? "Password updated successfully.",
+                    TryFindResource("success")?.ToString() ?? "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{TryFindResource("unexpectedError")}\n{ex.Message}",
+                    TryFindResource("errorTitle")?.ToString() ?? "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         /// <summary>
@@ -58,7 +140,9 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir configuración de sonido: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{TryFindResource("unexpectedError")}\n{ex.Message}",
+                    TryFindResource("errorTitle")?.ToString() ?? "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -73,11 +157,12 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir configuración de idioma: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{TryFindResource("unexpectedError")}\n{ex.Message}",
+                    TryFindResource("errorTitle")?.ToString() ?? "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
 }
-
 
 

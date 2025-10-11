@@ -15,7 +15,7 @@
                         AlignmentY="Center"/>
         </Grid.Background>
 
-        <!-- Capa de oscurecimiento -->
+        <!-- Capa translúcida -->
         <Rectangle Fill="#66000000"/>
 
         <!-- ===== BOTÓN BACK ===== -->
@@ -25,7 +25,6 @@
                 Margin="20"
                 Background="Transparent"
                 BorderBrush="Transparent"
-                BorderThickness="0"
                 ToolTip="{DynamicResource back}"
                 Cursor="Hand"
                 Click="OnBackClick">
@@ -36,20 +35,20 @@
         </Button>
 
         <!-- ===== CONTENIDO PRINCIPAL ===== -->
-        <StackPanel VerticalAlignment="Center"
+        <StackPanel VerticalAlignment="Top"
+                    Margin="0,100,0,0"
                     HorizontalAlignment="Center"
-                    Margin="40"
-                    Width="480">
+                    Width="1000">
 
             <!-- ===== TÍTULO ===== -->
-            <Grid HorizontalAlignment="Center" Margin="0,0,0,40">
+            <Grid HorizontalAlignment="Center" Margin="0,0,0,30">
                 <TextBlock Text="{DynamicResource changeData}"
                            FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            FontSize="58"
                            FontWeight="Bold"
                            Foreground="Black"
-                           Margin="2,2,0,0"
                            Opacity="0.7"
+                           Margin="2,2,0,0"
                            TextAlignment="Center">
                     <TextBlock.Effect>
                         <BlurEffect Radius="1.5"/>
@@ -71,105 +70,197 @@
                        Margin="0,0,0,30"
                        TextWrapping="Wrap"/>
 
-            <!-- ===== CAMPOS ===== -->
+            <!-- ===== SECCIONES PRINCIPALES (IZQ: username / DER: contraseña) ===== -->
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- NOMBRE -->
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,15">
-                    <TextBlock Text="{DynamicResource firstName}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox Text="Iván"
-                             IsReadOnly="True"
-                             Width="200" Height="38"
-                             Background="#444"
-                             Foreground="#AAAAAA"
-                             BorderBrush="#777"
-                             BorderThickness="1"
-                             Opacity="0.7"/>
+                <!-- ===== IZQUIERDA: DATOS Y CAMBIO DE USERNAME ===== -->
+                <StackPanel Grid.Column="0">
+                    <!-- Datos actuales -->
+                    <Border Background="#22000000" Padding="15" CornerRadius="10" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource currentData}"
+                                       FontSize="18" 
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       Margin="0,0,0,10"/>
+
+                            <!-- Nombre y Apellido -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                    <TextBlock Text="{DynamicResource firstName}" Foreground="White" FontSize="15"/>
+                                    <TextBox Text="Iván" 
+                                             IsReadOnly="True"
+                                             Background="#444"
+                                             Foreground="#AAAAAA"
+                                             BorderBrush="#777"
+                                             BorderThickness="1"
+                                             Height="36"
+                                             Opacity="0.7"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="{DynamicResource lastName}" Foreground="White" FontSize="15"/>
+                                    <TextBox Text="Rodríguez"
+                                             IsReadOnly="True"
+                                             Background="#444"
+                                             Foreground="#AAAAAA"
+                                             BorderBrush="#777"
+                                             BorderThickness="1"
+                                             Height="36"
+                                             Opacity="0.7"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Correo y Username en la misma línea -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Correo -->
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                    <TextBlock Text="{DynamicResource email}" Foreground="White" FontSize="15"/>
+                                    <TextBox Text="PixelYT12@gmail.com"
+                                             IsReadOnly="True"
+                                             Background="#444"
+                                             Foreground="#AAAAAA"
+                                             BorderBrush="#777"
+                                             BorderThickness="1"
+                                             Height="36"
+                                             Opacity="0.7"/>
+                                </StackPanel>
+
+                                <!-- Username -->
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="{DynamicResource username}" Foreground="White" FontSize="15"/>
+                                    <TextBox Text="PixelYT12"
+                                             IsReadOnly="True"
+                                             Background="#444"
+                                             Foreground="#AAAAAA"
+                                             BorderBrush="#777"
+                                             BorderThickness="1"
+                                             Height="36"
+                                             Opacity="0.7"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Cambio de username -->
+                    <Border Background="#22000000" Padding="15" CornerRadius="10">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource changeUsername}"
+                                       FontSize="18" 
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       Margin="0,0,0,10"/>
+                            <TextBlock Text="{DynamicResource newUsername}" Foreground="White" FontSize="15"/>
+                            <TextBox x:Name="txtUsername"
+                                     Width="420" Height="38"
+                                     Background="White"
+                                     Foreground="Black"
+                                     BorderBrush="#CCCCCC"
+                                     BorderThickness="1"/>
+                            <Button Style="{StaticResource BaseGameButton}"
+                                    Content="{DynamicResource saveUsername}"
+                                    Width="200" Height="45"
+                                    Margin="0,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    Click="OnSaveUsernameClick"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
 
-                <!-- APELLIDO -->
-                <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,15">
-                    <TextBlock Text="{DynamicResource lastName}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox Text="Rodríguez"
-                             IsReadOnly="True"
-                             Width="200" Height="38"
-                             Background="#444"
-                             Foreground="#AAAAAA"
-                             BorderBrush="#777"
-                             BorderThickness="1"
-                             Opacity="0.7"/>
-                </StackPanel>
+                <!-- ===== DERECHA: CAMBIO DE CONTRASEÑA ===== -->
+                <Border Grid.Column="2"
+                        Background="#22000000"
+                        Padding="15"
+                        CornerRadius="10">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource changePassword}"
+                                   FontSize="18" 
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="0,0,0,10"/>
 
-                <!-- CORREO -->
-                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,15">
-                    <TextBlock Text="{DynamicResource email}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox Text="PixelYT12@gmail.com"
-                             IsReadOnly="True"
-                             Width="200" Height="38"
-                             Background="#444"
-                             Foreground="#AAAAAA"
-                             BorderBrush="#777"
-                             BorderThickness="1"
-                             Opacity="0.7"/>
-                </StackPanel>
+                        <TextBlock Text="{DynamicResource passwordInstruction}"
+                                   FontSize="14"
+                                   Foreground="#CCCCCC"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,15"/>
 
-                <!-- USUARIO -->
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,0,15">
-                    <TextBlock Text="{DynamicResource username}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtUsername"
-                             Width="200" Height="38"
-                             Background="White"
-                             Foreground="Black"
-                             BorderBrush="#CCCCCC"
-                             BorderThickness="1"/>
-                </StackPanel>
-
-                <!-- CONTRASEÑA -->
-                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,10,15">
-                    <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtPassword"
-                                 Width="200" Height="38"
+                        <!-- Código -->
+                        <TextBlock Text="{DynamicResource codePassword}" Foreground="White" FontSize="15"/>
+                        <TextBox x:Name="txtCode"
+                                 Width="420" Height="38"
                                  Background="White"
                                  Foreground="Black"
                                  BorderBrush="#CCCCCC"
-                                 BorderThickness="1"/>
-                </StackPanel>
+                                 BorderThickness="1"
+                                 Margin="0,0,0,10"/>
 
-                <!-- CONFIRMAR CONTRASEÑA -->
-                <StackPanel Grid.Row="2" Grid.Column="1" Margin="10,0,0,15">
-                    <TextBlock Text="{DynamicResource confirmPassword}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtConfirmPassword"
-                                 Width="200" Height="38"
-                                 Background="White"
-                                 Foreground="Black"
-                                 BorderBrush="#CCCCCC"
-                                 BorderThickness="1"/>
-                </StackPanel>
+                        <!-- Contraseñas -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="15"/>
+                                <PasswordBox x:Name="txtPassword"
+                                             Width="200" Height="38"
+                                             Background="White"
+                                             Foreground="Black"
+                                             BorderBrush="#CCCCCC"
+                                             BorderThickness="1"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                <TextBlock Text="{DynamicResource confirmPassword}" Foreground="White" FontSize="15"/>
+                                <PasswordBox x:Name="txtConfirmPassword"
+                                             Width="200" Height="38"
+                                             Background="White"
+                                             Foreground="Black"
+                                             BorderBrush="#CCCCCC"
+                                             BorderThickness="1"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Botones juntos -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,25,0,0">
+                            <Button Style="{StaticResource BaseGameButton}"
+                                    Content="{DynamicResource sendCode}"
+                                    Width="160" Height="45"
+                                    Margin="0,0,10,0"
+                                    Click="OnSendCodeClick"/>
+                            <Button Style="{StaticResource BaseGameButton}"
+                                    Content="{DynamicResource savePassword}"
+                                    Width="160" Height="45"
+                                    Click="OnSavePasswordClick"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </Grid>
-
-            <!-- ===== BOTÓN GUARDAR CAMBIOS ===== -->
-            <Button Style="{StaticResource BaseGameButton}"
-                    Content="{DynamicResource saveChanges}"
-                    Width="220" Height="50"
-                    Margin="0,20,0,0"
-                    Click="OnSaveChangesClick"/>
         </StackPanel>
 
         <!-- ===== ICONOS INFERIORES ===== -->
         <Grid VerticalAlignment="Bottom"
               HorizontalAlignment="Right"
-              Margin="20"
-              Panel.ZIndex="10">
+              Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="20"/>
@@ -181,7 +272,6 @@
                     Width="60" Height="60"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    BorderThickness="0"
                     ToolTip="{DynamicResource sound}"
                     Cursor="Hand"
                     Click="OnSoundClick">
@@ -199,7 +289,6 @@
                     Width="60" Height="60"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    BorderThickness="0"
                     ToolTip="{DynamicResource language}"
                     Cursor="Hand"
                     Click="OnLanguageClick">
