@@ -1,50 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DamasChinas_Client.UI.UsuarioServiceReference;
+using System;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class SignIn : Page
     {
+        private IUsuarioService _proxy;
+        private UsuarioCallback _callback;
+
         public SignIn()
         {
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Evento del botón "Crear cuenta".
-        /// </summary>
-        private void OnCreateAccountClick(object sender, RoutedEventArgs e)
+        private async void OnCreateAccountClick(object sender, RoutedEventArgs e)
         {
             string first = txtFirstName.Text;
             string last = txtLastName.Text;
             string email = txtEmail.Text;
             string user = txtUsername.Text;
+            string password = txtPassword.Password; // si tienes un PasswordBox
 
-            MessageBox.Show(
-                $"Account created for: {first} {last}\nEmail: {email}\nUsername: {user}",
-                "Create Account",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
+            // Crear callback
+            _callback = new UsuarioCallback();
+
+            // Crear binding y endpoint (opcional si está en config)
+            var context = new InstanceContext(_callback);
+            var factory = new DuplexChannelFactory<IUsuarioService>(context, "NetTcpBinding_IUsuarioService");
+
+            _proxy = factory.CreateChannel();
+
+            try
+            {
+                // Ejecutar la llamada en un hilo separado para no congelar la UI
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    _proxy.CrearUsuario(first, last, email, password, user);
+                });
+
+                MessageBox.Show(
+                    $"Solicitud enviada para crear cuenta:\n{first} {last}\nEmail: {email}\nUsername: {user}",
+                    "Create Account",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error conectando al servidor: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        /// <summary>
-        /// Evento del botón "Back" con icono.
-        /// </summary>
+
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)
@@ -53,17 +63,11 @@ namespace DamasChinas_Client.UI.Pages
                 MessageBox.Show("No previous page found.");
         }
 
-        /// <summary>
-        /// Maneja el clic en el ícono de sonido.
-        /// </summary>
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
 
-        /// <summary>
-        /// Maneja el clic en el ícono de idioma.
-        /// </summary>
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
             try

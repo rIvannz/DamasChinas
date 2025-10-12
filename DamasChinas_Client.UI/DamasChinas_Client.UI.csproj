@@ -38,6 +38,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,6 +63,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Connected Services\UsuarioServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioCallback.cs" />
     <Compile Include="Utilities\LanguageManager.cs" />
     <Compile Include="Utilities\SoundManager.cs" />
     <Page Include="AppShell.xaml">
@@ -129,10 +137,23 @@
   <ItemGroup>
     <None Include="App.config" />
     <Resource Include="Assets\Fonts\Oups.otf" />
+    <None Include="Connected Services\UsuarioServiceReference\service.wsdl" />
+    <None Include="Connected Services\UsuarioServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UsuarioServiceReference\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings" />
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\UsuarioServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\UsuarioServiceReference\configuration.svcinfo" />
+    <None Include="Connected Services\UsuarioServiceReference\configuration91.svcinfo" />
     <Resource Include="Assets\Backgrounds\board-background.png" />
     <Resource Include="Assets\Backgrounds\wood-texture.png" />
     <Resource Include="Assets\Icons\avatarIcon.png" />
@@ -163,6 +184,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Logos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\UsuarioServiceReference\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
