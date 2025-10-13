@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3620fd81d7bf493e9ab0f2930cefa40a" Name="Diagram1">
+        <EntityTypeShape EntityType="damas_chinasModel.amistades" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.bloqueos" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.movimientos" Width="1.5" PointX="8.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.participantes_partida" Width="1.5" PointX="6" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.partidas" Width="1.5" PointX="3.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.perfiles" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.solicitudes_amistad" Width="1.5" PointX="3" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.usuarios" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.historial_partidas" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="damas_chinasModel.fk_amistad_usuario1" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_amistad_usuario2" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_bloqueado" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_bloqueador" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_movimiento_pp" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_pp_partida" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_pp_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_perfil_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_solicitud_emisor" ManuallyRouted="false" />
+        <AssociationConnector Association="damas_chinasModel.fk_solicitud_receptor" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

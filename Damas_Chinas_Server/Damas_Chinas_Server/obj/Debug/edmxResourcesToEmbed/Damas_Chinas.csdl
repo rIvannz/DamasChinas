@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="damas_chinasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="amistades">
+    <Key>
+      <PropertyRef Name="id_usuario1" />
+      <PropertyRef Name="id_usuario2" />
+    </Key>
+    <Property Name="id_usuario1" Type="Int32" Nullable="false" />
+    <Property Name="id_usuario2" Type="Int32" Nullable="false" />
+    <Property Name="fecha_amistad" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="usuarios" Relationship="Self.fk_amistad_usuario1" FromRole="amistades" ToRole="usuarios" />
+    <NavigationProperty Name="usuarios1" Relationship="Self.fk_amistad_usuario2" FromRole="amistades" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="bloqueos">
+    <Key>
+      <PropertyRef Name="id_bloqueador" />
+      <PropertyRef Name="id_bloqueado" />
+    </Key>
+    <Property Name="id_bloqueador" Type="Int32" Nullable="false" />
+    <Property Name="id_bloqueado" Type="Int32" Nullable="false" />
+    <Property Name="fecha_bloqueo" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="usuarios" Relationship="Self.fk_bloqueado" FromRole="bloqueos" ToRole="usuarios" />
+    <NavigationProperty Name="usuarios1" Relationship="Self.fk_bloqueador" FromRole="bloqueos" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="movimientos">
+    <Key>
+      <PropertyRef Name="id_movimiento" />
+    </Key>
+    <Property Name="id_movimiento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_partida" Type="Int32" Nullable="false" />
+    <Property Name="id_jugador" Type="Int32" Nullable="false" />
+    <Property Name="orden" Type="Int32" Nullable="false" />
+    <Property Name="movimiento" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="participantes_partida" Relationship="Self.fk_movimiento_pp" FromRole="movimientos" ToRole="participantes_partida" />
+  </EntityType>
+  <EntityType Name="participantes_partida">
+    <Key>
+      <PropertyRef Name="id_partida" />
+      <PropertyRef Name="id_jugador" />
+    </Key>
+    <Property Name="id_partida" Type="Int32" Nullable="false" />
+    <Property Name="id_jugador" Type="Int32" Nullable="false" />
+    <Property Name="posicion_final" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="movimientos" Relationship="Self.fk_movimiento_pp" FromRole="participantes_partida" ToRole="movimientos" />
+    <NavigationProperty Name="partidas" Relationship="Self.fk_pp_partida" FromRole="participantes_partida" ToRole="partidas" />
+    <NavigationProperty Name="usuarios" Relationship="Self.fk_pp_usuario" FromRole="participantes_partida" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="partidas">
+    <Key>
+      <PropertyRef Name="id_partida" />
+    </Key>
+    <Property Name="id_partida" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fecha_partida" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="participantes_partida" Relationship="Self.fk_pp_partida" FromRole="partidas" ToRole="participantes_partida" />
+  </EntityType>
+  <EntityType Name="perfiles">
+    <Key>
+      <PropertyRef Name="id_perfil" />
+    </Key>
+    <Property Name="id_perfil" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_usuario" Type="Int32" Nullable="false" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="imagen_perfil" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ultimo_login" Type="DateTime" Precision="7" />
+    <Property Name="apellido_materno" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="usuarios" Relationship="Self.fk_perfil_usuario" FromRole="perfiles" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="solicitudes_amistad">
+    <Key>
+      <PropertyRef Name="id_solicitud" />
+    </Key>
+    <Property Name="id_solicitud" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_emisor" Type="Int32" Nullable="false" />
+    <Property Name="id_receptor" Type="Int32" Nullable="false" />
+    <Property Name="fecha_envio" Type="DateTime" Precision="7" />
+    <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="usuarios" Relationship="Self.fk_solicitud_emisor" FromRole="solicitudes_amistad" ToRole="usuarios" />
+    <NavigationProperty Name="usuarios1" Relationship="Self.fk_solicitud_receptor" FromRole="solicitudes_amistad" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="usuarios">
+    <Key>
+      <PropertyRef Name="id_usuario" />
+    </Key>
+    <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="rol" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="fecha_creacion" Type="DateTime" Nullable="false" Precision="7" />
+    <NavigationProperty Name="amistades" Relationship="Self.fk_amistad_usuario1" FromRole="usuarios" ToRole="amistades" />
+    <NavigationProperty Name="amistades1" Relationship="Self.fk_amistad_usuario2" FromRole="usuarios" ToRole="amistades" />
+    <NavigationProperty Name="bloqueos" Relationship="Self.fk_bloqueado" FromRole="usuarios" ToRole="bloqueos" />
+    <NavigationProperty Name="bloqueos1" Relationship="Self.fk_bloqueador" FromRole="usuarios" ToRole="bloqueos" />
+    <NavigationProperty Name="participantes_partida" Relationship="Self.fk_pp_usuario" FromRole="usuarios" ToRole="participantes_partida" />
+    <NavigationProperty Name="perfiles" Relationship="Self.fk_perfil_usuario" FromRole="usuarios" ToRole="perfiles" />
+    <NavigationProperty Name="solicitudes_amistad" Relationship="Self.fk_solicitud_emisor" FromRole="usuarios" ToRole="solicitudes_amistad" />
+    <NavigationProperty Name="solicitudes_amistad1" Relationship="Self.fk_solicitud_receptor" FromRole="usuarios" ToRole="solicitudes_amistad" />
+  </EntityType>
+  <EntityType Name="historial_partidas">
+    <Key>
+      <PropertyRef Name="id_jugador" />
+      <PropertyRef Name="id_partida" />
+      <PropertyRef Name="mi_posicion" />
+    </Key>
+    <Property Name="id_jugador" Type="Int32" Nullable="false" />
+    <Property Name="id_partida" Type="Int32" Nullable="false" />
+    <Property Name="fecha_partida" Type="DateTime" Precision="7" />
+    <Property Name="jugadores" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="mi_posicion" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="fk_amistad_usuario1">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="amistades" Type="Self.amistades" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="amistades">
+        <PropertyRef Name="id_usuario1" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_amistad_usuario2">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="amistades" Type="Self.amistades" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="amistades">
+        <PropertyRef Name="id_usuario2" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_bloqueado">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="bloqueos" Type="Self.bloqueos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="bloqueos">
+        <PropertyRef Name="id_bloqueado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_bloqueador">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="bloqueos" Type="Self.bloqueos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="bloqueos">
+        <PropertyRef Name="id_bloqueador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_movimiento_pp">
+    <End Role="participantes_partida" Type="Self.participantes_partida" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="movimientos" Type="Self.movimientos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="participantes_partida">
+        <PropertyRef Name="id_partida" />
+        <PropertyRef Name="id_jugador" />
+      </Principal>
+      <Dependent Role="movimientos">
+        <PropertyRef Name="id_partida" />
+        <PropertyRef Name="id_jugador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_pp_partida">
+    <End Role="partidas" Type="Self.partidas" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="participantes_partida" Type="Self.participantes_partida" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="partidas">
+        <PropertyRef Name="id_partida" />
+      </Principal>
+      <Dependent Role="participantes_partida">
+        <PropertyRef Name="id_partida" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_pp_usuario">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="participantes_partida" Type="Self.participantes_partida" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="participantes_partida">
+        <PropertyRef Name="id_jugador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_perfil_usuario">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="perfiles" Type="Self.perfiles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="perfiles">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_solicitud_emisor">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="solicitudes_amistad" Type="Self.solicitudes_amistad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="solicitudes_amistad">
+        <PropertyRef Name="id_emisor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_solicitud_receptor">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="solicitudes_amistad" Type="Self.solicitudes_amistad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="solicitudes_amistad">
+        <PropertyRef Name="id_receptor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="damas_chinasEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="amistades" EntityType="Self.amistades" />
+    <EntitySet Name="bloqueos" EntityType="Self.bloqueos" />
+    <EntitySet Name="movimientos" EntityType="Self.movimientos" />
+    <EntitySet Name="participantes_partida" EntityType="Self.participantes_partida" />
+    <EntitySet Name="partidas" EntityType="Self.partidas" />
+    <EntitySet Name="perfiles" EntityType="Self.perfiles" />
+    <EntitySet Name="solicitudes_amistad" EntityType="Self.solicitudes_amistad" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="usuarios" EntityType="Self.usuarios" />
+    <EntitySet Name="historial_partidas" EntityType="Self.historial_partidas" />
+    <AssociationSet Name="fk_amistad_usuario1" Association="Self.fk_amistad_usuario1">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="amistades" EntitySet="amistades" />
+    </AssociationSet>
+    <AssociationSet Name="fk_amistad_usuario2" Association="Self.fk_amistad_usuario2">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="amistades" EntitySet="amistades" />
+    </AssociationSet>
+    <AssociationSet Name="fk_bloqueado" Association="Self.fk_bloqueado">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="bloqueos" EntitySet="bloqueos" />
+    </AssociationSet>
+    <AssociationSet Name="fk_bloqueador" Association="Self.fk_bloqueador">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="bloqueos" EntitySet="bloqueos" />
+    </AssociationSet>
+    <AssociationSet Name="fk_movimiento_pp" Association="Self.fk_movimiento_pp">
+      <End Role="participantes_partida" EntitySet="participantes_partida" />
+      <End Role="movimientos" EntitySet="movimientos" />
+    </AssociationSet>
+    <AssociationSet Name="fk_pp_partida" Association="Self.fk_pp_partida">
+      <End Role="partidas" EntitySet="partidas" />
+      <End Role="participantes_partida" EntitySet="participantes_partida" />
+    </AssociationSet>
+    <AssociationSet Name="fk_pp_usuario" Association="Self.fk_pp_usuario">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="participantes_partida" EntitySet="participantes_partida" />
+    </AssociationSet>
+    <AssociationSet Name="fk_perfil_usuario" Association="Self.fk_perfil_usuario">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="perfiles" EntitySet="perfiles" />
+    </AssociationSet>
+    <AssociationSet Name="fk_solicitud_emisor" Association="Self.fk_solicitud_emisor">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="solicitudes_amistad" EntitySet="solicitudes_amistad" />
+    </AssociationSet>
+    <AssociationSet Name="fk_solicitud_receptor" Association="Self.fk_solicitud_receptor">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="solicitudes_amistad" EntitySet="solicitudes_amistad" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(damas_chinasModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(damas_chinasModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>
