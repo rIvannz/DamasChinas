@@ -1,6 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Damas_Chinas_Server.Dtos;
+using System;
 using System.Data.Entity; // Necesario para Include
+using System.Linq;
 
 namespace Damas_Chinas_Server
 {
@@ -84,6 +85,70 @@ namespace Damas_Chinas_Server
             }
         }
 
-   
+        public PublicProfile ObtenerPerfilPublico(int idUsuario)
+        {
+            using (var db = new damas_chinasEntities())
+            {
+                // Buscar el usuario con su perfil
+                var usuario = db.usuarios
+                                .Include(u => u.perfiles)
+                                .FirstOrDefault(u => u.id_usuario == idUsuario);
+
+                if (usuario == null)
+                    return null; // o lanzar excepción según tu preferencia
+
+                var perfil = usuario.perfiles.FirstOrDefault();
+
+                return new PublicProfile
+                {
+                    Username = perfil?.username ?? "N/A",
+                    Nombre = perfil.nombre,
+                    LastName = perfil.apellido_materno,
+                    Telefono = perfil?.telefono ?? "N/A",
+                    Correo = usuario.correo
+                };
+            }
+        }
+
+        public bool CambiarUsername(int idUsuario, string nuevoUsername)
+        {
+            using (var db = new damas_chinasEntities())
+            {
+                if (db.perfiles.Any(p => p.username == nuevoUsername))
+                    throw new Exception("El nombre de usuario ya está en uso.");
+
+                var perfil = db.perfiles.FirstOrDefault(p => p.id_usuario == idUsuario);
+                if (perfil == null)
+                    throw new Exception("No se encontró el perfil del usuario.");
+
+                perfil.username = nuevoUsername;
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+
+        public bool CambiarPassword(int idUsuario, string nuevaPassword)
+        {
+            using (var db = new damas_chinasEntities())
+            {
+                var usuario = db.usuarios.FirstOrDefault(u => u.id_usuario == idUsuario);
+                if (usuario == null)
+                    throw new Exception("No se encontró el usuario.");
+
+                if (string.IsNullOrWhiteSpace(nuevaPassword))
+                    throw new Exception("La nueva contraseña no puede estar vacía.");
+
+                usuario.password_hash = nuevaPassword;
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+
+
+
     }
 }

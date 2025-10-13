@@ -5,26 +5,42 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
+
 namespace Damas_Chinas_Server
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class SingInService : ISingInService
     {
-        public void CrearUsuario(string nombre, string apellido, string correo, string password, string username)
+        public ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IUsuarioCallback>();
+            var resultado = new ResultadoOperacion();
+
             try
             {
-                // Aquí va tu lógica de creación de usuario
                 var repo = new RepositorioUsuarios();
                 var usuario = repo.CrearUsuario(nombre, apellido, correo, password, username);
 
-                callback.UsuarioCreado("hola desde el server");
+                var perfil = usuario.perfiles.FirstOrDefault();
+
+                resultado.Exito = true;
+                resultado.Mensaje = "Usuario creado correctamente.";
+                resultado.Usuario = new UsuarioInfo
+                {
+                    IdUsuario = usuario.id_usuario,
+                    Username = perfil?.username ?? username,
+                    Correo = usuario.correo,
+                    NombreCompleto = perfil != null
+                        ? $"{perfil.nombre} {perfil.apellido_materno}"
+                        : $"{nombre} {apellido}"
+                };
             }
             catch (Exception ex)
             {
-                callback.ErrorCreandoUsuario(ex.Message);
+                resultado.Exito = false;
+                resultado.Mensaje = $"Error al crear usuario: {ex.Message}";
+                resultado.Usuario = null;
             }
+
+            return resultado;
         }
     }
 }

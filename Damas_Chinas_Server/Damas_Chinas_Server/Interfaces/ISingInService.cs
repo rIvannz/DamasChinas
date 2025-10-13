@@ -8,19 +8,11 @@ using System.Text;
 
 namespace Damas_Chinas_Server
 {
-    [ServiceContract(CallbackContract = typeof(IUsuarioCallback))]
+    [ServiceContract]
     public interface ISingInService
     {
         [OperationContract]
-        void CrearUsuario(string nombre, string apellido, string correo, string password, string username);
-    }
-
-    public interface IUsuarioCallback
-    {
-        [OperationContract]
-        void UsuarioCreado(string mensaje);
-
-        [OperationContract]
-        void ErrorCreandoUsuario(string mensaje);
+        ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username);
     }
 }
+

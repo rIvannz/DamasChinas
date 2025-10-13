@@ -1,39 +1,89 @@
 ﻿using System;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using Damas_Chinas_Server;
 
-namespace Host
+namespace DamasChinasHost
 {
-    internal class Program
+    class Program
     {
         static void Main(string[] args)
         {
-            ServiceHost loginHost = null;
-            ServiceHost signInHost = null;
+            // Crear URIs base para cada servicio
+            Uri loginBaseAddress = new Uri("http://localhost:8739/LoginService/");
+            Uri signInBaseAddress = new Uri("http://localhost:8736/SignInService/");
+            Uri accountManagerBaseAddress = new Uri("http://localhost:8735/AccountManager/");
 
-            try
+            // Crear hosts individuales para cada servicio
+            using (ServiceHost loginHost = new ServiceHost(typeof(LoginService), loginBaseAddress))
+            using (ServiceHost signInHost = new ServiceHost(typeof(SingInService), signInBaseAddress))
+            using (ServiceHost accountHost = new ServiceHost(typeof(AccountManager), accountManagerBaseAddress))
             {
-                loginHost = new ServiceHost(typeof(LoginService));
-                loginHost.Open();
-                Console.WriteLine("✅ LoginService está listo en http://localhost:8733/LoginService/");
+                try
+                {
+                    // =========================
+                    // LOGIN SERVICE
+                    // =========================
+                    loginHost.AddServiceEndpoint(typeof(IILoginService), new BasicHttpBinding(), "");
+                    var loginMetadata = new ServiceMetadataBehavior
+                    {
+                        HttpGetEnabled = true,
+                        HttpGetUrl = loginBaseAddress
+                    };
+                    loginHost.Description.Behaviors.Add(loginMetadata);
 
-                signInHost = new ServiceHost(typeof(SingInService));
-                signInHost.Open();
-                Console.WriteLine("✅ SingInService está listo en net.tcp://localhost:8091/SingInService/");
+                    // =========================
+                    // SIGN IN SERVICE
+                    // =========================
+                    signInHost.AddServiceEndpoint(typeof(ISingInService), new BasicHttpBinding(), "");
+                    var signInMetadata = new ServiceMetadataBehavior
+                    {
+                        HttpGetEnabled = true,
+                        HttpGetUrl = signInBaseAddress
+                    };
+                    signInHost.Description.Behaviors.Add(signInMetadata);
 
-                Console.WriteLine("\nPresione [Enter] para cerrar los servicios...");
-                Console.ReadLine();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Error al iniciar los servicios: {ex.Message}");
-            }
-            finally
-            {
-                if (loginHost?.State == CommunicationState.Opened)
+                    // =========================
+                    // ACCOUNT MANAGER SERVICE
+                    // =========================
+                    accountHost.AddServiceEndpoint(typeof(IAccountManager), new BasicHttpBinding(), "");
+                    var accountMetadata = new ServiceMetadataBehavior
+                    {
+                        HttpGetEnabled = true,
+                        HttpGetUrl = accountManagerBaseAddress
+                    };
+                    accountHost.Description.Behaviors.Add(accountMetadata);
+
+                    // Abrir todos los servicios
+                    loginHost.Open();
+                    signInHost.Open();
+                    accountHost.Open();
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("✅ Servicios WCF levantados correctamente:\n");
+                    Console.ResetColor();
+
+                    Console.WriteLine($"➡ LoginService: {loginBaseAddress}");
+                    Console.WriteLine($"➡ SignInService: {signInBaseAddress}");
+                    Console.WriteLine($"➡ AccountManager: {accountManagerBaseAddress}");
+                    Console.WriteLine("\nPresiona <Enter> para detener los servicios...");
+                    Console.ReadLine();
+
+                    // Cerrar servicios
                     loginHost.Close();
-                if (signInHost?.State == CommunicationState.Opened)
                     signInHost.Close();
+                    accountHost.Close();
+                }
+                catch (CommunicationException ce)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("❌ Error al iniciar los servicios: {0}", ce.Message);
+                    Console.ResetColor();
+
+                    loginHost.Abort();
+                    signInHost.Abort();
+                    accountHost.Abort();
+                }
             }
         }
     }
