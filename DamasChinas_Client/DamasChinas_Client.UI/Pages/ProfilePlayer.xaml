@@ -19,11 +19,8 @@
         <Grid Margin="40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Header -->
                 <RowDefinition Height="*"/>
-                <!-- Content -->
                 <RowDefinition Height="Auto"/>
-                <!-- Iconos inferiores -->
             </Grid.RowDefinitions>
 
             <!-- ===== ENCABEZADO ===== -->
@@ -57,7 +54,7 @@
                            Margin="15,0,0,0"/>
             </Grid>
 
-            <!-- ===== CONTENIDO AUTOAJUSTABLE ===== -->
+            <!-- ===== CONTENIDO ===== -->
             <Border Grid.Row="1"
                     Background="#80222222"
                     BorderBrush="#444"
@@ -70,12 +67,10 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="3*"/>
-                        <!-- PERFIL -->
                         <RowDefinition Height="1.3*"/>
-                        <!-- ESTADÍSTICAS -->
                     </Grid.RowDefinitions>
 
-                    <!-- ===== SECCIÓN PERFIL ===== -->
+                    <!-- ===== PERFIL ===== -->
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
@@ -93,7 +88,6 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Título -->
                             <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
                                        Text="{DynamicResource yourProfile}"
                                        FontSize="32"
@@ -104,19 +98,19 @@
                             <!-- Username -->
                             <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,36,20,0">
                                 <TextBlock Text="{DynamicResource username}" FontSize="24" Foreground="White"/>
-                                <TextBlock Text="PixelYT12" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="UsernameTextBlock" Text="PixelYT12" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
                             <!-- Email -->
                             <StackPanel Grid.Row="0" Grid.Column="1" Margin="20,36,0,0">
                                 <TextBlock Text="{DynamicResource email}" FontSize="24" Foreground="White"/>
-                                <TextBlock Text="PixelYT12@gmail.com" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="EmailTextBlock" Text="PixelYT12@gmail.com" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
                             <!-- Full Name -->
                             <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,20,0">
                                 <TextBlock Text="{DynamicResource fullname}" FontSize="25" Foreground="White"/>
-                                <TextBlock Text="Iván Rodríguez" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="FullNameTextBlock" Text="Iván Rodríguez" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
                             <!-- Social Media -->
@@ -157,7 +151,6 @@
                                     Margin="0,0,0,10"
                                     Click="OnChangeDataClick"/>
 
-
                             <Button Style="{DynamicResource BaseGameButton}"
                                     Content="{DynamicResource logout}"
                                     Width="180" Height="44"
@@ -165,7 +158,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- ===== SECCIÓN ESTADÍSTICAS ===== -->
+                    <!-- ===== ESTADÍSTICAS ===== -->
                     <Grid Grid.Row="1" Margin="0,20,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -187,17 +180,17 @@
 
                             <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                 <TextBlock Text="{DynamicResource matchesPlayed}" FontSize="23" Foreground="White"/>
-                                <TextBlock Text="100" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="MatchesPlayedTextBlock" Text="100" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                 <TextBlock Text="{DynamicResource wins}" FontSize="23" Foreground="White"/>
-                                <TextBlock Text="80" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="WinsTextBlock" Text="80" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                 <TextBlock Text="{DynamicResource loses}" FontSize="23" Foreground="White"/>
-                                <TextBlock Text="20" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LosesTextBlock" Text="20" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                         </Grid>
                     </Grid>

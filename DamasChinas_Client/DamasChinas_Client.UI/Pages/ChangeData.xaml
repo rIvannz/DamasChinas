@@ -98,8 +98,8 @@
 
                                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                                     <TextBlock Text="{DynamicResource firstName}" Foreground="White" FontSize="15"/>
-                                    <TextBox Text="Iván" 
-                                             IsReadOnly="True"
+                                    <TextBox x:Name="txtFirstName"
+                                             Text="Iván" 
                                              Background="#444"
                                              Foreground="#AAAAAA"
                                              BorderBrush="#777"
@@ -110,8 +110,8 @@
 
                                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                                     <TextBlock Text="{DynamicResource lastName}" Foreground="White" FontSize="15"/>
-                                    <TextBox Text="Rodríguez"
-                                             IsReadOnly="True"
+                                    <TextBox x:Name="txtLastName"
+                                             Text="Rodríguez"
                                              Background="#444"
                                              Foreground="#AAAAAA"
                                              BorderBrush="#777"
@@ -131,8 +131,8 @@
                                 <!-- Correo -->
                                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                                     <TextBlock Text="{DynamicResource email}" Foreground="White" FontSize="15"/>
-                                    <TextBox Text="PixelYT12@gmail.com"
-                                             IsReadOnly="True"
+                                    <TextBox x:Name="txtEmail"
+                                             Text="PixelYT12@gmail.com"
                                              Background="#444"
                                              Foreground="#AAAAAA"
                                              BorderBrush="#777"
@@ -144,7 +144,8 @@
                                 <!-- Username -->
                                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                                     <TextBlock Text="{DynamicResource username}" Foreground="White" FontSize="15"/>
-                                    <TextBox Text="PixelYT12"
+                                    <TextBox x:Name="txtCurrentUsername"
+                                             Text="PixelYT12"
                                              IsReadOnly="True"
                                              Background="#444"
                                              Foreground="#AAAAAA"

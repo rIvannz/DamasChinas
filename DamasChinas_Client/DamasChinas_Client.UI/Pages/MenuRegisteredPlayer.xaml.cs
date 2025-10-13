@@ -1,20 +1,10 @@
 ﻿using DamasChinas_Client.Pages;
+using DamasChinas_Client.UI.AccountManagerServiceProxy;
 using DamasChinas_Client.UI.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 
 namespace DamasChinas_Client
 {
@@ -24,9 +14,18 @@ namespace DamasChinas_Client
     /// </summary>
     public partial class MenuRegisteredPlayer : Page
     {
+        private int _idUsuario;
+
         public MenuRegisteredPlayer()
         {
             InitializeComponent();
+        }
+
+        public MenuRegisteredPlayer(int idUsuario, string username)
+            : this()
+        {
+            _idUsuario = idUsuario;
+            txtUsername.Text = username;
         }
 
         // ====== EVENTOS DE BOTONES ======
@@ -36,7 +35,17 @@ namespace DamasChinas_Client
         /// </summary>
         private void OnAvatarClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new ProfilePlayer());
+            try
+            {
+                var client = new AccountManagerClient();
+                var profile = client.ObtenerPerfilPublico(_idUsuario); // Llamada al servicio
+                NavigationService?.Navigate(new ProfilePlayer(profile, _idUsuario));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener el perfil: " + ex.Message,
+                                "Perfil", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         /// <summary>

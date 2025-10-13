@@ -1,15 +1,13 @@
-﻿using DamasChinas_Client.UI.UsuarioServiceReference;
+﻿using DamasChinas_Client.UI.SingInServiceProxy;
 using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class SignIn : Page
     {
-        private IUsuarioService _proxy;
-        private UsuarioCallback _callback;
+        private SingInServiceClient _proxy;
 
         public SignIn()
         {
@@ -18,50 +16,58 @@ namespace DamasChinas_Client.UI.Pages
 
         private async void OnCreateAccountClick(object sender, RoutedEventArgs e)
         {
-            string first = txtFirstName.Text;
-            string last = txtLastName.Text;
-            string email = txtEmail.Text;
-            string user = txtUsername.Text;
-            string password = txtPassword.Password; // si tienes un PasswordBox
+            if (txtPassword.Password != txtConfirmPassword.Password)
+            {
+                MessageBox.Show("Las contraseñas no coinciden.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-            // Crear callback
-            _callback = new UsuarioCallback();
+            string firstName = txtFirstName.Text.Trim();
+            string lastName = txtLastName.Text.Trim();
+            string email = txtEmail.Text.Trim();
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Password;
 
-            // Crear binding y endpoint (opcional si está en config)
-            var context = new InstanceContext(_callback);
-            var factory = new DuplexChannelFactory<IUsuarioService>(context, "NetTcpBinding_IUsuarioService");
-
-            _proxy = factory.CreateChannel();
+            var client = new SingInServiceClient("BasicHttpBinding_ISingInService");
 
             try
             {
-                // Ejecutar la llamada en un hilo separado para no congelar la UI
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    _proxy.CrearUsuario(first, last, email, password, user);
-                });
+                var resultado = client.CrearUsuario(firstName, lastName, email, password, username);
 
-                MessageBox.Show(
-                    $"Solicitud enviada para crear cuenta:\n{first} {last}\nEmail: {email}\nUsername: {user}",
-                    "Create Account",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
+                if (resultado.Exito)
+                {
+                    MessageBox.Show(resultado.Mensaje, "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Limpiar formulario
+                    txtFirstName.Clear();
+                    txtLastName.Clear();
+                    txtEmail.Clear();
+                    txtUsername.Clear();
+                    txtPassword.Clear();
+                    txtConfirmPassword.Clear();
+                }
+                else
+                {
+                    MessageBox.Show(resultado.Mensaje, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error conectando al servidor: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"No se pudo conectar con el servidor: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+             
+                if (client.State == System.ServiceModel.CommunicationState.Opened)
+                    client.Close();
             }
         }
 
 
+
         private void OnBackClick(object sender, RoutedEventArgs e)
-        {
-            if (NavigationService?.CanGoBack == true)
-                NavigationService.GoBack();
-            else
-                MessageBox.Show("No previous page found.");
-        }
+        { if (NavigationService?.CanGoBack == true) NavigationService.GoBack(); else MessageBox.Show("No previous page found."); }
+
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {

@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -25,18 +14,57 @@ namespace DamasChinas_Client.UI.Pages
 
         // ===== EVENTOS =====
 
-        /// <summary>
-        /// Maneja el clic en el botón "Log in".
-        /// </summary>
         private void OnLoginClick(object sender, RoutedEventArgs e)
         {
-            // Navegar directamente al menú registrado sin validar credenciales.
-            NavigationService?.Navigate(new MenuRegisteredPlayer());
+            try
+            {
+                var loginClient = new LogInServiceProxy.ILoginServiceClient();
+
+                string username = txtUsername.Text.Trim();
+                string password = txtPassword.Password.Trim();
+
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    MessageBox.Show("Por favor ingresa usuario y contraseña.",
+                                    "Login",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                    return;
+                }
+
+                var resultado = loginClient.ValidarLogin(username, password);
+
+                if (loginClient.State == System.ServiceModel.CommunicationState.Faulted)
+                {
+                    loginClient.Abort();
+                }
+                else
+                {
+                    loginClient.Close();
+                }
+
+                if (resultado != null && resultado.Success)
+                {
+                    // Navegar al menú pasando el username y el IdUsuario
+                    NavigationService?.Navigate(new MenuRegisteredPlayer(resultado.IdUsuario, resultado.Username));
+                }
+                else
+                {
+                    MessageBox.Show("Login fallido. Usuario o contraseña incorrectos.",
+                                    "Login",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al conectar con el servicio:\n{ex.Message}",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
         }
 
-        /// <summary>
-        /// Maneja el clic en el botón "Back" para regresar a la ventana principal.
-        /// </summary>
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)
@@ -45,9 +73,6 @@ namespace DamasChinas_Client.UI.Pages
                 MessageBox.Show("No hay una página anterior para regresar.");
         }
 
-        /// <summary>
-        /// Maneja el clic en el ícono "Language" para cambiar el idioma.
-        /// </summary>
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
             try
@@ -61,22 +86,14 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        /// <summary>
-        /// Maneja el clic en el enlace "¿Olvidaste tu contraseña?".
-        /// </summary>
         private void OnForgotPasswordClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Aquí se mostrará la recuperación de contraseña.");
         }
 
-        /// <summary>
-        /// Maneja el clic en el ícono de sonido.
-        /// </summary>
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());
         }
     }
 }
-
-

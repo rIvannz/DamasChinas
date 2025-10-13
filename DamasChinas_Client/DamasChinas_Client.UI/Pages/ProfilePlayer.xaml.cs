@@ -1,39 +1,52 @@
-﻿using DamasChinas_Client.UI.Pages;
+﻿using DamasChinas_Client.UI.AccountManagerServiceProxy;
+using DamasChinas_Client.UI.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 
 namespace DamasChinas_Client.Pages
 {
     public partial class ProfilePlayer : Page
     {
+        private int _idUsuario;
+
         public ProfilePlayer()
         {
             InitializeComponent();
         }
 
+        public ProfilePlayer(PublicProfile profile, int idUsuario) : this()
+        {
+            _idUsuario = idUsuario;
+
+            if (profile != null)
+            {
+                UsernameTextBlock.Text = profile.Username + _idUsuario;
+                FullNameTextBlock.Text = profile.Nombre + " " + profile.LastName;
+                EmailTextBlock.Text = profile.Correo;
+                // PhoneTextBlock.Text = profile.Telefono;
+            }
+        }
+
         // ===== Botón Back =====
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new MenuRegisteredPlayer());
+            if (NavigationService.CanGoBack)
+                NavigationService.GoBack();
         }
 
         // ===== Botón Change Data =====
         private void OnChangeDataClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new ChangeData());
+            try
+            {
+                NavigationService?.Navigate(new ChangeData(_idUsuario));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al navegar a cambiar datos: " + ex.Message,
+                                "Perfil", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         // ===== Botón Sonido =====
@@ -47,7 +60,21 @@ namespace DamasChinas_Client.Pages
         {
             NavigationService?.Navigate(new SelectLanguage());
         }
+
+        // ===== Método para navegar desde otro lado usando el ID de usuario =====
+        public static void NavigateToProfile(Frame frame, int userId)
+        {
+            try
+            {
+                var client = new AccountManagerClient();
+                var profile = client.ObtenerPerfilPublico(userId);
+
+                frame.Navigate(new ProfilePlayer(profile, userId));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener el perfil: " + ex.Message, "Perfil", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
-
-

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="AccountManager" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:8735/AccountManager/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8735/AccountManager/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8735/AccountManager/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos" />
+      <xsd:import schemaLocation="http://localhost:8735/AccountManager/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IAccountManager_ObtenerPerfilPublico_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtenerPerfilPublico" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_ObtenerPerfilPublico_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtenerPerfilPublicoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_CambiarUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:CambiarUsername" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_CambiarUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CambiarUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_CambiarPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:CambiarPassword" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_CambiarPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CambiarPasswordResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IAccountManager">
+    <wsdl:operation name="ObtenerPerfilPublico">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/ObtenerPerfilPublico" message="tns:IAccountManager_ObtenerPerfilPublico_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/ObtenerPerfilPublicoResponse" message="tns:IAccountManager_ObtenerPerfilPublico_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CambiarUsername">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/CambiarUsername" message="tns:IAccountManager_CambiarUsername_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/CambiarUsernameResponse" message="tns:IAccountManager_CambiarUsername_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CambiarPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/CambiarPassword" message="tns:IAccountManager_CambiarPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/CambiarPasswordResponse" message="tns:IAccountManager_CambiarPassword_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IAccountManager" type="tns:IAccountManager">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ObtenerPerfilPublico">
+      <soap:operation soapAction="http://tempuri.org/IAccountManager/ObtenerPerfilPublico" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CambiarUsername">
+      <soap:operation soapAction="http://tempuri.org/IAccountManager/CambiarUsername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CambiarPassword">
+      <soap:operation soapAction="http://tempuri.org/IAccountManager/CambiarPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AccountManager">
+    <wsdl:port name="BasicHttpBinding_IAccountManager" binding="tns:BasicHttpBinding_IAccountManager">
+      <soap:address location="http://localhost:8735/AccountManager/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

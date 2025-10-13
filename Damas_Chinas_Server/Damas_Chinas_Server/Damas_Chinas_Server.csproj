@@ -116,7 +116,7 @@
     <Compile Include="usuarios.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
-    <Compile Include="Dtos\xxx.cs" />
+    <Compile Include="Dtos\AccountMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

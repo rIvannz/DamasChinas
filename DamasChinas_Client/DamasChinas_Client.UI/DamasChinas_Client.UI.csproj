@@ -63,12 +63,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Connected Services\UsuarioServiceReference\Reference.cs">
+    <Compile Include="Connected Services\AccountManagerServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="UsuarioCallback.cs" />
+    <Compile Include="Connected Services\LogInServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\SingInServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\LanguageManager.cs" />
     <Compile Include="Utilities\SoundManager.cs" />
     <Page Include="AppShell.xaml">
@@ -137,23 +146,76 @@
   <ItemGroup>
     <None Include="App.config" />
     <Resource Include="Assets\Fonts\Oups.otf" />
-    <None Include="Connected Services\UsuarioServiceReference\service.wsdl" />
-    <None Include="Connected Services\UsuarioServiceReference\service.xsd">
+    <None Include="Connected Services\AccountManagerServiceProxy\AccountManager.wsdl" />
+    <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.ResultadoOperacion.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UsuarioServiceReference\service1.xsd">
+    <None Include="Connected Services\AccountManagerServiceProxy\item1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\DamasChinas_Client.UI.LogInServiceProxy.LoginResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\LoginService.wsdl" />
+    <None Include="Connected Services\SingInServiceProxy\DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\SingInServiceProxy\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SingInServiceProxy\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SingInServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SingInServiceProxy\SingInService.wsdl" />
     <None Include="Properties\Settings.settings" />
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
-    <None Include="Connected Services\UsuarioServiceReference\Reference.svcmap">
+    <None Include="Connected Services\SingInServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Connected Services\UsuarioServiceReference\configuration.svcinfo" />
-    <None Include="Connected Services\UsuarioServiceReference\configuration91.svcinfo" />
+    <None Include="Connected Services\SingInServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\SingInServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\SingInServiceProxy\item.disco" />
+    <None Include="Connected Services\AccountManagerServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\AccountManagerServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\AccountManagerServiceProxy\item.disco" />
+    <None Include="Connected Services\LogInServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\LogInServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\LogInServiceProxy\item.disco" />
     <Resource Include="Assets\Backgrounds\board-background.png" />
     <Resource Include="Assets\Backgrounds\wood-texture.png" />
     <Resource Include="Assets\Icons\avatarIcon.png" />
@@ -189,7 +251,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\UsuarioServiceReference\" />
+    <WCFMetadataStorage Include="Connected Services\AccountManagerServiceProxy\" />
+    <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
+    <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,3 +30,19 @@ C:\Users\cuent\OneDrive\Desktop\copia\Damas_Chinas_Server\Host\obj\Debug\Host.cs
 C:\Users\cuent\OneDrive\Desktop\copia\Damas_Chinas_Server\Host\obj\Debug\Host.csproj.Up2Date
 C:\Users\cuent\OneDrive\Desktop\copia\Damas_Chinas_Server\Host\obj\Debug\Host.exe
 C:\Users\cuent\OneDrive\Desktop\copia\Damas_Chinas_Server\Host\obj\Debug\Host.pdb
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\Host.exe.config
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\Host.exe
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\Host.pdb
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\Damas_Chinas_Server.dll
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\EntityFramework.dll
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\Damas_Chinas_Server.pdb
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\Damas_Chinas_Server.dll.config
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\EntityFramework.xml
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\obj\Debug\Host.csproj.AssemblyReference.cache
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\obj\Debug\Host.exe.config
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\obj\Debug\Host.csproj.CoreCompileInputs.cache
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\obj\Debug\Host.csproj.Up2Date
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\obj\Debug\Host.exe
+C:\Users\cuent\OneDrive\Desktop\Proyecto Damas Chinas\DamasChinas\Damas_Chinas_Server\Host\obj\Debug\Host.pdb
