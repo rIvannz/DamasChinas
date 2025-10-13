@@ -3,18 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|c:\\users\\cuent\\onedrive\\desktop\\proyecto damas chinas\\damaschinas\\damas_chinas_server\\damas_chinas_server\\interfaces\\iaccountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\interfaces\\iaccountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\services\\accountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\services\\accountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\repositoriousuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\repositoriousuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
@@ -23,36 +11,60 @@
       "RelativeMoniker": "D:0:0:{095B6CF3-CDCB-4E47-9087-B350DC44FB44}|Host\\Host.csproj|solutionrelative:host\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{095B6CF3-CDCB-4E47-9087-B350DC44FB44}|Host\\Host.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\host\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{095B6CF3-CDCB-4E47-9087-B350DC44FB44}|Host\\Host.csproj|solutionrelative:host\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\dtos\\publicprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\dtos\\publicprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\services\\accountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\services\\accountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\services\\singinservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\services\\singinservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\interfaces\\isinginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\interfaces\\isinginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|c:\\users\\cuent\\onedrive\\desktop\\proyecto damas chinas\\damaschinas\\damas_chinas_server\\damas_chinas_server\\utilidades\\validator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\utilidades\\validator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|c:\\users\\cuent\\onedrive\\desktop\\proyecto damas chinas\\damaschinas\\damas_chinas_server\\damas_chinas_server\\utilidades\\correo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\utilidades\\correo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\dtos\\publicprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\dtos\\publicprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\dtos\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\dtos\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|c:\\users\\cuent\\onedrive\\desktop\\proyecto damas chinas\\damaschinas\\damas_chinas_server\\damas_chinas_server\\dtos\\accountmgr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\dtos\\accountmgr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|c:\\users\\cuent\\onedrive\\desktop\\proyecto damas chinas\\damaschinas\\damas_chinas_server\\damas_chinas_server\\logica\\repositoriousuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\logica\\repositoriousuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|c:\\users\\cuent\\onedrive\\desktop\\proyecto damas chinas\\damaschinas\\damas_chinas_server\\damas_chinas_server\\interfaces\\iaccountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\interfaces\\iaccountmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{095B6CF3-CDCB-4E47-9087-B350DC44FB44}|Host\\Host.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\host\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{095B6CF3-CDCB-4E47-9087-B350DC44FB44}|Host\\Host.csproj|solutionrelative:host\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\damas_chinas.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
       "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\damas_chinas.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\services\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\interfaces\\iloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\interfaces\\iloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\damas_chinas_server\\interfaces\\isinginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3E751113-C65C-458A-B22A-ACA914F8FA9B}|Damas_Chinas_Server\\Damas_Chinas_Server.csproj|solutionrelative:damas_chinas_server\\interfaces\\isinginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{095B6CF3-CDCB-4E47-9087-B350DC44FB44}|Host\\Host.csproj|C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\host\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
@@ -70,7 +82,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 246,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -85,8 +97,51 @@
               "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
+              "Title": "Validator.cs",
+              "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Utilidades\\Validator.cs",
+              "RelativeDocumentMoniker": "Damas_Chinas_Server\\Utilidades\\Validator.cs",
+              "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Utilidades\\Validator.cs",
+              "RelativeToolTip": "Damas_Chinas_Server\\Utilidades\\Validator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAE0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T13:31:46.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Correo.cs",
+              "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Utilidades\\Correo.cs",
+              "RelativeDocumentMoniker": "Damas_Chinas_Server\\Utilidades\\Correo.cs",
+              "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Utilidades\\Correo.cs",
+              "RelativeToolTip": "Damas_Chinas_Server\\Utilidades\\Correo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T13:28:29.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AccountMgr.cs",
+              "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Dtos\\AccountMgr.cs",
+              "RelativeDocumentMoniker": "Damas_Chinas_Server\\Dtos\\AccountMgr.cs",
+              "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Dtos\\AccountMgr.cs",
+              "RelativeToolTip": "Damas_Chinas_Server\\Dtos\\AccountMgr.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T13:20:18.848Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "IAccountManager.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Interfaces\\IAccountManager.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Interfaces\\IAccountManager.cs",
@@ -99,7 +154,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "xxx.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Dtos\\xxx.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Dtos\\xxx.cs",
@@ -110,60 +165,60 @@
               "WhenOpened": "2025-10-12T22:41:42.527Z"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "App.config",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\App.config",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\App.config",
               "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\App.config",
               "RelativeToolTip": "Damas_Chinas_Server\\App.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAABlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-10-12T21:03:13.431Z"
+              "WhenOpened": "2025-10-12T21:03:13.431Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "PublicProfile.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Dtos\\PublicProfile.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Dtos\\PublicProfile.cs",
               "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Dtos\\PublicProfile.cs",
               "RelativeToolTip": "Damas_Chinas_Server\\Dtos\\PublicProfile.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T23:34:30.208Z"
+              "WhenOpened": "2025-10-12T23:34:30.208Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "AccountManager.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Services\\AccountManager.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Services\\AccountManager.cs",
               "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Services\\AccountManager.cs",
               "RelativeToolTip": "Damas_Chinas_Server\\Services\\AccountManager.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAkwG4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAYwAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T23:27:39.525Z"
+              "WhenOpened": "2025-10-12T23:27:39.525Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "SingInService.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Services\\SingInService.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Services\\SingInService.cs",
               "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Services\\SingInService.cs",
               "RelativeToolTip": "Damas_Chinas_Server\\Services\\SingInService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T22:40:57.561Z"
+              "WhenOpened": "2025-10-12T22:40:57.561Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 5,
               "Title": "ISingInService.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Interfaces\\ISingInService.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Interfaces\\ISingInService.cs",
@@ -171,11 +226,12 @@
               "RelativeToolTip": "Damas_Chinas_Server\\Interfaces\\ISingInService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T22:40:37.18Z"
+              "WhenOpened": "2025-10-12T22:40:37.18Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "IloginService.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Interfaces\\IloginService.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Interfaces\\IloginService.cs",
@@ -183,11 +239,12 @@
               "RelativeToolTip": "Damas_Chinas_Server\\Interfaces\\IloginService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:02:17.508Z"
+              "WhenOpened": "2025-10-12T21:02:17.508Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 13,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Host\\Program.cs",
               "RelativeDocumentMoniker": "Host\\Program.cs",
@@ -195,11 +252,12 @@
               "RelativeToolTip": "Host\\Program.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAQwAcAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:20:24.902Z"
+              "WhenOpened": "2025-10-12T21:20:24.902Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "packages.config",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Host\\packages.config",
               "RelativeDocumentMoniker": "Host\\packages.config",
@@ -211,7 +269,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "App.config",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Host\\App.config",
               "RelativeDocumentMoniker": "Host\\App.config",
@@ -219,35 +277,38 @@
               "RelativeToolTip": "Host\\App.config",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-10-12T21:23:20.836Z"
+              "WhenOpened": "2025-10-12T21:23:20.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "RepositorioUsuarios.cs",
+              "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Logica\\RepositorioUsuarios.cs",
+              "RelativeDocumentMoniker": "Damas_Chinas_Server\\Logica\\RepositorioUsuarios.cs",
+              "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Logica\\RepositorioUsuarios.cs",
+              "RelativeToolTip": "Damas_Chinas_Server\\Logica\\RepositorioUsuarios.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAQwBQAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-12T21:12:14.219Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "RepositorioUsuarios.cs",
-              "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\RepositorioUsuarios.cs",
-              "RelativeDocumentMoniker": "Damas_Chinas_Server\\RepositorioUsuarios.cs",
-              "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\RepositorioUsuarios.cs",
-              "RelativeToolTip": "Damas_Chinas_Server\\RepositorioUsuarios.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAowJQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:12:14.219Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "LoginService.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Services\\LoginService.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Services\\LoginService.cs",
               "ToolTip": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Services\\LoginService.cs",
               "RelativeToolTip": "Damas_Chinas_Server\\Services\\LoginService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:09:31.712Z"
+              "WhenOpened": "2025-10-12T21:09:31.712Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Login.cs",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Dtos\\Login.cs",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Dtos\\Login.cs",
@@ -255,11 +316,12 @@
               "RelativeToolTip": "Damas_Chinas_Server\\Dtos\\Login.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:07:42.175Z"
+              "WhenOpened": "2025-10-12T21:07:42.175Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 14,
               "Title": "Damas_Chinas.edmx [Diagram1]",
               "DocumentMoniker": "C:\\Users\\cuent\\OneDrive\\Desktop\\Proyecto Damas Chinas\\DamasChinas\\Damas_Chinas_Server\\Damas_Chinas_Server\\Damas_Chinas.edmx",
               "RelativeDocumentMoniker": "Damas_Chinas_Server\\Damas_Chinas.edmx",

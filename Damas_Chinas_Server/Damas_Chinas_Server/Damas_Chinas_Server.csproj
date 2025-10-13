@@ -88,7 +88,7 @@
     <Compile Include="movimientos.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
-    <Compile Include="RepositorioUsuarios.cs" />
+    <Compile Include="Logica\RepositorioUsuarios.cs" />
     <Compile Include="participantes_partida.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
@@ -117,6 +117,8 @@
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
     <Compile Include="Dtos\AccountMgr.cs" />
+    <Compile Include="Utilidades\Correo.cs" />
+    <Compile Include="Utilidades\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

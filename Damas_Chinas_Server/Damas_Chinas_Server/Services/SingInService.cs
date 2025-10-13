@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
-
+using System.Threading.Tasks;
+using Damas_Chinas_Server.Utilidades;
 
 namespace Damas_Chinas_Server
 {
@@ -16,6 +13,14 @@ namespace Damas_Chinas_Server
 
             try
             {
+                // --- Validaciones ---
+                Validator.ValidarNombre(nombre);
+                Validator.ValidarNombre(apellido);
+                Validator.ValidarCorreo(correo);
+                Validator.ValidarUsername(username);
+                Validator.ValidarPassword(password);
+
+                // --- Crear usuario ---
                 var repo = new RepositorioUsuarios();
                 var usuario = repo.CrearUsuario(nombre, apellido, correo, password, username);
 
@@ -32,6 +37,21 @@ namespace Damas_Chinas_Server
                         ? $"{perfil.nombre} {perfil.apellido_materno}"
                         : $"{nombre} {apellido}"
                 };
+
+                // --- Enviar correo de bienvenida en segundo plano ---
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        string asunto = "Bienvenido a Damas Chinas";
+                        string cuerpo = $"Hola {resultado.Usuario.NombreCompleto},<br><br>¡Gracias por registrarte en Damas Chinas! Tu usuario es <b>{resultado.Usuario.Username}</b>.<br><br>Disfruta jugando!";
+                        await Correo.EnviarAsync(correo, asunto, cuerpo, html: true);
+                    }
+                    catch
+                    {
+                        // Opcional: log del error, no bloquea al usuario
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -44,4 +64,3 @@ namespace Damas_Chinas_Server
         }
     }
 }
-

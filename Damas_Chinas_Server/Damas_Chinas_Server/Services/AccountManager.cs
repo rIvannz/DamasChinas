@@ -2,7 +2,7 @@
 using System;
 using System.Data.Entity;
 using System.Linq;
-using System.ServiceModel;
+using Damas_Chinas_Server.Utilidades;
 
 namespace Damas_Chinas_Server
 {
@@ -34,37 +34,52 @@ namespace Damas_Chinas_Server
 
         public ResultadoOperacion CambiarUsername(int idUsuario, string nuevoUsername)
         {
-            using (var db = new damas_chinasEntities())
+            try
             {
-                // Verificar si el username ya existe
-                if (db.perfiles.Any(p => p.username == nuevoUsername))
+                // --- Validación usando Validator ---
+                Validator.ValidarUsername(nuevoUsername);
+
+                using (var db = new damas_chinasEntities())
                 {
+                    // Verificar si el username ya existe
+                    if (db.perfiles.Any(p => p.username == nuevoUsername))
+                    {
+                        return new ResultadoOperacion
+                        {
+                            Exito = false,
+                            Mensaje = "El nombre de usuario ya está en uso.",
+                            Usuario = null
+                        };
+                    }
+
+                    var perfil = db.perfiles.FirstOrDefault(p => p.id_usuario == idUsuario);
+                    if (perfil == null)
+                    {
+                        return new ResultadoOperacion
+                        {
+                            Exito = false,
+                            Mensaje = "No se encontró el perfil del usuario.",
+                            Usuario = null
+                        };
+                    }
+
+                    perfil.username = nuevoUsername;
+                    db.SaveChanges();
+
                     return new ResultadoOperacion
                     {
-                        Exito = false,
-                        Mensaje = "El nombre de usuario ya está en uso.",
+                        Exito = true,
+                        Mensaje = "Nombre de usuario actualizado correctamente.",
                         Usuario = null
                     };
                 }
-
-                var perfil = db.perfiles.FirstOrDefault(p => p.id_usuario == idUsuario);
-                if (perfil == null)
-                {
-                    return new ResultadoOperacion
-                    {
-                        Exito = false,
-                        Mensaje = "No se encontró el perfil del usuario.",
-                        Usuario = null
-                    };
-                }
-
-                perfil.username = nuevoUsername;
-                db.SaveChanges();
-
+            }
+            catch (Exception ex)
+            {
                 return new ResultadoOperacion
                 {
-                    Exito = true,
-                    Mensaje = "Nombre de usuario actualizado correctamente.",
+                    Exito = false,
+                    Mensaje = $"Error al actualizar el nombre de usuario: {ex.Message}",
                     Usuario = null
                 };
             }
@@ -72,40 +87,46 @@ namespace Damas_Chinas_Server
 
         public ResultadoOperacion CambiarPassword(int idUsuario, string nuevaPassword)
         {
-            using (var db = new damas_chinasEntities())
+            try
             {
-                var usuario = db.usuarios.FirstOrDefault(u => u.id_usuario == idUsuario);
-                if (usuario == null)
+                // --- Validación usando Validator ---
+                Validator.ValidarPassword(nuevaPassword);
+
+                using (var db = new damas_chinasEntities())
                 {
+                    var usuario = db.usuarios.FirstOrDefault(u => u.id_usuario == idUsuario);
+                    if (usuario == null)
+                    {
+                        return new ResultadoOperacion
+                        {
+                            Exito = false,
+                            Mensaje = "No se encontró el usuario.",
+                            Usuario = null
+                        };
+                    }
+
+                    usuario.password_hash = nuevaPassword;
+                    db.SaveChanges();
+
                     return new ResultadoOperacion
                     {
-                        Exito = false,
-                        Mensaje = "No se encontró el usuario.",
+                        Exito = true,
+                        Mensaje = "Contraseña actualizada correctamente.",
                         Usuario = null
                     };
                 }
-
-                if (string.IsNullOrWhiteSpace(nuevaPassword))
-                {
-                    return new ResultadoOperacion
-                    {
-                        Exito = false,
-                        Mensaje = "La nueva contraseña no puede estar vacía.",
-                        Usuario = null
-                    };
-                }
-
-                usuario.password_hash = nuevaPassword;
-                db.SaveChanges();
-
+            }
+            catch (Exception ex)
+            {
                 return new ResultadoOperacion
                 {
-                    Exito = true,
-                    Mensaje = "Contraseña actualizada correctamente.",
+                    Exito = false,
+                    Mensaje = $"Error al actualizar la contraseña: {ex.Message}",
                     Usuario = null
                 };
             }
         }
     }
+
 }
 

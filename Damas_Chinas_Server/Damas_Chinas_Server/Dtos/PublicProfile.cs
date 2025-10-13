@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Damas_Chinas_Server.Dtos
 {
@@ -14,10 +9,10 @@ namespace Damas_Chinas_Server.Dtos
         public string Username { get; set; }
 
         [DataMember]
-        public string Nombre{ get; set; }
+        public string Nombre { get; set; }
 
         [DataMember]
-       
+
         public string LastName { get; set; }
 
         [DataMember]

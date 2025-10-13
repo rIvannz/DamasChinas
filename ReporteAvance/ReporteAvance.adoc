@@ -202,3 +202,95 @@ El equipo definió reglas para un uso responsable:
 * Prohibido: usar código generado por IA que no se entienda.  
 
 ---
+
+
+== Segundo reporte de Avance del proyecto final: Juego Damas Chinas
+
+
+
+=== Server
+
+image::images/Server_Rute.png[Directorio server, width=300]
+image::images/Evicence_RunServices_global.png[Directorio server, width=300]
+
+==== AccountManager.cs
+
+image::images/AcountManager_Service_Evidence.png[Directorio server, width=600]
+
+
+1. ObtenerPerfilPublico(int idUsuario)
+   - Función: Devuelve la información pública de un usuario.
+   - Retorna: PublicProfile (datos como nombre, apellido, correo, teléfono)
+
+2. CambiarUsername(int idUsuario, string nuevoUsername)
+   - Función: Modifica el nombre de usuario de un usuario.
+   - Retorna: ResultadoOperacion (indica éxito o error de la operación)
+
+3. CambiarPassword(int idUsuario, string nuevaPassword)
+   - Función: Modifica la contraseña de un usuario.
+   - Retorna: ResultadoOperacion (indica éxito o error de la operación)
+
+
+
+==== LoginService.cs 
+image::images/LoginService_Service_Evidence.png[Directorio server, width=600]
+
+
+1. ValidarLogin(string username, string password)
+   - Función: Valida las credenciales de un usuario durante el inicio de sesión.
+   - Retorna: LoginResult 
+     - `Exito` (bool) – indica si la autenticación fue correcta.
+     - `Mensaje` (string) – mensaje informativo o de error.
+     - `Usuario` (UsuarioInfo) – información básica del usuario autenticado en caso de éxito.
+
+
+=== ISingInService.cs
+
+image::images/SingInService_Service_Evidence.png[Directorio server, width=600]
+
+
+1. CrearUsuario(string nombre, string apellido, string correo, string password, string username)
+   - Función: Crea un nuevo usuario junto con su perfil asociado en la base de datos.
+   - Retorna: ResultadoOperacion
+     - `Exito` (bool) – indica si la creación del usuario fue exitosa.
+     - `Mensaje` (string) – mensaje informativo o de error.
+     - `Usuario` (UsuarioInfo) – información básica del usuario recién creado en caso de éxito.
+
+
+
+
+=== Logica
+
+==== Repositorio usuarios
+
+Funciones implementadas para la comunicacion entre la capa de datos y la de logica.
+
+=== RepositorioUsuarios.cs
+
+1. CrearUsuario(string nombre, string apellido, string correo, string password, string username)
+   - Función: Crea un nuevo usuario junto con su perfil asociado en la base de datos.
+   - Retorna: usuarios (entidad creada con su perfil agregado).
+
+2. ObtenerLoginResult(string usuarioInput, string password)
+   - Función: Valida las credenciales de un usuario y retorna información básica para login.
+   - Retorna: LoginResult
+     - `IdUsuario` (int) – identificador del usuario.
+     - `Username` (string) – nombre de usuario del perfil.
+     - `Success` (bool) – indica si el login fue exitoso.
+
+3. ObtenerPerfilPublico(int idUsuario)
+   - Función: Obtiene la información pública de un usuario a partir de su id.
+   - Retorna: PublicProfile (datos como username, nombre, apellido, correo y teléfono).
+
+4. CambiarUsername(int idUsuario, string nuevoUsername)
+   - Función: Actualiza el nombre de usuario de un perfil.
+   - Retorna: bool – `true` si la operación fue exitosa.
+   - Lanza excepción si el username ya existe o el perfil no se encuentra.
+
+5. CambiarPassword(int idUsuario, string nuevaPassword)
+   - Función: Actualiza la contraseña de un usuario.
+   - Retorna: bool – `true` si la operación fue exitosa.
+   - Lanza excepción si el usuario no existe o la contraseña está vacía.
+
+
+

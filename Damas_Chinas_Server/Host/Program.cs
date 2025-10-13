@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Damas_Chinas_Server;
+using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using Damas_Chinas_Server;
 
 namespace DamasChinasHost
 {

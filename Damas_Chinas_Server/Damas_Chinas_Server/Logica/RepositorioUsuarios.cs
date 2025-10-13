@@ -17,18 +17,17 @@ namespace Damas_Chinas_Server
         {
             using (var db = new damas_chinasEntities())
             {
-                // Verificar si ya existe el correo o username
+
                 if (db.usuarios.Any(u => u.correo == correo))
                     throw new Exception("Ya existe un usuario con ese correo.");
 
                 if (db.perfiles.Any(p => p.username == username))
                     throw new Exception("Ya existe un perfil con ese nombre de usuario.");
 
-                // Crear usuario
                 var nuevoUsuario = new usuarios
                 {
                     correo = correo,
-                    password_hash = password, // Guardar texto plano
+                    password_hash = password,
                     rol = "cliente",
                     fecha_creacion = DateTime.Now
                 };
@@ -54,12 +53,10 @@ namespace Damas_Chinas_Server
             }
         }
 
-        // 🔹 Obtener LoginResult con Eager Loading para evitar errores de contexto
         public LoginResult ObtenerLoginResult(string usuarioInput, string password)
         {
             using (var db = new damas_chinasEntities())
             {
-                // Cargar perfiles con Include para evitar ObjectContext disposed
                 var usuario = db.usuarios
                     .Include(u => u.perfiles)
                     .FirstOrDefault(u => u.correo == usuarioInput ||
@@ -95,7 +92,7 @@ namespace Damas_Chinas_Server
                                 .FirstOrDefault(u => u.id_usuario == idUsuario);
 
                 if (usuario == null)
-                    return null; // o lanzar excepción según tu preferencia
+                    return null;
 
                 var perfil = usuario.perfiles.FirstOrDefault();
 
