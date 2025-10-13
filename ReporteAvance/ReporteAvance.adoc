@@ -179,14 +179,14 @@ image::images/xxx.png[Entity Mapeo, width=300]
 - Creación e integración de íconos.  
 - Configuración de la conexión a BD.  
 - Internacionalización (50%).  
-Contribución estimada: 60%.  
+Contribución estimada: 50%.  
 
 *Integrante 2 – Marquez Rodríguez Seth*  
 - Desarrollo de la navegabilidad entre ventanas.  
 - Implementación de la BD en SQL Server.  
 - Implementación de utilidades: validación, encriptación, validadores.  
 - Internacionalización (50%).  
-Contribución estimada: 60%.  
+Contribución estimada: 50%.  
 
 *Nota:* El equipo considera que ambas contribuciones son complementarias (uno enfocado en capa visual y BD, el otro en lógica de validación y soporte multilenguaje).
 
@@ -203,94 +203,227 @@ El equipo definió reglas para un uso responsable:
 
 ---
 
-
 == Segundo reporte de Avance del proyecto final: Juego Damas Chinas
 
-
-
-=== Server
-
+== Server
 image::images/Server_Rute.png[Directorio server, width=300]
+
 image::images/Evicence_RunServices_global.png[Directorio server, width=300]
 
-==== AccountManager.cs
-
+=== AccountManager.cs
 image::images/AcountManager_Service_Evidence.png[Directorio server, width=600]
 
+==== DataContracts
+- **PublicProfile**
+    - Representa la información pública de un usuario.
+    - Campos:
+        - **`Username`** (string) – nombre de usuario del perfil.
+        - **`Nombre`** (string) – nombre propio del usuario.
+        - **`LastName`** (string) – apellido del usuario.
+        - **`Correo`** (string) – correo del usuario.
+        - **`Telefono`** (string) – teléfono registrado del usuario.
 
-1. ObtenerPerfilPublico(int idUsuario)
+- **UsuarioInfo**
+    - Representa la información de un usuario dentro de una operación.
+    - Campos:
+        - **`IdUsuario`** (int) – identificador del usuario.
+        - **`Username`** (string) – nombre de usuario.
+        - **`Correo`** (string) – correo del usuario.
+        - **`NombreCompleto`** (string) – concatenación de nombre y apellido.
+
+- **ResultadoOperacion**
+    - Representa el resultado de una operación de modificación de datos.
+    - Campos:
+        - **`Exito`** (bool) – indica si la operación fue exitosa.
+        - **`Mensaje`** (string) – descripción del resultado.
+        - **`Usuario`** (UsuarioInfo) – información del usuario afectado (opcional, puede ser null).
+
+==== Servicios
+- **IAccountManager** (ServiceContract)
+    - Define las operaciones expuestas por el servicio WCF **AccountManager**.
+    - Operaciones (OperationContract):
+        - **`PublicProfile ObtenerPerfilPublico(int idUsuario)`**
+        - **`ResultadoOperacion CambiarUsername(int idUsuario, string nuevoUsername)`**
+        - **`ResultadoOperacion CambiarPassword(int idUsuario, string nuevaPassword)`**
+
+==== Operaciones / Funcionalidad
+1. **ObtenerPerfilPublico(int idUsuario)**
    - Función: Devuelve la información pública de un usuario.
-   - Retorna: PublicProfile (datos como nombre, apellido, correo, teléfono)
+               Internamente delega la obtención a **RepositorioUsuarios.ObtenerPerfilPublico**.
+   - Retorna: **PublicProfile** (DataContract)
+   - Retorna **null** si el usuario no existe.
 
-2. CambiarUsername(int idUsuario, string nuevoUsername)
+2. **CambiarUsername(int idUsuario, string nuevoUsername)**
    - Función: Modifica el nombre de usuario de un usuario.
-   - Retorna: ResultadoOperacion (indica éxito o error de la operación)
+               Delegado a **RepositorioUsuarios.CambiarUsername**, que valida el username.
+   - Retorna: **ResultadoOperacion** (DataContract)
+       - **`Exito`**, **`Mensaje`**, **`Usuario`** (actualmente null)
 
-3. CambiarPassword(int idUsuario, string nuevaPassword)
+3. **CambiarPassword(int idUsuario, string nuevaPassword)**
    - Función: Modifica la contraseña de un usuario.
-   - Retorna: ResultadoOperacion (indica éxito o error de la operación)
+               Delegado a **RepositorioUsuarios.CambiarPassword**, que valida la contraseña.
+   - Retorna: **ResultadoOperacion** (DataContract)
+       - **`Exito`**, **`Mensaje`**, **`Usuario`** (actualmente null)
 
 
+=== LoginService.cs
 
-==== LoginService.cs 
 image::images/LoginService_Service_Evidence.png[Directorio server, width=600]
 
+==== DataContracts
+- **LoginResult**
+    - Representa el resultado de la validación de login de un usuario.
+    - Campos:
+        - **`IdUsuario`** (int) – identificador del usuario.
+        - **`Username`** (string) – nombre de usuario del perfil.
+        - **`Success`** (bool) – indica si la validación fue exitosa.
 
-1. ValidarLogin(string username, string password)
-   - Función: Valida las credenciales de un usuario durante el inicio de sesión.
-   - Retorna: LoginResult 
-     - `Exito` (bool) – indica si la autenticación fue correcta.
-     - `Mensaje` (string) – mensaje informativo o de error.
-     - `Usuario` (UsuarioInfo) – información básica del usuario autenticado en caso de éxito.
+==== Servicios
+- **ILoginService** (ServiceContract)
+    - Define las operaciones expuestas por el servicio WCF **LoginService**.
+    - Operaciones (OperationContract):
+        - **`LoginResult ValidarLogin(string usuarioInput, string password)`**
 
+==== Operaciones / Funcionalidad
+1. **ValidarLogin(string usuarioInput, string password)**
+   - Función: Valida las credenciales de un usuario.
+               Internamente delega la operación a **RepositorioUsuarios.ObtenerLoginResult**.
+   - Retorna: **LoginResult** (DataContract)
+       - **`IdUsuario`**, **`Username`**, **`Success`**
+   - Validación mínima: Se asegura de que los parámetros no estén vacíos dentro del repositorio.
 
-=== ISingInService.cs
+=== SingInService.cs
 
 image::images/SingInService_Service_Evidence.png[Directorio server, width=600]
 
+==== DataContracts
+- **UsuarioInfo**
+    - Representa la información de un usuario dentro de una operación.
+    - Campos:
+        - **`IdUsuario`** (int) – identificador del usuario.
+        - **`Username`** (string) – nombre de usuario.
+        - **`Correo`** (string) – correo del usuario.
+        - **`NombreCompleto`** (string) – concatenación de nombre y apellido.
 
-1. CrearUsuario(string nombre, string apellido, string correo, string password, string username)
-   - Función: Crea un nuevo usuario junto con su perfil asociado en la base de datos.
-   - Retorna: ResultadoOperacion
-     - `Exito` (bool) – indica si la creación del usuario fue exitosa.
-     - `Mensaje` (string) – mensaje informativo o de error.
-     - `Usuario` (UsuarioInfo) – información básica del usuario recién creado en caso de éxito.
+- **ResultadoOperacion**
+    - Representa el resultado de una operación sobre datos de usuario.
+    - Campos:
+        - **`Exito`** (bool) – indica si la operación fue exitosa.
+        - **`Mensaje`** (string) – descripción del resultado o error.
+        - **`Usuario`** (UsuarioInfo) – información del usuario afectado (opcional, puede ser null).
 
+==== Servicios
+- **ISingInService** (ServiceContract)
+    - Define las operaciones expuestas por el servicio WCF **SingInService**.
+    - Operaciones (OperationContract):
+        - **`ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username)`**
 
-
+==== Operaciones / Funcionalidad
+1. **CrearUsuario(string nombre, string apellido, string correo, string password, string username)**
+   - Función: Crea un nuevo usuario junto con su perfil asociado.
+               Internamente delega la operación a **RepositorioUsuarios.CrearUsuario**, 
+               que realiza todas las validaciones de nombre, apellido, correo, username y contraseña.
+   - Retorna: **ResultadoOperacion** (DataContract)
+       - **`Exito`** – true si se creó correctamente.
+       - **`Mensaje`** – mensaje de éxito o error.
+       - **`Usuario`** – **UsuarioInfo** con los datos del usuario creado.
+   - Envío de correo de bienvenida: Opcionalmente envía un email en segundo plano tras la creación del usuario.
+   - Validación: Todas las validaciones se realizan en **RepositorioUsuarios**, no en el servicio.
 
 === Logica
 
-==== Repositorio usuarios
+==== RepositorioUsuarios.cs 
 
-Funciones implementadas para la comunicacion entre la capa de datos y la de logica.
-
-=== RepositorioUsuarios.cs
-
-1. CrearUsuario(string nombre, string apellido, string correo, string password, string username)
+1. **CrearUsuario(string nombre, string apellido, string correo, string password, string username)**
    - Función: Crea un nuevo usuario junto con su perfil asociado en la base de datos.
+               Antes de guardar, valida los datos usando la clase **Validator**:
+                 - Nombre y apellido → **Validator.ValidarNombre**
+                 - Correo → **Validator.ValidarCorreo**
+                 - Username → **Validator.ValidarUsername**
+                 - Contraseña → **Validator.ValidarPassword**
    - Retorna: usuarios (entidad creada con su perfil agregado).
+   - Excepciones: Lanza excepción si ya existe el correo o el username, 
+                  o si algún dato no cumple las reglas de validación.
 
-2. ObtenerLoginResult(string usuarioInput, string password)
+2. **ObtenerLoginResult(string usuarioInput, string password)**
    - Función: Valida las credenciales de un usuario y retorna información básica para login.
-   - Retorna: LoginResult
-     - `IdUsuario` (int) – identificador del usuario.
-     - `Username` (string) – nombre de usuario del perfil.
-     - `Success` (bool) – indica si el login fue exitoso.
+               Realiza validación mínima de que los parámetros no estén vacíos.
+   - Retorna: **LoginResult**
+     - **`IdUsuario`**, **`Username`**, **`Success`**
+   - Excepciones: Lanza excepción si **usuarioInput** o **password** están vacíos.
 
-3. ObtenerPerfilPublico(int idUsuario)
+3. **ObtenerPerfilPublico(int idUsuario)**
    - Función: Obtiene la información pública de un usuario a partir de su id.
-   - Retorna: PublicProfile (datos como username, nombre, apellido, correo y teléfono).
+   - Retorna: **PublicProfile** (datos como username, nombre, apellido, correo y teléfono).
+   - Retorna **null** si el usuario no existe.
 
-4. CambiarUsername(int idUsuario, string nuevoUsername)
+4. **CambiarUsername(int idUsuario, string nuevoUsername)**
    - Función: Actualiza el nombre de usuario de un perfil.
-   - Retorna: bool – `true` si la operación fue exitosa.
-   - Lanza excepción si el username ya existe o el perfil no se encuentra.
+               Antes de modificarlo, valida el username usando:
+                 - **Validator.ValidarUsername**
+   - Retorna: **bool** – `true` si la operación fue exitosa.
+   - Excepciones: Lanza excepción si el username ya existe, el perfil no se encuentra, 
+                  o el username no cumple las reglas de validación.
 
-5. CambiarPassword(int idUsuario, string nuevaPassword)
+5. **CambiarPassword(int idUsuario, string nuevaPassword)**
    - Función: Actualiza la contraseña de un usuario.
-   - Retorna: bool – `true` si la operación fue exitosa.
-   - Lanza excepción si el usuario no existe o la contraseña está vacía.
+               Antes de modificarla, valida la contraseña usando:
+                 - **Validator.ValidarPassword**
+   - Retorna: **bool** – `true` si la operación fue exitosa.
+   - Excepciones: Lanza excepción si el usuario no existe o la contraseña no cumple las reglas de validación.
 
 
 
+=== IMPLEMENTACION
+
+image::images/Cliente/EvidenceServices.png[Directorio server, width=600]
+
+=== SingIn
+
+
+image::images/SingInUi/Base.png[Directorio server, width=600]
+
+image::images/SingInUi/BaseErrorContraseñaInsegura.png[Directorio server, width=600]
+
+image::images/SingInUi/BaseExito.png[Directorio, width=600]
+
+=== MenuRegisteredPlayer
+
+image::images/MenuRegisteredPlayer/Base.png[Directorio, width=600]
+
+=== ProfilePlayer
+
+image::images/ProfilePlayer/Base.png[Directorio, width=600]
+
+=== ChangeData
+
+
+image::images/ChangeData/Base.png[Directorio, width=600]
+
+image::images/ChangeData/BaseUsernameExito.png[Directorio, width=600]
+
+image::images/ChangeData/BaseExitoContraseña.png[Directorio, width=600]
+
+==== Evidencia posterior al cambio
+
+image::images/ChangeData/PruebaExito.png[Directorio, width=600]
+
+
+== DOCUMENTACION 
+
+Elaboración de un documento de **AsciiDoc** para facilitar el control y registro de los cambios realizados con cada entrega.
+
+image::images/EvidenceAsciiDoc.png[Directorio server, width=600]
+
+
+
+== Avance del Proyecto Final: Juego Damas Chinas (Entrega 2)
+
+=== SETH
+- **Creación del server:** 100%
+- **Implementación de servicios en el cliente:** 100%
+- **Creación de documento ASCII-DOC:** 60%
+- **Conexión de Cliente con Host:** 100%
+
+=== IVAN
+- **GUI:** 100%

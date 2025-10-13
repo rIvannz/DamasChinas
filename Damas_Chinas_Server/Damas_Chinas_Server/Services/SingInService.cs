@@ -1,29 +1,27 @@
-﻿using System;
+﻿using Damas_Chinas_Server.Utilidades;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Damas_Chinas_Server.Utilidades;
 
 namespace Damas_Chinas_Server
 {
     public class SingInService : ISingInService
     {
+        private readonly RepositorioUsuarios _repositorio;
+
+        public SingInService()
+        {
+            _repositorio = new RepositorioUsuarios();
+        }
+
         public ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username)
         {
             var resultado = new ResultadoOperacion();
 
             try
             {
-                // --- Validaciones ---
-                Validator.ValidarNombre(nombre);
-                Validator.ValidarNombre(apellido);
-                Validator.ValidarCorreo(correo);
-                Validator.ValidarUsername(username);
-                Validator.ValidarPassword(password);
-
-                // --- Crear usuario ---
-                var repo = new RepositorioUsuarios();
-                var usuario = repo.CrearUsuario(nombre, apellido, correo, password, username);
-
+                // Crear usuario usando el repositorio (ya hace validaciones)
+                var usuario = _repositorio.CrearUsuario(nombre, apellido, correo, password, username);
                 var perfil = usuario.perfiles.FirstOrDefault();
 
                 resultado.Exito = true;

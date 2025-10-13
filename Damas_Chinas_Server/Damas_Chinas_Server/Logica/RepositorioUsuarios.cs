@@ -1,8 +1,8 @@
 ﻿using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Utilidades;
 using System;
 using System.Data.Entity; // Necesario para Include
 using System.Linq;
-
 namespace Damas_Chinas_Server
 {
     public class RepositorioUsuarios
@@ -15,9 +15,15 @@ namespace Damas_Chinas_Server
             string password,
             string username)
         {
+            // Validaciones
+            Validator.ValidarNombre(nombre);
+            Validator.ValidarNombre(apellido);
+            Validator.ValidarCorreo(correo);
+            Validator.ValidarPassword(password);
+            Validator.ValidarUsername(username);
+
             using (var db = new damas_chinasEntities())
             {
-
                 if (db.usuarios.Any(u => u.correo == correo))
                     throw new Exception("Ya existe un usuario con ese correo.");
 
@@ -55,6 +61,10 @@ namespace Damas_Chinas_Server
 
         public LoginResult ObtenerLoginResult(string usuarioInput, string password)
         {
+            // Validación mínima
+            if (string.IsNullOrWhiteSpace(usuarioInput) || string.IsNullOrWhiteSpace(password))
+                throw new Exception("Usuario y contraseña son requeridos.");
+
             using (var db = new damas_chinasEntities())
             {
                 var usuario = db.usuarios
@@ -86,7 +96,6 @@ namespace Damas_Chinas_Server
         {
             using (var db = new damas_chinasEntities())
             {
-                // Buscar el usuario con su perfil
                 var usuario = db.usuarios
                                 .Include(u => u.perfiles)
                                 .FirstOrDefault(u => u.id_usuario == idUsuario);
@@ -109,6 +118,8 @@ namespace Damas_Chinas_Server
 
         public bool CambiarUsername(int idUsuario, string nuevoUsername)
         {
+            Validator.ValidarUsername(nuevoUsername);
+
             using (var db = new damas_chinasEntities())
             {
                 if (db.perfiles.Any(p => p.username == nuevoUsername))
@@ -125,17 +136,15 @@ namespace Damas_Chinas_Server
             }
         }
 
-
         public bool CambiarPassword(int idUsuario, string nuevaPassword)
         {
+            Validator.ValidarPassword(nuevaPassword);
+
             using (var db = new damas_chinasEntities())
             {
                 var usuario = db.usuarios.FirstOrDefault(u => u.id_usuario == idUsuario);
                 if (usuario == null)
                     throw new Exception("No se encontró el usuario.");
-
-                if (string.IsNullOrWhiteSpace(nuevaPassword))
-                    throw new Exception("La nueva contraseña no puede estar vacía.");
 
                 usuario.password_hash = nuevaPassword;
 
@@ -143,9 +152,6 @@ namespace Damas_Chinas_Server
                 return true;
             }
         }
-
-
-
-
     }
 }
+
