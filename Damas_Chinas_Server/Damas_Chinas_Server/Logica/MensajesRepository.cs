@@ -7,7 +7,6 @@ namespace Damas_Chinas_Server
     {
         private readonly damas_chinasEntities _context = new damas_chinasEntities();
 
-        // Guardar mensaje en BD usando IDs (interno del servidor)
         public void GuardarMensaje(int remitenteId, int destinatarioId, string texto)
         {
             var mensaje = new mensajes
@@ -22,7 +21,6 @@ namespace Damas_Chinas_Server
             _context.SaveChanges();
         }
 
-        // Obtener historial usando IDs (interno)
         public IQueryable<mensajes> ObtenerHistorialPorId(int idUsuario1, int idUsuario2)
         {
             return _context.mensajes
@@ -31,10 +29,8 @@ namespace Damas_Chinas_Server
                 .OrderBy(m => m.fecha_envio);
         }
 
-        // Obtener historial usando usernames (para no exponer IDs al cliente)
         public IQueryable<Mensaje> ObtenerHistorialPorUsername(int idUsuario, string usernameDestino)
         {
-            // Primero obtenemos el ID del usuario destino, ignorando mayúsculas/minúsculas
             var idDestino = _context.usuarios
                 .Where(u => u.perfiles.Any(p => p.username.ToLower() == usernameDestino.ToLower()))
                 .Select(u => u.id_usuario)
@@ -43,7 +39,6 @@ namespace Damas_Chinas_Server
             if (idDestino == 0)
                 return Enumerable.Empty<Mensaje>().AsQueryable();
 
-            // Ahora buscamos mensajes entre los dos IDs y los transformamos a DTO
             var mensajesQuery = _context.mensajes
                 .Where(m =>
                     (m.id_usuario_remitente == idUsuario && m.id_usuario_destino == idDestino) ||

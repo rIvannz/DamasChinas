@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="3620fd81d7bf493e9ab0f2930cefa40a" Name="Diagram1" ZoomLevel="94">
         <EntityTypeShape EntityType="damas_chinasModel.amistades" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="damas_chinasModel.bloqueos" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="damas_chinasModel.bloqueos" Width="1.5" PointX="8" PointY="5.5" IsExpanded="true" />
         <EntityTypeShape EntityType="damas_chinasModel.movimientos" Width="1.5" PointX="8.25" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="damas_chinasModel.participantes_partida" Width="1.5" PointX="6" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="damas_chinasModel.partidas" Width="1.5" PointX="3.75" PointY="8.875" IsExpanded="true" />
@@ -25,7 +25,7 @@
         <AssociationConnector Association="damas_chinasModel.fk_perfil_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="damas_chinasModel.fk_solicitud_emisor" ManuallyRouted="false" />
         <AssociationConnector Association="damas_chinasModel.fk_solicitud_receptor" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="damas_chinasModel.mensajes" Width="1.5" PointX="3.125" PointY="0.5" />
+        <EntityTypeShape EntityType="damas_chinasModel.mensajes" Width="1.5" PointX="3.25" PointY="5.75" />
         <AssociationConnector Association="damas_chinasModel.fk_mensaje_destino" />
         <AssociationConnector Association="damas_chinasModel.fk_mensaje_remitente" />
       </Diagram>

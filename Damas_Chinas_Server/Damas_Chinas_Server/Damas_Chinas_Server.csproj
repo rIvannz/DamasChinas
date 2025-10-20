@@ -65,8 +65,8 @@
     <Compile Include="Interfaces\IAmistadService.cs" />
     <Compile Include="Logica\RepositorioAmistades.cs" />
     <Compile Include="MensajeriaCallback.cs" />
-    <Compile Include="IMensajeriaService.cs" />
-    <Compile Include="MensajeriaService .cs" />
+    <Compile Include="Interfaces\IMensajeriaService.cs" />
+    <Compile Include="Services\MensajeriaService .cs" />
     <Compile Include="Services\AccountManager.cs" />
     <Compile Include="amistades.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>

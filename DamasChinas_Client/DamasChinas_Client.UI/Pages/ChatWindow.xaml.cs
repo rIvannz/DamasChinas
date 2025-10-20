@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading; // <-- Necesario para DispatcherTimer
+using System.Windows.Threading; 
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -18,7 +18,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private IMensajeriaService _client;
 
-        private DispatcherTimer _refreshTimer; // <-- Timer para actualizar cada 5 segundos
+        private DispatcherTimer _refreshTimer; 
 
         public ObservableCollection<Mensaje> Messages { get; set; } = new ObservableCollection<Mensaje>();
 
@@ -32,7 +32,6 @@ namespace DamasChinas_Client.UI.Pages
 
             DataContext = this;
 
-            // Inicializar cliente duplex
             var callback = new MensajeriaCallback(this);
             var context = new InstanceContext(callback);
 
@@ -46,13 +45,13 @@ namespace DamasChinas_Client.UI.Pages
             var factory = new DuplexChannelFactory<IMensajeriaService>(context, binding, endpoint);
             _client = factory.CreateChannel();
 
-            // Registrar cliente en el servidor
+      
             _client.RegistrarCliente(_myUsername);
 
-            // Cargar historial inicialmente
+          
             CargarHistorial();
 
-            // Configurar el timer para recargar historial cada 5 segundos
+          
             _refreshTimer = new DispatcherTimer();
             _refreshTimer.Interval = TimeSpan.FromSeconds(5);
             _refreshTimer.Tick += (s, e) => CargarHistorial();
@@ -61,7 +60,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private string ObtenerMiUsername()
         {
-            // TODO: reemplaza con la forma real de obtener el username del usuario actual
+            
             return "mi_username_real";
         }
 
@@ -72,8 +71,7 @@ namespace DamasChinas_Client.UI.Pages
                 Messages.Clear();
                 var historial = await Task.Run(() => _client.ObtenerHistorialMensajes(_miIdUsuario, _friendUsername));
 
-                // Si quieres, puedes comentar esta línea para no mostrar un MessageBox cada 5s
-                // MessageBox.Show($"Cantidad de mensajes recibidos: {historial.Count()}");
+              
 
                 foreach (var msg in historial)
                     Messages.Add(msg);
@@ -83,7 +81,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                // Solo logueamos en consola, no molestar al usuario cada 5s
+         
                 Console.WriteLine("Error al cargar historial: " + ex.Message);
             }
         }

@@ -427,3 +427,124 @@ image::images/EvidenceAsciiDoc.png[Directorio server, width=600]
 
 === IVAN
 - **GUI:** 100%
+
+
+== Tercer reporte de entrega
+
+=== Modificaciones a la BD
+
+En busqueda de mantener la persistencia de los mensajes existentes en un chat de amigos se implemento la siguiente tabla en la base de datos, con la finalidad de no saturar la memoria del servidor para acceder a las platicas.
+
+
+image::images/BD/MensajesBd.png[Evidencia Funcionamiento, width=600]
+
+=== Cliente
+
+==== CHAT
+
+Funcionalidad: Guardar Mensajes entre amigos.  
+Características: Muestra de forma dinamica la recepcion de mensajes manteninedo chats individuales entre amigos. 
+Internacionalización: Inglés y español.  
+Estado: En proceso, la mensajeria funciona pero el callback que actualiza al llegar un nuevo mensaje aun no esta del todo funcional
+
+
+image::images/chat/FunctionalEvidence.png[Evidencia Funcionamiento, width=600]
+
+
+**Fucionalidad**
+
+image::images/chat/XAMLchat.png[Explicacion Funcionamiento, width=600]
+
+AL iniciar la ventana de chat, se recurre a la interfaz *MesageService* misma que se encarga de consultar los mensajes existentes entre 2 usuarios y agregarlos a una coleccion de mensajes misma que sera mostrada automaticamente por la page.
+
+image::images/chat/Cargadelosdatos.png[Explicacion Funcionamiento2, width=600]
+
+==== Friends
+
+image::images/Friends/Evidencia1.png[Evidencia friends, width=600]
+
+Funcionalidad:
+
+- Mostrar la lista de amigos  
+- Permite la apertura de un chat con amigos
+- Nos permite consultar el perfil publico de nuestros amigos
+
+Características: Al entrar en la ventana se recupera la lista de amigos del usuario y los despliega por medio de una lista de amigos provista por el servidor
+
+image::images/Friends/DTOFriend.png[Evidencia friends, width=600]
+
+
+Y lo muestra por medio de un  ItemControl Para mantener la estetica de nuestras ventanas y permiten la creacion de botones dinamicos para cada uno de los amigos.
+
+image::images/Friends/ItemControl.png[Evidencia ItemList, width=600]
+
+
+=== Servidor
+
+**Evidencia Servicios Corriendo**
+
+image::images/Server/EvidenciaRunService.png[RunService width=600]
+
+
+==== AmistadService
+
+*Funcionalidades y estado.*
+
+image::images/Server/FrienService/HttpEvidence.png[HttpEvidence  width=600]
+
+
+Este servicio es el encargado de todo lo relacionado a la gestion de amigos.
+
+
+
+
+- Mostrar Lista de Amigos (Funcional)
+- Agregar amigo (pendiente de implementacion)
+- Eliminar amigo (pendiente de implementacion)
+- Bloquear usuario (pendiente de implementacion)
+
+
+image::images/Server/FrienService/eVIDENCIA1.png[Evidencia1 ItemList, width=600]
+
+image::images/Server/FrienService/ServiceContract.png[ServiceContract , width=600]
+
+image::images/Server/FrienService/dto.png[ServiceContract , width=600]
+
+==== MessageService
+
+Este servicio es el encargado de todo lo relacionado a la entrega de mensajes entre amigos para el chat
+
+**DTO**
+
+image::images/Server/MensajeriaService/Dto.png[dto servicemesage , width=600]
+
+**ServiceContract**
+
+image::images/Server/MensajeriaService/ServiceContract.png[ ServiceContract , width=600]
+
+
+**Service**
+
+image::images/Server/MensajeriaService/service.png[ ServiceContract , width=600]
+
+
+**UtilidadesImplementadas**
+
+encargadas de mediar la logica entre el servidor y la implementacion de entity framework 
+
+image::images/Server/MensajeriaService/Utilidades.png[ ServiceContract , width=600]
+
+
+== Avance del Proyecto Final: Juego Damas Chinas (Entrega 3)
+
+=== SETH
+- **Creacion e implementacion de el servicio de mensajes:** 100%
+- **Creacion del servicio de amigos** 100%
+- **Creacion del servicio de mensajes** 100%
+- **Creación de documento ASCII-DOC:** 50%
+- **Implemtacion de servicio amigos en cliente** 100%
+- **Implementacion de servicio de mensajes en cliente* 100%
+- **Modificacion de la base de datos** 50%
+
+=== IVAN
+- **GUI:** 100%
