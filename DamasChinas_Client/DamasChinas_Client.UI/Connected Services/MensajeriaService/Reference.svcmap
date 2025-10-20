@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="a8fbdbfa-fa98-4c05-9153-4a0d97c7d988" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="26e9299f-6f26-4c2d-836d-86bbc18f0446" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,13 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://localhost:8750/MensajeriaService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://localhost:8755/MensajeriaService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="8b9e6bb6-f54d-4fd9-aab7-58842bec976b" SourceId="1" SourceUrl="net.tcp://localhost:8750/MensajeriaService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="6bd08d0f-b0a6-4bf5-a07d-6262a9318a47" SourceId="1" SourceUrl="net.tcp://localhost:8750/MensajeriaService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="d91d7501-d3d8-4b3e-9470-09e36f2cb8c9" SourceId="1" SourceUrl="net.tcp://localhost:8750/MensajeriaService/mex" />
-    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="e557184e-3bfd-4770-858b-8a9c0a3d1194" SourceId="1" SourceUrl="net.tcp://localhost:8750/MensajeriaService/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="c61e2543-e962-4452-bead-dc9f12b9113b" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="7980ae4a-ce2a-42a2-8e20-7487b099a414" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="71bb259d-52f7-47ea-bb60-9cabf54a0235" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
+    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="c51a44d0-8d75-4735-b2f5-54938c1c3adf" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

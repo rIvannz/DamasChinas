@@ -1,10 +1,12 @@
 ﻿using DamasChinas_Client.UI.MensajeriaService;
-using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading; // <-- Necesario para DispatcherTimer
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -12,35 +14,49 @@ namespace DamasChinas_Client.UI.Pages
     {
         private int _miIdUsuario;
         private string _friendUsername;
-        private string _myUsername; // username real para registrar en WCF
+        private string _myUsername;
 
-        private MensajeriaServiceClient _client;
+        private IMensajeriaService _client;
+
+        private DispatcherTimer _refreshTimer; // <-- Timer para actualizar cada 5 segundos
 
         public ObservableCollection<Mensaje> Messages { get; set; } = new ObservableCollection<Mensaje>();
 
-        // Constructor de dos parámetros, como quieres
         public ChatWindow(int miId, string friendUsername)
         {
             InitializeComponent();
 
             _miIdUsuario = miId;
             _friendUsername = friendUsername;
-
-            // Aquí obtienes tu username de alguna forma, por ejemplo desde tu sesión
             _myUsername = ObtenerMiUsername();
 
             DataContext = this;
 
-            // Inicializar cliente WCF con callback
+            // Inicializar cliente duplex
             var callback = new MensajeriaCallback(this);
-            var context = new System.ServiceModel.InstanceContext(callback);
-            _client = new MensajeriaServiceClient(context);
+            var context = new InstanceContext(callback);
 
-            // Registrar el cliente con su username real
+            var binding = new NetTcpBinding
+            {
+                Security = { Mode = SecurityMode.None },
+                ReceiveTimeout = TimeSpan.MaxValue
+            };
+
+            var endpoint = new EndpointAddress("net.tcp://localhost:8755/MensajeriaService/");
+            var factory = new DuplexChannelFactory<IMensajeriaService>(context, binding, endpoint);
+            _client = factory.CreateChannel();
+
+            // Registrar cliente en el servidor
             _client.RegistrarCliente(_myUsername);
 
-            // Cargar historial
+            // Cargar historial inicialmente
             CargarHistorial();
+
+            // Configurar el timer para recargar historial cada 5 segundos
+            _refreshTimer = new DispatcherTimer();
+            _refreshTimer.Interval = TimeSpan.FromSeconds(5);
+            _refreshTimer.Tick += (s, e) => CargarHistorial();
+            _refreshTimer.Start();
         }
 
         private string ObtenerMiUsername()
@@ -48,6 +64,7 @@ namespace DamasChinas_Client.UI.Pages
             // TODO: reemplaza con la forma real de obtener el username del usuario actual
             return "mi_username_real";
         }
+
         private async void CargarHistorial()
         {
             try
@@ -55,7 +72,8 @@ namespace DamasChinas_Client.UI.Pages
                 Messages.Clear();
                 var historial = await Task.Run(() => _client.ObtenerHistorialMensajes(_miIdUsuario, _friendUsername));
 
-                MessageBox.Show($"Cantidad de mensajes recibidos: {historial.Count()}");
+                // Si quieres, puedes comentar esta línea para no mostrar un MessageBox cada 5s
+                // MessageBox.Show($"Cantidad de mensajes recibidos: {historial.Count()}");
 
                 foreach (var msg in historial)
                     Messages.Add(msg);
@@ -65,11 +83,10 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar historial: " + ex.Message);
+                // Solo logueamos en consola, no molestar al usuario cada 5s
+                Console.WriteLine("Error al cargar historial: " + ex.Message);
             }
         }
-
-
 
         private void OnSendClick(object sender, RoutedEventArgs e)
         {

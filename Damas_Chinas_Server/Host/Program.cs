@@ -13,7 +13,7 @@ namespace DamasChinasHost
             Uri loginBaseAddress = new Uri("http://localhost:8739/LoginService/");
             Uri signInBaseAddress = new Uri("http://localhost:8736/SignInService/");
             Uri accountManagerBaseAddress = new Uri("http://localhost:8735/AccountManager/");
-            Uri saludoBaseAddress = new Uri("net.tcp://localhost:8755/SaludoService/");
+            Uri saludoBaseAddress = new Uri("net.tcp://localhost:8755/MensajeriaService/");
             Uri amistadBaseAddress = new Uri("http://localhost:8741/AmistadService/"); // CORREGIDO: puerto libre
 
             // Crear hosts individuales para cada servicio
@@ -22,9 +22,14 @@ namespace DamasChinasHost
             using (ServiceHost accountHost = new ServiceHost(typeof(AccountManager), accountManagerBaseAddress))
             using (ServiceHost saludoHost = new ServiceHost(typeof(MensajeriaService), saludoBaseAddress))
             using (ServiceHost amistadHost = new ServiceHost(typeof(AmistadService), amistadBaseAddress))
+
+
+
+
             {
                 try
                 {
+
                     // =========================
                     // LOGIN SERVICE
                     // =========================
@@ -49,9 +54,25 @@ namespace DamasChinasHost
                     // =========================
                     // SALUDO SERVICE (NetTcp + Callback)
                     // =========================
-                    saludoHost.AddServiceEndpoint(typeof(IMensajeriaService), new NetTcpBinding(), "");
+                    var saludoBinding = new NetTcpBinding
+                    {
+                        Security = { Mode = SecurityMode.None },
+                        ReceiveTimeout = TimeSpan.MaxValue
+                    };
+
+                    // Crear el comportamiento de metadata
                     var saludoMetadata = new ServiceMetadataBehavior { HttpGetEnabled = false };
                     saludoHost.Description.Behaviors.Add(saludoMetadata);
+
+                    // Agregar endpoint del servicio
+                    saludoHost.AddServiceEndpoint(typeof(IMensajeriaService), saludoBinding, "");
+
+                    // Agregar endpoint MEX TCP para que Visual Studio lo detecte
+                    saludoHost.AddServiceEndpoint(
+                        typeof(IMetadataExchange),
+                        MetadataExchangeBindings.CreateMexTcpBinding(),
+                        "mex" // Esto crea net.tcp://localhost:8755/MensajeriaService/mex
+                    );
 
                     // =========================
                     // AMISTAD SERVICE (HTTP)

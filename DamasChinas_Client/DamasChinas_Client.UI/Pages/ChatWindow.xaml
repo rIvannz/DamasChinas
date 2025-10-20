@@ -13,7 +13,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="0,2">
-                        <TextBlock Text="{Binding IdUsuario}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding UsernameDestino}" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Texto}" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding FechaEnvio}" FontSize="10" Foreground="Gray"/>
                     </StackPanel>
