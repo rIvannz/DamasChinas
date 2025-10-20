@@ -18,6 +18,16 @@
     <Property Name="id_bloqueado" Type="int" Nullable="false" />
     <Property Name="fecha_bloqueo" Type="datetime2" Precision="7" />
   </EntityType>
+  <EntityType Name="mensajes">
+    <Key>
+      <PropertyRef Name="id_mensaje" />
+    </Key>
+    <Property Name="id_mensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_usuario_remitente" Type="int" Nullable="false" />
+    <Property Name="id_usuario_destino" Type="int" Nullable="false" />
+    <Property Name="texto" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="fecha_envio" Type="datetime2" Precision="7" Nullable="false" />
+  </EntityType>
   <EntityType Name="movimientos">
     <Key>
       <PropertyRef Name="id_movimiento" />
@@ -153,6 +163,32 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_mensaje_destino">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="mensajes">
+        <PropertyRef Name="id_usuario_destino" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_mensaje_remitente">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="mensajes">
+        <PropertyRef Name="id_usuario_remitente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_movimiento_pp">
     <End Role="participantes_partida" Type="Self.participantes_partida" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -271,6 +307,7 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
   <EntityContainer Name="damas_chinasModelStoreContainer">
     <EntitySet Name="amistades" EntityType="Self.amistades" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="bloqueos" EntityType="Self.bloqueos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="mensajes" EntityType="Self.mensajes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="movimientos" EntityType="Self.movimientos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="participantes_partida" EntityType="Self.participantes_partida" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="partidas" EntityType="Self.partidas" Schema="dbo" store:Type="Tables" />
@@ -302,6 +339,14 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
     <AssociationSet Name="fk_bloqueador" Association="Self.fk_bloqueador">
       <End Role="usuarios" EntitySet="usuarios" />
       <End Role="bloqueos" EntitySet="bloqueos" />
+    </AssociationSet>
+    <AssociationSet Name="fk_mensaje_destino" Association="Self.fk_mensaje_destino">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="mensajes" EntitySet="mensajes" />
+    </AssociationSet>
+    <AssociationSet Name="fk_mensaje_remitente" Association="Self.fk_mensaje_remitente">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="mensajes" EntitySet="mensajes" />
     </AssociationSet>
     <AssociationSet Name="fk_movimiento_pp" Association="Self.fk_movimiento_pp">
       <End Role="participantes_partida" EntitySet="participantes_partida" />

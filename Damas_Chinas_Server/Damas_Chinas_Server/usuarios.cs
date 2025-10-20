@@ -25,6 +25,8 @@ namespace Damas_Chinas_Server
             this.perfiles = new HashSet<perfiles>();
             this.solicitudes_amistad = new HashSet<solicitudes_amistad>();
             this.solicitudes_amistad1 = new HashSet<solicitudes_amistad>();
+            this.mensajes = new HashSet<mensajes>();
+            this.mensajes1 = new HashSet<mensajes>();
         }
     
         public int id_usuario { get; set; }
@@ -49,5 +51,9 @@ namespace Damas_Chinas_Server
         public virtual ICollection<solicitudes_amistad> solicitudes_amistad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<solicitudes_amistad> solicitudes_amistad1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<mensajes> mensajes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<mensajes> mensajes1 { get; set; }
     }
 }

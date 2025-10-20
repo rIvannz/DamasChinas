@@ -106,6 +106,8 @@
     <NavigationProperty Name="perfiles" Relationship="Self.fk_perfil_usuario" FromRole="usuarios" ToRole="perfiles" />
     <NavigationProperty Name="solicitudes_amistad" Relationship="Self.fk_solicitud_emisor" FromRole="usuarios" ToRole="solicitudes_amistad" />
     <NavigationProperty Name="solicitudes_amistad1" Relationship="Self.fk_solicitud_receptor" FromRole="usuarios" ToRole="solicitudes_amistad" />
+    <NavigationProperty Name="mensajes" Relationship="damas_chinasModel.fk_mensaje_destino" FromRole="usuarios" ToRole="mensajes" />
+    <NavigationProperty Name="mensajes1" Relationship="damas_chinasModel.fk_mensaje_remitente" FromRole="usuarios" ToRole="mensajes" />
   </EntityType>
   <EntityType Name="historial_partidas">
     <Key>
@@ -336,6 +338,15 @@
       <Parameter Name="new_diagramname" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="mensajes" EntityType="damas_chinasModel.mensajes" />
+    <AssociationSet Name="fk_mensaje_destino" Association="damas_chinasModel.fk_mensaje_destino">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="mensajes" EntitySet="mensajes" />
+    </AssociationSet>
+    <AssociationSet Name="fk_mensaje_remitente" Association="damas_chinasModel.fk_mensaje_remitente">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="mensajes" EntitySet="mensajes" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="sp_helpdiagramdefinition_Result">
     <Property Type="Int32" Name="version" Nullable="true" />
@@ -348,4 +359,42 @@
     <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
     <Property Type="Int32" Name="OwnerID" Nullable="false" />
   </ComplexType>
+  <EntityType Name="mensajes">
+    <Key>
+      <PropertyRef Name="id_mensaje" />
+    </Key>
+    <Property Name="id_mensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_usuario_remitente" Type="Int32" Nullable="false" />
+    <Property Name="id_usuario_destino" Type="Int32" Nullable="false" />
+    <Property Name="texto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fecha_envio" Type="DateTime" Nullable="false" Precision="7" />
+    <NavigationProperty Name="usuarios" Relationship="damas_chinasModel.fk_mensaje_destino" FromRole="mensajes" ToRole="usuarios" />
+    <NavigationProperty Name="usuarios1" Relationship="damas_chinasModel.fk_mensaje_remitente" FromRole="mensajes" ToRole="usuarios" />
+  </EntityType>
+  <Association Name="fk_mensaje_destino">
+    <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1" />
+    <End Type="damas_chinasModel.mensajes" Role="mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="mensajes">
+        <PropertyRef Name="id_usuario_destino" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_mensaje_remitente">
+    <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="damas_chinasModel.mensajes" Role="mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="mensajes">
+        <PropertyRef Name="id_usuario_remitente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

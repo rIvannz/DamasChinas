@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="damas_chinasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="damas_chinasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="amistades">
           <Key>
             <PropertyRef Name="id_usuario1" />
@@ -22,6 +22,16 @@
           <Property Name="id_bloqueador" Type="int" Nullable="false" />
           <Property Name="id_bloqueado" Type="int" Nullable="false" />
           <Property Name="fecha_bloqueo" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="mensajes">
+          <Key>
+            <PropertyRef Name="id_mensaje" />
+          </Key>
+          <Property Name="id_mensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario_remitente" Type="int" Nullable="false" />
+          <Property Name="id_usuario_destino" Type="int" Nullable="false" />
+          <Property Name="texto" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="fecha_envio" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
         <EntityType Name="movimientos">
           <Key>
@@ -158,6 +168,32 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_mensaje_destino">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="id_usuario_destino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mensaje_remitente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="id_usuario_remitente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_movimiento_pp">
           <End Role="participantes_partida" Type="Self.participantes_partida" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -276,6 +312,7 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
         <EntityContainer Name="damas_chinasModelStoreContainer">
           <EntitySet Name="amistades" EntityType="Self.amistades" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="bloqueos" EntityType="Self.bloqueos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mensajes" EntityType="Self.mensajes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="movimientos" EntityType="Self.movimientos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="participantes_partida" EntityType="Self.participantes_partida" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="partidas" EntityType="Self.partidas" Schema="dbo" store:Type="Tables" />
@@ -308,6 +345,14 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="bloqueos" EntitySet="bloqueos" />
           </AssociationSet>
+          <AssociationSet Name="fk_mensaje_destino" Association="Self.fk_mensaje_destino">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mensaje_remitente" Association="Self.fk_mensaje_remitente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
           <AssociationSet Name="fk_movimiento_pp" Association="Self.fk_movimiento_pp">
             <End Role="participantes_partida" EntitySet="participantes_partida" />
             <End Role="movimientos" EntitySet="movimientos" />
@@ -333,8 +378,7 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <End Role="solicitudes_amistad" EntitySet="solicitudes_amistad" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="damas_chinasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -444,6 +488,8 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <NavigationProperty Name="perfiles" Relationship="Self.fk_perfil_usuario" FromRole="usuarios" ToRole="perfiles" />
           <NavigationProperty Name="solicitudes_amistad" Relationship="Self.fk_solicitud_emisor" FromRole="usuarios" ToRole="solicitudes_amistad" />
           <NavigationProperty Name="solicitudes_amistad1" Relationship="Self.fk_solicitud_receptor" FromRole="usuarios" ToRole="solicitudes_amistad" />
+          <NavigationProperty Name="mensajes" Relationship="damas_chinasModel.fk_mensaje_destino" FromRole="usuarios" ToRole="mensajes" />
+          <NavigationProperty Name="mensajes1" Relationship="damas_chinasModel.fk_mensaje_remitente" FromRole="usuarios" ToRole="mensajes" />
         </EntityType>
         <EntityType Name="historial_partidas">
           <Key>
@@ -674,6 +720,15 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="mensajes" EntityType="damas_chinasModel.mensajes" />
+          <AssociationSet Name="fk_mensaje_destino" Association="damas_chinasModel.fk_mensaje_destino">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mensaje_remitente" Association="damas_chinasModel.fk_mensaje_remitente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -686,6 +741,44 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="mensajes">
+          <Key>
+            <PropertyRef Name="id_mensaje" />
+          </Key>
+          <Property Name="id_mensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario_remitente" Type="Int32" Nullable="false" />
+          <Property Name="id_usuario_destino" Type="Int32" Nullable="false" />
+          <Property Name="texto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_envio" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="usuarios" Relationship="damas_chinasModel.fk_mensaje_destino" FromRole="mensajes" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="damas_chinasModel.fk_mensaje_remitente" FromRole="mensajes" ToRole="usuarios" />
+        </EntityType>
+        <Association Name="fk_mensaje_destino">
+          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1" />
+          <End Type="damas_chinasModel.mensajes" Role="mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="id_usuario_destino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mensaje_remitente">
+          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="damas_chinasModel.mensajes" Role="mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="id_usuario_remitente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -820,6 +913,17 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="damas_chinasModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="damas_chinasModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="mensajes">
+            <EntityTypeMapping TypeName="damas_chinasModel.mensajes">
+              <MappingFragment StoreEntitySet="mensajes">
+                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
+                <ScalarProperty Name="texto" ColumnName="texto" />
+                <ScalarProperty Name="id_usuario_destino" ColumnName="id_usuario_destino" />
+                <ScalarProperty Name="id_usuario_remitente" ColumnName="id_usuario_remitente" />
+                <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

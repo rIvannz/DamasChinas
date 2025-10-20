@@ -55,6 +55,18 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logica\MensajesRepository.cs" />
+    <Compile Include="mensajes.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AmistadService.cs" />
+    <Compile Include="Dtos\AmigoDto.cs" />
+    <Compile Include="Dtos\Mensaje.cs" />
+    <Compile Include="Interfaces\IAmistadService.cs" />
+    <Compile Include="Logica\RepositorioAmistades.cs" />
+    <Compile Include="MensajeriaCallback.cs" />
+    <Compile Include="IMensajeriaService.cs" />
+    <Compile Include="MensajeriaService .cs" />
     <Compile Include="Services\AccountManager.cs" />
     <Compile Include="amistades.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>

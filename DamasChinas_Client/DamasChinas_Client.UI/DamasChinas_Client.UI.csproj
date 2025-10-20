@@ -68,7 +68,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\AmistadService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\LogInServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\MensajeriaService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -78,7 +88,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ChatWindow.xaml.cs">
+      <DependentUpon>ChatWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\Amigos.cs" />
     <Compile Include="Utilities\LanguageManager.cs" />
+    <Compile Include="Utilities\MensajeriaCallback.cs" />
     <Compile Include="Utilities\SoundManager.cs" />
     <Page Include="AppShell.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -96,6 +111,10 @@
     <Compile Include="Pages\ChangeData.xaml.cs">
       <DependentUpon>ChangeData.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\ChatWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ConfiSound.xaml" />
     <Compile Include="Pages\ConfiSound.xaml.cs">
       <DependentUpon>ConfiSound.xaml</DependentUpon>
@@ -165,6 +184,19 @@
     <None Include="Connected Services\AccountManagerServiceProxy\item3.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\AmistadService\AmistadService.wsdl" />
+    <None Include="Connected Services\AmistadService\DamasChinas_Client.UI.AmistadService.AmigoDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AmistadService\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AmistadService\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AmistadService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LogInServiceProxy\DamasChinas_Client.UI.LogInServiceProxy.LoginResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -178,6 +210,19 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\LoginService.wsdl" />
+    <None Include="Connected Services\MensajeriaService\DamasChinas_Client.UI.MensajeriaService.Mensaje.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\MensajeriaService\service.wsdl" />
+    <None Include="Connected Services\MensajeriaService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MensajeriaService\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MensajeriaService\service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\SingInServiceProxy\DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -195,6 +240,19 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\MensajeriaService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\MensajeriaService\configuration.svcinfo" />
+    <None Include="Connected Services\MensajeriaService\configuration91.svcinfo" />
+    <None Include="Connected Services\AmistadService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\AmistadService\configuration.svcinfo" />
+    <None Include="Connected Services\AmistadService\configuration91.svcinfo" />
+    <None Include="Connected Services\AmistadService\item.disco" />
     <None Include="Connected Services\SingInServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -252,7 +310,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AccountManagerServiceProxy\" />
+    <WCFMetadataStorage Include="Connected Services\AmistadService\" />
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
+    <WCFMetadataStorage Include="Connected Services\MensajeriaService\" />
     <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

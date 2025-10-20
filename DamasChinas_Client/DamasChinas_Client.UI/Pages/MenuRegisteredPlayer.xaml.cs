@@ -89,7 +89,16 @@ namespace DamasChinas_Client
         /// </summary>
         private void OnFriendsClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new Friends());
+            try
+            {
+                // Pasamos el id del usuario actual al constructor
+                NavigationService?.Navigate(new Friends(_idUsuario));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al abrir la lista de amigos: " + ex.Message,
+                                "Amigos", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         /// <summary>

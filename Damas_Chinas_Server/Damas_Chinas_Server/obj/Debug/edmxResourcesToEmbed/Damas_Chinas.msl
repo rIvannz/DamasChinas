@@ -129,5 +129,16 @@
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="damas_chinasModel.Store.sp_renamediagram" />
     <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="damas_chinasModel.Store.sp_upgraddiagrams" />
+    <EntitySetMapping Name="mensajes">
+      <EntityTypeMapping TypeName="damas_chinasModel.mensajes">
+        <MappingFragment StoreEntitySet="mensajes">
+          <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
+          <ScalarProperty Name="texto" ColumnName="texto" />
+          <ScalarProperty Name="id_usuario_destino" ColumnName="id_usuario_destino" />
+          <ScalarProperty Name="id_usuario_remitente" ColumnName="id_usuario_remitente" />
+          <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

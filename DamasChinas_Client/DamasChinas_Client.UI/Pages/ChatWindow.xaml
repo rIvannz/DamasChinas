@@ -1,0 +1,31 @@
+﻿<Window x:Class="DamasChinas_Client.UI.Pages.ChatWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chat" Height="400" Width="350">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Lista de mensajes -->
+        <ListBox x:Name="MessagesList" ItemsSource="{Binding Messages}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,2">
+                        <TextBlock Text="{Binding IdUsuario}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Texto}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding FechaEnvio}" FontSize="10" Foreground="Gray"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Entrada de mensaje -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+            <TextBox x:Name="InputMessage" Width="220" Height="30"/>
+            <Button Content="Enviar" Width="80" Height="30" Margin="10,0,0,0"
+                    Click="OnSendClick"/>
+        </StackPanel>
+    </Grid>
+</Window>
