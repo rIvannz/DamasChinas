@@ -1,0 +1,24 @@
+#######################################
+# IGNORAR ARCHIVO DE CREDENCIALES LOCALES
+#######################################
+connectionStrings.config
+
+#######################################
+# ARCHIVOS Y CARPETAS TEMPORALES DE VISUAL STUDIO
+#######################################
+[Bb]in/
+[Oo]bj/
+[Tt]emp/
+[Tt]estResults/
+*.cache
+*.log
+*.suo
+*.user
+*.userosscache
+*.vs/
+*.vscode/
+_ReSharper*/
+*.bak
+*.tmp
+*.old
+*.orig
