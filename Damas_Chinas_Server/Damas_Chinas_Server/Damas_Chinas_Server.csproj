@@ -55,6 +55,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\Lobby.cs" />
+    <Compile Include="Interfaces\ILobbyService.cs" />
     <Compile Include="Logica\MensajesRepository.cs" />
     <Compile Include="mensajes.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
@@ -66,6 +68,7 @@
     <Compile Include="Logica\RepositorioAmistades.cs" />
     <Compile Include="MensajeriaCallback.cs" />
     <Compile Include="Interfaces\IMensajeriaService.cs" />
+    <Compile Include="Services\LobbyService.cs" />
     <Compile Include="Services\MensajeriaService .cs" />
     <Compile Include="Services\AccountManager.cs" />
     <Compile Include="amistades.cs">
@@ -133,11 +136,16 @@
     <Compile Include="Utilidades\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <EntityDeploy Include="Damas_Chinas.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Damas_Chinas.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="connectionStrings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Damas_Chinas.edmx.diagram">
       <DependentUpon>Damas_Chinas.edmx</DependentUpon>
     </None>

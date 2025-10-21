@@ -4,7 +4,8 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DamasChinas_Client.Pages
+namespace DamasChinas_Client.UI.Pages
+
 {
     public partial class ProfilePlayer : Page
     {

@@ -1,0 +1,199 @@
+﻿<Page x:Class="DamasChinas_Client.UI.Pages.PreLobby"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Background="{DynamicResource SurfaceBrush}"
+      d:DesignHeight="720" d:DesignWidth="1280">
+
+    <Grid>
+        <!-- ===== FONDO ===== -->
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
+                        Stretch="UniformToFill"/>
+        </Grid.Background>
+
+        <!-- Capa oscura -->
+        <Rectangle Fill="#66000000"/>
+
+        <!-- ===== CONTENIDO PRINCIPAL ===== -->
+        <Grid Margin="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ===== ENCABEZADO ===== -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10,0,20">
+                <Button Click="OnBackClick"
+                        Background="Transparent" BorderThickness="0" Cursor="Hand">
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
+                           Width="28" Height="28"/>
+                </Button>
+                <TextBlock Text="{DynamicResource preLobby}"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           Margin="12,0,0,0"/>
+            </StackPanel>
+
+            <!-- ===== TABLERO Y HOST ===== -->
+            <Border Grid.Row="1" CornerRadius="12" Background="#33000000" Margin="0,0,20,0" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Host -->
+                    <TextBlock x:Name="lblUsername"
+                               Text="PLAYER_1 (H)"
+                               Foreground="White"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+
+                    <!-- Tablero -->
+                    <Image Grid.Row="1"
+                           Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/boardPreview.png"
+                           Stretch="Uniform"
+                           Margin="0,10,0,10"
+                           Opacity="0.8"/>
+
+                    <!-- Invitado -->
+                    <TextBlock Grid.Row="2"
+                               Text="guest"
+                               Foreground="White"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ===== PANEL DERECHO ===== -->
+            <Grid Grid.Row="1" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Friends -->
+                <Border CornerRadius="12" Background="#22000000" Padding="10" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource friendsList}"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+                        <ListBox x:Name="friendsList"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Height="120"
+                                 SelectionMode="Single"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Members -->
+                <Border Grid.Row="1" CornerRadius="12" Background="#22000000" Padding="10" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource membersList}"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+                        <ListBox x:Name="friendsLDist"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Height="120"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Chat -->
+                <Border Grid.Row="2" CornerRadius="12" Background="#22000000" Padding="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Contenedor del chat -->
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Margin="0,0,0,10">
+                            <StackPanel x:Name="chatContainer"/>
+                        </ScrollViewer>
+
+                        <!-- Área de escritura -->
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <Grid Width="220" Height="32" Margin="0,0,10,0">
+                                <TextBox x:Name="txtChatMessage"
+                                         VerticalContentAlignment="Center"
+                                         Foreground="Black"
+                                         Background="White"
+                                         BorderThickness="1"
+                                         BorderBrush="#444"
+                                         TextWrapping="Wrap"
+                                         Padding="5,2"/>
+                                <TextBlock x:Name="txtChatPlaceholder"
+                                           Text="{DynamicResource chatPlaceholder}"
+                                           Foreground="#888"
+                                           Margin="8,2,0,0"
+                                           IsHitTestVisible="False"
+                                           VerticalAlignment="Center"
+                                           Visibility="Visible"
+                                           FontStyle="Italic"/>
+                            </Grid>
+
+                            <!-- Botón Enviar -->
+                            <Button Content="{DynamicResource send}"
+                                    Style="{DynamicResource BaseGameButton}"
+                                    Width="90" Height="32"
+                                    Click="OnSendMessageClick"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ===== BOTONES E INFORMACIÓN ===== -->
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
+
+                <StackPanel Orientation="Vertical" Margin="0,0,60,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="lblLobbyCode"
+                               Text="{DynamicResource lobbyCode}"
+                               Foreground="White"
+                               FontSize="16" FontWeight="Bold"
+                               TextAlignment="Center"/>
+                    <TextBlock x:Name="txtLobbyPlayers"
+                               Text="{DynamicResource players}"
+                               Foreground="White"
+                               FontSize="14"
+                               TextAlignment="Center"/>
+                </StackPanel>
+
+                <Button Content="{DynamicResource exit}"
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="150" Height="48" Margin="0,0,15,0"
+                        Click="OnExitClick"/>
+
+                <Button Content="{DynamicResource startGame}"
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="150" Height="48"
+                        Click="OnStartGameClick"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

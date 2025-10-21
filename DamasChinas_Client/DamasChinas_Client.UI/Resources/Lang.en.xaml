@@ -48,7 +48,6 @@
     <sys:String x:Key="joinParty">Join a Party</sys:String>
     <sys:String x:Key="howToPlay">How to Play</sys:String>
     <sys:String x:Key="profile">Profile</sys:String>
-    <sys:String x:Key="friends">Friends</sys:String>
     <sys:String x:Key="statistics">Statistics</sys:String>
     <sys:String x:Key="guestUser">GUEST1</sys:String>
     <sys:String x:Key="configuration">Configuration</sys:String>
@@ -83,7 +82,21 @@
     <sys:String x:Key="codeSentMessage">Verification code sent to your email.</sys:String>
     <sys:String x:Key="newUsername">New Username</sys:String>
     <sys:String x:Key="codePassword">Verification Code</sys:String>
-
+    <sys:String x:Key="preLobby">Pre-Lobby</sys:String>
+    <sys:String x:Key="friendsList">Friends</sys:String>
+    <sys:String x:Key="membersList">Members</sys:String>
+    <sys:String x:Key="invite">Invite</sys:String>
+    <sys:String x:Key="chatPlaceholder">Type your message...</sys:String>
+    <sys:String x:Key="send">Send</sys:String>
+    <sys:String x:Key="startGame">Start Game</sys:String>
+    <sys:String x:Key="leaveLobby">Leave Lobby</sys:String>
+    <sys:String x:Key="lobbyCode">Lobby Code</sys:String>
+    <sys:String x:Key="players">Players</sys:String>
+    <sys:String x:Key="waitingForPlayers">Waiting for players...</sys:String>
+    <sys:String x:Key="lobbyCreated">Lobby created successfully!</sys:String>
+    <sys:String x:Key="youJoinedLobby">You joined the lobby.</sys:String>
+    <sys:String x:Key="gameStarting">The game is starting!</sys:String>
+    <sys:String x:Key="lobbyClosed">The lobby has been closed.</sys:String>
 
 
 

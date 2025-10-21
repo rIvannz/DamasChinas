@@ -1,10 +1,11 @@
-﻿using DamasChinas_Client.Pages;
-using DamasChinas_Client.UI.AccountManagerServiceProxy;
-using DamasChinas_Client.UI.Pages;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using DamasChinas_Client.UI.Utilities;                
+using DamasChinas_Client.UI.Pages;                     
+using DamasChinas_Client.UI.AccountManagerServiceProxy; 
+
 
 namespace DamasChinas_Client
 {
@@ -14,7 +15,8 @@ namespace DamasChinas_Client
     /// </summary>
     public partial class MenuRegisteredPlayer : Page
     {
-        private int _idUsuario;
+        private readonly int _idUsuario;
+        private readonly string _username;
 
         public MenuRegisteredPlayer()
         {
@@ -25,6 +27,7 @@ namespace DamasChinas_Client
             : this()
         {
             _idUsuario = idUsuario;
+            _username = username;
             txtUsername.Text = username;
         }
 
@@ -48,14 +51,25 @@ namespace DamasChinas_Client
             }
         }
 
-        /// <summary>
-        /// Maneja el clic en "Create Game".
-        /// </summary>
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Create Game clicked", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-            // TODO: Navegar a la página de creación de partida
+            try
+            {
+                // Crear el LobbyManager e invocar el servicio remoto
+                var lobbyManager = new LobbyManager();
+                var lobby = lobbyManager.CreateLobby(_idUsuario, _username, false);
+
+                // Navegar al PreLobby pasando los datos del lobby recién creado
+                var preLobbyPage = new PreLobby(lobby, _username);
+                NavigationService?.Navigate(preLobbyPage);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al crear la partida: {ex.Message}",
+                                "Create Game", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
         /// <summary>
         /// Maneja el clic en "Join Party".
@@ -91,7 +105,6 @@ namespace DamasChinas_Client
         {
             try
             {
-                // Pasamos el id del usuario actual al constructor
                 NavigationService?.Navigate(new Friends(_idUsuario));
             }
             catch (Exception ex)

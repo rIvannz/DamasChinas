@@ -36,6 +36,7 @@
   </PropertyGroup>
   <!-- Referencias base del framework -->
   <ItemGroup>
+    <Reference Include="DamasChinas_Client.Logic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -73,6 +74,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\LobbyServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\LogInServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -91,8 +97,12 @@
     <Compile Include="Pages\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PreLobby.xaml.cs">
+      <DependentUpon>PreLobby.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\Amigos.cs" />
     <Compile Include="Utilities\LanguageManager.cs" />
+    <Compile Include="Utilities\LobbyManager.cs" />
     <Compile Include="Utilities\MensajeriaCallback.cs" />
     <Compile Include="Utilities\SoundManager.cs" />
     <Page Include="AppShell.xaml">
@@ -139,6 +149,10 @@
     <Compile Include="Pages\MenuRegisteredPlayer.xaml.cs">
       <DependentUpon>MenuRegisteredPlayer.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\PreLobby.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProfilePlayer.xaml" />
     <Compile Include="Pages\ProfilePlayer.xaml.cs">
       <DependentUpon>ProfilePlayer.xaml</DependentUpon>
@@ -197,6 +211,19 @@
     <None Include="Connected Services\AmistadService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.Lobby.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\Damas_Chinas_Server.Dtos.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\service.wsdl" />
+    <None Include="Connected Services\LobbyServiceProxy\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LogInServiceProxy\DamasChinas_Client.UI.LogInServiceProxy.LoginResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -236,10 +263,17 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\SingInServiceProxy\SingInService.wsdl" />
+    <None Include="Properties\DataSources\DamasChinas_Client.Logic.LobbyServiceProxy.Lobby.datasource" />
     <None Include="Properties\Settings.settings" />
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\LobbyServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\LobbyServiceProxy\configuration91.svcinfo" />
     <None Include="Connected Services\MensajeriaService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -311,6 +345,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AccountManagerServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\AmistadService\" />
+    <WCFMetadataStorage Include="Connected Services\LobbyServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\MensajeriaService\" />
     <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />

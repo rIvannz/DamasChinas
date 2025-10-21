@@ -2,6 +2,9 @@
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using Damas_Chinas_Server.Services;       
+using Damas_Chinas_Server.Interfaces;
+
 
 namespace DamasChinasHost
 {
@@ -15,6 +18,7 @@ namespace DamasChinasHost
             Uri accountManagerBaseAddress = new Uri("http://localhost:8735/AccountManager/");
             Uri saludoBaseAddress = new Uri("net.tcp://localhost:8755/MensajeriaService/");
             Uri amistadBaseAddress = new Uri("http://localhost:8741/AmistadService/"); // CORREGIDO: puerto libre
+            Uri lobbyBaseAddress = new Uri("net.tcp://localhost:8751/LobbyService/"); // nuevo servicio
 
             // Crear hosts individuales para cada servicio
             using (ServiceHost loginHost = new ServiceHost(typeof(LoginService), loginBaseAddress))
@@ -22,14 +26,10 @@ namespace DamasChinasHost
             using (ServiceHost accountHost = new ServiceHost(typeof(AccountManager), accountManagerBaseAddress))
             using (ServiceHost saludoHost = new ServiceHost(typeof(MensajeriaService), saludoBaseAddress))
             using (ServiceHost amistadHost = new ServiceHost(typeof(AmistadService), amistadBaseAddress))
-
-
-
-
+            using (ServiceHost lobbyHost = new ServiceHost(typeof(LobbyService), lobbyBaseAddress)) // nuevo
             {
                 try
                 {
-
                     // =========================
                     // LOGIN SERVICE
                     // =========================
@@ -60,19 +60,13 @@ namespace DamasChinasHost
                         ReceiveTimeout = TimeSpan.MaxValue
                     };
 
-                    // Crear el comportamiento de metadata
                     var saludoMetadata = new ServiceMetadataBehavior { HttpGetEnabled = false };
                     saludoHost.Description.Behaviors.Add(saludoMetadata);
 
-                    // Agregar endpoint del servicio
                     saludoHost.AddServiceEndpoint(typeof(IMensajeriaService), saludoBinding, "");
-
-                    // Agregar endpoint MEX TCP para que Visual Studio lo detecte
-                    saludoHost.AddServiceEndpoint(
-                        typeof(IMetadataExchange),
+                    saludoHost.AddServiceEndpoint(typeof(IMetadataExchange),
                         MetadataExchangeBindings.CreateMexTcpBinding(),
-                        "mex" // Esto crea net.tcp://localhost:8755/MensajeriaService/mex
-                    );
+                        "mex");
 
                     // =========================
                     // AMISTAD SERVICE (HTTP)
@@ -81,12 +75,32 @@ namespace DamasChinasHost
                     var amistadMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = amistadBaseAddress };
                     amistadHost.Description.Behaviors.Add(amistadMetadata);
 
+                    // =========================
+                    // LOBBY SERVICE (NetTcp + Callback)
+                    // =========================
+                    var lobbyBinding = new NetTcpBinding
+                    {
+                        Security = { Mode = SecurityMode.None },
+                        ReceiveTimeout = TimeSpan.MaxValue
+                    };
+
+                    var lobbyMetadata = new ServiceMetadataBehavior { HttpGetEnabled = false };
+                    lobbyHost.Description.Behaviors.Add(lobbyMetadata);
+
+                    lobbyHost.AddServiceEndpoint(typeof(ILobbyService), lobbyBinding, "");
+                    lobbyHost.AddServiceEndpoint(typeof(IMetadataExchange),
+                        MetadataExchangeBindings.CreateMexTcpBinding(),
+                        "mex");
+
+                    // =========================
                     // Abrir todos los servicios
+                    // =========================
                     loginHost.Open();
                     signInHost.Open();
                     accountHost.Open();
                     saludoHost.Open();
                     amistadHost.Open();
+                    lobbyHost.Open();
 
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("✅ Servicios WCF levantados correctamente:\n");
@@ -95,8 +109,9 @@ namespace DamasChinasHost
                     Console.WriteLine($"➡ LoginService: {loginBaseAddress}");
                     Console.WriteLine($"➡ SignInService: {signInBaseAddress}");
                     Console.WriteLine($"➡ AccountManager: {accountManagerBaseAddress}");
-                    Console.WriteLine($"➡ SaludoService (NetTcp): {saludoBaseAddress}");
+                    Console.WriteLine($"➡ MensajeriaService (NetTcp): {saludoBaseAddress}");
                     Console.WriteLine($"➡ AmistadService: {amistadBaseAddress}");
+                    Console.WriteLine($"➡ LobbyService (NetTcp): {lobbyBaseAddress}");
                     Console.WriteLine("\nPresiona <Enter> para detener los servicios...");
                     Console.ReadLine();
 
@@ -106,6 +121,7 @@ namespace DamasChinasHost
                     accountHost.Close();
                     saludoHost.Close();
                     amistadHost.Close();
+                    lobbyHost.Close();
                 }
                 catch (CommunicationException ce)
                 {
@@ -118,6 +134,7 @@ namespace DamasChinasHost
                     accountHost.Abort();
                     saludoHost.Abort();
                     amistadHost.Abort();
+                    lobbyHost.Abort();
                 }
             }
         }

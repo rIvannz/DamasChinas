@@ -1,8 +1,8 @@
-﻿using DamasChinas_Client.UI.AccountManagerServiceProxy;
-using DamasChinas_Client.Pages;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using DamasChinas_Client.UI.Pages;
+using DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
 {

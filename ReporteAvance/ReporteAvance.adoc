@@ -17,7 +17,7 @@ Marquez Rodríguez Seth (S23014042)
 Perez Arriaga Juan Carlos  
 
 *Fecha de entrega:*  
-Xalapa, Ver., 26 de septiembre de 2025
+Xalapa, Ver., 21 de Octubre de 2025
 
 
 == Primer reporte de Avance del proyecto final: Juego Damas Chinas
@@ -535,7 +535,92 @@ encargadas de mediar la logica entre el servidor y la implementacion de entity f
 image::images/Server/MensajeriaService/Utilidades.png[ ServiceContract , width=600]
 
 
-== Avance del Proyecto Final: Juego Damas Chinas (Entrega 3)
+
+==== LOBBY
+
+Funcionalidad: Creación, unión y gestión dinámica de lobbies multijugador.
+
+Características: Permite la creación de lobbies privados o públicos por parte del usuario anfitrión, la unión de otros jugadores mediante un código de invitación, y la comunicación en tiempo real entre los miembros de un mismo lobby. 
+
+Internacionalización: Inglés y español.  
+Estado: **En funcionamiento.** El cliente y servidor ya se comunican correctamente mediante WCF, el *LobbyManager* del cliente está implementado y los servicios del servidor están en ejecución estable.
+
+
+---
+
+**Descripción de la implementación**
+
+La estructura del sistema se divide en **Cliente (UI)** y **Servidor (WCF Services)**.  
+El *Cliente* utiliza el proxy `LobbyServiceProxy` generado automáticamente desde el servicio del servidor para gestionar la comunicación, mientras que el *Servidor* expone la lógica de negocio a través del contrato `ILobbyService` y el *callback contract* `ILobbyCallback`.
+
+image::images/Lobby/LobbyServiceProxy.jpg[Evidencia funcionamiento Lobby, width=600]
+
+
+
+
+
+---
+
+**Estructura del Servidor**
+
+- **Carpeta Dtos:** contiene las clases `Lobby`, que representan la sesión multijugador y los jugadores conectados.
+- **Carpeta Interfaces:** define `ILobbyService` (contrato principal) e `ILobbyCallback` (canal de retorno que notifica eventos a los clientes).
+- **Carpeta Services:** contiene `LobbyService.cs`, que implementa toda la lógica del sistema de lobbies.
+
+image::images/Lobby/LobbyDtos.jpg[Evidencia funcionamiento Lobby, width=600]
+
+image::images/Lobby/LobbyInterface.jpg[Evidencia funcionamiento Lobby, width=600]
+
+image::images/Lobby/LobbyServices.jpg[Evidencia funcionamiento Lobby, width=600]
+
+
+---
+
+**ServiceContract y Callback**
+
+El servidor implementa las siguientes operaciones mediante WCF:
+
+- `CreateLobby(hostUserId, hostUsername, isPrivate)` → crea un nuevo lobby y registra al host.
+- `JoinLobby(code, userId, username)` → permite a un jugador unirse mediante el código.
+- `LeaveLobby(code, userId)` → remueve al jugador del lobby.
+- `SendLobbyMessage(code, userId, username, message)` → envía mensajes a todos los miembros conectados.
+- `StartGame(code)` → notifica a todos los jugadores que la partida ha comenzado.
+
+El `ILobbyCallback` define los métodos que el servidor invoca en los clientes:
+- `OnMemberJoined(LobbyMember member)`
+- `OnMemberLeft(int userId)`
+- `OnMessageReceived(int userId, string username, string message, string utcIso)`
+- `OnLobbyClosed(string reason)`
+- `OnGameStarted(string code)`
+
+
+---
+
+**Estructura del Cliente**
+
+El cliente cuenta con una capa de utilidades (`Utilities`) que maneja la conexión con los servicios del servidor y los eventos recibidos por medio de callbacks.
+
+- **LobbyManager.cs**: clase encargada de gestionar la conexión con el servicio `LobbyService`, utilizando el proxy generado por *Connected Services*.  
+- Implementa la interfaz `ILobbyServiceCallback` para recibir las notificaciones del servidor en tiempo real.  
+- Expone eventos públicos (`MemberJoined`, `MemberLeft`, `MessageReceived`, `LobbyClosed`, `GameStarted`) a los que la UI puede suscribirse para actualizar las vistas.
+
+
+
+---
+
+**Flujo de comunicación**
+
+1. El usuario crea o se une a un lobby desde la interfaz WPF.
+2. `LobbyManager` crea una instancia de `LobbyServiceClient` con un `InstanceContext` para manejar los callbacks.
+3. El servicio `LobbyService` en el servidor agrega el usuario al lobby y notifica al resto mediante `OnMemberJoined`.
+4. La UI del cliente actualiza la vista de jugadores conectados automáticamente mediante eventos suscritos.
+
+
+
+---
+
+
+==== Avance del Proyecto Final: Juego Damas Chinas (Entrega 3)
 
 === SETH
 - **Creacion e implementacion de el servicio de mensajes:** 100%
@@ -548,3 +633,7 @@ image::images/Server/MensajeriaService/Utilidades.png[ ServiceContract , width=6
 
 === IVAN
 - **GUI:** 100%
+- **Creacion e implementación del servicio de Lobby de juego** 100%
+- **Creación de documento ASCII-DOC:** 50%
+- **Implementacion de servicio de lobby en cliente** 100%
+- **Modificacion de la base de datos** 50%
