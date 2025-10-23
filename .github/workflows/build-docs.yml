@@ -1,29 +1,42 @@
-name: Build Asciidoc site
+name: Build & Publish Docs
 
 on:
   push:
-    branches: ["main"]
+    branches: [ main ]
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: ruby/setup-ruby@v1
         with:
-          node-version: "20"
-
-      - name: Setup Asciidoctor
-        run: sudo apt-get install -y asciidoctor
-
-      - name: Build documentation
-        run: asciidoctor -D docs -R docs docs/index.adoc
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+          ruby-version: '3.3'
+      - run: gem install asciidoctor asciidoctor-pdf
+      # HTML
+      - run: mkdir -p build
+      - run: asciidoctor -D build docs/index.adoc
+      # PDF
+      - run: asciidoctor-pdf -o build/index.pdf docs/index.adoc
+      # Copiar recursos estáticos (imágenes, etc.)
+      - name: Copy static assets
+        run: |
+          if [ -d docs/images ]; then
+            mkdir -p build/images
+            cp -r docs/images/* build/images/
+          fi
+      - uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
