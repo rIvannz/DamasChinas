@@ -42,15 +42,15 @@
                               RecognizesAccessKey="True"/>
                     </Border>
 
-                    <!-- Triggers -->
+                
                     <ControlTemplate.Triggers>
 
-                        <!-- Hover: oscurece ligeramente -->
+                    
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="Opacity" Value="0.8"/>
                         </Trigger>
 
-                        <!-- Presionado: leve reducción -->
+                  
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="bd" Property="RenderTransform">
                                 <Setter.Value>
@@ -59,7 +59,7 @@
                             </Setter>
                         </Trigger>
 
-                        <!-- Deshabilitado -->
+                        
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.6"/>
                         </Trigger>

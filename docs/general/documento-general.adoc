@@ -1,3 +1,0 @@
-// docs/general/documento-general.adoc
-= Documento general
-Este es un archivo temporal para la compilación.

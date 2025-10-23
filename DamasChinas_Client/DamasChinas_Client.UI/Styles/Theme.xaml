@@ -39,7 +39,6 @@
     <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource Marble-Red}"/>
     <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource Marble-Blue}"/>
 
-    <!-- ===== Alias para compatibilidad (AccentColor usado en XAML) ===== -->
     <SolidColorBrush x:Key="AccentColor" Color="{Binding Color, Source={StaticResource AccentBrush}}"/>
 
 
@@ -101,7 +100,7 @@
         </Setter>
     </Style>
 
-    <!-- ===== Referencias a otros estilos ===== -->
+   
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Buttons.xaml"/>
     </ResourceDictionary.MergedDictionaries>
