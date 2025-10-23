@@ -21,6 +21,8 @@ FACULTAD DE ESTADÍSTICA E INFORMÁTICA
 :note-caption: Nota
 :tip-caption: Consejo
 :warning-caption: Advertencia
+:relfilesuffix: .adoc
+:relfileprefix: ./
 
 [.text-center]
 image::images/UVLogo.png[width=120,align=center]
@@ -73,3 +75,4 @@ include::general/documento-general.adoc[]
 include::estandar/estandar.adoc[]
 
 include::reportes/2025-10-21-reporte.adoc[]
+

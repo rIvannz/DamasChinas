@@ -1,0 +1,29 @@
+name: Build Asciidoc site
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Asciidoctor
+        run: sudo apt-get install -y asciidoctor
+
+      - name: Build documentation
+        run: asciidoctor -D docs -R docs docs/index.adoc
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
