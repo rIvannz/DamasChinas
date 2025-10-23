@@ -23,7 +23,7 @@ jobs:
       - run: asciidoctor -D build docs/index.adoc
       # PDF
       - run: asciidoctor-pdf -o build/index.pdf docs/index.adoc
-      # Copiar recursos estáticos (imágenes, etc.)
+      # Copiar recursos estáticos
       - name: Copy static assets
         run: |
           if [ -d docs/images ]; then
@@ -37,6 +37,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
