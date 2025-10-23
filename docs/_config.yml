@@ -1,0 +1,13 @@
+title: "Documentación Damas Chinas (Cliente)"
+description: "Docs con GitHub Pages + AsciiDoc"
+plugins:
+  - jekyll-asciidoc
+asciidoctor:
+  safe: unsafe
+  attributes:
+    icons: font
+    toc: left
+    toclevels: 3
+    sectanchors: true
+    source-highlighter: rouge
+theme: jekyll-theme-cayman

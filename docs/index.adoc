@@ -1,0 +1,44 @@
+= UNIVERSIDAD VERACRUZANA
+:doctype: report
+:icons: font
+:toc!:
+:toclevels: 2
+:sectanchors:
+
+[.text-center]
+image::images//UV/LogoUV.jpg[width=120,align=center]
+
+[.text-center]
+== LICENCIATURA EN INGENIERÍA DE SOFTWARE
+
+[.text-center]
+FACULTAD DE ESTADÍSTICA E INFORMÁTICA
+
+'''
+
+[.text-center]
+=== TECNOLOGÍAS PARA LA CONSTRUCCIÓN DE SOFTWARE
+
+[.text-center]
+==== DOCUMENTACION DEL PROYECTO FINAL
+
+'''
+
+[.text-center]
+*Realizado por:* +
+Rodrigo Iván Ahumada Rodríguez (S21013886) +
+Marquez Rodríguez Seth (S23014042)
+
+'''
+
+[.text-center]
+*Docente:* +
+Perez Arriaga Juan Carlos
+
+'''
+
+[.text-center]
+*Fecha de entrega:* +
+Xalapa, Ver., 23 de Octubre de 2025
+
+'''
