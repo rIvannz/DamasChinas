@@ -1,12 +1,29 @@
 = UNIVERSIDAD VERACRUZANA
-:doctype: report
+LIC. INGENIERÍA DE SOFTWARE
+FACULTAD DE ESTADÍSTICA E INFORMÁTICA
+:doctype: book
+:toc: left
+:sectnums:
 :icons: font
-:toc!:
-:toclevels: 2
-:sectanchors:
+:source-highlighter: highlightjs
+:imagesdir: images
+:lang: es
+
+:chapter-label: Capítulo
+:apendix-caption: Apéndice
+:part-signifier: Parte
+:figure-caption: Figura
+:table-caption: Tabla
+:example-caption: Ejemplo
+:listing-caption: Listado
+:caution-caption: Precaución
+:important-caption: Importante
+:note-caption: Nota
+:tip-caption: Consejo
+:warning-caption: Advertencia
 
 [.text-center]
-image::images//UV/LogoUV.jpg[width=120,align=center]
+image::images/UVLogo.png[width=120,align=center]
 
 [.text-center]
 == LICENCIATURA EN INGENIERÍA DE SOFTWARE
@@ -20,7 +37,7 @@ FACULTAD DE ESTADÍSTICA E INFORMÁTICA
 === TECNOLOGÍAS PARA LA CONSTRUCCIÓN DE SOFTWARE
 
 [.text-center]
-==== DOCUMENTACION DEL PROYECTO FINAL
+==== ENTREGA SEMANAL DE AVANCES
 
 '''
 
@@ -39,6 +56,20 @@ Perez Arriaga Juan Carlos
 
 [.text-center]
 *Fecha de entrega:* +
-Xalapa, Ver., 23 de Octubre de 2025
+Xalapa, Ver., 21 de Octubre de 2025
 
 '''
+
+[.text-center]
+image::images/BarrasUV.png[width=600,align=center]
+
+'''
+
+<<<
+== Contenido del documento
+
+include::general/documento-general.adoc[]
+
+include::estandar/estandar.adoc[]
+
+include::reportes/2025-10-21-reporte.adoc[]
