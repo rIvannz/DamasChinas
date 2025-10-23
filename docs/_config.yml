@@ -1,7 +1,11 @@
-title: "Documentación Damas Chinas (Cliente)"
+title: "Documentación Damas Chinas"
 description: "Docs con GitHub Pages + AsciiDoc"
+markdown: kramdown
+theme: jekyll-theme-cayman
+
 plugins:
   - jekyll-asciidoc
+
 asciidoctor:
   safe: unsafe
   attributes:
@@ -10,4 +14,3 @@ asciidoctor:
     toclevels: 3
     sectanchors: true
     source-highlighter: rouge
-theme: jekyll-theme-cayman
