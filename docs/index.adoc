@@ -1,6 +1,4 @@
 = UNIVERSIDAD VERACRUZANA
-LIC. INGENIERÍA DE SOFTWARE
-FACULTAD DE ESTADÍSTICA E INFORMÁTICA
 :doctype: book
 :toc: left
 :sectnums:
@@ -24,11 +22,13 @@ FACULTAD DE ESTADÍSTICA E INFORMÁTICA
 :relfilesuffix: .adoc
 :relfileprefix: ./
 
-[.text-center]
-image::images/UVLogo.png[width=120,align=center]
+== Portada
 
 [.text-center]
-== LICENCIATURA EN INGENIERÍA DE SOFTWARE
+image::UV/LogoUV.jpg[width=120,align=center]
+
+[.text-center]
+=== LICENCIATURA EN INGENIERÍA DE SOFTWARE
 
 [.text-center]
 FACULTAD DE ESTADÍSTICA E INFORMÁTICA
@@ -36,10 +36,10 @@ FACULTAD DE ESTADÍSTICA E INFORMÁTICA
 '''
 
 [.text-center]
-=== TECNOLOGÍAS PARA LA CONSTRUCCIÓN DE SOFTWARE
+==== TECNOLOGÍAS PARA LA CONSTRUCCIÓN DE SOFTWARE
 
 [.text-center]
-==== ENTREGA SEMANAL DE AVANCES
+===== ENTREGA SEMANAL DE AVANCES
 
 '''
 
@@ -62,11 +62,6 @@ Xalapa, Ver., 21 de Octubre de 2025
 
 '''
 
-[.text-center]
-image::images/BarrasUV.png[width=600,align=center]
-
-'''
-
 <<<
 == Contenido del documento
 
@@ -74,5 +69,6 @@ include::general/documento-general.adoc[]
 
 include::estandar/estandar.adoc[]
 
-include::reportes/2025-10-21-reporte.adoc[]
+include::reportes/primer-reporte.adoc[]
+
 
