@@ -1,4 +1,4 @@
-﻿using DamasChinas_Client.UI.AmistadService;
+﻿using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -8,35 +8,35 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class Friends : Page
     {
-        public ObservableCollection<Amigos> AmigosList { get; set; } = new ObservableCollection<Amigos>();
-        private int _idUsuario;
+        public ObservableCollection<Amigos> FriendList { get; set; } = new ObservableCollection<Amigos>();
+        private int _idUser;
 
-        // Constructor que recibe el ID del usuario actual
+      
         public Friends(int idUsuario)
         {
             InitializeComponent();
             DataContext = this;
-            _idUsuario = idUsuario;
+            _idUser = idUsuario;
 
-            CargarAmigos();
+            ChargeFriendsToView();
         }
 
-        // Método que llama al servicio WCF para obtener la lista de amigos
-        private void CargarAmigos()
+       
+        private void ChargeFriendsToView()
         {
             try
             {
-                using (var client = new AmistadServiceClient())
+                using (var client = new FriendServiceClient())
                 {
-                    var lista = client.ObtenerAmigos(_idUsuario);
+                    var friendList = client.GetFriends(_idUser);
 
-                    AmigosList.Clear();
-                    foreach (var amigo in lista)
+                    this.FriendList.Clear();
+                    foreach (var friend in friendList)
                     {
-                        AmigosList.Add(new Amigos
+                        this.FriendList.Add(new Amigos
                         {
-                            Username = amigo.Username,
-                            EnLinea = amigo.EnLinea,
+                            Username = friend.Username,
+                            ConnectionStatus = friend.ConnectionState,
                             Avatar = "pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/avatarIcon.png"
                         });
                     }
@@ -63,7 +63,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             if (sender is FrameworkElement fe && fe.DataContext is Amigos amigo)
             {
-                var chatWindow = new ChatWindow(_idUsuario, amigo.Username);
+                var chatWindow = new ChatWindow(_idUser, amigo.Username);
                 chatWindow.Show();
             }
         }

@@ -7,12 +7,12 @@ namespace Damas_Chinas_Server
     public interface IAccountManager
     {
         [OperationContract]
-        PublicProfile ObtenerPerfilPublico(int idUsuario);
+        PublicProfile GetPublicProfile(int idUser);
 
         [OperationContract]
-        ResultadoOperacion CambiarUsername(int idUsuario, string nuevoUsername);
+        OperationResult ChangeUsername(int idUser, string newUsername);
 
         [OperationContract]
-        ResultadoOperacion CambiarPassword(int idUsuario, string nuevaPassword);
+        OperationResult ChangePassword(int idUser, string newPassword);
     }
 }

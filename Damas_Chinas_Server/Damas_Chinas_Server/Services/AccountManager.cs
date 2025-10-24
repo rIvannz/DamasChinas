@@ -6,60 +6,60 @@ namespace Damas_Chinas_Server
 {
     public class AccountManager : IAccountManager
     {
-        private readonly RepositorioUsuarios _repositorio;
+        private readonly RepositoryUsers _repository;
 
         public AccountManager()
         {
-            _repositorio = new RepositorioUsuarios();
+            _repository = new RepositoryUsers();
         }
 
-        public PublicProfile ObtenerPerfilPublico(int idUsuario)
+        public PublicProfile GetPublicProfile(int idUser)
         {
-            return _repositorio.ObtenerPerfilPublico(idUsuario);
+            return _repository.GetPublicProfile(idUser);
         }
 
-        public ResultadoOperacion CambiarUsername(int idUsuario, string nuevoUsername)
+        public OperationResult ChangeUsername(int idUser, string newUsername)
         {
             try
             {
-                bool exito = _repositorio.CambiarUsername(idUsuario, nuevoUsername);
-                return new ResultadoOperacion
+                bool exito = _repository.ChangeUsername(idUser, newUsername);
+                return new OperationResult
                 {
-                    Exito = exito,
-                    Mensaje = exito ? "Nombre de usuario actualizado correctamente." : "Error al actualizar el nombre de usuario.",
-                    Usuario = null
+                    Succes = exito,
+                    Messaje = exito ? "Nombre de usuario actualizado correctamente." : "Error al actualizar el nombre de usuario.",
+                    User = null
                 };
             }
             catch (Exception ex)
             {
-                return new ResultadoOperacion
+                return new OperationResult
                 {
-                    Exito = false,
-                    Mensaje = $"Error al actualizar el nombre de usuario: {ex.Message}",
-                    Usuario = null
+                    Succes = false,
+                    Messaje = $"Error al actualizar el nombre de usuario: {ex.Message}",
+                    User = null
                 };
             }
         }
 
-        public ResultadoOperacion CambiarPassword(int idUsuario, string nuevaPassword)
+        public OperationResult ChangePassword(int idUsuario, string nuevaPassword)
         {
             try
             {
-                bool exito = _repositorio.CambiarPassword(idUsuario, nuevaPassword);
-                return new ResultadoOperacion
+                bool OperationResult = _repository.ChangePassword(idUsuario, nuevaPassword);
+                return new OperationResult
                 {
-                    Exito = exito,
-                    Mensaje = exito ? "Contraseña actualizada correctamente." : "Error al actualizar la contraseña.",
-                    Usuario = null
+                    Succes = OperationResult,
+                    Messaje = OperationResult ? "Contraseña actualizada correctamente." : "Error al actualizar la contraseña.",
+                    User = null
                 };
             }
             catch (Exception ex)
             {
-                return new ResultadoOperacion
+                return new OperationResult
                 {
-                    Exito = false,
-                    Mensaje = $"Error al actualizar la contraseña: {ex.Message}",
-                    Usuario = null
+                    Succes = false,
+                    Messaje = $"Error al actualizar la contraseña: {ex.Message}",
+                    User = null
                 };
             }
         }

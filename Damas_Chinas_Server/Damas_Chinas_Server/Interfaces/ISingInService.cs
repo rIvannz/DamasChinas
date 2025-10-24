@@ -7,7 +7,7 @@ namespace Damas_Chinas_Server
     public interface ISingInService
     {
         [OperationContract]
-        ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username);
+        OperationResult CreateUser(string nombre, string lastName, string Email, string password, string username);
     }
 }
 

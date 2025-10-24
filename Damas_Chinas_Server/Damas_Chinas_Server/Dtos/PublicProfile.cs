@@ -9,17 +9,17 @@ namespace Damas_Chinas_Server.Dtos
         public string Username { get; set; }
 
         [DataMember]
-        public string Nombre { get; set; }
+        public string Name { get; set; }
 
         [DataMember]
 
         public string LastName { get; set; }
 
         [DataMember]
-        public string Telefono { get; set; }
+        public string SocialUrl { get; set; }
 
         [DataMember]
-        public string Correo { get; set; }
+        public string Email { get; set; }
     }
 
 }

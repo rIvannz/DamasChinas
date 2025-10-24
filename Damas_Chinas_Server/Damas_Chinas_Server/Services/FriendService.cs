@@ -8,13 +8,13 @@ using System.Text;
 
 namespace Damas_Chinas_Server
 {
-    public class AmistadService : IAmistadService
+    public class FriendService : IFriendService
     {
-        private readonly RepositorioAmistades repo = new RepositorioAmistades();
+        private readonly FriendRepository repo = new FriendRepository();
 
-        public List<AmigoDto> ObtenerAmigos(int idUsuario)
+        public List<FriendDto> GetFriends(int idUser)
         {
-            return repo.ObtenerAmigos(idUsuario);
+            return repo.GetFriends(idUser);
         }
     }
 }

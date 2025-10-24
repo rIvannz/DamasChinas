@@ -94,11 +94,11 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInServiceProxy.IILoginService")]
     public interface IILoginService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IILoginService/ValidarLogin", ReplyAction="http://tempuri.org/IILoginService/ValidarLoginResponse")]
-        DamasChinas_Client.UI.LogInServiceProxy.LoginResult ValidarLogin(string usuarioInput, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IILoginService/ValidateLogin", ReplyAction="http://tempuri.org/IILoginService/ValidateLoginResponse")]
+        DamasChinas_Client.UI.LogInServiceProxy.LoginResult ValidateLogin(string usuarioInput, string password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IILoginService/ValidarLogin", ReplyAction="http://tempuri.org/IILoginService/ValidarLoginResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LogInServiceProxy.LoginResult> ValidarLoginAsync(string usuarioInput, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IILoginService/ValidateLogin", ReplyAction="http://tempuri.org/IILoginService/ValidateLoginResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LogInServiceProxy.LoginResult> ValidateLoginAsync(string usuarioInput, string password);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -128,12 +128,12 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
                 base(binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.LogInServiceProxy.LoginResult ValidarLogin(string usuarioInput, string password) {
-            return base.Channel.ValidarLogin(usuarioInput, password);
+        public DamasChinas_Client.UI.LogInServiceProxy.LoginResult ValidateLogin(string usuarioInput, string password) {
+            return base.Channel.ValidateLogin(usuarioInput, password);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LogInServiceProxy.LoginResult> ValidarLoginAsync(string usuarioInput, string password) {
-            return base.Channel.ValidarLoginAsync(usuarioInput, password);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LogInServiceProxy.LoginResult> ValidateLoginAsync(string usuarioInput, string password) {
+            return base.Channel.ValidateLoginAsync(usuarioInput, password);
         }
     }
 }

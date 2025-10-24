@@ -41,7 +41,7 @@ namespace DamasChinas_Client
             try
             {
                 var client = new AccountManagerClient();
-                var profile = client.ObtenerPerfilPublico(_idUsuario); // Llamada al servicio
+                var profile = client.GetPublicProfile(_idUsuario); // Llamada al servicio
                 NavigationService?.Navigate(new ProfilePlayer(profile, _idUsuario));
             }
             catch (Exception ex)

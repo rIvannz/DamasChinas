@@ -4,9 +4,9 @@ using System.ServiceModel;
 namespace Damas_Chinas_Server
 {
     [ServiceContract]
-    public interface IMensajeriaCallback
+    public interface IChatCallback
     {
         [OperationContract(IsOneWay = true)]
-        void RecibirMensaje(Mensaje mensaje);
+        void Receivemessage(Message mensaje);
     }
 }

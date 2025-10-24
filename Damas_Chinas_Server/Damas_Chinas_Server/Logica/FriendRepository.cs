@@ -6,46 +6,43 @@ using System.Linq;
 
 namespace Damas_Chinas_Server
 {
-    public class RepositorioAmistades
+    public class FriendRepository
     {
         /// <summary>
         /// Obtiene la lista de amigos de un usuario, incluyendo su estado y avatar.
         /// </summary>
         /// <param name="idUsuario">ID del usuario base.</param>
         /// <returns>Lista de amigos en formato AmigoDto.</returns>
-        public List<AmigoDto> ObtenerAmigos(int idUsuario)
+        public List<FriendDto> GetFriends(int idUsuario)
         {
             using (var db = new damas_chinasEntities())
             {
-                // 1️⃣ Obtener todas las relaciones de amistad del usuario
-                var amistades = db.amistades
+                var friends = db.amistades
                     .Include("usuarios.perfiles")
                     .Include("usuarios1.perfiles")
                     .Where(a => a.id_usuario1 == idUsuario || a.id_usuario2 == idUsuario)
                     .ToList();
 
-                if (amistades == null || amistades.Count == 0)
-                    return new List<AmigoDto>();
+                if (friends == null || friends.Count == 0)
+                    return new List<FriendDto>();
 
-                // 2️⃣ Determinar los usuarios amigos (el opuesto de la relación)
-                var amigos = amistades.Select(a =>
+                var friendships = friends.Select(a =>
                     a.id_usuario1 == idUsuario ? a.usuarios1 : a.usuarios
                 ).ToList();
 
-                // 3️⃣ Mapear a AmigoDto (solo los datos necesarios para el cliente)
-                var listaAmigos = amigos.Select(u =>
+                var friendList = friendships.Select(u =>
                 {
-                    var perfil = u.perfiles.FirstOrDefault();
-                    return new AmigoDto
+                    var profile = u.perfiles.FirstOrDefault();
+                    return new FriendDto
                     {
-                        IdAmigo = u.id_usuario, // interno, no se expone al cliente
-                        Username = perfil?.username ?? "N/A",
-                        EnLinea = true,
-                        Avatar = perfil?.imagen_perfil ?? "default.png"
+                        IdFriend = u.id_usuario, 
+                        Username = profile?.username ?? "N/A",
+                        ConnectionState = true,
+                        Avatar = profile?.imagen_perfil ?? "default.png"
                     };
                 }).ToList();
 
-                return listaAmigos;
+                return friendList;
             }
         }
 
@@ -59,14 +56,13 @@ namespace Damas_Chinas_Server
 
             using (var db = new damas_chinasEntities())
             {
-                // Verificar que ambos usuarios existan
+            
                 var existe1 = db.usuarios.Any(u => u.id_usuario == idUsuario1);
                 var existe2 = db.usuarios.Any(u => u.id_usuario == idUsuario2);
 
                 if (!existe1 || !existe2)
                     throw new Exception("Uno o ambos usuarios no existen.");
 
-                // Evitar duplicados
                 bool yaSonAmigos = db.amistades.Any(a =>
                     (a.id_usuario1 == idUsuario1 && a.id_usuario2 == idUsuario2) ||
                     (a.id_usuario1 == idUsuario2 && a.id_usuario2 == idUsuario1)
@@ -75,7 +71,7 @@ namespace Damas_Chinas_Server
                 if (yaSonAmigos)
                     throw new Exception("Estos usuarios ya son amigos.");
 
-                // Crear la amistad
+
                 var nuevaAmistad = new amistades
                 {
                     id_usuario1 = idUsuario1,

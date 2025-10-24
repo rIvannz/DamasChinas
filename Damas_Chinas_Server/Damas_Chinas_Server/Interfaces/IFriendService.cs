@@ -9,9 +9,9 @@ using System.Text;
 namespace Damas_Chinas_Server
 {
     [ServiceContract]
-    public interface IAmistadService
+    public interface IFriendService
     {
         [OperationContract]
-        List<AmigoDto> ObtenerAmigos(int idUsuario);
+        List<FriendDto> GetFriends(int idUser);
     }
 }

@@ -7,33 +7,32 @@ namespace Damas_Chinas_Server
 {
     public class SingInService : ISingInService
     {
-        private readonly RepositorioUsuarios _repositorio;
+        private readonly RepositoryUsers _repositorio;
 
         public SingInService()
         {
-            _repositorio = new RepositorioUsuarios();
+            _repositorio = new RepositoryUsers();
         }
 
-        public ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username)
+        public OperationResult CreateUser(string name, string lastName, string email, string password, string username)
         {
-            var resultado = new ResultadoOperacion();
+            var _result = new OperationResult();
 
             try
             {
-                // Crear usuario usando el repositorio (ya hace validaciones)
-                var usuario = _repositorio.CrearUsuario(nombre, apellido, correo, password, username);
-                var perfil = usuario.perfiles.FirstOrDefault();
+                var _user = _repositorio.CreateUser(name, lastName, email, password, username);
+                var _profile = _user.perfiles.FirstOrDefault();
 
-                resultado.Exito = true;
-                resultado.Mensaje = "Usuario creado correctamente.";
-                resultado.Usuario = new UsuarioInfo
+                _result.Succes = true;
+                _result.Messaje = "Usuario creado correctamente.";
+                _result.User = new UserInfo
                 {
-                    IdUsuario = usuario.id_usuario,
-                    Username = perfil?.username ?? username,
-                    Correo = usuario.correo,
-                    NombreCompleto = perfil != null
-                        ? $"{perfil.nombre} {perfil.apellido_materno}"
-                        : $"{nombre} {apellido}"
+                    IdUser = _user.id_usuario,
+                    Username = _profile?.username ?? username,
+                    Email = _user.correo,
+                    FullName = _profile != null
+                        ? $"{_profile.nombre} {_profile.apellido_materno}"
+                        : $"{name} {lastName}"
                 };
 
                 // --- Enviar correo de bienvenida en segundo plano ---
@@ -41,24 +40,23 @@ namespace Damas_Chinas_Server
                 {
                     try
                     {
-                        string asunto = "Bienvenido a Damas Chinas";
-                        string cuerpo = $"Hola {resultado.Usuario.NombreCompleto},<br><br>¡Gracias por registrarte en Damas Chinas! Tu usuario es <b>{resultado.Usuario.Username}</b>.<br><br>Disfruta jugando!";
-                        await Correo.EnviarAsync(correo, asunto, cuerpo, html: true);
+                        string subject = "Bienvenido a Damas Chinas";
+                        string body = $"Hola {_result.User.FullName},<br><br>¡Gracias por registrarte en Damas Chinas! Tu usuario es <b>{_result.User.Username}</b>.<br><br>Disfruta jugando!";
+                        await Correo.SendAsync(email, subject, body, html: true);
                     }
                     catch
                     {
-                        // Opcional: log del error, no bloquea al usuario
                     }
                 });
             }
             catch (Exception ex)
             {
-                resultado.Exito = false;
-                resultado.Mensaje = $"Error al crear usuario: {ex.Message}";
-                resultado.Usuario = null;
+                _result.Succes = false;
+                _result.Messaje = $"Error al crear usuario: {ex.Message}";
+                _result.User = null;
             }
 
-            return resultado;
+            return _result;
         }
     }
 }

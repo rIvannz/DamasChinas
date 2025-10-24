@@ -62,7 +62,7 @@
                               HorizontalScrollBarVisibility="Disabled">
 
                     <!-- ItemsControl dinámico para amigos -->
-                    <ItemsControl x:Name="FriendsList" ItemsSource="{Binding AmigosList}" Margin="10">
+                    <ItemsControl x:Name="FriendsList" ItemsSource="{Binding FriendList}" Margin="10">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Background="#44222222"
@@ -80,7 +80,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Círculo de estado deshabilitado -->
+                                        <!-- Pendiente de implementar -->
                                         <Ellipse Width="16" Height="16"
                                                  Fill="Gray"
                                                  VerticalAlignment="Center"

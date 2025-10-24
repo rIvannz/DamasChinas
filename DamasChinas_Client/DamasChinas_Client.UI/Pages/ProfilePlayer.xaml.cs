@@ -23,9 +23,9 @@ namespace DamasChinas_Client.UI.Pages
             if (profile != null)
             {
                 UsernameTextBlock.Text = profile.Username + _idUsuario;
-                FullNameTextBlock.Text = profile.Nombre + " " + profile.LastName;
-                EmailTextBlock.Text = profile.Correo;
-                // PhoneTextBlock.Text = profile.Telefono;
+                FullNameTextBlock.Text = profile.Name + " " + profile.LastName;
+                EmailTextBlock.Text = profile.Email;
+                // PhoneTextBlock.Text = profile.Telefono; // reutilizadopara redes sociales pendiente pedirle a ivan lo del icono
             }
         }
 
@@ -68,7 +68,7 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 var client = new AccountManagerClient();
-                var profile = client.ObtenerPerfilPublico(userId);
+                var profile = client.GetPublicProfile(userId);
 
                 frame.Navigate(new ProfilePlayer(profile, userId));
             }

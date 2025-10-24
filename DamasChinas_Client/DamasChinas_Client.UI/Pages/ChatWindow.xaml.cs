@@ -1,12 +1,11 @@
-﻿using DamasChinas_Client.UI.MensajeriaService;
+﻿using DamasChinas_Client.UI.ChatServiceProxy;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading; 
+using System.Windows.Threading;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -16,11 +15,11 @@ namespace DamasChinas_Client.UI.Pages
         private string _friendUsername;
         private string _myUsername;
 
-        private IMensajeriaService _client;
+        private IChatService _client;
 
-        private DispatcherTimer _refreshTimer; 
+        private DispatcherTimer _refreshTimer;
 
-        public ObservableCollection<Mensaje> Messages { get; set; } = new ObservableCollection<Mensaje>();
+        public ObservableCollection<Message> Messages { get; set; } = new ObservableCollection<Message>();
 
         public ChatWindow(int miId, string friendUsername)
         {
@@ -32,7 +31,7 @@ namespace DamasChinas_Client.UI.Pages
 
             DataContext = this;
 
-            var callback = new MensajeriaCallback(this);
+            var callback = new ChatCallback(this);
             var context = new InstanceContext(callback);
 
             var binding = new NetTcpBinding
@@ -41,17 +40,14 @@ namespace DamasChinas_Client.UI.Pages
                 ReceiveTimeout = TimeSpan.MaxValue
             };
 
-            var endpoint = new EndpointAddress("net.tcp://localhost:8755/MensajeriaService/");
-            var factory = new DuplexChannelFactory<IMensajeriaService>(context, binding, endpoint);
+            var endpoint = new EndpointAddress("net.tcp://localhost:8755/ChatService/");
+            var factory = new DuplexChannelFactory<IChatService>(context, binding, endpoint);
             _client = factory.CreateChannel();
 
-      
             _client.RegistrarCliente(_myUsername);
 
-          
             CargarHistorial();
 
-          
             _refreshTimer = new DispatcherTimer();
             _refreshTimer.Interval = TimeSpan.FromSeconds(5);
             _refreshTimer.Tick += (s, e) => CargarHistorial();
@@ -60,8 +56,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private string ObtenerMiUsername()
         {
-            
-            return "mi_username_real";
+            return "prueba"; 
         }
 
         private async void CargarHistorial()
@@ -69,19 +64,20 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 Messages.Clear();
-                var historial = await Task.Run(() => _client.ObtenerHistorialMensajes(_miIdUsuario, _friendUsername));
 
-              
+                var historial = await Task.Run(() => _client.GetHistoricalMessages(_miIdUsuario, _friendUsername).ToList());
 
-                foreach (var msg in historial)
+                foreach (var msg in historial) 
+                
                     Messages.Add(msg);
-
-                if (MessagesList.Items.Count > 0)
+                    if (MessagesList.Items.Count > 0)
+                        {
                     MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
-            }
+                        }
+                }
+
             catch (Exception ex)
             {
-         
                 Console.WriteLine("Error al cargar historial: " + ex.Message);
             }
         }
@@ -89,19 +85,22 @@ namespace DamasChinas_Client.UI.Pages
         private void OnSendClick(object sender, RoutedEventArgs e)
         {
             var texto = InputMessage.Text.Trim();
-            if (string.IsNullOrEmpty(texto)) return;
-
-            var mensaje = new Mensaje
+            if (string.IsNullOrEmpty(texto))
             {
-                IdUsuario = _miIdUsuario,
-                UsernameDestino = _friendUsername,
-                Texto = texto,
-                FechaEnvio = DateTime.Now
+                return;
+            }
+            var mensaje = new Message
+
+            {
+                IdUser = _miIdUsuario,
+                DestinationUsername = _friendUsername,
+                Text = texto,
+                SendDate = DateTime.Now
             };
 
             try
             {
-                _client.EnviarMensaje(mensaje);
+                _client.SendMessage(mensaje);
                 Messages.Add(mensaje);
                 MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
                 InputMessage.Clear();
@@ -112,9 +111,9 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        public void RecibirMensaje(Mensaje mensaje)
+        public void RecibirMensaje(Message mensaje)
         {
-            if (mensaje.IdUsuario == _miIdUsuario || mensaje.UsernameDestino == _friendUsername)
+            if (mensaje.IdUser == _miIdUsuario || mensaje.DestinationUsername == _friendUsername)
             {
                 Dispatcher.Invoke(() =>
                 {
@@ -125,11 +124,11 @@ namespace DamasChinas_Client.UI.Pages
         }
     }
 
-    public class MensajeriaCallback : IMensajeriaServiceCallback
+    public class ChatCallback : IChatServiceCallback
     {
         private readonly ChatWindow _chatWindow;
-        public MensajeriaCallback(ChatWindow chatWindow) => _chatWindow = chatWindow;
+        public ChatCallback(ChatWindow chatWindow) => _chatWindow = chatWindow;
 
-        public void RecibirMensaje(Mensaje mensaje) => _chatWindow.RecibirMensaje(mensaje);
+        public void Receivemessage(Message mensaje) => _chatWindow.RecibirMensaje(mensaje);
     }
 }

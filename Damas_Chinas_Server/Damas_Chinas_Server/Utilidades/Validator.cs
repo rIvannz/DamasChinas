@@ -5,8 +5,8 @@ namespace Damas_Chinas_Server.Utilidades
 {
     internal static class Validator
     {
-        // Valida el nombre o apellido
-        public static bool ValidarNombre(string nombre)
+
+        public static bool ValidateName(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
                 throw new Exception("El nombre no puede estar vacío.");
@@ -20,8 +20,8 @@ namespace Damas_Chinas_Server.Utilidades
             return true;
         }
 
-        // Valida username
-        public static bool ValidarUsername(string username)
+     
+        public static bool ValidateUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new Exception("El nombre de usuario no puede estar vacío.");
@@ -35,8 +35,7 @@ namespace Damas_Chinas_Server.Utilidades
             return true;
         }
 
-        // Valida contraseña
-        public static bool ValidarPassword(string password)
+        public static bool ValidatePassword(string password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 throw new Exception("La contraseña no puede estar vacía.");
@@ -59,8 +58,8 @@ namespace Damas_Chinas_Server.Utilidades
             return true;
         }
 
-        // Valida correo
-        public static bool ValidarCorreo(string correo)
+  
+        public static bool ValidateEmail(string correo)
         {
             if (string.IsNullOrWhiteSpace(correo))
                 throw new Exception("El correo no puede estar vacío.");

@@ -69,7 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Connected Services\AmistadService\Reference.cs">
+    <Compile Include="Connected Services\FriendServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -84,7 +84,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Connected Services\MensajeriaService\Reference.cs">
+    <Compile Include="Connected Services\ChatServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -180,10 +180,10 @@
     <None Include="App.config" />
     <Resource Include="Assets\Fonts\Oups.otf" />
     <None Include="Connected Services\AccountManagerServiceProxy\AccountManager.wsdl" />
-    <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile.datasource">
+    <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.ResultadoOperacion.datasource">
+    <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\AccountManagerServiceProxy\item.xsd">
@@ -198,17 +198,20 @@
     <None Include="Connected Services\AccountManagerServiceProxy\item3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AmistadService\AmistadService.wsdl" />
-    <None Include="Connected Services\AmistadService\DamasChinas_Client.UI.AmistadService.AmigoDto.datasource">
+    <None Include="Connected Services\ChatServiceProxy\DamasChinas_Client.UI.ChatServiceProxy.Message.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\AmistadService\item.xsd">
+    <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.FriendDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\FriendServiceProxy\FriendService.wsdl" />
+    <None Include="Connected Services\FriendServiceProxy\item3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AmistadService\item1.xsd">
+    <None Include="Connected Services\FriendServiceProxy\item31.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AmistadService\item2.xsd">
+    <None Include="Connected Services\FriendServiceProxy\item32.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.Lobby.datasource">
@@ -237,20 +240,17 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\LoginService.wsdl" />
-    <None Include="Connected Services\MensajeriaService\DamasChinas_Client.UI.MensajeriaService.Mensaje.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\MensajeriaService\service.wsdl" />
-    <None Include="Connected Services\MensajeriaService\service.xsd">
+    <None Include="Connected Services\ChatServiceProxy\service1.wsdl" />
+    <None Include="Connected Services\ChatServiceProxy\service3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\MensajeriaService\service1.xsd">
+    <None Include="Connected Services\ChatServiceProxy\service31.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\MensajeriaService\service2.xsd">
+    <None Include="Connected Services\ChatServiceProxy\service32.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\SingInServiceProxy\DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion.datasource">
+    <None Include="Connected Services\SingInServiceProxy\DamasChinas_Client.UI.SingInServiceProxy.OperationResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\SingInServiceProxy\item.xsd">
@@ -268,25 +268,25 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\FriendServiceProxy\item1.disco" />
     <None Include="Connected Services\LobbyServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\configuration.svcinfo" />
     <None Include="Connected Services\LobbyServiceProxy\configuration91.svcinfo" />
-    <None Include="Connected Services\MensajeriaService\Reference.svcmap">
+    <None Include="Connected Services\ChatServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Connected Services\MensajeriaService\configuration.svcinfo" />
-    <None Include="Connected Services\MensajeriaService\configuration91.svcinfo" />
-    <None Include="Connected Services\AmistadService\Reference.svcmap">
+    <None Include="Connected Services\ChatServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\ChatServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\FriendServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Connected Services\AmistadService\configuration.svcinfo" />
-    <None Include="Connected Services\AmistadService\configuration91.svcinfo" />
-    <None Include="Connected Services\AmistadService\item.disco" />
+    <None Include="Connected Services\FriendServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\FriendServiceProxy\configuration91.svcinfo" />
     <None Include="Connected Services\SingInServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -344,10 +344,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AccountManagerServiceProxy\" />
-    <WCFMetadataStorage Include="Connected Services\AmistadService\" />
+    <WCFMetadataStorage Include="Connected Services\FriendServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LobbyServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
-    <WCFMetadataStorage Include="Connected Services\MensajeriaService\" />
+    <WCFMetadataStorage Include="Connected Services\ChatServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

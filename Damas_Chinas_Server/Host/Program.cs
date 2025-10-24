@@ -12,48 +12,36 @@ namespace DamasChinasHost
     {
         static void Main(string[] args)
         {
-            // Crear URIs base para cada servicio
             Uri loginBaseAddress = new Uri("http://localhost:8739/LoginService/");
             Uri signInBaseAddress = new Uri("http://localhost:8736/SignInService/");
             Uri accountManagerBaseAddress = new Uri("http://localhost:8735/AccountManager/");
-            Uri saludoBaseAddress = new Uri("net.tcp://localhost:8755/MensajeriaService/");
-            Uri amistadBaseAddress = new Uri("http://localhost:8741/AmistadService/"); // CORREGIDO: puerto libre
-            Uri lobbyBaseAddress = new Uri("net.tcp://localhost:8751/LobbyService/"); // nuevo servicio
+            Uri chatBaseAddress = new Uri("net.tcp://localhost:8755/ChatService/");
+            Uri amistadBaseAddress = new Uri("http://localhost:8741/FriendService/"); 
+            Uri lobbyBaseAddress = new Uri("net.tcp://localhost:8751/LobbyService/"); 
 
-            // Crear hosts individuales para cada servicio
             using (ServiceHost loginHost = new ServiceHost(typeof(LoginService), loginBaseAddress))
             using (ServiceHost signInHost = new ServiceHost(typeof(SingInService), signInBaseAddress))
             using (ServiceHost accountHost = new ServiceHost(typeof(AccountManager), accountManagerBaseAddress))
-            using (ServiceHost saludoHost = new ServiceHost(typeof(MensajeriaService), saludoBaseAddress))
-            using (ServiceHost amistadHost = new ServiceHost(typeof(AmistadService), amistadBaseAddress))
-            using (ServiceHost lobbyHost = new ServiceHost(typeof(LobbyService), lobbyBaseAddress)) // nuevo
+            using (ServiceHost ChatHost = new ServiceHost(typeof(ChatService), chatBaseAddress))
+            using (ServiceHost amistadHost = new ServiceHost(typeof(FriendService), amistadBaseAddress))
+            using (ServiceHost lobbyHost = new ServiceHost(typeof(LobbyService), lobbyBaseAddress)) 
             {
                 try
                 {
-                    // =========================
-                    // LOGIN SERVICE
-                    // =========================
+                
                     loginHost.AddServiceEndpoint(typeof(IILoginService), new BasicHttpBinding(), "");
                     var loginMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = loginBaseAddress };
                     loginHost.Description.Behaviors.Add(loginMetadata);
 
-                    // =========================
-                    // SIGN IN SERVICE
-                    // =========================
                     signInHost.AddServiceEndpoint(typeof(ISingInService), new BasicHttpBinding(), "");
                     var signInMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = signInBaseAddress };
                     signInHost.Description.Behaviors.Add(signInMetadata);
 
-                    // =========================
-                    // ACCOUNT MANAGER SERVICE
-                    // =========================
+                    
                     accountHost.AddServiceEndpoint(typeof(IAccountManager), new BasicHttpBinding(), "");
                     var accountMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = accountManagerBaseAddress };
                     accountHost.Description.Behaviors.Add(accountMetadata);
 
-                    // =========================
-                    // SALUDO SERVICE (NetTcp + Callback)
-                    // =========================
                     var saludoBinding = new NetTcpBinding
                     {
                         Security = { Mode = SecurityMode.None },
@@ -61,23 +49,19 @@ namespace DamasChinasHost
                     };
 
                     var saludoMetadata = new ServiceMetadataBehavior { HttpGetEnabled = false };
-                    saludoHost.Description.Behaviors.Add(saludoMetadata);
+                    ChatHost.Description.Behaviors.Add(saludoMetadata);
 
-                    saludoHost.AddServiceEndpoint(typeof(IMensajeriaService), saludoBinding, "");
-                    saludoHost.AddServiceEndpoint(typeof(IMetadataExchange),
+                    ChatHost.AddServiceEndpoint(typeof(IChatService), saludoBinding, "");
+                    ChatHost.AddServiceEndpoint(typeof(IMetadataExchange),
                         MetadataExchangeBindings.CreateMexTcpBinding(),
                         "mex");
 
-                    // =========================
-                    // AMISTAD SERVICE (HTTP)
-                    // =========================
-                    amistadHost.AddServiceEndpoint(typeof(IAmistadService), new BasicHttpBinding(), "");
+                 
+                    amistadHost.AddServiceEndpoint(typeof(IFriendService), new BasicHttpBinding(), "");
                     var amistadMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = amistadBaseAddress };
                     amistadHost.Description.Behaviors.Add(amistadMetadata);
 
-                    // =========================
-                    // LOBBY SERVICE (NetTcp + Callback)
-                    // =========================
+                    
                     var lobbyBinding = new NetTcpBinding
                     {
                         Security = { Mode = SecurityMode.None },
@@ -92,13 +76,10 @@ namespace DamasChinasHost
                         MetadataExchangeBindings.CreateMexTcpBinding(),
                         "mex");
 
-                    // =========================
-                    // Abrir todos los servicios
-                    // =========================
                     loginHost.Open();
                     signInHost.Open();
                     accountHost.Open();
-                    saludoHost.Open();
+                    ChatHost.Open();
                     amistadHost.Open();
                     lobbyHost.Open();
 
@@ -109,17 +90,17 @@ namespace DamasChinasHost
                     Console.WriteLine($"➡ LoginService: {loginBaseAddress}");
                     Console.WriteLine($"➡ SignInService: {signInBaseAddress}");
                     Console.WriteLine($"➡ AccountManager: {accountManagerBaseAddress}");
-                    Console.WriteLine($"➡ MensajeriaService (NetTcp): {saludoBaseAddress}");
+                    Console.WriteLine($"➡ MensajeriaService (NetTcp): {chatBaseAddress}");
                     Console.WriteLine($"➡ AmistadService: {amistadBaseAddress}");
                     Console.WriteLine($"➡ LobbyService (NetTcp): {lobbyBaseAddress}");
                     Console.WriteLine("\nPresiona <Enter> para detener los servicios...");
                     Console.ReadLine();
 
-                    // Cerrar servicios
+                    
                     loginHost.Close();
                     signInHost.Close();
                     accountHost.Close();
-                    saludoHost.Close();
+                    ChatHost.Close();
                     amistadHost.Close();
                     lobbyHost.Close();
                 }
@@ -132,7 +113,7 @@ namespace DamasChinasHost
                     loginHost.Abort();
                     signInHost.Abort();
                     accountHost.Abort();
-                    saludoHost.Abort();
+                    ChatHost.Abort();
                     amistadHost.Abort();
                     lobbyHost.Abort();
                 }

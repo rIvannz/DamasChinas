@@ -5,10 +5,10 @@ using System.Data.Entity; // Necesario para Include
 using System.Linq;
 namespace Damas_Chinas_Server
 {
-    public class RepositorioUsuarios
+    public class RepositoryUsers
     {
         // 🔹 Crea un usuario con su perfil correspondiente
-        public usuarios CrearUsuario(
+        public usuarios CreateUser(
             string nombre,
             string apellido,
             string correo,
@@ -16,11 +16,11 @@ namespace Damas_Chinas_Server
             string username)
         {
             // Validaciones
-            Validator.ValidarNombre(nombre);
-            Validator.ValidarNombre(apellido);
-            Validator.ValidarCorreo(correo);
-            Validator.ValidarPassword(password);
-            Validator.ValidarUsername(username);
+            Validator.ValidateName(nombre);
+            Validator.ValidateName(apellido);
+            Validator.ValidateEmail(correo);
+            Validator.ValidatePassword(password);
+            Validator.ValidateUsername(username);
 
             using (var db = new damas_chinasEntities())
             {
@@ -59,9 +59,8 @@ namespace Damas_Chinas_Server
             }
         }
 
-        public LoginResult ObtenerLoginResult(string usuarioInput, string password)
+        public LoginResult GetLoginResult(string usuarioInput, string password)
         {
-            // Validación mínima
             if (string.IsNullOrWhiteSpace(usuarioInput) || string.IsNullOrWhiteSpace(password))
                 throw new Exception("Usuario y contraseña son requeridos.");
 
@@ -92,53 +91,53 @@ namespace Damas_Chinas_Server
             }
         }
 
-        public PublicProfile ObtenerPerfilPublico(int idUsuario)
+        public PublicProfile GetPublicProfile(int idUsuario)
         {
             using (var db = new damas_chinasEntities())
             {
-                var usuario = db.usuarios
+                var user = db.usuarios
                                 .Include(u => u.perfiles)
                                 .FirstOrDefault(u => u.id_usuario == idUsuario);
 
-                if (usuario == null)
+                if (user == null)
                     return null;
 
-                var perfil = usuario.perfiles.FirstOrDefault();
+                var perfil = user.perfiles.FirstOrDefault();
 
                 return new PublicProfile
                 {
                     Username = perfil?.username ?? "N/A",
-                    Nombre = perfil.nombre,
+                    Name = perfil.nombre,
                     LastName = perfil.apellido_materno,
-                    Telefono = perfil?.telefono ?? "N/A",
-                    Correo = usuario.correo
+                    SocialUrl = perfil?.telefono ?? "N/A",
+                    Email = user.correo
                 };
             }
         }
 
-        public bool CambiarUsername(int idUsuario, string nuevoUsername)
+        public bool ChangeUsername(int idUsuario, string NewUsername)
         {
-            Validator.ValidarUsername(nuevoUsername);
+            Validator.ValidateUsername(NewUsername);
 
             using (var db = new damas_chinasEntities())
             {
-                if (db.perfiles.Any(p => p.username == nuevoUsername))
+                if (db.perfiles.Any(p => p.username == NewUsername))
                     throw new Exception("El nombre de usuario ya está en uso.");
 
                 var perfil = db.perfiles.FirstOrDefault(p => p.id_usuario == idUsuario);
                 if (perfil == null)
                     throw new Exception("No se encontró el perfil del usuario.");
 
-                perfil.username = nuevoUsername;
+                perfil.username = NewUsername;
 
                 db.SaveChanges();
                 return true;
             }
         }
 
-        public bool CambiarPassword(int idUsuario, string nuevaPassword)
+        public bool ChangePassword(int idUsuario, string newPassword)
         {
-            Validator.ValidarPassword(nuevaPassword);
+            Validator.ValidatePassword(newPassword);
 
             using (var db = new damas_chinasEntities())
             {
@@ -146,7 +145,7 @@ namespace Damas_Chinas_Server
                 if (usuario == null)
                     throw new Exception("No se encontró el usuario.");
 
-                usuario.password_hash = nuevaPassword;
+                usuario.password_hash = newPassword;
 
                 db.SaveChanges();
                 return true;

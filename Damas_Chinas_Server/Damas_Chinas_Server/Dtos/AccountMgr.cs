@@ -3,32 +3,32 @@
 namespace Damas_Chinas_Server
 {
     [DataContract]
-    public class UsuarioInfo
+    public class UserInfo
     {
         [DataMember]
-        public int IdUsuario { get; set; }
+        public int IdUser { get; set; }
 
         [DataMember]
         public string Username { get; set; }
 
         [DataMember]
-        public string Correo { get; set; }
+        public string Email { get; set; }
 
         [DataMember]
-        public string NombreCompleto { get; set; }
+        public string FullName { get; set; }
     }
 
     [DataContract]
-    public class ResultadoOperacion
+    public class OperationResult
     {
         [DataMember]
-        public bool Exito { get; set; }
+        public bool Succes { get; set; }
 
         [DataMember]
-        public string Mensaje { get; set; }
+        public string Messaje { get; set; }
 
         [DataMember]
-        public UsuarioInfo Usuario { get; set; }
+        public UserInfo User { get; set; }
     }
 
 }

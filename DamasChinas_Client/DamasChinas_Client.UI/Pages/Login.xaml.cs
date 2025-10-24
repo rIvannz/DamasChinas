@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.LogInServiceProxy;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -32,7 +33,7 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                var resultado = loginClient.ValidarLogin(username, password);
+                var loginResult = loginClient.ValidateLogin(username, password);
 
                 if (loginClient.State == System.ServiceModel.CommunicationState.Faulted)
                 {
@@ -43,10 +44,10 @@ namespace DamasChinas_Client.UI.Pages
                     loginClient.Close();
                 }
 
-                if (resultado != null && resultado.Success)
+                if (loginResult != null && loginResult.Success)
                 {
-                    // Navegar al menú pasando el username y el IdUsuario
-                    NavigationService?.Navigate(new MenuRegisteredPlayer(resultado.IdUsuario, resultado.Username));
+                
+                    NavigationService?.Navigate(new MenuRegisteredPlayer(loginResult.IdUsuario, loginResult.Username));
                 }
                 else
                 {

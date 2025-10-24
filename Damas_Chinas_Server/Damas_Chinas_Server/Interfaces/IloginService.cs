@@ -8,6 +8,6 @@ namespace Damas_Chinas_Server
     public interface IILoginService
     {
         [OperationContract]
-        LoginResult ValidarLogin(string usuarioInput, string password);
+        LoginResult ValidateLogin(string usuarioInput, string password);
     }
 }

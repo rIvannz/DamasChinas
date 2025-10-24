@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace Damas_Chinas_Server.Dtos
 {
     [DataContract]
-    public class AmigoDto
+    public class FriendDto
     {
-        public int IdAmigo { get; set; }
+        public int IdFriend { get; set; }
 
         [DataMember]
         public string Username { get; set; }
 
         [DataMember]
-        public bool EnLinea { get; set; }
+        public bool ConnectionState { get; set; }
 
         [DataMember]
         public string Avatar { get; set; }

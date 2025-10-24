@@ -8,16 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DamasChinas_Client.UI.AmistadService {
+namespace DamasChinas_Client.UI.FriendServiceProxy {
     using System.Runtime.Serialization;
     using System;
     
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AmigoDto", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FriendDto", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
     [System.SerializableAttribute()]
-    public partial class AmigoDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class FriendDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -26,7 +26,7 @@ namespace DamasChinas_Client.UI.AmistadService {
         private string AvatarField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool EnLineaField;
+        private bool ConnectionStateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
@@ -55,14 +55,14 @@ namespace DamasChinas_Client.UI.AmistadService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool EnLinea {
+        public bool ConnectionState {
             get {
-                return this.EnLineaField;
+                return this.ConnectionStateField;
             }
             set {
-                if ((this.EnLineaField.Equals(value) != true)) {
-                    this.EnLineaField = value;
-                    this.RaisePropertyChanged("EnLinea");
+                if ((this.ConnectionStateField.Equals(value) != true)) {
+                    this.ConnectionStateField = value;
+                    this.RaisePropertyChanged("ConnectionState");
                 }
             }
         }
@@ -91,49 +91,49 @@ namespace DamasChinas_Client.UI.AmistadService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="AmistadService.IAmistadService")]
-    public interface IAmistadService {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="FriendServiceProxy.IFriendService")]
+    public interface IFriendService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAmistadService/ObtenerAmigos", ReplyAction="http://tempuri.org/IAmistadService/ObtenerAmigosResponse")]
-        DamasChinas_Client.UI.AmistadService.AmigoDto[] ObtenerAmigos(int idUsuario);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
+        DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(int idUser);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAmistadService/ObtenerAmigos", ReplyAction="http://tempuri.org/IAmistadService/ObtenerAmigosResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.AmistadService.AmigoDto[]> ObtenerAmigosAsync(int idUsuario);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(int idUser);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IAmistadServiceChannel : DamasChinas_Client.UI.AmistadService.IAmistadService, System.ServiceModel.IClientChannel {
+    public interface IFriendServiceChannel : DamasChinas_Client.UI.FriendServiceProxy.IFriendService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class AmistadServiceClient : System.ServiceModel.ClientBase<DamasChinas_Client.UI.AmistadService.IAmistadService>, DamasChinas_Client.UI.AmistadService.IAmistadService {
+    public partial class FriendServiceClient : System.ServiceModel.ClientBase<DamasChinas_Client.UI.FriendServiceProxy.IFriendService>, DamasChinas_Client.UI.FriendServiceProxy.IFriendService {
         
-        public AmistadServiceClient() {
+        public FriendServiceClient() {
         }
         
-        public AmistadServiceClient(string endpointConfigurationName) : 
+        public FriendServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public AmistadServiceClient(string endpointConfigurationName, string remoteAddress) : 
+        public FriendServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public AmistadServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public FriendServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public AmistadServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public FriendServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.AmistadService.AmigoDto[] ObtenerAmigos(int idUsuario) {
-            return base.Channel.ObtenerAmigos(idUsuario);
+        public DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(int idUser) {
+            return base.Channel.GetFriends(idUser);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AmistadService.AmigoDto[]> ObtenerAmigosAsync(int idUsuario) {
-            return base.Channel.ObtenerAmigosAsync(idUsuario);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(int idUser) {
+            return base.Channel.GetFriendsAsync(idUser);
         }
     }
 }

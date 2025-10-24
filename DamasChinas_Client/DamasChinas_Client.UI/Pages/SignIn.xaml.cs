@@ -32,7 +32,7 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                var resultado = client.CrearUsuario(firstName, lastName, email, password, username);
+                var resultado = client.CreateUser(firstName, lastName, email, password, username);
 
                 if (resultado.Exito)
                 {

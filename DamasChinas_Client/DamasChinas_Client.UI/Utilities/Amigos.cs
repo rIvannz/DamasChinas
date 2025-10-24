@@ -9,7 +9,7 @@ namespace DamasChinas_Client.UI.Utilities
     public class Amigos
     {
         public string Username { get; set; }
-        public bool EnLinea { get; set; } 
+        public bool ConnectionStatus { get; set; } 
         public string Avatar { get; set; } 
     }
 

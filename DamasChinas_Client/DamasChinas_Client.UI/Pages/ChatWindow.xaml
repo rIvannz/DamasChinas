@@ -13,9 +13,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="0,2">
-                        <TextBlock Text="{Binding UsernameDestino}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Texto}" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding FechaEnvio}" FontSize="10" Foreground="Gray"/>
+                        <TextBlock Text="{Binding DestinationUsername}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding SendDate}" FontSize="10" Foreground="Gray"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

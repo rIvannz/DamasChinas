@@ -23,13 +23,13 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 var client = new AccountManagerClient();
-                var profile = client.ObtenerPerfilPublico(_idUsuario);
+                var profile = client.GetPublicProfile(_idUsuario);
 
                 if (profile != null)
                 {
-                    txtFirstName.Text = profile.Nombre;
+                    txtFirstName.Text = profile.Name;
                     txtLastName.Text = profile.LastName;
-                    txtEmail.Text = profile.Correo;
+                    txtEmail.Text = profile.Email;
                     txtCurrentUsername.Text = profile.Username;
                 }
                 else
@@ -113,7 +113,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 var client = new AccountManagerClient();
-                var resultado = client.CambiarUsername(_idUsuario, txtUsername.Text);
+                var resultado = client.ChangeUsername(_idUsuario, txtUsername.Text);
 
                 if (resultado.Exito)
                 {
@@ -121,7 +121,7 @@ namespace DamasChinas_Client.UI.Pages
                         "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     // Volver al perfil actualizado
-                    NavigationService?.Navigate(new ProfilePlayer(client.ObtenerPerfilPublico(_idUsuario), _idUsuario));
+                    NavigationService?.Navigate(new ProfilePlayer(client.GetPublicProfile(_idUsuario), _idUsuario));
                 }
                 else
                 {
@@ -157,7 +157,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 var client = new AccountManagerClient();
-                var resultado = client.CambiarPassword(_idUsuario, txtPassword.Password);
+                var resultado = client.ChangePassword(_idUsuario, txtPassword.Password);
 
                 if (resultado.Exito)
                 {

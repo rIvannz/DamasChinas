@@ -15,9 +15,9 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultadoOperacion", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
     [System.SerializableAttribute()]
-    public partial class ResultadoOperacion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -187,11 +187,11 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="SingInServiceProxy.ISingInService")]
     public interface ISingInService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CrearUsuario", ReplyAction="http://tempuri.org/ISingInService/CrearUsuarioResponse")]
-        DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CreateUser", ReplyAction="http://tempuri.org/ISingInService/CreateUserResponse")]
+        DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(string nombre, string lastName, string Email, string password, string username);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CrearUsuario", ReplyAction="http://tempuri.org/ISingInService/CrearUsuarioResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion> CrearUsuarioAsync(string nombre, string apellido, string correo, string password, string username);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CreateUser", ReplyAction="http://tempuri.org/ISingInService/CreateUserResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(string nombre, string lastName, string Email, string password, string username);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -221,12 +221,12 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
                 base(binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion CrearUsuario(string nombre, string apellido, string correo, string password, string username) {
-            return base.Channel.CrearUsuario(nombre, apellido, correo, password, username);
+        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(string nombre, string lastName, string Email, string password, string username) {
+            return base.Channel.CreateUser(nombre, lastName, Email, password, username);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.ResultadoOperacion> CrearUsuarioAsync(string nombre, string apellido, string correo, string password, string username) {
-            return base.Channel.CrearUsuarioAsync(nombre, apellido, correo, password, username);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(string nombre, string lastName, string Email, string password, string username) {
+            return base.Channel.CreateUserAsync(nombre, lastName, Email, password, username);
         }
     }
 }

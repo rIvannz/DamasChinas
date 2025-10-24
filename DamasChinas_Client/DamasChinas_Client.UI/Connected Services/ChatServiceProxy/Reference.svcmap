@@ -19,13 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://localhost:8755/MensajeriaService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://localhost:8755/ChatService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="c61e2543-e962-4452-bead-dc9f12b9113b" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="7980ae4a-ce2a-42a2-8e20-7487b099a414" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="71bb259d-52f7-47ea-bb60-9cabf54a0235" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
-    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="c51a44d0-8d75-4735-b2f5-54938c1c3adf" SourceId="1" SourceUrl="net.tcp://localhost:8755/MensajeriaService/mex" />
+    <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="7ea3a41a-eaa2-43e0-ae2c-d511a628dd83" SourceId="1" SourceUrl="net.tcp://localhost:8755/ChatService/mex" />
+    <MetadataFile FileName="service3.xsd" MetadataType="Schema" ID="591c661c-9008-45c3-9a03-056235ba2eea" SourceId="1" SourceUrl="net.tcp://localhost:8755/ChatService/mex" />
+    <MetadataFile FileName="service31.xsd" MetadataType="Schema" ID="cb65b9ed-6bd2-4df2-93b3-a2cd6aacd14d" SourceId="1" SourceUrl="net.tcp://localhost:8755/ChatService/mex" />
+    <MetadataFile FileName="service32.xsd" MetadataType="Schema" ID="924aacc1-a5f3-4195-8f1d-5c3d01483108" SourceId="1" SourceUrl="net.tcp://localhost:8755/ChatService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
