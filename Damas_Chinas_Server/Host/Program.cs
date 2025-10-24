@@ -82,18 +82,14 @@ namespace DamasChinasHost
                     ChatHost.Open();
                     amistadHost.Open();
                     lobbyHost.Open();
+                    Console.WriteLine(" Servicios WCF levantados correctamente:\n");
 
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("✅ Servicios WCF levantados correctamente:\n");
-                    Console.ResetColor();
-
-                    Console.WriteLine($"➡ LoginService: {loginBaseAddress}");
-                    Console.WriteLine($"➡ SignInService: {signInBaseAddress}");
-                    Console.WriteLine($"➡ AccountManager: {accountManagerBaseAddress}");
-                    Console.WriteLine($"➡ MensajeriaService (NetTcp): {chatBaseAddress}");
-                    Console.WriteLine($"➡ AmistadService: {amistadBaseAddress}");
-                    Console.WriteLine($"➡ LobbyService (NetTcp): {lobbyBaseAddress}");
-                    Console.WriteLine("\nPresiona <Enter> para detener los servicios...");
+                    Console.WriteLine($"LoginService: {loginBaseAddress}");
+                    Console.WriteLine($"SignInService: {signInBaseAddress}");
+                    Console.WriteLine($"AccountManager: {accountManagerBaseAddress}");
+                    Console.WriteLine($"ChatService (NetTcp): {chatBaseAddress}");
+                    Console.WriteLine($"FriendService: {amistadBaseAddress}");
+                    Console.WriteLine($"LobbyService (NetTcp): {lobbyBaseAddress}");
                     Console.ReadLine();
 
                     
@@ -107,7 +103,7 @@ namespace DamasChinasHost
                 catch (CommunicationException ce)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("❌ Error al iniciar los servicios: {0}", ce.Message);
+                    Console.WriteLine(" Error al iniciar los servicios: {0}", ce.Message);
                     Console.ResetColor();
 
                     loginHost.Abort();
