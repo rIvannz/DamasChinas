@@ -67,7 +67,7 @@
           <Property Name="id_usuario" Type="int" Nullable="false" />
           <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="nombre" Type="nvarchar" MaxLength="100" />
-          <Property Name="telefono" Type="nvarchar" MaxLength="20" />
+          <Property Name="url" Type="varchar" MaxLength="255" />
           <Property Name="imagen_perfil" Type="nvarchar" MaxLength="255" />
           <Property Name="ultimo_login" Type="datetime2" Precision="7" />
           <Property Name="apellido_materno" Type="nchar" MaxLength="10" />
@@ -443,7 +443,7 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Name="id_usuario" Type="Int32" Nullable="false" />
           <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="imagen_perfil" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ultimo_login" Type="DateTime" Precision="7" />
           <Property Name="apellido_materno" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
@@ -834,11 +834,11 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <EntitySetMapping Name="perfiles">
             <EntityTypeMapping TypeName="damas_chinasModel.perfiles">
               <MappingFragment StoreEntitySet="perfiles">
+                <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="id_perfil" ColumnName="id_perfil" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="imagen_perfil" ColumnName="imagen_perfil" />
                 <ScalarProperty Name="ultimo_login" ColumnName="ultimo_login" />
                 <ScalarProperty Name="apellido_materno" ColumnName="apellido_materno" />

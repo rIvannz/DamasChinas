@@ -95,10 +95,10 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
     public interface IFriendService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
-        DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(int idUser);
+        DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(int idUser);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(string username);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -128,12 +128,12 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
                 base(binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(int idUser) {
-            return base.Channel.GetFriends(idUser);
+        public DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(string username) {
+            return base.Channel.GetFriends(username);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(int idUser) {
-            return base.Channel.GetFriendsAsync(idUser);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(string username) {
+            return base.Channel.GetFriendsAsync(username);
         }
     }
 }

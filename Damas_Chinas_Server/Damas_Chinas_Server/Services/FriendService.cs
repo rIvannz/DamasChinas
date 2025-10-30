@@ -1,4 +1,4 @@
-﻿using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,13 @@ using System.Text;
 
 namespace Damas_Chinas_Server
 {
-    public class FriendService : IFriendService
-    {
-        private readonly FriendRepository repo = new FriendRepository();
+	public class FriendService : IFriendService
+	{
+		private readonly FriendRepository repo = new FriendRepository();
 
-        public List<FriendDto> GetFriends(int idUser)
-        {
-            return repo.GetFriends(idUser);
-        }
-    }
+		public List<FriendDto> GetFriends(string username)
+		{
+			return repo.GetFriends(username);
+		}
+	}
 }

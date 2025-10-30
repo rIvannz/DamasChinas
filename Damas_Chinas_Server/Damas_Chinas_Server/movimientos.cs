@@ -9,17 +9,17 @@
 
 namespace Damas_Chinas_Server
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class movimientos
-    {
-        public int id_movimiento { get; set; }
-        public int id_partida { get; set; }
-        public int id_jugador { get; set; }
-        public int orden { get; set; }
-        public string movimiento { get; set; }
-    
-        public virtual participantes_partida participantes_partida { get; set; }
-    }
+	using System;
+	using System.Collections.Generic;
+
+	public partial class movimientos
+	{
+		public int id_movimiento { get; set; }
+		public int id_partida { get; set; }
+		public int id_jugador { get; set; }
+		public int orden { get; set; }
+		public string movimiento { get; set; }
+
+		public virtual participantes_partida participantes_partida { get; set; }
+	}
 }

@@ -1,62 +1,81 @@
-﻿using Damas_Chinas_Server.Utilidades;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Utilidades;
 
 namespace Damas_Chinas_Server
 {
-    public class SingInService : ISingInService
-    {
-        private readonly RepositoryUsers _repositorio;
+	public class SingInService : ISingInService
+	{
+		private readonly RepositoryUsers _repository;
 
-        public SingInService()
-        {
-            _repositorio = new RepositoryUsers();
-        }
+		public SingInService()
+		{
+			_repository = new RepositoryUsers();
+		}
 
-        public OperationResult CreateUser(string name, string lastName, string email, string password, string username)
-        {
-            var _result = new OperationResult();
+		public OperationResult CreateUser(UserDto userDto)
+		{
+			var result = new OperationResult();
 
-            try
-            {
-                var _user = _repositorio.CreateUser(name, lastName, email, password, username);
-                var _profile = _user.perfiles.FirstOrDefault();
+			try
+			{
+				var user = _repository.CreateUser(userDto);
+				result.User = MapToUserInfo(user, userDto);
+				result.Succes = true;
+				result.Messaje = "Usuario creado correctamente.";
 
-                _result.Succes = true;
-                _result.Messaje = "Usuario creado correctamente.";
-                _result.User = new UserInfo
-                {
-                    IdUser = _user.id_usuario,
-                    Username = _profile?.username ?? username,
-                    Email = _user.correo,
-                    FullName = _profile != null
-                        ? $"{_profile.nombre} {_profile.apellido_materno}"
-                        : $"{name} {lastName}"
-                };
+				EnviarCorreoBienvenida(result.User);
+			}
+			catch (ArgumentException ex)
+			{
+				result.Succes = false;
+				result.Messaje = ex.Message;
+			}
+			catch (InvalidOperationException ex)
+			{
+				result.Succes = false;
+				result.Messaje = ex.Message;
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine(ex);
+				result.Succes = false;
+				result.Messaje = "Ocurrió un error inesperado al crear el usuario.";
+			}
 
-                // --- Enviar correo de bienvenida en segundo plano ---
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        string subject = "Bienvenido a Damas Chinas";
-                        string body = $"Hola {_result.User.FullName},<br><br>¡Gracias por registrarte en Damas Chinas! Tu usuario es <b>{_result.User.Username}</b>.<br><br>Disfruta jugando!";
-                        await Correo.SendAsync(email, subject, body, html: true);
-                    }
-                    catch
-                    {
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                _result.Succes = false;
-                _result.Messaje = $"Error al crear usuario: {ex.Message}";
-                _result.User = null;
-            }
+			return result;
+		}
 
-            return _result;
-        }
-    }
+		private void EnviarCorreoBienvenida(UserInfo user)
+		{
+			Task.Run(async () =>
+			{
+				try
+				{
+					await Correo.EnviarBienvenidaAsync(user).ConfigureAwait(false);
+				}
+				catch (Exception ex)
+				{
+					Console.Error.WriteLine(ex);
+				}
+			});
+		}
+
+		private UserInfo MapToUserInfo(usuarios user, UserDto userDto)
+		{
+			var profile = user.perfiles.FirstOrDefault();
+
+			return new UserInfo
+			{
+				IdUser = user.id_usuario,
+				Username = profile?.username ?? userDto.Username,
+				Email = user.correo,
+				FullName = profile != null
+					? $"{profile.nombre} {profile.apellido_materno}"
+					: $"{userDto.Name} {userDto.LastName}"
+			};
+		}
+	}
 }

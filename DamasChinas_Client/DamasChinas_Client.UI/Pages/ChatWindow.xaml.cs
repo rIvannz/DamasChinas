@@ -1,134 +1,113 @@
-﻿using DamasChinas_Client.UI.ChatServiceProxy;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
+using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.LogInServiceProxy;
+using DamasChinas_Client.UI.MensajeriaService;
 
 namespace DamasChinas_Client.UI.Pages
 {
-    public partial class ChatWindow : Window
-    {
-        private int _miIdUsuario;
-        private string _friendUsername;
-        private string _myUsername;
+	public partial class ChatWindow : Window
+	{
+		private readonly string _friendUsername;
+		private readonly string _myUsername;
+		private readonly IChatService _client;
 
-        private IChatService _client;
+		public ObservableCollection<Message> Messages { get; } = new ObservableCollection<Message>();
 
-        private DispatcherTimer _refreshTimer;
+		public ChatWindow(PublicProfile currentUser, string friendUsername)
+		{
+			InitializeComponent();
 
-        public ObservableCollection<Message> Messages { get; set; } = new ObservableCollection<Message>();
+			_friendUsername = friendUsername ?? throw new ArgumentNullException(nameof(friendUsername));
+			_myUsername = currentUser?.Username ?? throw new ArgumentNullException(nameof(currentUser));
 
-        public ChatWindow(int miId, string friendUsername)
-        {
-            InitializeComponent();
+			DataContext = this;
 
-            _miIdUsuario = miId;
-            _friendUsername = friendUsername;
-            _myUsername = ObtenerMiUsername();
+			try
+			{
+				var callback = new ChatCallback(ReceiveMessage);
+				var context = new InstanceContext(callback);
 
-            DataContext = this;
+				var binding = new NetTcpBinding
+				{
+					Security = { Mode = SecurityMode.None },
+					ReceiveTimeout = TimeSpan.MaxValue
+				};
 
-            var callback = new ChatCallback(this);
-            var context = new InstanceContext(callback);
+				var endpoint = new EndpointAddress("net.tcp://localhost:8755/ChatService/");
 
-            var binding = new NetTcpBinding
-            {
-                Security = { Mode = SecurityMode.None },
-                ReceiveTimeout = TimeSpan.MaxValue
-            };
+				var factory = new DuplexChannelFactory<IChatService>(context, binding, endpoint);
+				_client = factory.CreateChannel();
 
-            var endpoint = new EndpointAddress("net.tcp://localhost:8755/ChatService/");
-            var factory = new DuplexChannelFactory<IChatService>(context, binding, endpoint);
-            _client = factory.CreateChannel();
+				_client.RegistrarCliente(_myUsername);
 
-            _client.RegistrarCliente(_myUsername);
+				_ = LoadHistoryAsync();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Error al inicializar el chat: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
 
-            CargarHistorial();
+		private async Task LoadHistoryAsync()
+		{
+			try
+			{
+				Messages.Clear();
+				var history = await Task.Run(() => _client.GetHistoricalMessages(_myUsername, _friendUsername));
 
-            _refreshTimer = new DispatcherTimer();
-            _refreshTimer.Interval = TimeSpan.FromSeconds(5);
-            _refreshTimer.Tick += (s, e) => CargarHistorial();
-            _refreshTimer.Start();
-        }
+				foreach (var message in history)
+				{
+					Messages.Add(message);
+				}
 
-        private string ObtenerMiUsername()
-        {
-            return "prueba"; 
-        }
+				if (MessagesList.Items.Count > 0)
+				{
+					MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Error al cargar historial: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+		}
 
-        private async void CargarHistorial()
-        {
-            try
-            {
-                Messages.Clear();
+		private void OnSendClick(object sender, RoutedEventArgs e)
+		{
+			var text = InputMessage.Text.Trim();
+			if (string.IsNullOrEmpty(text))
+			{
+				return;
+			}
 
-                var historial = await Task.Run(() => _client.GetHistoricalMessages(_miIdUsuario, _friendUsername).ToList());
+			var message = new Message
+			{
+				UsarnameSender = _myUsername,
+				DestinationUsername = _friendUsername,
+				Text = text,
+				SendDate = DateTime.Now
+			};
 
-                foreach (var msg in historial) 
-                
-                    Messages.Add(msg);
-                    if (MessagesList.Items.Count > 0)
-                        {
-                    MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
-                        }
-                }
+			try
+			{
+				_client.SendMessage(message);
+				Messages.Add(message);
+				MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
+				InputMessage.Clear();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al enviar mensaje: " + ex.Message);
+			}
+		}
 
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al cargar historial: " + ex.Message);
-            }
-        }
-
-        private void OnSendClick(object sender, RoutedEventArgs e)
-        {
-            var texto = InputMessage.Text.Trim();
-            if (string.IsNullOrEmpty(texto))
-            {
-                return;
-            }
-            var mensaje = new Message
-
-            {
-                IdUser = _miIdUsuario,
-                DestinationUsername = _friendUsername,
-                Text = texto,
-                SendDate = DateTime.Now
-            };
-
-            try
-            {
-                _client.SendMessage(mensaje);
-                Messages.Add(mensaje);
-                MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
-                InputMessage.Clear();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al enviar mensaje: " + ex.Message);
-            }
-        }
-
-        public void RecibirMensaje(Message mensaje)
-        {
-            if (mensaje.IdUser == _miIdUsuario || mensaje.DestinationUsername == _friendUsername)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    Messages.Add(mensaje);
-                    MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
-                });
-            }
-        }
-    }
-
-    public class ChatCallback : IChatServiceCallback
-    {
-        private readonly ChatWindow _chatWindow;
-        public ChatCallback(ChatWindow chatWindow) => _chatWindow = chatWindow;
-
-        public void Receivemessage(Message mensaje) => _chatWindow.RecibirMensaje(mensaje);
-    }
+		public void ReceiveMessage(Message message)
+		{
+			Messages.Add(message);
+			MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
+		}
+	}
 }

@@ -132,13 +132,13 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool ExitoField;
+        private string MessajeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MensajeField;
+        private bool SuccesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private DamasChinas_Client.UI.AccountManagerServiceProxy.UsuarioInfo UsuarioField;
+        private DamasChinas_Client.UI.AccountManagerServiceProxy.UserInfo UserField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -151,40 +151,40 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool Exito {
+        public string Messaje {
             get {
-                return this.ExitoField;
+                return this.MessajeField;
             }
             set {
-                if ((this.ExitoField.Equals(value) != true)) {
-                    this.ExitoField = value;
-                    this.RaisePropertyChanged("Exito");
+                if ((object.ReferenceEquals(this.MessajeField, value) != true)) {
+                    this.MessajeField = value;
+                    this.RaisePropertyChanged("Messaje");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Mensaje {
+        public bool Succes {
             get {
-                return this.MensajeField;
+                return this.SuccesField;
             }
             set {
-                if ((object.ReferenceEquals(this.MensajeField, value) != true)) {
-                    this.MensajeField = value;
-                    this.RaisePropertyChanged("Mensaje");
+                if ((this.SuccesField.Equals(value) != true)) {
+                    this.SuccesField = value;
+                    this.RaisePropertyChanged("Succes");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.UsuarioInfo Usuario {
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.UserInfo User {
             get {
-                return this.UsuarioField;
+                return this.UserField;
             }
             set {
-                if ((object.ReferenceEquals(this.UsuarioField, value) != true)) {
-                    this.UsuarioField = value;
-                    this.RaisePropertyChanged("Usuario");
+                if ((object.ReferenceEquals(this.UserField, value) != true)) {
+                    this.UserField = value;
+                    this.RaisePropertyChanged("User");
                 }
             }
         }
@@ -201,21 +201,21 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="UsuarioInfo", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserInfo", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
     [System.SerializableAttribute()]
-    public partial class UsuarioInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class UserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CorreoField;
+        private string EmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IdUsuarioField;
+        private string FullNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NombreCompletoField;
+        private int IdUserField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
@@ -231,40 +231,40 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Correo {
+        public string Email {
             get {
-                return this.CorreoField;
+                return this.EmailField;
             }
             set {
-                if ((object.ReferenceEquals(this.CorreoField, value) != true)) {
-                    this.CorreoField = value;
-                    this.RaisePropertyChanged("Correo");
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int IdUsuario {
+        public string FullName {
             get {
-                return this.IdUsuarioField;
+                return this.FullNameField;
             }
             set {
-                if ((this.IdUsuarioField.Equals(value) != true)) {
-                    this.IdUsuarioField = value;
-                    this.RaisePropertyChanged("IdUsuario");
+                if ((object.ReferenceEquals(this.FullNameField, value) != true)) {
+                    this.FullNameField = value;
+                    this.RaisePropertyChanged("FullName");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string NombreCompleto {
+        public int IdUser {
             get {
-                return this.NombreCompletoField;
+                return this.IdUserField;
             }
             set {
-                if ((object.ReferenceEquals(this.NombreCompletoField, value) != true)) {
-                    this.NombreCompletoField = value;
-                    this.RaisePropertyChanged("NombreCompleto");
+                if ((this.IdUserField.Equals(value) != true)) {
+                    this.IdUserField = value;
+                    this.RaisePropertyChanged("IdUser");
                 }
             }
         }
@@ -297,22 +297,22 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
     public interface IAccountManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/GetPublicProfile", ReplyAction="http://tempuri.org/IAccountManager/GetPublicProfileResponse")]
-        DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile GetPublicProfile(int idUsuario);
+        DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile GetPublicProfile(int idUser);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/GetPublicProfile", ReplyAction="http://tempuri.org/IAccountManager/GetPublicProfileResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile> GetPublicProfileAsync(int idUsuario);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile> GetPublicProfileAsync(int idUser);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeUsername", ReplyAction="http://tempuri.org/IAccountManager/ChangeUsernameResponse")]
-        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeUsername(int idUsuario, string newUsername);
+        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeUsername(string username, string newUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeUsername", ReplyAction="http://tempuri.org/IAccountManager/ChangeUsernameResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeUsernameAsync(int idUsuario, string newUsername);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeUsernameAsync(string username, string newUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangePassword", ReplyAction="http://tempuri.org/IAccountManager/ChangePasswordResponse")]
-        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangePassword(int idUsuario, string newPassword);
+        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangePassword(string correo, string newPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangePassword", ReplyAction="http://tempuri.org/IAccountManager/ChangePasswordResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangePasswordAsync(int idUsuario, string newPassword);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangePasswordAsync(string correo, string newPassword);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -342,28 +342,28 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
                 base(binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile GetPublicProfile(int idUsuario) {
-            return base.Channel.GetPublicProfile(idUsuario);
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile GetPublicProfile(int idUser) {
+            return base.Channel.GetPublicProfile(idUser);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile> GetPublicProfileAsync(int idUsuario) {
-            return base.Channel.GetPublicProfileAsync(idUsuario);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile> GetPublicProfileAsync(int idUser) {
+            return base.Channel.GetPublicProfileAsync(idUser);
         }
         
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeUsername(int idUsuario, string newUsername) {
-            return base.Channel.ChangeUsername(idUsuario, newUsername);
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeUsername(string username, string newUsername) {
+            return base.Channel.ChangeUsername(username, newUsername);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeUsernameAsync(int idUsuario, string newUsername) {
-            return base.Channel.ChangeUsernameAsync(idUsuario, newUsername);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeUsernameAsync(string username, string newUsername) {
+            return base.Channel.ChangeUsernameAsync(username, newUsername);
         }
         
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangePassword(int idUsuario, string newPassword) {
-            return base.Channel.ChangePassword(idUsuario, newPassword);
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangePassword(string correo, string newPassword) {
+            return base.Channel.ChangePassword(correo, newPassword);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangePasswordAsync(int idUsuario, string newPassword) {
-            return base.Channel.ChangePasswordAsync(idUsuario, newPassword);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangePasswordAsync(string correo, string newPassword) {
+            return base.Channel.ChangePasswordAsync(correo, newPassword);
         }
     }
 }

@@ -1,119 +1,68 @@
-﻿using Damas_Chinas_Server;
+using Damas_Chinas_Server;
+using Damas_Chinas_Server.Services;
 using System;
 using System.ServiceModel;
-using System.ServiceModel.Description;
-using Damas_Chinas_Server.Services;       
-using Damas_Chinas_Server.Interfaces;
-
 
 namespace DamasChinasHost
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Uri loginBaseAddress = new Uri("http://localhost:8739/LoginService/");
-            Uri signInBaseAddress = new Uri("http://localhost:8736/SignInService/");
-            Uri accountManagerBaseAddress = new Uri("http://localhost:8735/AccountManager/");
-            Uri chatBaseAddress = new Uri("net.tcp://localhost:8755/ChatService/");
-            Uri amistadBaseAddress = new Uri("http://localhost:8741/FriendService/"); 
-            Uri lobbyBaseAddress = new Uri("net.tcp://localhost:8751/LobbyService/"); 
+	internal class Program
+	{
+		static void Main(string[] args)
+		{
+			Console.Title = "DAMAS";
 
-            using (ServiceHost loginHost = new ServiceHost(typeof(LoginService), loginBaseAddress))
-            using (ServiceHost signInHost = new ServiceHost(typeof(SingInService), signInBaseAddress))
-            using (ServiceHost accountHost = new ServiceHost(typeof(AccountManager), accountManagerBaseAddress))
-            using (ServiceHost ChatHost = new ServiceHost(typeof(ChatService), chatBaseAddress))
-            using (ServiceHost amistadHost = new ServiceHost(typeof(FriendService), amistadBaseAddress))
-            using (ServiceHost lobbyHost = new ServiceHost(typeof(LobbyService), lobbyBaseAddress)) 
-            {
-                try
-                {
-                
-                    loginHost.AddServiceEndpoint(typeof(IILoginService), new BasicHttpBinding(), "");
-                    var loginMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = loginBaseAddress };
-                    loginHost.Description.Behaviors.Add(loginMetadata);
+			ServiceHost[] hosts =
+			{
+				new ServiceHost(typeof(LoginService)),
+				new ServiceHost(typeof(SingInService)),
+				new ServiceHost(typeof(AccountManager)),
+				new ServiceHost(typeof(ChatService)),
+				new ServiceHost(typeof(FriendService))
+			};
+			foreach (var host in hosts)
+			{
+				try
+				{
+					host.Open();
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.WriteLine($" {host.Description.ServiceType.Name} activo.");
+				}
+				catch (Exception ex)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine($"Error al iniciar {host.Description.ServiceType.Name}: {ex.Message}");
+					host.Abort();
+				}
+				finally
+				{
+					Console.ResetColor();
+				}
+			}
 
-                    signInHost.AddServiceEndpoint(typeof(ISingInService), new BasicHttpBinding(), "");
-                    var signInMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = signInBaseAddress };
-                    signInHost.Description.Behaviors.Add(signInMetadata);
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.WriteLine(" DAMAS");
+			Console.ResetColor();
+			Console.WriteLine("detener...");
+			Console.ReadLine();
 
-                    
-                    accountHost.AddServiceEndpoint(typeof(IAccountManager), new BasicHttpBinding(), "");
-                    var accountMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = accountManagerBaseAddress };
-                    accountHost.Description.Behaviors.Add(accountMetadata);
+			foreach (var host in hosts)
+			{
+				try
+				{
+					if (host.State == CommunicationState.Opened)
+					{
+						host.Close();
+					}
+				}
+				catch
+				{
+					host.Abort();
+				}
+			}
 
-                    var saludoBinding = new NetTcpBinding
-                    {
-                        Security = { Mode = SecurityMode.None },
-                        ReceiveTimeout = TimeSpan.MaxValue
-                    };
-
-                    var saludoMetadata = new ServiceMetadataBehavior { HttpGetEnabled = false };
-                    ChatHost.Description.Behaviors.Add(saludoMetadata);
-
-                    ChatHost.AddServiceEndpoint(typeof(IChatService), saludoBinding, "");
-                    ChatHost.AddServiceEndpoint(typeof(IMetadataExchange),
-                        MetadataExchangeBindings.CreateMexTcpBinding(),
-                        "mex");
-
-                 
-                    amistadHost.AddServiceEndpoint(typeof(IFriendService), new BasicHttpBinding(), "");
-                    var amistadMetadata = new ServiceMetadataBehavior { HttpGetEnabled = true, HttpGetUrl = amistadBaseAddress };
-                    amistadHost.Description.Behaviors.Add(amistadMetadata);
-
-                    
-                    var lobbyBinding = new NetTcpBinding
-                    {
-                        Security = { Mode = SecurityMode.None },
-                        ReceiveTimeout = TimeSpan.MaxValue
-                    };
-
-                    var lobbyMetadata = new ServiceMetadataBehavior { HttpGetEnabled = false };
-                    lobbyHost.Description.Behaviors.Add(lobbyMetadata);
-
-                    lobbyHost.AddServiceEndpoint(typeof(ILobbyService), lobbyBinding, "");
-                    lobbyHost.AddServiceEndpoint(typeof(IMetadataExchange),
-                        MetadataExchangeBindings.CreateMexTcpBinding(),
-                        "mex");
-
-                    loginHost.Open();
-                    signInHost.Open();
-                    accountHost.Open();
-                    ChatHost.Open();
-                    amistadHost.Open();
-                    lobbyHost.Open();
-                    Console.WriteLine(" Servicios WCF levantados correctamente:\n");
-
-                    Console.WriteLine($"LoginService: {loginBaseAddress}");
-                    Console.WriteLine($"SignInService: {signInBaseAddress}");
-                    Console.WriteLine($"AccountManager: {accountManagerBaseAddress}");
-                    Console.WriteLine($"ChatService (NetTcp): {chatBaseAddress}");
-                    Console.WriteLine($"FriendService: {amistadBaseAddress}");
-                    Console.WriteLine($"LobbyService (NetTcp): {lobbyBaseAddress}");
-                    Console.ReadLine();
-
-                    
-                    loginHost.Close();
-                    signInHost.Close();
-                    accountHost.Close();
-                    ChatHost.Close();
-                    amistadHost.Close();
-                    lobbyHost.Close();
-                }
-                catch (CommunicationException ce)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(" Error al iniciar los servicios: {0}", ce.Message);
-                    Console.ResetColor();
-
-                    loginHost.Abort();
-                    signInHost.Abort();
-                    accountHost.Abort();
-                    ChatHost.Abort();
-                    amistadHost.Abort();
-                    lobbyHost.Abort();
-                }
-            }
-        }
-    }
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("\n Servidor detenido correctamente.");
+			Console.ResetColor();
+		}
+	}
 }

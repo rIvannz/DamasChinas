@@ -9,16 +9,16 @@
 
 namespace Damas_Chinas_Server
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class amistades
-    {
-        public int id_usuario1 { get; set; }
-        public int id_usuario2 { get; set; }
-        public Nullable<System.DateTime> fecha_amistad { get; set; }
-    
-        public virtual usuarios usuarios { get; set; }
-        public virtual usuarios usuarios1 { get; set; }
-    }
+	using System;
+	using System.Collections.Generic;
+
+	public partial class amistades
+	{
+		public int id_usuario1 { get; set; }
+		public int id_usuario2 { get; set; }
+		public Nullable<System.DateTime> fecha_amistad { get; set; }
+
+		public virtual usuarios usuarios { get; set; }
+		public virtual usuarios usuarios1 { get; set; }
+	}
 }

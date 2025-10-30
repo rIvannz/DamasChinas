@@ -1,83 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+using System;
+using System.Diagnostics;
 using System.IO;
+using System.Windows.Media;
 
-
-namespace DamasChinas_Client.Utilities
+namespace DamasChinas_Client.UI.Utilities
 {
-    public static class SoundManager
-    {
-        private static readonly MediaPlayer _musicPlayer = new MediaPlayer();
-        private static bool _initialized = false;
+	public static class SoundManager
+	{
+		private static readonly MediaPlayer MusicPlayer = new MediaPlayer();
+		private static bool _initialized;
 
-        public static double MusicVolume { get; private set; } = 0.5;
-        public static bool IsPlaying { get; private set; } = false;
+		public static double MusicVolume { get; private set; } = 0.5;
+		public static bool IsPlaying { get; private set; }
 
-        /// <summary>
-        /// Inicializa y reproduce la música global del juego.
-        /// </summary>
-        public static void Initialize()
-        {
-            if (_initialized) return;
+		/// <summary>
+		/// Inicializa y reproduce la música global del juego.
+		/// </summary>
+		public static void Initialize()
+		{
+			if (_initialized)
+			{
+				return;
+			}
 
-            try
-            {
-                // Ruta absoluta del proyecto (válida para desarrollo)
-                string musicPath = @"C:\Projects\DamasChinas_Client\Assets\Sounds\background_music.mp3";
+			try
+			{
+				const string musicPath = @"C:\\Projects\\DamasChinas_Client\\Assets\\Sounds\\background_music.mp3";
 
-                if (!File.Exists(musicPath))
-                {
-                    System.Diagnostics.Debug.WriteLine($"[SoundManager] Archivo no encontrado: {musicPath}");
-                    return;
-                }
+				if (!File.Exists(musicPath))
+				{
+					Debug.WriteLine($"[SoundManager] Archivo no encontrado: {musicPath}");
+					return;
+				}
 
-                Uri uri = new Uri(musicPath, UriKind.Absolute);
-                _musicPlayer.Open(uri);
-                _musicPlayer.Volume = MusicVolume;
+				var uri = new Uri(musicPath, UriKind.Absolute);
+				MusicPlayer.Open(uri);
+				MusicPlayer.Volume = MusicVolume;
 
-                // Repetir en bucle
-                _musicPlayer.MediaEnded += (s, e) =>
-                {
-                    _musicPlayer.Position = TimeSpan.Zero;
-                    _musicPlayer.Play();
-                };
+				MusicPlayer.MediaEnded += (sender, args) =>
+				{
+					MusicPlayer.Position = TimeSpan.Zero;
+					MusicPlayer.Play();
+				};
 
-                _musicPlayer.Play();
-                IsPlaying = true;
-                _initialized = true;
-                System.Diagnostics.Debug.WriteLine("[SoundManager] Música iniciada correctamente.");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[SoundManager] Error al iniciar música: {ex.Message}");
-            }
-        }
+				MusicPlayer.Play();
+				IsPlaying = true;
+				_initialized = true;
+				Debug.WriteLine("[SoundManager] Música iniciada correctamente.");
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"[SoundManager] Error al iniciar música: {ex.Message}");
+			}
+		}
 
-        /// <summary>
-        /// Aplica el nuevo volumen.
-        /// </summary>
-        public static void ApplyVolume(double newVolume)
-        {
-            MusicVolume = newVolume;
-            _musicPlayer.Volume = MusicVolume;
-        }
+		/// <summary>
+		/// Aplica el nuevo volumen.
+		/// </summary>
+		public static void ApplyVolume(double newVolume)
+		{
+			MusicVolume = newVolume;
+			MusicPlayer.Volume = MusicVolume;
+		}
 
-        public static void TogglePlayPause()
-        {
-            if (IsPlaying)
-            {
-                _musicPlayer.Pause();
-                IsPlaying = false;
-            }
-            else
-            {
-                _musicPlayer.Play();
-                IsPlaying = true;
-            }
-        }
-    }
+		public static void TogglePlayPause()
+		{
+			if (IsPlaying)
+			{
+				MusicPlayer.Pause();
+				IsPlaying = false;
+			}
+			else
+			{
+				MusicPlayer.Play();
+				IsPlaying = true;
+			}
+		}
+	}
 }

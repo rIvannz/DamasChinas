@@ -1,182 +1,220 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using DamasChinas_Client.UI.Pages;
 using DamasChinas_Client.UI.AccountManagerServiceProxy;
+using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class ChangeData : Page
     {
-        private int _idUsuario;
+        private PublicProfile _profile;
 
         public ChangeData()
         {
             InitializeComponent();
         }
 
-        // Constructor con idUsuario para cargar los datos
-        public ChangeData(int idUsuario) : this()
+        public ChangeData(PublicProfile profile)
+            : this()
         {
-            _idUsuario = idUsuario;
-
-            try
-            {
-                var client = new AccountManagerClient();
-                var profile = client.GetPublicProfile(_idUsuario);
-
-                if (profile != null)
-                {
-                    txtFirstName.Text = profile.Name;
-                    txtLastName.Text = profile.LastName;
-                    txtEmail.Text = profile.Email;
-                    txtCurrentUsername.Text = profile.Username;
-                }
-                else
-                {
-                    MessageBox.Show("No se encontró el perfil del usuario.",
-                                    "Perfil", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar los datos del usuario: " + ex.Message,
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            _profile = profile;
+            LoadProfileData();
         }
 
-        // ===== BOTONES =====
+        // -------------------------------
+        // 🔹 Navegación general
+        // -------------------------------
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new ProfilePlayer(null, _idUsuario));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error inesperado:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            NavigationService?.GoBack();
         }
 
         private void OnSendCodeClick(object sender, RoutedEventArgs e)
         {
-            try
+            TryExecuteAction(() =>
             {
-                MessageBox.Show("Código enviado correctamente.",
-                    "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error inesperado:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                MessageHelper.ShowSuccess("Código enviado correctamente.");
+            }, "Error al enviar el código");
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new ConfiSound());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error inesperado:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryExecuteAction(() => NavigationService?.Navigate(new ConfiSound()), "Error al abrir configuración de sonido");
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new SelectLanguage());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error inesperado:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TryExecuteAction(() => NavigationService?.Navigate(new SelectLanguage()), "Error al abrir configuración de idioma");
         }
 
-        // ===== CAMBIO DE USERNAME =====
+        // -------------------------------
+        // 🔹 Cambio de usuario
+        // -------------------------------
+
         private void OnSaveUsernameClick(object sender, RoutedEventArgs e)
         {
-            try
+            TryExecuteAction(() =>
             {
-                if (string.IsNullOrWhiteSpace(txtUsername.Text))
-                {
-                    MessageBox.Show("El nombre de usuario no puede estar vacío.",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (!ValidateUsernameInput())
                     return;
-                }
 
-                var client = new AccountManagerClient();
-                var resultado = client.ChangeUsername(_idUsuario, txtUsername.Text);
+                ChangeUsername(txtUsername.Text.Trim());
+            }, "Error al cambiar el nombre de usuario");
+        }
 
-                if (resultado.Exito)
+        private bool ValidateUsernameInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                MessageHelper.ShowWarning("El nombre de usuario no puede estar vacío.");
+                return false;
+            }
+            return true;
+        }
+
+        private void ChangeUsername(string newUsername)
+        {
+            using (var client = new AccountManagerClient())
+            {
+                var result = client.ChangeUsername(_profile.Username, newUsername);
+
+                if (result.Succes)
                 {
-                    MessageBox.Show(resultado.Mensaje,
-                        "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    // Volver al perfil actualizado
-                    NavigationService?.Navigate(new ProfilePlayer(client.GetPublicProfile(_idUsuario), _idUsuario));
+                    UpdateUsernameState(newUsername);
+                    MessageHelper.ShowSuccess(result.Messaje);
+                    NavigationService?.GoBack();
                 }
                 else
                 {
-                    MessageBox.Show(resultado.Mensaje,
-                        "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageHelper.ShowWarning(result.Messaje, "Aviso");
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al cambiar el nombre de usuario: {ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        // ===== CAMBIO DE CONTRASEÑA =====
+        private void UpdateUsernameState(string newUsername)
+        {
+            _profile.Username = newUsername;
+            txtCurrentUsername.Text = _profile.Username;
+
+            if (ClientSession.IsLoggedIn)
+            {
+                ClientSession.CurrentProfile.Username = newUsername;
+            }
+        }
+
+        // -------------------------------
+        // 🔹 Cambio de contraseña
+        // -------------------------------
+
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
+        {
+            TryExecuteAction(() =>
+            {
+                if (!ValidatePasswordInputs())
+                    return;
+
+                if (!ValidatePasswordStrength(txtPassword.Password))
+                    return;
+
+                string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
+                ChangePassword(_profile.Username, hashedPassword);
+            }, "Error al cambiar la contraseña");
+        }
+
+        private bool ValidatePasswordInputs()
+        {
+            if (string.IsNullOrWhiteSpace(txtPassword.Password) ||
+                string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
+            {
+                MessageHelper.ShowWarning("Por favor llena todos los campos.");
+                return false;
+            }
+
+            if (txtPassword.Password != txtConfirmPassword.Password)
+            {
+                MessageHelper.ShowWarning("Las contraseñas no coinciden.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidatePasswordStrength(string password)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(txtPassword.Password) ||
-                    string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
+                Validator.ValidatePassword(password);
+                MessageHelper.ShowInfo("Contraseña válida.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowWarning($"Contraseña inválida: {ex.Message}");
+                return false;
+            }
+        }
+
+        private void ChangePassword(string username, string hashedPassword)
+        {
+            using (var client = new AccountManagerClient())
+            {
+                var result = client.ChangePassword(username, hashedPassword);
+
+                if (result.Succes)
                 {
-                    MessageBox.Show("Por favor llena todos los campos.",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                if (txtPassword.Password != txtConfirmPassword.Password)
-                {
-                    MessageBox.Show("Las contraseñas no coinciden.",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                var client = new AccountManagerClient();
-                var resultado = client.ChangePassword(_idUsuario, txtPassword.Password);
-
-                if (resultado.Exito)
-                {
-                    MessageBox.Show(resultado.Mensaje,
-                        "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    txtPassword.Password = string.Empty;
-                    txtConfirmPassword.Password = string.Empty;
+                    MessageHelper.ShowSuccess(result.Messaje);
+                    ClearPasswordInputs();
                 }
                 else
                 {
-                    MessageBox.Show(resultado.Mensaje,
-                        "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageHelper.ShowWarning(result.Messaje, "Aviso");
+                }
+            }
+        }
+
+        private void ClearPasswordInputs()
+        {
+            txtPassword.Password = string.Empty;
+            txtConfirmPassword.Password = string.Empty;
+        }
+
+        // -------------------------------
+        // 🔹 Utilidades
+        // -------------------------------
+
+        private void LoadProfileData()
+        {
+            try
+            {
+                if (_profile != null)
+                {
+                    txtFirstName.Text = _profile.Name;
+                    txtLastName.Text = _profile.LastName;
+                    txtEmail.Text = _profile.Email;
+                    txtCurrentUsername.Text = _profile.Username;
+                }
+                else
+                {
+                    MessageHelper.ShowWarning("No se encontró el perfil del usuario.", "Perfil");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cambiar la contraseña: {ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageHelper.ShowError("Error al cargar los datos del usuario: " + ex.Message);
+            }
+        }
+
+        private void TryExecuteAction(Action action, string errorMessage)
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError($"{errorMessage}: {ex.Message}");
             }
         }
     }

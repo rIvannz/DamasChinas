@@ -1,81 +1,72 @@
-﻿using DamasChinas_Client.UI.AccountManagerServiceProxy;
-using DamasChinas_Client.UI.Pages;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
+using DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
-
 {
-    public partial class ProfilePlayer : Page
-    {
-        private int _idUsuario;
+	public partial class ProfilePlayer : Page
+	{
+		private PublicProfile _profile;
 
-        public ProfilePlayer()
-        {
-            InitializeComponent();
+		public ProfilePlayer()
+		{
+			InitializeComponent();
+		}
+
+                public ProfilePlayer(PublicProfile profile)
+                {
+                        InitializeComponent();
+
+                        _profile = profile ?? throw new ArgumentNullException(nameof(profile));
+
+                        UpdateProfileDisplay();
+                }
+
+      
+
+		private void OnBackClick(object sender, RoutedEventArgs e)
+		{
+			if (NavigationService.CanGoBack)
+			{
+				NavigationService.GoBack();
+			}
+		}
+
+		private void OnChangeDataClick(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				NavigationService?.Navigate(new ChangeData(_profile));
+			    
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error al navegar a cambiar datos: " + ex.Message, "Perfil", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+
+		private void OnSoundClick(object sender, RoutedEventArgs e)
+		{
+			NavigationService?.Navigate(new ConfiSound());
+		}
+
+                private void OnLanguageClick(object sender, RoutedEventArgs e)
+                {
+                        NavigationService?.Navigate(new SelectLanguage());
+                }
+
+                private void UpdateProfileDisplay()
+                {
+                        if (_profile == null)
+                        {
+                                return;
+                        }
+
+                        UsernameTextBlock.Text = _profile.Username;
+                        FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
+                        EmailTextBlock.Text = _profile.Email;
+                }
         }
-
-        public ProfilePlayer(PublicProfile profile, int idUsuario) : this()
-        {
-            _idUsuario = idUsuario;
-
-            if (profile != null)
-            {
-                UsernameTextBlock.Text = profile.Username + _idUsuario;
-                FullNameTextBlock.Text = profile.Name + " " + profile.LastName;
-                EmailTextBlock.Text = profile.Email;
-                // PhoneTextBlock.Text = profile.Telefono; // reutilizadopara redes sociales pendiente pedirle a ivan lo del icono
-            }
-        }
-
-        // ===== Botón Back =====
-        private void OnBackClick(object sender, RoutedEventArgs e)
-        {
-            if (NavigationService.CanGoBack)
-                NavigationService.GoBack();
-        }
-
-        // ===== Botón Change Data =====
-        private void OnChangeDataClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                NavigationService?.Navigate(new ChangeData(_idUsuario));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al navegar a cambiar datos: " + ex.Message,
-                                "Perfil", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        // ===== Botón Sonido =====
-        private void OnSoundClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new ConfiSound());
-        }
-
-        // ===== Botón Idioma =====
-        private void OnLanguageClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new SelectLanguage());
-        }
-
-        // ===== Método para navegar desde otro lado usando el ID de usuario =====
-        public static void NavigateToProfile(Frame frame, int userId)
-        {
-            try
-            {
-                var client = new AccountManagerClient();
-                var profile = client.GetPublicProfile(userId);
-
-                frame.Navigate(new ProfilePlayer(profile, userId));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al obtener el perfil: " + ex.Message, "Perfil", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-    }
 }

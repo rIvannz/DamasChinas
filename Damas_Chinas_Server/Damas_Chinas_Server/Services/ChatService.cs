@@ -1,50 +1,50 @@
-﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 namespace Damas_Chinas_Server
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
-    public class ChatService : IChatService
-    {
- 
-        private static Dictionary<string, IChatCallback> clientes = new Dictionary<string, IChatCallback>();
+	[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+	public class ChatService : IChatService
+	{
 
-     
-        private ChatRepository _repo = new ChatRepository();
+		private static readonly ConcurrentDictionary<string, IChatCallback> clientes = new ConcurrentDictionary<string, IChatCallback>();
 
-    
-        public void RegistrarCliente(string username)
-        {
-            var callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
-            if (!clientes.ContainsKey(username))
-                clientes[username] = callback;
-        }
+		private ChatRepository _repo = new ChatRepository();
 
-       
-        public void SendMessage(Message message)
-        {
-            
-            int idUserSender = message.IdUser;
-            int idUserRecipient = _repo.GetIdByUsername(message.DestinationUsername);
+		public void RegistrateClient(string username)
+		{
+			var callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
+			if (!clientes.ContainsKey(username))
+			{
+				clientes[username] = callback;
+			}
+		}
 
-            _repo.SaveMessage(idUserSender, idUserRecipient, message.Text);
+		public void SendMessage(Message message)
+		{
 
-            if (clientes.ContainsKey(message.DestinationUsername))
-            {
-                try
-                {
-                    clientes[message.DestinationUsername].Receivemessage(message);
-                }
-                catch
-                {
-                    clientes.Remove(message.DestinationUsername);
-                }
-            }
-        }
+			string idUserSender = message.UsarnameSender;
+			int idUserRecipient = _repo.GetIdByUsername(message.DestinationUsername);
 
-        public Message[] GetHistoricalMessages(int idUsuario, string usernameDestino)
-        {
-            return _repo.GetChatByUsername(idUsuario, usernameDestino).ToArray();
-        }
-    }
+			_repo.SaveMessage(idUserSender, idUserRecipient, message.Text);
+
+			if (clientes.ContainsKey(message.DestinationUsername))
+			{
+				try
+				{
+					clientes[message.DestinationUsername].ReceiveMessage(message);
+				}
+				catch
+				{
+				}
+			}
+		}
+
+		public Message[] GetHistoricalMessages(string usernameSender, string usernameDestino)
+		{
+			return _repo.GetChatByUsername(usernameSender, usernameDestino).ToArray();
+		}
+
+	}
 }

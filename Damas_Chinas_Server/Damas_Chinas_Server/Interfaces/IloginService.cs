@@ -1,13 +1,22 @@
-﻿using System.ServiceModel;
-
+using System.ServiceModel;
+using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Interfaces;
 
 namespace Damas_Chinas_Server
 {
-    [ServiceContract]
+	[ServiceContract(CallbackContract = typeof(ILoginCallback), SessionMode = SessionMode.Required)]
+	public interface ILoginService
+	{
+		[OperationContract(IsOneWay = true)]
+		void Login(LoginRequest loginRequest);
+	}
 
-    public interface IILoginService
-    {
-        [OperationContract]
-        LoginResult ValidateLogin(string usuarioInput, string password);
-    }
+	public interface ILoginCallback : ISessionCallback
+	{
+		[OperationContract(IsOneWay = true)]
+		void OnLoginSuccess(PublicProfile profile);
+
+		[OperationContract(IsOneWay = true)]
+		void OnLoginError(string message);
+	}
 }

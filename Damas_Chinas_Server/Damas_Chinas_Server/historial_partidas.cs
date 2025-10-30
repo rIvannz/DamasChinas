@@ -9,15 +9,15 @@
 
 namespace Damas_Chinas_Server
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class historial_partidas
-    {
-        public int id_jugador { get; set; }
-        public int id_partida { get; set; }
-        public Nullable<System.DateTime> fecha_partida { get; set; }
-        public string jugadores { get; set; }
-        public int mi_posicion { get; set; }
-    }
+	using System;
+	using System.Collections.Generic;
+
+	public partial class historial_partidas
+	{
+		public int id_jugador { get; set; }
+		public int id_partida { get; set; }
+		public Nullable<System.DateTime> fecha_partida { get; set; }
+		public string jugadores { get; set; }
+		public int mi_posicion { get; set; }
+	}
 }

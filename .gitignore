@@ -1,0 +1,13 @@
+# Ignorar archivos temporales de Visual Studio (no VS Code)
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.vsidx
+*.dbmdl
+*.cache/
+*.log
+
+# Mantener configuración de VS Code
+!.vscode/

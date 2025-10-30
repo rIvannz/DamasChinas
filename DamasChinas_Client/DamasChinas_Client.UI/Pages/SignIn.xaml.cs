@@ -1,94 +1,137 @@
-﻿using DamasChinas_Client.UI.SingInServiceProxy;
+using DamasChinas_Client.UI.SingInServiceProxy;
+using DamasChinas_Client.UI.Utilities;
 using System;
-using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+
 namespace DamasChinas_Client.UI.Pages
 {
-    public partial class SignIn : Page
-    {
-        private SingInServiceClient _proxy;
-
-        public SignIn()
-        {
-            InitializeComponent();
-        }
+	public partial class SignIn : Page
+	{
+		public SignIn()
+		{
+			InitializeComponent();
+		}
 
         private async void OnCreateAccountClick(object sender, RoutedEventArgs e)
         {
-            if (txtPassword.Password != txtConfirmPassword.Password)
-            {
-                MessageBox.Show("Las contraseñas no coinciden.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            string firstName = txtFirstName.Text.Trim();
-            string lastName = txtLastName.Text.Trim();
-            string email = txtEmail.Text.Trim();
-            string username = txtUsername.Text.Trim();
-            string password = txtPassword.Password;
-
-            var client = new SingInServiceClient("BasicHttpBinding_ISingInService");
+            SingInServiceClient client = null;
 
             try
             {
-                var resultado = client.CreateUser(firstName, lastName, email, password, username);
+				if (!ValidatebothPasswords() && ValidatePassword())
+				{
+					return;
+				}
 
-                if (resultado.Exito)
-                {
-                    MessageBox.Show(resultado.Mensaje, "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Limpiar formulario
-                    txtFirstName.Clear();
-                    txtLastName.Clear();
-                    txtEmail.Clear();
-                    txtUsername.Clear();
-                    txtPassword.Clear();
-                    txtConfirmPassword.Clear();
-                }
-                else
+
+                var userDto = GetUserFromInputs();
+
+                
+                client = new SingInServiceClient();
+                var result = await Task.Run(() => client.CreateUser(userDto));
+
+                MessageHelper.ShowFromResult(result);
+
+                if (result?.Succes == true)
                 {
-                    MessageBox.Show(resultado.Mensaje, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ClearInputs();
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageHelper.ShowWarning(ex.Message);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudo conectar con el servidor: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageHelper.ShowError($"Ocurrió un error: {ex.Message}");
             }
             finally
             {
-             
-                if (client.State == System.ServiceModel.CommunicationState.Opened)
-                    client.Close();
+                ServiceHelper.SafeClose(client);
             }
         }
 
+        private bool ValidatebothPasswords()
+		{
+			if (txtPassword.Password != txtConfirmPassword.Password)
+			{
+				MessageHelper.ShowWarning("Las contraseñas no coinciden.");
+				return false;
+			}
 
 
-        private void OnBackClick(object sender, RoutedEventArgs e)
-        { if (NavigationService?.CanGoBack == true) NavigationService.GoBack(); else MessageBox.Show("No previous page found."); }
-
-
-        private void OnSoundClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new ConfiSound());
+			return true;
         }
 
-        private void OnLanguageClick(object sender, RoutedEventArgs e)
+        private bool ValidatePassword()
         {
             try
             {
-                NavigationService?.Navigate(new SelectLanguage());
+                string _password = txtPassword.Password;
+                Validator.ValidatePassword(_password);
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"Error while opening language settings: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                MessageHelper.ShowWarning($"Contraseña inválida: {ex.Message}");
+                return false;
             }
         }
-    }
+
+
+        private UserDto GetUserFromInputs()
+        {
+            return new UserDto
+            {
+                Name = txtFirstName.Text.Trim(),
+                LastName = txtLastName.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Username = txtUsername.Text.Trim(),
+                Password = Hasher.HashPassword(txtPassword.Password.Trim())
+            };
+        }
+
+
+        private void ClearInputs()
+		{
+			txtFirstName.Clear();
+			txtLastName.Clear();
+			txtEmail.Clear();
+			txtUsername.Clear();
+			txtPassword.Clear();
+			txtConfirmPassword.Clear();
+		}
+
+		private void OnBackClick(object sender, RoutedEventArgs e)
+		{
+			if (NavigationService?.CanGoBack == true)
+			{
+				NavigationService.GoBack();
+			}
+			else
+			{
+				MessageHelper.ShowInfo("No previous page found.");
+			}
+		}
+
+		private void OnSoundClick(object sender, RoutedEventArgs e)
+		{
+			NavigationService?.Navigate(new ConfiSound());
+		}
+
+		private void OnLanguageClick(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				NavigationService?.Navigate(new SelectLanguage());
+			}
+			catch (Exception ex)
+			{
+				MessageHelper.ShowError($"Error while opening language settings: {ex.Message}");
+			}
+		}
+	}
 }

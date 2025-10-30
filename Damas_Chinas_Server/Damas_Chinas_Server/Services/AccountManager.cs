@@ -1,68 +1,77 @@
-﻿using Damas_Chinas_Server.Dtos;
 using System;
-using System.Data.Entity;
+using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Services;
 
 namespace Damas_Chinas_Server
 {
-    public class AccountManager : IAccountManager
-    {
-        private readonly RepositoryUsers _repository;
+	public class AccountManager : IAccountManager
+	{
+		private readonly RepositoryUsers _repository;
 
-        public AccountManager()
-        {
-            _repository = new RepositoryUsers();
-        }
+		public AccountManager()
+			: this(new RepositoryUsers())
+		{
+		}
 
-        public PublicProfile GetPublicProfile(int idUser)
-        {
-            return _repository.GetPublicProfile(idUser);
-        }
+		internal AccountManager(RepositoryUsers repository)
+		{
+			_repository = repository ?? throw new ArgumentNullException(nameof(repository));
+		}
 
-        public OperationResult ChangeUsername(int idUser, string newUsername)
-        {
-            try
-            {
-                bool exito = _repository.ChangeUsername(idUser, newUsername);
-                return new OperationResult
-                {
-                    Succes = exito,
-                    Messaje = exito ? "Nombre de usuario actualizado correctamente." : "Error al actualizar el nombre de usuario.",
-                    User = null
-                };
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult
-                {
-                    Succes = false,
-                    Messaje = $"Error al actualizar el nombre de usuario: {ex.Message}",
-                    User = null
-                };
-            }
-        }
+		public PublicProfile GetPublicProfile(int idUser)
+		{
+			return _repository.GetPublicProfile(idUser);
+		}
 
-        public OperationResult ChangePassword(int idUsuario, string nuevaPassword)
-        {
-            try
-            {
-                bool OperationResult = _repository.ChangePassword(idUsuario, nuevaPassword);
-                return new OperationResult
+                public OperationResult ChangeUsername(string username, string newUsername)
                 {
-                    Succes = OperationResult,
-                    Messaje = OperationResult ? "Contraseña actualizada correctamente." : "Error al actualizar la contraseña.",
-                    User = null
-                };
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult
-                {
-                    Succes = false,
-                    Messaje = $"Error al actualizar la contraseña: {ex.Message}",
-                    User = null
-                };
-            }
-        }
-    }
+                        return ExecuteAccountOperation(
+                                () =>
+                                {
+                                        var success = _repository.ChangeUsername(username, newUsername);
+
+                                        if (success)
+                                        {
+                                                SessionManager.UpdateSessionUsername(username, newUsername);
+                                        }
+
+                                        return success;
+                                },
+                                "Nombre de usuario actualizado correctamente.",
+                                "Error al actualizar el nombre de usuario.",
+                                "Error al actualizar el nombre de usuario");
+                }
+
+		public OperationResult ChangePassword(string correo, string nuevaPassword)
+		{
+			return ExecuteAccountOperation(
+				() => _repository.ChangePassword(correo, nuevaPassword),
+				"Contraseña actualizada correctamente.",
+				"Error al actualizar la contraseña.",
+				"Error al actualizar la contraseña");
+		}
+
+		private static OperationResult ExecuteAccountOperation(Func<bool> operation, string successMessage, string failureMessage, string errorPrefix)
+		{
+			try
+			{
+				bool success = operation();
+				return new OperationResult
+				{
+					Succes = success,
+					Messaje = success ? successMessage : failureMessage,
+					User = null
+				};
+			}
+			catch (Exception ex)
+			{
+				return new OperationResult
+				{
+					Succes = false,
+					Messaje = $"{errorPrefix}: {ex.Message}",
+					User = null
+				};
+			}
+		}
+	}
 }
-

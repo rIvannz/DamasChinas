@@ -9,16 +9,16 @@
 
 namespace Damas_Chinas_Server
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class bloqueos
-    {
-        public int id_bloqueador { get; set; }
-        public int id_bloqueado { get; set; }
-        public Nullable<System.DateTime> fecha_bloqueo { get; set; }
-    
-        public virtual usuarios usuarios { get; set; }
-        public virtual usuarios usuarios1 { get; set; }
-    }
+	using System;
+	using System.Collections.Generic;
+
+	public partial class bloqueos
+	{
+		public int id_bloqueador { get; set; }
+		public int id_bloqueado { get; set; }
+		public Nullable<System.DateTime> fecha_bloqueo { get; set; }
+
+		public virtual usuarios usuarios { get; set; }
+		public virtual usuarios usuarios1 { get; set; }
+	}
 }

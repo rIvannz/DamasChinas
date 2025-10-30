@@ -15,21 +15,27 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserDto", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
     [System.SerializableAttribute()]
-    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class UserDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool ExitoField;
+        private string EmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MensajeField;
+        private string LastNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private DamasChinas_Client.UI.SingInServiceProxy.UsuarioInfo UsuarioField;
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PasswordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -42,40 +48,66 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool Exito {
+        public string Email {
             get {
-                return this.ExitoField;
+                return this.EmailField;
             }
             set {
-                if ((this.ExitoField.Equals(value) != true)) {
-                    this.ExitoField = value;
-                    this.RaisePropertyChanged("Exito");
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Mensaje {
+        public string LastName {
             get {
-                return this.MensajeField;
+                return this.LastNameField;
             }
             set {
-                if ((object.ReferenceEquals(this.MensajeField, value) != true)) {
-                    this.MensajeField = value;
-                    this.RaisePropertyChanged("Mensaje");
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public DamasChinas_Client.UI.SingInServiceProxy.UsuarioInfo Usuario {
+        public string Name {
             get {
-                return this.UsuarioField;
+                return this.NameField;
             }
             set {
-                if ((object.ReferenceEquals(this.UsuarioField, value) != true)) {
-                    this.UsuarioField = value;
-                    this.RaisePropertyChanged("Usuario");
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Password {
+            get {
+                return this.PasswordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PasswordField, value) != true)) {
+                    this.PasswordField = value;
+                    this.RaisePropertyChanged("Password");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
                 }
             }
         }
@@ -92,21 +124,98 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="UsuarioInfo", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
     [System.SerializableAttribute()]
-    public partial class UsuarioInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CorreoField;
+        private string MessajeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IdUsuarioField;
+        private bool SuccesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NombreCompletoField;
+        private DamasChinas_Client.UI.SingInServiceProxy.UserInfo UserField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Messaje {
+            get {
+                return this.MessajeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessajeField, value) != true)) {
+                    this.MessajeField = value;
+                    this.RaisePropertyChanged("Messaje");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Succes {
+            get {
+                return this.SuccesField;
+            }
+            set {
+                if ((this.SuccesField.Equals(value) != true)) {
+                    this.SuccesField = value;
+                    this.RaisePropertyChanged("Succes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.SingInServiceProxy.UserInfo User {
+            get {
+                return this.UserField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserField, value) != true)) {
+                    this.UserField = value;
+                    this.RaisePropertyChanged("User");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserInfo", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
+    [System.SerializableAttribute()]
+    public partial class UserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FullNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdUserField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
@@ -122,40 +231,40 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Correo {
+        public string Email {
             get {
-                return this.CorreoField;
+                return this.EmailField;
             }
             set {
-                if ((object.ReferenceEquals(this.CorreoField, value) != true)) {
-                    this.CorreoField = value;
-                    this.RaisePropertyChanged("Correo");
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int IdUsuario {
+        public string FullName {
             get {
-                return this.IdUsuarioField;
+                return this.FullNameField;
             }
             set {
-                if ((this.IdUsuarioField.Equals(value) != true)) {
-                    this.IdUsuarioField = value;
-                    this.RaisePropertyChanged("IdUsuario");
+                if ((object.ReferenceEquals(this.FullNameField, value) != true)) {
+                    this.FullNameField = value;
+                    this.RaisePropertyChanged("FullName");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string NombreCompleto {
+        public int IdUser {
             get {
-                return this.NombreCompletoField;
+                return this.IdUserField;
             }
             set {
-                if ((object.ReferenceEquals(this.NombreCompletoField, value) != true)) {
-                    this.NombreCompletoField = value;
-                    this.RaisePropertyChanged("NombreCompleto");
+                if ((this.IdUserField.Equals(value) != true)) {
+                    this.IdUserField = value;
+                    this.RaisePropertyChanged("IdUser");
                 }
             }
         }
@@ -188,10 +297,10 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
     public interface ISingInService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CreateUser", ReplyAction="http://tempuri.org/ISingInService/CreateUserResponse")]
-        DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(string nombre, string lastName, string Email, string password, string username);
+        DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CreateUser", ReplyAction="http://tempuri.org/ISingInService/CreateUserResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(string nombre, string lastName, string Email, string password, string username);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -221,12 +330,12 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
                 base(binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(string nombre, string lastName, string Email, string password, string username) {
-            return base.Channel.CreateUser(nombre, lastName, Email, password, username);
+        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto) {
+            return base.Channel.CreateUser(userDto);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(string nombre, string lastName, string Email, string password, string username) {
-            return base.Channel.CreateUserAsync(nombre, lastName, Email, password, username);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto) {
+            return base.Channel.CreateUserAsync(userDto);
         }
     }
 }

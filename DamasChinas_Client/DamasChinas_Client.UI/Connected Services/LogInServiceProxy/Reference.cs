@@ -15,18 +15,15 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginResult", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginRequest", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
     [System.SerializableAttribute()]
-    public partial class LoginResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class LoginRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IdUsuarioField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool SuccessField;
+        private string PasswordField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
@@ -42,27 +39,123 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int IdUsuario {
+        public string Password {
             get {
-                return this.IdUsuarioField;
+                return this.PasswordField;
             }
             set {
-                if ((this.IdUsuarioField.Equals(value) != true)) {
-                    this.IdUsuarioField = value;
-                    this.RaisePropertyChanged("IdUsuario");
+                if ((object.ReferenceEquals(this.PasswordField, value) != true)) {
+                    this.PasswordField = value;
+                    this.RaisePropertyChanged("Password");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool Success {
+        public string Username {
             get {
-                return this.SuccessField;
+                return this.UsernameField;
             }
             set {
-                if ((this.SuccessField.Equals(value) != true)) {
-                    this.SuccessField = value;
-                    this.RaisePropertyChanged("Success");
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
+    [System.SerializableAttribute()]
+    public partial class PublicProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LastNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SocialUrlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastName {
+            get {
+                return this.LastNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SocialUrl {
+            get {
+                return this.SocialUrlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SocialUrlField, value) != true)) {
+                    this.SocialUrlField = value;
+                    this.RaisePropertyChanged("SocialUrl");
                 }
             }
         }
@@ -91,49 +184,60 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInServiceProxy.IILoginService")]
-    public interface IILoginService {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInServiceProxy.ILoginService", CallbackContract=typeof(DamasChinas_Client.UI.LogInServiceProxy.ILoginServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
+    public interface ILoginService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IILoginService/ValidateLogin", ReplyAction="http://tempuri.org/IILoginService/ValidateLoginResponse")]
-        DamasChinas_Client.UI.LogInServiceProxy.LoginResult ValidateLogin(string usuarioInput, string password);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/Login")]
+        void Login(DamasChinas_Client.UI.LogInServiceProxy.LoginRequest loginRequest);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IILoginService/ValidateLogin", ReplyAction="http://tempuri.org/IILoginService/ValidateLoginResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LogInServiceProxy.LoginResult> ValidateLoginAsync(string usuarioInput, string password);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/Login")]
+        System.Threading.Tasks.Task LoginAsync(DamasChinas_Client.UI.LogInServiceProxy.LoginRequest loginRequest);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IILoginServiceChannel : DamasChinas_Client.UI.LogInServiceProxy.IILoginService, System.ServiceModel.IClientChannel {
+    public interface ILoginServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/OnLoginSuccess")]
+        void OnLoginSuccess(DamasChinas_Client.UI.LogInServiceProxy.PublicProfile profile);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/OnLoginError")]
+        void OnLoginError(string message);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ILoginServiceChannel : DamasChinas_Client.UI.LogInServiceProxy.ILoginService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ILoginServiceClient : System.ServiceModel.ClientBase<DamasChinas_Client.UI.LogInServiceProxy.IILoginService>, DamasChinas_Client.UI.LogInServiceProxy.IILoginService {
+    public partial class LoginServiceClient : System.ServiceModel.DuplexClientBase<DamasChinas_Client.UI.LogInServiceProxy.ILoginService>, DamasChinas_Client.UI.LogInServiceProxy.ILoginService {
         
-        public ILoginServiceClient() {
+        public LoginServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public ILoginServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public LoginServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public ILoginServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public LoginServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ILoginServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public LoginServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ILoginServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public LoginServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.LogInServiceProxy.LoginResult ValidateLogin(string usuarioInput, string password) {
-            return base.Channel.ValidateLogin(usuarioInput, password);
+        public void Login(DamasChinas_Client.UI.LogInServiceProxy.LoginRequest loginRequest) {
+            base.Channel.Login(loginRequest);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LogInServiceProxy.LoginResult> ValidateLoginAsync(string usuarioInput, string password) {
-            return base.Channel.ValidateLoginAsync(usuarioInput, password);
+        public System.Threading.Tasks.Task LoginAsync(DamasChinas_Client.UI.LogInServiceProxy.LoginRequest loginRequest) {
+            return base.Channel.LoginAsync(loginRequest);
         }
     }
 }

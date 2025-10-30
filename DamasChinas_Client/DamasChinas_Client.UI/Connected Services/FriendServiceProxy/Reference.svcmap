@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8740/FriendService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8004/FriendService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="FriendService.wsdl" MetadataType="Wsdl" ID="b023d85b-ab08-4a36-8834-8345ed52a0bc" SourceId="1" SourceUrl="http://localhost:8740/FriendService/?wsdl" />
-    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="0311b3b2-0e26-44e1-a582-86e1ca8e48a1" SourceId="1" SourceUrl="http://localhost:8740/FriendService/?xsd=xsd0" />
-    <MetadataFile FileName="item31.xsd" MetadataType="Schema" ID="092aaeec-2d6b-4fa7-a1bb-abe15d7358b9" SourceId="1" SourceUrl="http://localhost:8740/FriendService/?xsd=xsd2" />
-    <MetadataFile FileName="item32.xsd" MetadataType="Schema" ID="ef334058-c0d6-4e0c-9e53-fed977b8dc59" SourceId="1" SourceUrl="http://localhost:8740/FriendService/?xsd=xsd1" />
-    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="e4405460-6fe4-4da9-8918-176c6cf5c932" SourceId="1" SourceUrl="http://localhost:8740/FriendService/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="d89ac286-1437-4821-81cd-3526a5c0fcbd" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd1" />
+    <MetadataFile FileName="FriendService1.wsdl" MetadataType="Wsdl" ID="81b8dad4-3f36-40c5-ae58-4a3513e14ec6" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?wsdl" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="04314fa4-c15e-4930-97ce-19ef60193797" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd2" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="99dd1422-2bd4-4cd8-a314-2f72e6ccc54b" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?disco" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="102b5941-7b9d-4333-b243-c332a6b53e7d" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

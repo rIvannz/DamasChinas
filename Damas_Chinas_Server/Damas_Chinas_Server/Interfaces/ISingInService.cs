@@ -1,13 +1,12 @@
-﻿using System.ServiceModel;
-
+using Damas_Chinas_Server.Dtos;
+using System.ServiceModel;
 
 namespace Damas_Chinas_Server
 {
-    [ServiceContract]
-    public interface ISingInService
-    {
-        [OperationContract]
-        OperationResult CreateUser(string nombre, string lastName, string Email, string password, string username);
-    }
+	[ServiceContract]
+	public interface ISingInService
+	{
+		[OperationContract]
+		OperationResult CreateUser(UserDto userDto);
+	}
 }
-
