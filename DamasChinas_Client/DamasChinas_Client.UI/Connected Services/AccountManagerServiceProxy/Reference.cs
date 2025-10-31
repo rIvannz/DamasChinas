@@ -124,7 +124,7 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Contracts")]
     [System.SerializableAttribute()]
     public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -132,13 +132,13 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessajeField;
+        private DamasChinas_Client.UI.AccountManagerServiceProxy.MessageCode CodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool SuccesField;
+        private bool SuccessField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private DamasChinas_Client.UI.AccountManagerServiceProxy.UserInfo UserField;
+        private string TechnicalDetailField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -151,40 +151,40 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Messaje {
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.MessageCode Code {
             get {
-                return this.MessajeField;
+                return this.CodeField;
             }
             set {
-                if ((object.ReferenceEquals(this.MessajeField, value) != true)) {
-                    this.MessajeField = value;
-                    this.RaisePropertyChanged("Messaje");
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool Succes {
+        public bool Success {
             get {
-                return this.SuccesField;
+                return this.SuccessField;
             }
             set {
-                if ((this.SuccesField.Equals(value) != true)) {
-                    this.SuccesField = value;
-                    this.RaisePropertyChanged("Succes");
+                if ((this.SuccessField.Equals(value) != true)) {
+                    this.SuccessField = value;
+                    this.RaisePropertyChanged("Success");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.UserInfo User {
+        public string TechnicalDetail {
             get {
-                return this.UserField;
+                return this.TechnicalDetailField;
             }
             set {
-                if ((object.ReferenceEquals(this.UserField, value) != true)) {
-                    this.UserField = value;
-                    this.RaisePropertyChanged("User");
+                if ((object.ReferenceEquals(this.TechnicalDetailField, value) != true)) {
+                    this.TechnicalDetailField = value;
+                    this.RaisePropertyChanged("TechnicalDetail");
                 }
             }
         }
@@ -199,97 +199,33 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="UserInfo", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server")]
-    [System.SerializableAttribute()]
-    public partial class UserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.Runtime.Serialization.DataContractAttribute(Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Common")]
+    public enum MessageCode : int {
         
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoginInvalidCredentials = 1001,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FullNameField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserDuplicateEmail = 1002,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IdUserField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserNotFound = 1003,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string UsernameField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MatchCreationFailed = 1100,
         
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ServerUnavailable = 2001,
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NetworkLatency = 2100,
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FullName {
-            get {
-                return this.FullNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FullNameField, value) != true)) {
-                    this.FullNameField = value;
-                    this.RaisePropertyChanged("FullName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int IdUser {
-            get {
-                return this.IdUserField;
-            }
-            set {
-                if ((this.IdUserField.Equals(value) != true)) {
-                    this.IdUserField = value;
-                    this.RaisePropertyChanged("IdUser");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Username {
-            get {
-                return this.UsernameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
-                    this.UsernameField = value;
-                    this.RaisePropertyChanged("Username");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UnknownError = 9999,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

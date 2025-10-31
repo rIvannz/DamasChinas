@@ -1,81 +1,110 @@
+using Damas_Chinas_Server.Common;
+using Damas_Chinas_Server.Contracts;
+using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Services;
+using Damas_Chinas_Server.Utilidades;
 using System;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Damas_Chinas_Server.Dtos;
-using Damas_Chinas_Server.Utilidades;
 
 namespace Damas_Chinas_Server
 {
-	public class SingInService : ISingInService
-	{
-		private readonly RepositoryUsers _repository;
 
-		public SingInService()
-		{
-			_repository = new RepositoryUsers();
-		}
+    public class SingInService : ISingInService
+    {
+        private readonly RepositoryUsers _repository;
 
-		public OperationResult CreateUser(UserDto userDto)
-		{
-			var result = new OperationResult();
+        public SingInService()
+        {
+            _repository = new RepositoryUsers();
+        }
 
-			try
-			{
-				var user = _repository.CreateUser(userDto);
-				result.User = MapToUserInfo(user, userDto);
-				result.Succes = true;
-				result.Messaje = "Usuario creado correctamente.";
+  
+        public OperationResult CreateUser(UserDto userDto)
+        {
+            var result = new OperationResult();
 
-				EnviarCorreoBienvenida(result.User);
-			}
-			catch (ArgumentException ex)
-			{
-				result.Succes = false;
-				result.Messaje = ex.Message;
-			}
-			catch (InvalidOperationException ex)
-			{
-				result.Succes = false;
-				result.Messaje = ex.Message;
-			}
-			catch (Exception ex)
-			{
-				Console.Error.WriteLine(ex);
-				result.Succes = false;
-				result.Messaje = "Ocurrió un error inesperado al crear el usuario.";
-			}
+            try
+            {
+                var user = _repository.CreateUser(userDto);
 
-			return result;
-		}
+                result.Success = true;
+                result.Code = MessageCode.Success;
+                result.TechnicalDetail = "User created successfully.";
 
-		private void EnviarCorreoBienvenida(UserInfo user)
-		{
-			Task.Run(async () =>
-			{
-				try
-				{
-					await Correo.EnviarBienvenidaAsync(user).ConfigureAwait(false);
-				}
-				catch (Exception ex)
-				{
-					Console.Error.WriteLine(ex);
-				}
-			});
-		}
+                // Optional: send welcome email asynchronously
+                SendWelcomeEmail(MapToUserInfo(user, userDto));
 
-		private UserInfo MapToUserInfo(usuarios user, UserDto userDto)
-		{
-			var profile = user.perfiles.FirstOrDefault();
+                System.Diagnostics.Debug.WriteLine("[TRACE] User created successfully.");
+            }
+            catch (ArgumentException ex)
+            {
+                result.Success = false;
+                result.Code = MessageCode.UserDuplicateEmail;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[ERROR] Duplicate email during registration: {ex.Message}");
+            }
+            catch (SqlException ex)
+            {
+                result.Success = false;
+                result.Code = MessageCode.ServerUnavailable;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[FATAL] Database connection failed during registration: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                result.Success = false;
+                result.Code = MessageCode.UnknownError;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[ERROR] Invalid operation during registration: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Code = MessageCode.UnknownError;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[FATAL] Unexpected exception in CreateUser: {ex.Message}");
+            }
+            finally
+            {
+                System.Diagnostics.Debug.WriteLine("[TRACE] CreateUser operation finished.");
+            }
 
-			return new UserInfo
-			{
-				IdUser = user.id_usuario,
-				Username = profile?.username ?? userDto.Username,
-				Email = user.correo,
-				FullName = profile != null
-					? $"{profile.nombre} {profile.apellido_materno}"
-					: $"{userDto.Name} {userDto.LastName}"
-			};
-		}
-	}
+            return result;
+        }
+
+        
+        private void SendWelcomeEmail(UserInfo user)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await Correo.EnviarBienvenidaAsync(user).ConfigureAwait(false);
+                    System.Diagnostics.Debug.WriteLine("[TRACE] Welcome email sent successfully.");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ERROR] Failed to send welcome email: {ex.Message}");
+                }
+            });
+        }
+
+       
+        private UserInfo MapToUserInfo(usuarios user, UserDto userDto)
+        {
+            var profile = user.perfiles.FirstOrDefault();
+
+            return new UserInfo
+            {
+                IdUser = user.id_usuario,
+                Username = profile?.username ?? userDto.Username,
+                Email = user.correo,
+                FullName = profile != null
+                    ? $"{profile.nombre} {profile.apellido_materno}"
+                    : $"{userDto.Name} {userDto.LastName}"
+            };
+        }
+    }
 }

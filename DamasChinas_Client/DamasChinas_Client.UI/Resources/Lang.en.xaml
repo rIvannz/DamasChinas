@@ -99,6 +99,18 @@
     <sys:String x:Key="lobbyClosed">The lobby has been closed.</sys:String>
 
 
+    <!-- ===== Result messages (Server responses) ===== -->
+    <sys:String x:Key="msg_Success">Operation completed successfully.</sys:String>
+    <sys:String x:Key="msg_LoginInvalidCredentials">Invalid username or password.</sys:String>
+    <sys:String x:Key="msg_UserDuplicateEmail">Email is already registered.</sys:String>
+    <sys:String x:Key="msg_UserNotFound">User not found.</sys:String>
+    <sys:String x:Key="msg_MatchCreationFailed">Could not create the match.</sys:String>
+    <sys:String x:Key="msg_ServerUnavailable">Server unavailable, please try again later.</sys:String>
+    <sys:String x:Key="msg_NetworkLatency">Network latency detected.</sys:String>
+    <sys:String x:Key="msg_UnknownError">An unexpected error occurred. Please try again.</sys:String>
+
+
+
 
 
 

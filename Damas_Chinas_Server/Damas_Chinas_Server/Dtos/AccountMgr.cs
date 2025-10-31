@@ -18,17 +18,5 @@ namespace Damas_Chinas_Server
 		public string FullName { get; set; }
 	}
 
-	[DataContract]
-	public class OperationResult
-	{
-		[DataMember]
-		public bool Succes { get; set; }
-
-		[DataMember]
-		public string Messaje { get; set; }
-
-		[DataMember]
-		public UserInfo User { get; set; }
-	}
 
 }

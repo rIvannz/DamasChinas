@@ -24,6 +24,7 @@
   <Metadata>
     <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="8308e834-8e21-401d-bae4-8f58b06d8029" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd0" />
     <MetadataFile FileName="item41.xsd" MetadataType="Schema" ID="81cad266-3e15-4345-bee1-fa0a3206b45a" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd1" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="c710804c-be5b-40a0-af41-a2d7734cc51d" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd4" />
     <MetadataFile FileName="item42.xsd" MetadataType="Schema" ID="c79a22ce-c437-4c67-8f71-727aa95ec9c6" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd2" />
     <MetadataFile FileName="item43.xsd" MetadataType="Schema" ID="3b0a1433-9a18-4437-9034-72166970332a" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd3" />
     <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="bce378dd-029d-4fc5-9104-3a8a02b2de34" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?disco" />

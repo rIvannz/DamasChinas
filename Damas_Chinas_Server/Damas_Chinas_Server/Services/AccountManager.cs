@@ -1,77 +1,125 @@
-using System;
+using Damas_Chinas_Server.Common;
+using Damas_Chinas_Server.Contracts;
 using Damas_Chinas_Server.Dtos;
+using Damas_Chinas_Server.Interfaces;
 using Damas_Chinas_Server.Services;
+using System;
+using System.Data.SqlClient;
+using System.ServiceModel;
 
-namespace Damas_Chinas_Server
+namespace Damas_Chinas_Server.Services
 {
-	public class AccountManager : IAccountManager
-	{
-		private readonly RepositoryUsers _repository;
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession,
+                     ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public class AccountManager : IAccountManager
+    {
+        private readonly RepositoryUsers _repository;
 
-		public AccountManager()
-			: this(new RepositoryUsers())
-		{
-		}
+        public AccountManager()
+            : this(new RepositoryUsers())
+        {
+        }
 
-		internal AccountManager(RepositoryUsers repository)
-		{
-			_repository = repository ?? throw new ArgumentNullException(nameof(repository));
-		}
+        internal AccountManager(RepositoryUsers repository)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
 
-		public PublicProfile GetPublicProfile(int idUser)
-		{
-			return _repository.GetPublicProfile(idUser);
-		}
 
-                public OperationResult ChangeUsername(string username, string newUsername)
+        public PublicProfile GetPublicProfile(int idUser)
+        {
+            return _repository.GetPublicProfile(idUser);
+        }
+
+
+        public OperationResult ChangeUsername(string username, string newUsername)
+        {
+            return ExecuteAccountOperation(
+                () =>
                 {
-                        return ExecuteAccountOperation(
-                                () =>
-                                {
-                                        var success = _repository.ChangeUsername(username, newUsername);
+                    bool success = _repository.ChangeUsername(username, newUsername);
 
-                                        if (success)
-                                        {
-                                                SessionManager.UpdateSessionUsername(username, newUsername);
-                                        }
+                    if (success)
+                    {
+                        SessionManager.UpdateSessionUsername(username, newUsername);
+                    }
 
-                                        return success;
-                                },
-                                "Nombre de usuario actualizado correctamente.",
-                                "Error al actualizar el nombre de usuario.",
-                                "Error al actualizar el nombre de usuario");
-                }
+                    return success;
+                },
+                MessageCode.Success,
+                MessageCode.UnknownError,
+                MessageCode.ServerUnavailable,
+                "ChangeUsername"
+            );
+        }
 
-		public OperationResult ChangePassword(string correo, string nuevaPassword)
-		{
-			return ExecuteAccountOperation(
-				() => _repository.ChangePassword(correo, nuevaPassword),
-				"Contraseña actualizada correctamente.",
-				"Error al actualizar la contraseña.",
-				"Error al actualizar la contraseña");
-		}
 
-		private static OperationResult ExecuteAccountOperation(Func<bool> operation, string successMessage, string failureMessage, string errorPrefix)
-		{
-			try
-			{
-				bool success = operation();
-				return new OperationResult
-				{
-					Succes = success,
-					Messaje = success ? successMessage : failureMessage,
-					User = null
-				};
-			}
-			catch (Exception ex)
-			{
-				return new OperationResult
-				{
-					Succes = false,
-					Messaje = $"{errorPrefix}: {ex.Message}",
-					User = null
-				};
-			}
-		}
-	}
+        public OperationResult ChangePassword(string email, string newPassword)
+        {
+            return ExecuteAccountOperation(
+                () => _repository.ChangePassword(email, newPassword),
+                MessageCode.Success,
+                MessageCode.UnknownError,
+                MessageCode.ServerUnavailable,
+                "ChangePassword"
+            );
+        }
+
+        private static OperationResult ExecuteAccountOperation(
+            Func<bool> operation,
+            MessageCode successCode,
+            MessageCode failureCode,
+            MessageCode fatalCode,
+            string context)
+        {
+            var result = new OperationResult();
+
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"[TRACE] Starting operation: {context}");
+
+                bool success = operation();
+
+                result.Success = success;
+                result.Code = success ? successCode : failureCode;
+                result.TechnicalDetail = success
+                    ? $"{context} executed successfully."
+                    : $"{context} failed due to business conditions.";
+
+                System.Diagnostics.Debug.WriteLine(success
+                    ? $"[TRACE] {context} completed successfully."
+                    : $"[ERROR] {context} did not complete successfully.");
+
+                return result;
+            }
+            catch (SqlException ex)
+            {
+                result.Success = false;
+                result.Code = fatalCode;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[FATAL] SQL error in {context}: {ex.Message}");
+                return result;
+            }
+            catch (ArgumentException ex)
+            {
+                result.Success = false;
+                result.Code = failureCode;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[ERROR] Invalid argument in {context}: {ex.Message}");
+                return result;
+            }
+            catch (InvalidOperationException ex)
+            {
+                result.Success = false;
+                result.Code = failureCode;
+                result.TechnicalDetail = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[ERROR] Invalid operation in {context}: {ex.Message}");
+                return result;
+            }
+            finally
+            {
+                System.Diagnostics.Debug.WriteLine($"[TRACE] Finishing operation: {context}");
+            }
+        }
+    }
 }

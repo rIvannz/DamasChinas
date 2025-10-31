@@ -18,7 +18,9 @@ namespace DamasChinasHost
 				new ServiceHost(typeof(AccountManager)),
 				new ServiceHost(typeof(ChatService)),
 				new ServiceHost(typeof(FriendService)),
-                new ServiceHost(typeof(LobbyService))
+                new ServiceHost(typeof(LobbyService)),
+
+
             };
 			foreach (var host in hosts)
 			{

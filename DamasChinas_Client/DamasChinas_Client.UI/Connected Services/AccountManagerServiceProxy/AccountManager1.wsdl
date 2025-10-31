@@ -13,7 +13,8 @@
       <xsd:import schemaLocation="http://localhost:8002/AccountManager/?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:8002/AccountManager/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:8002/AccountManager/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos" />
-      <xsd:import schemaLocation="http://localhost:8002/AccountManager/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server" />
+      <xsd:import schemaLocation="http://localhost:8002/AccountManager/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Contracts" />
+      <xsd:import schemaLocation="http://localhost:8002/AccountManager/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Common" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IAccountManager_GetPublicProfile_InputMessage">
@@ -81,9 +82,9 @@
   </wsdl:binding>
   <wsdl:service name="AccountManager">
     <wsdl:port name="NetTcpBinding_IAccountManager" binding="tns:NetTcpBinding_IAccountManager">
-      <soap12:address location="net.tcp://localhost:8739/AccountManager/" />
+      <soap12:address location="net.tcp://localhost:8790/AccountManager/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8739/AccountManager/</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:8790/AccountManager/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

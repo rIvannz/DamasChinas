@@ -100,7 +100,15 @@
 
 
 
-
+    <!-- ===== Códigos de resultado (Mensajes del servidor) ===== -->
+    <sys:String x:Key="msg_Success">Operación realizada correctamente.</sys:String>
+    <sys:String x:Key="msg_LoginInvalidCredentials">Usuario o contraseña incorrectos.</sys:String>
+    <sys:String x:Key="msg_UserDuplicateEmail">El correo ya está registrado.</sys:String>
+    <sys:String x:Key="msg_UserNotFound">Usuario no encontrado.</sys:String>
+    <sys:String x:Key="msg_MatchCreationFailed">No se pudo crear la partida.</sys:String>
+    <sys:String x:Key="msg_ServerUnavailable">Servidor no disponible, inténtalo más tarde.</sys:String>
+    <sys:String x:Key="msg_NetworkLatency">Se detectó latencia en la conexión.</sys:String>
+    <sys:String x:Key="msg_UnknownError">Ocurrió un error inesperado. Por favor, inténtalo de nuevo.</sys:String>
 
 
 

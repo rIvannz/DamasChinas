@@ -4,8 +4,14 @@ using System.Windows.Controls;
 using DamasChinas_Client.UI.AccountManagerServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 
+
+
 namespace DamasChinas_Client.UI.Pages
 {
+    /// <summary>
+    /// Interaction logic for ChangeData.xaml
+    /// Allows the user to update their username and password.
+    /// </summary>
     public partial class ChangeData : Page
     {
         private PublicProfile _profile;
@@ -23,7 +29,7 @@ namespace DamasChinas_Client.UI.Pages
         }
 
         // -------------------------------
-        // 🔹 Navegación general
+        // 🔹 General navigation
         // -------------------------------
 
         private void OnBackClick(object sender, RoutedEventArgs e)
@@ -35,22 +41,22 @@ namespace DamasChinas_Client.UI.Pages
         {
             TryExecuteAction(() =>
             {
-                MessageHelper.ShowSuccess("Código enviado correctamente.");
-            }, "Error al enviar el código");
+                MessageHelper.ShowSuccess("Code sent successfully.");
+            }, "Error sending code");
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
-            TryExecuteAction(() => NavigationService?.Navigate(new ConfiSound()), "Error al abrir configuración de sonido");
+            TryExecuteAction(() => NavigationService?.Navigate(new ConfiSound()), "Error opening sound settings");
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            TryExecuteAction(() => NavigationService?.Navigate(new SelectLanguage()), "Error al abrir configuración de idioma");
+            TryExecuteAction(() => NavigationService?.Navigate(new SelectLanguage()), "Error opening language settings");
         }
 
         // -------------------------------
-        // 🔹 Cambio de usuario
+        // 🔹 Username change
         // -------------------------------
 
         private void OnSaveUsernameClick(object sender, RoutedEventArgs e)
@@ -61,14 +67,14 @@ namespace DamasChinas_Client.UI.Pages
                     return;
 
                 ChangeUsername(txtUsername.Text.Trim());
-            }, "Error al cambiar el nombre de usuario");
+            }, "Error changing username");
         }
 
         private bool ValidateUsernameInput()
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                MessageHelper.ShowWarning("El nombre de usuario no puede estar vacío.");
+                MessageHelper.ShowWarning("Username cannot be empty.");
                 return false;
             }
             return true;
@@ -80,15 +86,17 @@ namespace DamasChinas_Client.UI.Pages
             {
                 var result = client.ChangeUsername(_profile.Username, newUsername);
 
-                if (result.Succes)
+                if (result.Success)
                 {
                     UpdateUsernameState(newUsername);
-                    MessageHelper.ShowSuccess(result.Messaje);
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                    MessageHelper.ShowSuccess(message);
                     NavigationService?.GoBack();
                 }
                 else
                 {
-                    MessageHelper.ShowWarning(result.Messaje, "Aviso");
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                    MessageHelper.ShowWarning(message, "Warning");
                 }
             }
         }
@@ -105,7 +113,7 @@ namespace DamasChinas_Client.UI.Pages
         }
 
         // -------------------------------
-        // 🔹 Cambio de contraseña
+        // 🔹 Password change
         // -------------------------------
 
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
@@ -120,7 +128,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
                 ChangePassword(_profile.Username, hashedPassword);
-            }, "Error al cambiar la contraseña");
+            }, "Error changing password");
         }
 
         private bool ValidatePasswordInputs()
@@ -128,13 +136,13 @@ namespace DamasChinas_Client.UI.Pages
             if (string.IsNullOrWhiteSpace(txtPassword.Password) ||
                 string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
             {
-                MessageHelper.ShowWarning("Por favor llena todos los campos.");
+                MessageHelper.ShowWarning("Please fill in all fields.");
                 return false;
             }
 
             if (txtPassword.Password != txtConfirmPassword.Password)
             {
-                MessageHelper.ShowWarning("Las contraseñas no coinciden.");
+                MessageHelper.ShowWarning("Passwords do not match.");
                 return false;
             }
 
@@ -146,12 +154,12 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 Validator.ValidatePassword(password);
-                MessageHelper.ShowInfo("Contraseña válida.");
+                MessageHelper.ShowInfo("Password is valid.");
                 return true;
             }
             catch (Exception ex)
             {
-                MessageHelper.ShowWarning($"Contraseña inválida: {ex.Message}");
+                MessageHelper.ShowWarning($"Invalid password: {ex.Message}");
                 return false;
             }
         }
@@ -162,14 +170,16 @@ namespace DamasChinas_Client.UI.Pages
             {
                 var result = client.ChangePassword(username, hashedPassword);
 
-                if (result.Succes)
+                if (result.Success)
                 {
-                    MessageHelper.ShowSuccess(result.Messaje);
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                    MessageHelper.ShowSuccess(message);
                     ClearPasswordInputs();
                 }
                 else
                 {
-                    MessageHelper.ShowWarning(result.Messaje, "Aviso");
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                    MessageHelper.ShowWarning(message, "Warning");
                 }
             }
         }
@@ -181,7 +191,7 @@ namespace DamasChinas_Client.UI.Pages
         }
 
         // -------------------------------
-        // 🔹 Utilidades
+        // 🔹 Utilities
         // -------------------------------
 
         private void LoadProfileData()
@@ -197,12 +207,12 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    MessageHelper.ShowWarning("No se encontró el perfil del usuario.", "Perfil");
+                    MessageHelper.ShowWarning("User profile not found.", "Profile");
                 }
             }
             catch (Exception ex)
             {
-                MessageHelper.ShowError("Error al cargar los datos del usuario: " + ex.Message);
+                MessageHelper.ShowError("Error loading user data: " + ex.Message);
             }
         }
 
