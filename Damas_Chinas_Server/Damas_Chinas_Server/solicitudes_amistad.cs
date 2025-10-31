@@ -9,18 +9,18 @@
 
 namespace Damas_Chinas_Server
 {
-	using System;
-	using System.Collections.Generic;
-
-	public partial class solicitudes_amistad
-	{
-		public int id_solicitud { get; set; }
-		public int id_emisor { get; set; }
-		public int id_receptor { get; set; }
-		public Nullable<System.DateTime> fecha_envio { get; set; }
-		public string estado { get; set; }
-
-		public virtual usuarios usuarios { get; set; }
-		public virtual usuarios usuarios1 { get; set; }
-	}
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class solicitudes_amistad
+    {
+        public int id_solicitud { get; set; }
+        public int id_emisor { get; set; }
+        public int id_receptor { get; set; }
+        public Nullable<System.DateTime> fecha_envio { get; set; }
+        public string estado { get; set; }
+    
+        public virtual usuarios usuarios { get; set; }
+        public virtual usuarios usuarios1 { get; set; }
+    }
 }

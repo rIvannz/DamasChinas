@@ -9,20 +9,20 @@
 
 namespace Damas_Chinas_Server
 {
-	using System;
-	using System.Collections.Generic;
-
-	public partial class perfiles
-	{
-		public int id_perfil { get; set; }
-		public int id_usuario { get; set; }
-		public string username { get; set; }
-		public string nombre { get; set; }
-		public string url { get; set; }
-		public string imagen_perfil { get; set; }
-		public Nullable<System.DateTime> ultimo_login { get; set; }
-		public string apellido_materno { get; set; }
-
-		public virtual usuarios usuarios { get; set; }
-	}
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class perfiles
+    {
+        public int id_perfil { get; set; }
+        public int id_usuario { get; set; }
+        public string username { get; set; }
+        public string nombre { get; set; }
+        public string url { get; set; }
+        public string imagen_perfil { get; set; }
+        public Nullable<System.DateTime> ultimo_login { get; set; }
+        public string apellido_materno { get; set; }
+    
+        public virtual usuarios usuarios { get; set; }
+    }
 }

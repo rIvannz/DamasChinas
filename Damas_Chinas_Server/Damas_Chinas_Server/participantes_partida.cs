@@ -9,24 +9,24 @@
 
 namespace Damas_Chinas_Server
 {
-	using System;
-	using System.Collections.Generic;
-
-	public partial class participantes_partida
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-		public participantes_partida()
-		{
-			this.movimientos = new HashSet<movimientos>();
-		}
-
-		public int id_partida { get; set; }
-		public int id_jugador { get; set; }
-		public int posicion_final { get; set; }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public virtual ICollection<movimientos> movimientos { get; set; }
-		public virtual partidas partidas { get; set; }
-		public virtual usuarios usuarios { get; set; }
-	}
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class participantes_partida
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public participantes_partida()
+        {
+            this.movimientos = new HashSet<movimientos>();
+        }
+    
+        public int id_partida { get; set; }
+        public int id_jugador { get; set; }
+        public int posicion_final { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<movimientos> movimientos { get; set; }
+        public virtual partidas partidas { get; set; }
+        public virtual usuarios usuarios { get; set; }
+    }
 }
