@@ -19,13 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://localhost:8751/LobbyService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="http://localhost:8005/LobbyService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="c61599dd-7755-4959-b00b-580b3e0895d1" SourceId="1" SourceUrl="net.tcp://localhost:8751/LobbyService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="da50bc1b-bace-4d91-b08d-456605566def" SourceId="1" SourceUrl="net.tcp://localhost:8751/LobbyService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="5dc2486c-b93f-4d2b-b58f-159ec2b124fa" SourceId="1" SourceUrl="net.tcp://localhost:8751/LobbyService/mex" />
-    <MetadataFile FileName="Damas_Chinas_Server.Dtos.xsd" MetadataType="Schema" ID="35813fdd-f163-401c-9bb9-9c3e3306c6b4" SourceId="1" SourceUrl="net.tcp://localhost:8751/LobbyService/mex" />
+    <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="b5d36de5-1b48-431d-bda9-60f61fdbaa1a" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
+    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="6a6a7364-f411-4ba2-89af-7d65e0881ff1" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
+    <MetadataFile FileName="service21.xsd" MetadataType="Schema" ID="088fc5f1-dd47-4f12-b5b1-20af4df7ae53" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
+    <MetadataFile FileName="DamasChinas_Server.Dtos.xsd" MetadataType="Schema" ID="22d22559-f8bd-4f4b-9510-e820af4fd2aa" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

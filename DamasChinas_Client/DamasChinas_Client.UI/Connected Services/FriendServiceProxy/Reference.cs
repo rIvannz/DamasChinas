@@ -15,7 +15,7 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FriendDto", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FriendDto", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
     public partial class FriendDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         

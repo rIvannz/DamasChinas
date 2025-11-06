@@ -15,7 +15,7 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginRequest", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginRequest", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
     public partial class LoginRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -76,7 +76,7 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
     public partial class PublicProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         

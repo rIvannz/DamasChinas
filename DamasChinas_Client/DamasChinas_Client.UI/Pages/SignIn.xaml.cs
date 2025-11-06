@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
+
 namespace DamasChinas_Client.UI.Pages
 {
 	public partial class SignIn : Page
@@ -35,7 +36,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowFromResult(result);
 
-                if (result?.Succes == true)
+                if (result?.Success == true)
                 {
                     ClearInputs();
                 }

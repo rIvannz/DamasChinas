@@ -18,8 +18,8 @@
   <wsdl:message name="IChatService_SendMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendMessage" />
   </wsdl:message>
-  <wsdl:message name="IChatService_RegistrarCliente_InputMessage">
-    <wsdl:part name="parameters" element="tns:RegistrarCliente" />
+  <wsdl:message name="IChatService_RegistrateClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:RegistrateClient" />
   </wsdl:message>
   <wsdl:message name="IChatService_GetHistoricalMessages_InputMessage">
     <wsdl:part name="parameters" element="tns:GetHistoricalMessages" />
@@ -34,8 +34,8 @@
     <wsdl:operation name="SendMessage">
       <wsdl:input wsaw:Action="http://tempuri.org/IChatService/SendMessage" message="tns:IChatService_SendMessage_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="RegistrarCliente">
-      <wsdl:input wsaw:Action="http://tempuri.org/IChatService/RegistrarCliente" message="tns:IChatService_RegistrarCliente_InputMessage" />
+    <wsdl:operation name="RegistrateClient">
+      <wsdl:input wsaw:Action="http://tempuri.org/IChatService/RegistrateClient" message="tns:IChatService_RegistrateClient_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetHistoricalMessages">
       <wsdl:input wsaw:Action="http://tempuri.org/IChatService/GetHistoricalMessages" message="tns:IChatService_GetHistoricalMessages_InputMessage" />
@@ -54,8 +54,8 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="RegistrarCliente">
-      <soap12:operation soapAction="http://tempuri.org/IChatService/RegistrarCliente" style="document" />
+    <wsdl:operation name="RegistrateClient">
+      <soap12:operation soapAction="http://tempuri.org/IChatService/RegistrateClient" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

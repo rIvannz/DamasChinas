@@ -42,7 +42,7 @@ namespace DamasChinas_Client.UI.Pages
 				var factory = new DuplexChannelFactory<IChatService>(context, binding, endpoint);
 				_client = factory.CreateChannel();
 
-				_client.RegistrarCliente(_myUsername);
+				_client.RegistrateClient(_myUsername);
 
 				_ = LoadHistoryAsync();
 			}

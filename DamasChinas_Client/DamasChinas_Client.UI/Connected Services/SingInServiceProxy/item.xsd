@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8001/SignInService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
   <xs:complexType name="OperationResult">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Messaje" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Succes" type="xs:boolean" />
-      <xs:element minOccurs="0" name="User" nillable="true" type="tns:UserInfo" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" minOccurs="0" name="Code" type="q1:MessageCode" />
+      <xs:element minOccurs="0" name="Success" type="xs:boolean" />
+      <xs:element minOccurs="0" name="TechnicalDetail" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="OperationResult" nillable="true" type="tns:OperationResult" />
-  <xs:complexType name="UserInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FullName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="IdUser" type="xs:int" />
-      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="UserInfo" nillable="true" type="tns:UserInfo" />
 </xs:schema>

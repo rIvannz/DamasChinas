@@ -3,10 +3,8 @@
   <wsp:Policy wsu:Id="NetTcpBinding_ILobbyService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
-        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
-        </msb:BinaryEncoding>
-        <wsaw:UsingAddressing>
-        </wsaw:UsingAddressing>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
@@ -14,7 +12,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Damas_Chinas_Server.Dtos" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ILobbyService_CreateLobby_InputMessage">
@@ -116,8 +114,7 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILobbyService" type="tns:ILobbyService">
-    <wsp:PolicyReference URI="#NetTcpBinding_ILobbyService_policy">
-    </wsp:PolicyReference>
+    <wsp:PolicyReference URI="#NetTcpBinding_ILobbyService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="CreateLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/CreateLobby" style="document" />
