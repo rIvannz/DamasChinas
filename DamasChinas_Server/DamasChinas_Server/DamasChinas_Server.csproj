@@ -137,7 +137,7 @@
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
     <Compile Include="Dtos\AccountMgr.cs" />
-    <Compile Include="Utilities\Correo.cs" />
+    <Compile Include="Utilities\Email.cs" />
     <Compile Include="Utilities\DbContextFactory.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>

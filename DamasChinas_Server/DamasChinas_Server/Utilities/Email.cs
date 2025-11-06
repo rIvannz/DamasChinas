@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Utilidades
 {
-	internal static class Correo
+	internal static class Email
 	{
 		// Tu correo y contraseña de aplicación
 		private static readonly string sender = "damaschinas4u@gmail.com";
