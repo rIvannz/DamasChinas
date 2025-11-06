@@ -27,10 +27,8 @@ namespace DamasChinas_Server
 
                 var friendships = friends.Select(a =>
                 {
-                    // Determinar quién es el amigo (no el usuario actual)
                     var friendUser = a.id_usuario1 == id ? a.usuarios1 : a.usuarios;
 
-                    // Obtener su perfil (puede ser nulo)
                     var profile = friendUser.perfiles.FirstOrDefault();
 
                     string friendUsername = profile?.username ?? "N/A";
@@ -51,7 +49,7 @@ namespace DamasChinas_Server
         }
 
 
-        public bool AgregarAmistad(int idUsuario1, int idUsuario2)
+        public bool AddFriend(int idUsuario1, int idUsuario2)
 		{
 			if (idUsuario1 == idUsuario2)
 					{
@@ -90,7 +88,7 @@ namespace DamasChinas_Server
 			}
 		}
 
-		public bool EliminarAmistad(int idUsuario1, int idUsuario2)
+		public bool DeleteFriend(int idUsuario1, int idUsuario2)
 		{
 			using (var db = new damas_chinasEntities())
 			{

@@ -22,6 +22,7 @@
     <MetadataSource Address="http://localhost:8001/SignInService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
+    <MetadataFile FileName="item11.xsd" MetadataType="Schema" ID="4a159d4f-7b7b-46c1-b223-e782258ee586" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd4" />
     <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="7b1e5c2f-7afb-4b6d-a589-d60f979095a1" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd3" />
     <MetadataFile FileName="item32.xsd" MetadataType="Schema" ID="115b9214-3d5d-4d59-bb71-7aab566b36a9" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd2" />
     <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="5702d249-d660-4d8a-885a-3e1a46c72f1f" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?disco" />

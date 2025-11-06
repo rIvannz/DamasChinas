@@ -116,11 +116,11 @@ namespace DamasChinas_Client.UI.MensajeriaService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/SendMessage")]
         System.Threading.Tasks.Task SendMessageAsync(DamasChinas_Client.UI.MensajeriaService.Message message);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/RegistrarCliente")]
-        void RegistrarCliente(string username);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/RegistrateClient")]
+        void RegistrateClient(string username);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/RegistrarCliente")]
-        System.Threading.Tasks.Task RegistrarClienteAsync(string username);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/RegistrateClient")]
+        System.Threading.Tasks.Task RegistrateClientAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChatService/GetHistoricalMessages", ReplyAction="http://tempuri.org/IChatService/GetHistoricalMessagesResponse")]
         DamasChinas_Client.UI.MensajeriaService.Message[] GetHistoricalMessages(string usernameSender, string usernameRecipient);
@@ -172,12 +172,12 @@ namespace DamasChinas_Client.UI.MensajeriaService {
             return base.Channel.SendMessageAsync(message);
         }
         
-        public void RegistrarCliente(string username) {
-            base.Channel.RegistrarCliente(username);
+        public void RegistrateClient(string username) {
+            base.Channel.RegistrateClient(username);
         }
         
-        public System.Threading.Tasks.Task RegistrarClienteAsync(string username) {
-            return base.Channel.RegistrarClienteAsync(username);
+        public System.Threading.Tasks.Task RegistrateClientAsync(string username) {
+            return base.Channel.RegistrateClientAsync(username);
         }
         
         public DamasChinas_Client.UI.MensajeriaService.Message[] GetHistoricalMessages(string usernameSender, string usernameRecipient) {

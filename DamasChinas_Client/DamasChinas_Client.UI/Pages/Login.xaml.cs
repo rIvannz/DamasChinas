@@ -26,7 +26,6 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                // 🔹 Hashear la contraseña antes de enviarla al servidor
                 string hashedPassword = Hasher.HashPassword(password);
 
                 var client = CreateLoginClient(out var callback);
@@ -51,7 +50,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                // Puedes reactivar las validaciones si lo deseas
+            
                 // Validator.ValidateUsername(username);
                 // Validator.ValidatePassword(password);
                 return true;
@@ -106,7 +105,7 @@ namespace DamasChinas_Client.UI.Pages
             var loginRequest = new LogInServiceProxy.LoginRequest
             {
                 Username = username,
-                Password = hashedPassword // 🔒 Enviar hash, no texto plano
+                Password = hashedPassword 
             };
 
             client.Login(loginRequest);

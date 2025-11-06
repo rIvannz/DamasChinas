@@ -81,7 +81,7 @@ namespace DamasChinas_Server
             {
                 try
                 {
-                    await Correo.EnviarBienvenidaAsync(user).ConfigureAwait(false);
+                    await Email.EnviarBienvenidaAsync(user).ConfigureAwait(false);
                     System.Diagnostics.Debug.WriteLine("[TRACE] Welcome email sent successfully.");
                 }
                 catch (Exception ex)
