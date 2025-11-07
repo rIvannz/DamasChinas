@@ -15,9 +15,6 @@ namespace DamasChinas_Server.Game
 
         public HexCoordinate Coordinate { get; }
 
-        /// <summary>
-        /// Name of the zone the cell belongs to (Center, Red, Green, etc.).
-        /// </summary>
         public string Zone { get; }
 
         public bool IsValid { get; set; } = true;

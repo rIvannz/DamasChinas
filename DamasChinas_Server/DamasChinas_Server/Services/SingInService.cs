@@ -33,7 +33,6 @@ namespace DamasChinas_Server
                 result.Code = MessageCode.Success;
                 result.TechnicalDetail = "User created successfully.";
 
-                // Optional: send welcome email asynchronously
                 SendWelcomeEmail(MapToUserInfo(user, userDto));
 
                 System.Diagnostics.Debug.WriteLine("[TRACE] User created successfully.");

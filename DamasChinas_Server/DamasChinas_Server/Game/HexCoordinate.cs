@@ -18,7 +18,7 @@ namespace DamasChinas_Server.Game
 
         public static readonly IReadOnlyList<HexCoordinate> Directions = new[]
         {
-                        new HexCoordinate(1, -1, 0),
+            new HexCoordinate(1, -1, 0),
             new HexCoordinate(1, 0, -1),
             new HexCoordinate(0, 1, -1),
             new HexCoordinate(-1, 1, 0),

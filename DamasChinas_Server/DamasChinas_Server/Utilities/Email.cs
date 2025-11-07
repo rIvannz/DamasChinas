@@ -5,52 +5,65 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Utilidades
 {
-	internal static class Email
-	{
-		// Tu correo y contraseña de aplicación
-		private static readonly string sender = "damaschinas4u@gmail.com";
-		private static readonly string password = "prfd slyq tppc mlni"; // la protección la harás después
+    internal static class Email
+    {
+        private const string SmtpHost = "smtp.gmail.com";
+        private const int SmtpPort = 587;
+        private const bool EnableSsl = true;
 
-		/// <summary>
-		/// Envía un correo genérico usando Gmail
-		/// </summary>
-		public static async Task<bool> SendAsync(string reciver, string subject, string body, bool html = true)
-		{
-			try
-			{
-				using (SmtpClient smtp = new SmtpClient("smtp.gmail.com")
-				{
-					Port = 587,
-					Credentials = new NetworkCredential(sender, password),
-					EnableSsl = true
-				})
-				using (MailMessage mensaje = new MailMessage())
-				{
-					mensaje.From = new MailAddress(sender);
-					mensaje.To.Add(reciver);
-					mensaje.Subject = subject;
-					mensaje.Body = body;
-					mensaje.IsBodyHtml = html;
+        private const string SenderEmail = "damaschinas4u@gmail.com";
+        private const string SenderPassword = "prfd slyq tppc mlni"; // pendiente de implementar el recurso *++++++++++++++++++++++++++++++++++++++++
 
-					await smtp.SendMailAsync(mensaje);
-				}
+        private const string ErrorSendingMail = "Error al enviar correo: ";
+        private const string WelcomeSubject = "Bienvenido a Damas Chinas";
+        private const string WelcomeBodyTemplate =
+            "Hola {0},<br><br>" +
+            "Tu usuario es <b>{1}</b>.<br>" +
+            "Ya puedes iniciar sesión en la plataforma de Damas Chinas y disfrutar del juego.<br><br>" +
+            "¡Nos alegra tenerte con nosotros!<br><br>" +
+            "Atentamente,<br>Equipo Damas Chinas";
 
-				return true;
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("Error al enviar correo: " + ex.Message, ex);
-			}
-		}
+        /// <summary>
+        /// Envía un correo electrónico genérico mediante el servidor SMTP configurado.
+        /// </summary>
+        public static async Task<bool> SendAsync(string receiver, string subject, string body, bool html = true)
+        {
+            try
+            {
+                using (SmtpClient smtp = new SmtpClient(SmtpHost)
+                {
+                    Port = SmtpPort,
+                    Credentials = new NetworkCredential(SenderEmail, SenderPassword),
+                    EnableSsl = EnableSsl
+                })
+                using (MailMessage message = new MailMessage())
+                {
+                    message.From = new MailAddress(SenderEmail);
+                    message.To.Add(receiver);
+                    message.Subject = subject;
+                    message.Body = body;
+                    message.IsBodyHtml = html;
 
-		/// <summary>
-		/// Envía un correo de bienvenida con formato estándar
-		/// </summary>
-		public static async Task EnviarBienvenidaAsync(UserInfo user)
-		{
-			string subject = "Bienvenido a Damas Chinas";
-			string body = $"Hola {user.FullName},<br><br>Tu usuario es <b>{user.Username}</b>...";
-			await SendAsync(user.Email, subject, body, html: true);
-		}
-	}
+                    await smtp.SendMailAsync(message);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ErrorSendingMail + ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Envía un correo de bienvenida utilizando la plantilla estándar.
+        /// </summary>
+        public static async Task EnviarBienvenidaAsync(UserInfo user)
+        {
+            string subject = WelcomeSubject;
+            string body = string.Format(WelcomeBodyTemplate, user.FullName, user.Username);
+
+            await SendAsync(user.Email, subject, body, html: true);
+        }
+    }
 }
