@@ -113,6 +113,12 @@
     <sys:String x:Key="errorStartingGame">Failed to start the game.</sys:String>
     <sys:String x:Key="host">Host</sys:String>
     <sys:String x:Key="private">Private</sys:String>
+    <sys:String x:Key="public">Public</sys:String>
+    <sys:String x:Key="confirmExitLobby">Are you sure you want to leave the lobby?</sys:String>
+    <sys:String x:Key="confirmTitle">Confirmation</sys:String>
+    <sys:String x:Key="lobbyLeft">You have left the lobby.</sys:String>
+    <sys:String x:Key="infoTitle">Information</sys:String>
+
 
 
 

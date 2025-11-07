@@ -23,9 +23,7 @@ namespace DamasChinas_Server.Services
         private static string NewCode()
             => Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
 
-        // =========================
-        // CREAR LOBBY
-        // =========================
+       
         public Lobby CreateLobby(int hostUserId, string hostUsername, bool isPrivate)
         {
             var code = NewCode();
@@ -49,26 +47,24 @@ namespace DamasChinas_Server.Services
             return lobby;
         }
 
-        // =========================
-        // UNIRSE A UN LOBBY
-        // =========================
+      
         public Lobby JoinLobby(string code, int userId, string username)
         {
             if (!_lobbies.TryGetValue(code, out var lobby))
                 throw new FaultException("Lobby not found.");
 
-            // Validar que el host siga activo
+            
             if (!_connections.ContainsKey(lobby.HostUserId))
             {
                 _lobbies.TryRemove(code, out _);
                 throw new FaultException("Lobby is no longer active.");
             }
 
-            // Evitar unión de baneados
+           
             if (lobby.BannedUsers.Contains(userId))
                 throw new FaultException("You are banned from this lobby.");
 
-            // Registrar miembro si no existe
+            
             if (!lobby.Members.Any(m => m.UserId == userId))
             {
                 var member = new LobbyMember
@@ -82,7 +78,7 @@ namespace DamasChinas_Server.Services
 
             _connections[userId] = CurrentCallback;
 
-            // Notificar a los miembros activos (de forma asíncrona)
+            
             foreach (var m in lobby.Members.ToList())
             {
                 if (_connections.TryGetValue(m.UserId, out var cb))
@@ -109,12 +105,10 @@ namespace DamasChinas_Server.Services
             return lobby;
         }
 
-        // =========================
-        // OBTENER LOBBIES PÚBLICOS ACTIVOS
-        // =========================
+     
         public List<Lobby> GetPublicLobbies()
         {
-            // Eliminar lobbies donde el host ya no tiene conexión activa
+           
             var inactiveCodes = _lobbies.Values
                 .Where(l => !_connections.ContainsKey(l.HostUserId))
                 .Select(l => l.Code)
@@ -123,7 +117,7 @@ namespace DamasChinas_Server.Services
             foreach (var code in inactiveCodes)
                 _lobbies.TryRemove(code, out _);
 
-            // Devolver solo las partidas activas y públicas
+          
             var activeLobbies = _lobbies.Values
                 .Where(l => !l.IsPrivate && _connections.ContainsKey(l.HostUserId))
                 .ToList();
@@ -131,39 +125,73 @@ namespace DamasChinas_Server.Services
             return activeLobbies;
         }
 
-        // =========================
-        // SALIR DE UN LOBBY
-        // =========================
+
         public bool LeaveLobby(string code, int userId)
         {
-            if (!_lobbies.TryGetValue(code, out var lobby)) return false;
+            if (!_lobbies.TryGetValue(code, out var lobby))
+                return false;
 
             var member = lobby.Members.FirstOrDefault(m => m.UserId == userId);
-            if (member == null) return false;
+            if (member == null)
+                return false;
 
+            // Eliminar de la lista de miembros
             lobby.Members.Remove(member);
             _connections.TryRemove(userId, out _);
 
-            foreach (var m in lobby.Members)
+            // Notificar a los miembros que alguien salió
+            foreach (var m in lobby.Members.ToList())
+            {
                 if (_connections.TryGetValue(m.UserId, out var cb))
-                    cb.OnMemberLeft(userId);
+                {
+                    try
+                    {
+                        cb.OnMemberLeft(userId);
+                    }
+                    catch
+                    {
+                        _connections.TryRemove(m.UserId, out _);
+                    }
+                }
+            }
 
-            // Si se va el host o queda vacío, cerrar lobby
+            // Si se va el host o el lobby queda vacío
             if (userId == lobby.HostUserId || lobby.Members.Count == 0)
             {
-                foreach (var m in lobby.Members)
+                foreach (var m in lobby.Members.ToList())
+                {
                     if (_connections.TryGetValue(m.UserId, out var cb))
-                        cb.OnLobbyClosed("Host left or lobby empty.");
+                    {
+                        try
+                        {
+                            cb.OnLobbyClosed("The host has left the lobby or it became empty.");
+                        }
+                        catch
+                        {
+                            _connections.TryRemove(m.UserId, out _);
+                        }
+                    }
+                }
 
                 _lobbies.TryRemove(code, out _);
             }
 
+            // Limpieza extra (por si el host cierra la aplicación sin avisar)
+            var inactiveLobbies = _lobbies.Values
+                .Where(l => !_connections.ContainsKey(l.HostUserId))
+                .Select(l => l.Code)
+                .ToList();
+
+            foreach (var inactiveCode in inactiveLobbies)
+                _lobbies.TryRemove(inactiveCode, out _);
+
             return true;
         }
 
-        // =========================
-        // ENVIAR MENSAJE AL LOBBY
-        // =========================
+
+
+
+
         public void SendLobbyMessage(string code, int userId, string username, string message)
         {
             if (!_lobbies.TryGetValue(code, out var lobby)) return;
@@ -174,15 +202,11 @@ namespace DamasChinas_Server.Services
                     cb.OnMessageReceived(userId, username, message, utc);
         }
 
-        // =========================
-        // OBTENER LOBBY POR CÓDIGO
-        // =========================
+  
         public Lobby GetLobby(string code)
             => _lobbies.TryGetValue(code, out var lobby) ? lobby : null;
 
-        // =========================
-        // EXPULSAR JUGADOR
-        // =========================
+      
         public bool KickMember(string code, int targetUserId)
         {
             if (!_lobbies.TryGetValue(code, out var lobby)) return false;
@@ -199,9 +223,7 @@ namespace DamasChinas_Server.Services
             return true;
         }
 
-        // =========================
-        // BANEAR JUGADOR
-        // =========================
+      
         public bool BanMember(string code, int targetUserId)
         {
             if (!_lobbies.TryGetValue(code, out var lobby))
@@ -225,9 +247,7 @@ namespace DamasChinas_Server.Services
             return true;
         }
 
-        // =========================
-        // INICIAR PARTIDA
-        // =========================
+    
         public bool StartGame(string code)
         {
             if (!_lobbies.TryGetValue(code, out var lobby)) return false;
