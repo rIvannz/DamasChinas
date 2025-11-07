@@ -100,12 +100,16 @@
     <Compile Include="Pages\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\JoinParty.xaml.cs">
+      <DependentUpon>JoinParty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\FriendList.cs" />
     <Compile Include="Utilities\ClientSession.cs" />
     <Compile Include="Utilities\Hasher.cs" />
+    <Compile Include="Utilities\HostVisibilityConverter.cs" />
     <Compile Include="Utilities\MessageHerlper.cs" />
     <Compile Include="Utilities\MessageTranslator.cs" />
     <Compile Include="Utilities\ServiceHelper.cs" />
@@ -141,6 +145,10 @@
     <Compile Include="Pages\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\JoinParty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Login.xaml" />
     <Compile Include="Pages\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -220,6 +228,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\FriendServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.Lobby.datasource">

@@ -87,6 +87,33 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BanMember">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="code" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="targetUserId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BanMemberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BanMemberResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPublicLobbies">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPublicLobbiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="GetPublicLobbiesResult" nillable="true" type="q4:ArrayOfLobby" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="StartGame">
     <xs:complexType>
       <xs:sequence>
@@ -104,7 +131,7 @@
   <xs:element name="OnMemberJoined">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="member" nillable="true" type="q4:LobbyMember" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="member" nillable="true" type="q5:LobbyMember" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

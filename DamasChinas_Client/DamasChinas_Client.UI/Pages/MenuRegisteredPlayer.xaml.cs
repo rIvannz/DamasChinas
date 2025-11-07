@@ -51,12 +51,21 @@ namespace DamasChinas_Client.UI.Pages
 			}
 		}
 
-		private void OnJoinPartyClick(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("Join Party clicked", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-		}
+        private void OnJoinPartyClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var joinPartyPage = new JoinParty(_userId, _profile.Username);
+                NavigationService?.Navigate(joinPartyPage);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error while opening join party page: {ex.Message}", "Join Party");
+            }
+        }
 
-		private void OnHowToPlayClick(object sender, RoutedEventArgs e)
+
+        private void OnHowToPlayClick(object sender, RoutedEventArgs e)
 		{
 			MessageBox.Show("How to Play clicked", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
 		}

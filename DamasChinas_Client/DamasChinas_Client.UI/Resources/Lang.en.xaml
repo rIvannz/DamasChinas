@@ -97,6 +97,26 @@
     <sys:String x:Key="youJoinedLobby">You joined the lobby.</sys:String>
     <sys:String x:Key="gameStarting">The game is starting!</sys:String>
     <sys:String x:Key="lobbyClosed">The lobby has been closed.</sys:String>
+    <sys:String x:Key="availableGames">Available Games</sys:String>
+    <sys:String x:Key="refresh">Refresh</sys:String>
+    <sys:String x:Key="joinSelected">Join Selected</sys:String>
+    <sys:String x:Key="joinByCode">Join by Code</sys:String>
+    <sys:String x:Key="enterCodePlaceholder">Enter game code</sys:String>
+    <sys:String x:Key="noLobbySelected">Select a game to join.</sys:String>
+    <sys:String x:Key="invalidCodeWarning">Please enter a valid code.</sys:String>
+    <sys:String x:Key="errorLoadingLobbies">Error loading public games.</sys:String>
+    <sys:String x:Key="joiningLobbyError">Unable to join the selected lobby.</sys:String>
+    <sys:String x:Key="yes">Yes</sys:String>
+    <sys:String x:Key="no">No</sys:String>
+    <sys:String x:Key="lobbyInactive">This lobby is no longer active.</sys:String>
+    <sys:String x:Key="onlyHostCanStart">Only the host can start the game.</sys:String>
+    <sys:String x:Key="errorStartingGame">Failed to start the game.</sys:String>
+    <sys:String x:Key="host">Host</sys:String>
+    <sys:String x:Key="private">Private</sys:String>
+
+
+
+
 
 
     <!-- ===== Result messages (Server responses) ===== -->

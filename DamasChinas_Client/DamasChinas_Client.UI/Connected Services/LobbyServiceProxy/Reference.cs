@@ -23,6 +23,9 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int[] BannedUsersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -44,6 +47,19 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int[] BannedUsers {
+            get {
+                return this.BannedUsersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BannedUsersField, value) != true)) {
+                    this.BannedUsersField = value;
+                    this.RaisePropertyChanged("BannedUsers");
+                }
             }
         }
         
@@ -239,6 +255,18 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/KickMember", ReplyAction="http://tempuri.org/ILobbyService/KickMemberResponse")]
         System.Threading.Tasks.Task<bool> KickMemberAsync(string code, int targetUserId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/BanMember", ReplyAction="http://tempuri.org/ILobbyService/BanMemberResponse")]
+        bool BanMember(string code, int targetUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/BanMember", ReplyAction="http://tempuri.org/ILobbyService/BanMemberResponse")]
+        System.Threading.Tasks.Task<bool> BanMemberAsync(string code, int targetUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/ILobbyService/GetPublicLobbiesResponse")]
+        DamasChinas_Client.UI.LobbyServiceProxy.Lobby[] GetPublicLobbies();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/ILobbyService/GetPublicLobbiesResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby[]> GetPublicLobbiesAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/StartGame", ReplyAction="http://tempuri.org/ILobbyService/StartGameResponse")]
         bool StartGame(string code);
         
@@ -339,6 +367,22 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         public System.Threading.Tasks.Task<bool> KickMemberAsync(string code, int targetUserId) {
             return base.Channel.KickMemberAsync(code, targetUserId);
+        }
+        
+        public bool BanMember(string code, int targetUserId) {
+            return base.Channel.BanMember(code, targetUserId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> BanMemberAsync(string code, int targetUserId) {
+            return base.Channel.BanMemberAsync(code, targetUserId);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.Lobby[] GetPublicLobbies() {
+            return base.Channel.GetPublicLobbies();
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby[]> GetPublicLobbiesAsync() {
+            return base.Channel.GetPublicLobbiesAsync();
         }
         
         public bool StartGame(string code) {

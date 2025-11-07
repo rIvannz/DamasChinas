@@ -26,6 +26,7 @@
     <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="86889af0-ff5f-4c3b-8d4e-746da64b5ca8" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
     <MetadataFile FileName="service21.xsd" MetadataType="Schema" ID="66c9b755-7f01-48ef-a920-54ac90367068" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
     <MetadataFile FileName="DamasChinas_Server.Dtos.xsd" MetadataType="Schema" ID="a2a7ee82-b4bf-45b4-9a0f-c2bad004c8ae" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="f564ced2-963f-4e86-9270-0aa6334481b5" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

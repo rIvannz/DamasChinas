@@ -1,24 +1,30 @@
 ﻿<Application x:Class="DamasChinas_Client.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:util="clr-namespace:DamasChinas_Client.UI.Utilities"
              StartupUri="AppShell.xaml">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <!-- Idioma por defecto -->
+                <!-- ===== Idioma por defecto ===== -->
                 <ResourceDictionary Source="Resources/Lang.en.xaml"/>
 
-                <!-- Tema visual general -->
+                <!-- ===== Tema visual general ===== -->
                 <ResourceDictionary Source="Styles/Theme.xaml"/>
 
-                <!-- Estilos personalizados de botones -->
+                <!-- ===== Estilos personalizados de botones ===== -->
                 <ResourceDictionary Source="Styles/Buttons.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- ===== Converters globales ===== -->
+            <util:HostVisibilityConverter x:Key="HostVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+
 
 
 

@@ -50,6 +50,13 @@ namespace DamasChinas_Server.Interfaces
         bool KickMember(string code, int targetUserId);
 
         [OperationContract]
+        bool BanMember(string code, int targetUserId);
+
+        [OperationContract]
+        List<Lobby> GetPublicLobbies();
+
+
+        [OperationContract]
         bool StartGame(string code); // Notifica vía callback
     }
 }

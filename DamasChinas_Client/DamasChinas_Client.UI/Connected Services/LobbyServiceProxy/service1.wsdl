@@ -13,6 +13,7 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ILobbyService_CreateLobby_InputMessage">
@@ -47,6 +48,18 @@
   </wsdl:message>
   <wsdl:message name="ILobbyService_KickMember_OutputMessage">
     <wsdl:part name="parameters" element="tns:KickMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_BanMember_InputMessage">
+    <wsdl:part name="parameters" element="tns:BanMember" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_BanMember_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BanMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_GetPublicLobbies_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublicLobbies" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_GetPublicLobbies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublicLobbiesResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_StartGame_InputMessage">
     <wsdl:part name="parameters" element="tns:StartGame" />
@@ -92,6 +105,14 @@
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="KickMember">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/KickMember" message="tns:ILobbyService_KickMember_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/KickMemberResponse" message="tns:ILobbyService_KickMember_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="BanMember">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/BanMember" message="tns:ILobbyService_BanMember_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/BanMemberResponse" message="tns:ILobbyService_BanMember_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetPublicLobbies">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/GetPublicLobbies" message="tns:ILobbyService_GetPublicLobbies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/GetPublicLobbiesResponse" message="tns:ILobbyService_GetPublicLobbies_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="StartGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/StartGame" message="tns:ILobbyService_StartGame_InputMessage" />
@@ -160,6 +181,24 @@
     </wsdl:operation>
     <wsdl:operation name="KickMember">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/KickMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BanMember">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/BanMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPublicLobbies">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/GetPublicLobbies" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

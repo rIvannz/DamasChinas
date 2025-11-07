@@ -97,6 +97,25 @@
     <sys:String x:Key="youJoinedLobby">Te uniste al lobby.</sys:String>
     <sys:String x:Key="gameStarting">¡La partida está por comenzar!</sys:String>
     <sys:String x:Key="lobbyClosed">El lobby ha sido cerrado.</sys:String>
+    <sys:String x:Key="availableGames">Partidas disponibles</sys:String>
+    <sys:String x:Key="refresh">Actualizar</sys:String>
+    <sys:String x:Key="joinSelected">Unirse a la seleccionada</sys:String>
+    <sys:String x:Key="joinByCode">Unirse por código</sys:String>
+    <sys:String x:Key="enterCodePlaceholder">Código de partida</sys:String>
+    <sys:String x:Key="noLobbySelected">Selecciona una partida para unirte.</sys:String>
+    <sys:String x:Key="invalidCodeWarning">Introduce un código válido.</sys:String>
+    <sys:String x:Key="errorLoadingLobbies">Error al cargar las partidas públicas.</sys:String>
+    <sys:String x:Key="joiningLobbyError">No fue posible unirse a la partida seleccionada.</sys:String>
+    <sys:String x:Key="yes">Si</sys:String>
+    <sys:String x:Key="no">No</sys:String>
+    <sys:String x:Key="lobbyInactive_es">Esta partida ya no está activa.</sys:String>
+    <sys:String x:Key="onlyHostCanStart">Solo el anfitrión puede iniciar la partida.</sys:String>
+    <sys:String x:Key="errorStartingGame">Error al iniciar la partida.</sys:String>
+    <sys:String x:Key="host">Anfitrión</sys:String>
+    <sys:String x:Key="private">Privado</sys:String>
+
+
+
 
 
 
