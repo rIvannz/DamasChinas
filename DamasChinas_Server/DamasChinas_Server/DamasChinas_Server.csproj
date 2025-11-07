@@ -60,6 +60,15 @@
     <Compile Include="Dtos\Lobby.cs" />
     <Compile Include="Dtos\LoginRequest.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Game\ChineseCheckersBoard.cs" />
+    <Compile Include="Game\ChineseCheckersGame.cs" />
+    <Compile Include="Game\HexCell.cs" />
+    <Compile Include="Game\HexCoordinate.cs" />
+    <Compile Include="Game\MoveResult.cs" />
+    <Compile Include="Game\Piece.cs" />
+    <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\PlayerColor.cs" />
+    <Compile Include="Game\PlayerMove.cs" />
     <Compile Include="Interfaces\ILobbyService.cs" />
     <Compile Include="Interfaces\ISessionCallback.cs" />
     <Compile Include="logic\ChatRepository.cs" />
