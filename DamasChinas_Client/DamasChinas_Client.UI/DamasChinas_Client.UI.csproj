@@ -103,6 +103,9 @@
     <Compile Include="Pages\JoinParty.xaml.cs">
       <DependentUpon>JoinParty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MatchRoom.xaml.cs">
+      <DependentUpon>MatchRoom.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,10 @@
     <Compile Include="Pages\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\MatchRoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\MenuGuest.xaml" />
     <Compile Include="Pages\MenuGuest.xaml.cs">
       <DependentUpon>MenuGuest.xaml</DependentUpon>
