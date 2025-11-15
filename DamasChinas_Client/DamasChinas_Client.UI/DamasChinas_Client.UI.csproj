@@ -97,6 +97,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ChangeData.xaml.cs">
+      <DependentUpon>ChangeData.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
@@ -133,9 +136,6 @@
     </Compile>
     <!-- Páginas -->
     <Page Include="Pages\ChangeData.xaml" />
-    <Compile Include="Pages\ChangeData.xaml.cs">
-      <DependentUpon>ChangeData.xaml</DependentUpon>
-    </Compile>
     <Page Include="Pages\ChatWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
