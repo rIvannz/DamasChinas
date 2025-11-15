@@ -1,4 +1,6 @@
-﻿using DamasChinas_Client.UI.Utilities;
+﻿using DamasChinas_Client.UI.LobbyServiceProxy;
+using DamasChinas_Client.UI.Models;
+using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,40 +29,30 @@ namespace DamasChinas_Client.UI.Pages
         public JoinParty(int userId, string username)
         {
             InitializeComponent();
-
             _lobbyManager = new LobbyManager();
             _userId = userId;
             _username = username;
-
             LoadPublicLobbies();
         }
 
-        // ===== CARGAR PARTIDAS PÚBLICAS =====
         private void LoadPublicLobbies()
         {
             try
             {
-                var publicLobbies = _lobbyManager.GetPublicLobbies();
+                var publicLobbies = _lobbyManager.GetPublicLobbies() ?? new List<Lobby>();
+                var activeLobbies = publicLobbies
+                    .Where(l => l.Members != null && l.Members.Length > 0)
+                    .ToList();
 
                 var list = new List<LobbySummary>();
-                foreach (var lobby in publicLobbies)
+                foreach (var lobby in activeLobbies)
                 {
                     int playerCount = lobby.Members?.Length ?? 0;
 
                     string hostUsername = $"User {lobby.HostUserId}";
-                    if (lobby.Members != null)
-                    {
-                        foreach (var member in lobby.Members)
-                        {
-                            if (member.IsHost)
-                            {
-                                hostUsername = string.IsNullOrWhiteSpace(member.Username)
-                                    ? hostUsername
-                                    : member.Username;
-                                break;
-                            }
-                        }
-                    }
+                    var host = lobby.Members?.FirstOrDefault(m => m.IsHost);
+                    if (host != null && !string.IsNullOrWhiteSpace(host.Username))
+                        hostUsername = host.Username;
 
                     list.Add(new LobbySummary
                     {
@@ -68,20 +60,14 @@ namespace DamasChinas_Client.UI.Pages
                         HostUsername = hostUsername,
                         PlayerCount = $"{playerCount}/6",
                         IsPrivate = lobby.IsPrivate
-                            ? (string)FindResource("yes")
-                            : (string)FindResource("no")
+                            ? (string)FindResource("private")
+                            : (string)FindResource("public")
                     });
                 }
 
+                lstPublicLobbies.ItemsSource = null;
                 lstPublicLobbies.ItemsSource = list;
-            }
-            catch (FaultException faultEx)
-            {
-                MessageBox.Show(
-                    faultEx.Message,
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                lstPublicLobbies.Items.Refresh();
             }
             catch (Exception ex)
             {
@@ -93,19 +79,13 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        private void OnRefreshClick(object sender, RoutedEventArgs e) => LoadPublicLobbies();
 
-        // ===== REFRESCAR LISTA =====
-        private void OnRefreshClick(object sender, RoutedEventArgs e)
-        {
-            LoadPublicLobbies();
-        }
-
-        // ===== UNIRSE A PARTIDA SELECCIONADA =====
         private void OnJoinSelectedClick(object sender, RoutedEventArgs e)
         {
-            if (lstPublicLobbies.SelectedItem is LobbySummary selectedLobby)
+            if (lstPublicLobbies.SelectedItem is LobbySummary selected)
             {
-                TryJoinLobby(selectedLobby.Code);
+                TryJoinLobby(selected.Code);
             }
             else
             {
@@ -117,82 +97,60 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ===== UNIRSE POR CÓDIGO MANUAL =====
         private void OnJoinByCodeClick(object sender, RoutedEventArgs e)
         {
-            string code = txtLobbyCode.Text.Trim();
-
+            var code = txtLobbyCode.Text.Trim();
             if (string.IsNullOrEmpty(code))
             {
-                MessageBox.Show(
-                    (string)FindResource("invalidCodeWarning"),
+                MessageBox.Show((string)FindResource("invalidCodeWarning"),
                     (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
             TryJoinLobby(code);
         }
 
-        // ===== UNIÓN A LOBBY (REAL) =====
         private void TryJoinLobby(string code)
         {
             try
             {
                 var lobby = _lobbyManager.JoinLobby(code, _userId, _username);
+                if (lobby == null)
+                    throw new Exception("No lobby returned");
 
-                if (lobby != null)
-                {
-                    var preLobby = new PreLobby(lobby, _username);
-                    NavigationService?.Navigate(preLobby);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        (string)FindResource("joiningLobbyError"),
-                        (string)FindResource("errorTitle"),
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
+                NavigationService?.Navigate(new PreLobby(lobby, _userId, _username));
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show((string)FindResource("lobbyExpired"),
+                    (string)FindResource("errorTitle"),
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoadPublicLobbies();
+            }
+            catch (FaultException fault)
+            {
+                MessageBox.Show(fault.Message,
+                    (string)FindResource("errorTitle"),
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoadPublicLobbies();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"{FindResource("joiningLobbyError")} ({ex.Message})",
+                MessageBox.Show($"{FindResource("joiningLobbyError")} ({ex.Message})",
                     (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        // ===== PLACEHOLDER DEL CÓDIGO =====
         private void OnCodeBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            txtCodePlaceholder.Visibility = Visibility.Collapsed;
-        }
+            => txtCodePlaceholder.Visibility = Visibility.Collapsed;
 
         private void OnCodeBoxLostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtLobbyCode.Text))
-            {
                 txtCodePlaceholder.Visibility = Visibility.Visible;
-            }
         }
 
-        // ===== REGRESAR AL MENÚ =====
-        private void OnBackClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.GoBack();
-        }
-    }
-
-    // ===== CLASE AUXILIAR PARA LA LISTA DE PARTIDAS =====
-    public class LobbySummary
-    {
-        public string Code { get; set; }
-        public string HostUsername { get; set; }
-        public string PlayerCount { get; set; }
-        public string IsPrivate { get; set; }
+        private void OnBackClick(object sender, RoutedEventArgs e) => NavigationService?.GoBack();
     }
 }

@@ -58,54 +58,93 @@
                                Foreground="White"
                                Margin="0,0,0,10"/>
 
-                    <!-- Lista de partidas -->
-                    <!-- Lista de partidas -->
+                    <!-- ===== LISTA DE PARTIDAS ===== -->
                     <ListView x:Name="lstPublicLobbies"
-          Grid.Row="1"
-          Background="Transparent"
-          BorderThickness="0"
-          Foreground="White"
-          FontSize="14"
-          ScrollViewer.VerticalScrollBarVisibility="Auto"
-          SelectionMode="Single">
+                              Grid.Row="1"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              Foreground="White"
+                              FontSize="14"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              SelectionMode="Single">
+
+                        <ListView.Resources>
+                            <!-- Estilo para encabezados -->
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Background" Value="#33000000"/>
+                                <Setter Property="Padding" Value="8,4"/>
+                            </Style>
+                        </ListView.Resources>
+
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="{DynamicResource lobbyCode}" Width="120" DisplayMemberBinding="{Binding Code}" />
-                                <GridViewColumn Header="{DynamicResource host}" Width="200" DisplayMemberBinding="{Binding HostUsername}" />
-                                <GridViewColumn Header="{DynamicResource players}" Width="100" DisplayMemberBinding="{Binding PlayerCount}" />
-                                <GridViewColumn Header="{DynamicResource private}" Width="100" DisplayMemberBinding="{Binding IsPrivate}" />
+                                <GridViewColumn Header="{DynamicResource lobbyCode}" Width="160" DisplayMemberBinding="{Binding Code}" />
+                                <GridViewColumn Header="{DynamicResource host}" Width="220" DisplayMemberBinding="{Binding HostUsername}" />
+                                <GridViewColumn Header="{DynamicResource players}" Width="140" DisplayMemberBinding="{Binding PlayerCount}" />
+                                <GridViewColumn Header="{DynamicResource private}" Width="140" DisplayMemberBinding="{Binding IsPrivate}" />
                             </GridView>
                         </ListView.View>
 
+                        <!-- ===== ESTILO DE FILAS ===== -->
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Margin" Value="0,3"/>
                                 <Setter Property="Padding" Value="5,2"/>
                                 <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListViewItem">
-                                            <Border 
-                        Background="#33000000"
-                        BorderBrush="#55000000"
-                        BorderThickness="1"
-                        CornerRadius="10"
-                        Padding="5"
-                        SnapsToDevicePixels="True">
-                                                <ContentPresenter 
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"/>
+                                            <Border x:Name="ItemBorder"
+                                                    Background="#33000000"
+                                                    BorderBrush="#55000000"
+                                                    BorderThickness="1"
+                                                    CornerRadius="10"
+                                                    Padding="5"
+                                                    SnapsToDevicePixels="True"
+                                                    Opacity="0">
+                                                <ContentPresenter HorizontalAlignment="Stretch"
+                                                                  VerticalAlignment="Center"/>
+                                                <Border.Triggers>
+                                                    <!-- Animación de aparición -->
+                                                    <EventTrigger RoutedEvent="Loaded">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                                 From="0" To="1"
+                                                                                 Duration="0:0:0.3"
+                                                                                 FillBehavior="HoldEnd"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Border.Triggers>
                                             </Border>
+
+                                            <!-- Triggers visuales -->
+                                            <ControlTemplate.Triggers>
+                                                <!-- Hover -->
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#5533AA33"/>
+                                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#88FFFFFF"/>
+                                                </Trigger>
+                                                <!-- Seleccionado -->
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#7733AA33"/>
+                                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#AAFFFFFF"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
                             </Style>
                         </ListView.ItemContainerStyle>
-
                     </ListView>
 
-
-                    <!-- Botones de acción -->
+                    <!-- ===== BOTONES DE ACCIÓN ===== -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <Button Content="{DynamicResource refresh}"
                                 Style="{DynamicResource BaseGameButton}"
@@ -130,36 +169,36 @@
                 <!-- Contenedor para textbox y placeholder -->
                 <Grid Width="260" Height="36">
                     <TextBox x:Name="txtLobbyCode"
-                 VerticalContentAlignment="Center"
-                 FontSize="14"
-                 Padding="8,2"
-                 Foreground="Black"
-                 Background="White"
-                 BorderThickness="1"
-                 BorderBrush="#444"
-                 Text=""
-                 GotFocus="OnCodeBoxGotFocus"
-                 LostFocus="OnCodeBoxLostFocus"/>
+                             VerticalContentAlignment="Center"
+                             FontSize="14"
+                             Padding="8,2"
+                             Foreground="Black"
+                             Background="White"
+                             BorderThickness="1"
+                             BorderBrush="#444"
+                             Text=""
+                             GotFocus="OnCodeBoxGotFocus"
+                             LostFocus="OnCodeBoxLostFocus"/>
                     <TextBlock x:Name="txtCodePlaceholder"
-                   Text="{DynamicResource enterCodePlaceholder}"
-                   Foreground="#888"
-                   FontStyle="Italic"
-                   IsHitTestVisible="False"
-                   VerticalAlignment="Center"
-                   Margin="10,0,0,0"
-                   Visibility="Visible"
-                   FontSize="13"/>
+                               Text="{DynamicResource enterCodePlaceholder}"
+                               Foreground="#888"
+                               FontStyle="Italic"
+                               IsHitTestVisible="False"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"
+                               Visibility="Visible"
+                               FontSize="13"/>
                 </Grid>
 
                 <Button Grid.Column="1"
-            Content="{DynamicResource joinByCode}"
-            Style="{DynamicResource BaseGameButton}"
-            Width="150"
-            Height="36"
-            Margin="10,0,0,0"
-            Click="OnJoinByCodeClick" Cursor="Hand"/>
+                        Content="{DynamicResource joinByCode}"
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="150"
+                        Height="36"
+                        Margin="10,0,0,0"
+                        Click="OnJoinByCodeClick"
+                        Cursor="Hand"/>
             </Grid>
-
         </Grid>
     </Grid>
 </Page>

@@ -8,16 +8,14 @@
       d:DesignHeight="720" d:DesignWidth="1280">
 
     <Grid>
-        <!-- ===== FONDO ===== -->
+        <!-- Fondo -->
         <Grid.Background>
             <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"/>
         </Grid.Background>
 
-        <!-- Capa oscura -->
         <Rectangle Fill="#66000000"/>
 
-        <!-- ===== CONTENIDO PRINCIPAL ===== -->
         <Grid Margin="40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -31,7 +29,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- ===== ENCABEZADO ===== -->
+            <!-- Encabezado -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10,0,20">
                 <Button Click="OnBackClick"
                         Background="Transparent"
@@ -49,7 +47,7 @@
                            Margin="12,0,0,0"/>
             </StackPanel>
 
-            <!-- ===== SECCIÓN IZQUIERDA (FRIENDS & MEMBERS) ===== -->
+            <!-- SECCIÓN IZQUIERDA (Friends + Members) -->
             <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,20,0">
                 <!-- Friends -->
                 <Border CornerRadius="12" Background="#22000000" Padding="10" Margin="0,0,0,10">
@@ -67,6 +65,27 @@
                                  Height="150"
                                  SelectionMode="Single"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                            <!-- Amigo de ejemplo fijo -->
+                            <ListBox.Items>
+                                <ListBoxItem>
+                                    <DockPanel LastChildFill="False" Margin="0,2">
+                                        <TextBlock Text="Pruebas"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="White"
+                                                   DockPanel.Dock="Left"/>
+                                        <Button Content="{DynamicResource invite}"
+                                                Style="{DynamicResource BaseGameButton}"
+                                                Width="70"
+                                                Height="24"
+                                                DockPanel.Dock="Right"
+                                                Margin="10,0,0,0"
+                                                Click="OnInviteFriendClick"/>
+                                    </DockPanel>
+                                </ListBoxItem>
+                            </ListBox.Items>
+
+                            <!-- Plantilla para amigos reales -->
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel LastChildFill="False" Margin="0,2">
@@ -79,7 +98,8 @@
                                                 Width="70"
                                                 Height="24"
                                                 DockPanel.Dock="Right"
-                                                Margin="10,0,0,0"/>
+                                                Margin="10,0,0,0"
+                                                Click="OnInviteFriendClick"/>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -109,15 +129,6 @@
                                                    VerticalAlignment="Center" 
                                                    Foreground="White" 
                                                    DockPanel.Dock="Left"/>
-                                        <Button Content="BAN"
-                                                Style="{DynamicResource BaseGameButton}"
-                                                Width="70"
-                                                Height="24"
-                                                DockPanel.Dock="Right"
-                                                Margin="10,0,0,0"
-                                                Tag="{Binding}"
-                                                Click="OnBanMemberClick"
-                                                Visibility="{Binding IsHost, Converter={StaticResource HostVisibilityConverter}}"/>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -126,7 +137,7 @@
                 </Border>
             </StackPanel>
 
-            <!-- ===== SECCIÓN DERECHA (CHAT) ===== -->
+            <!-- SECCIÓN DERECHA (Chat) -->
             <Border Grid.Row="1" Grid.Column="2" CornerRadius="12" Background="#22000000" Padding="10">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -135,9 +146,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Chat messages -->
-                    <ScrollViewer Grid.Row="0"
-                                  VerticalScrollBarVisibility="Auto"
-                                  Margin="0,0,0,10">
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10">
                         <StackPanel x:Name="chatContainer"/>
                     </ScrollViewer>
 
@@ -170,7 +179,7 @@
                 </Grid>
             </Border>
 
-            <!-- ===== PIE DE PÁGINA ===== -->
+            <!-- PIE -->
             <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
                 <StackPanel Orientation="Vertical" Margin="0,0,60,0" VerticalAlignment="Center">
@@ -194,13 +203,10 @@
                         Click="OnExitClick"/>
 
                 <Button Content="{DynamicResource startGame}"
-                    Style="{DynamicResource BaseGameButton}"
-                    Width="150" Height="48"
-                    Visibility="{Binding IsHost, Converter={StaticResource HostVisibilityConverter}}"
-                    Click="OnStartGameClick"/>
-
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="150" Height="48"
+                        Click="OnStartGameClick"/>
             </StackPanel>
         </Grid>
     </Grid>
 </Page>
-

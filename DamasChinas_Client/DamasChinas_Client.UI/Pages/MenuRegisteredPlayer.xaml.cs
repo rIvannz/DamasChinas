@@ -35,21 +35,22 @@ namespace DamasChinas_Client.UI.Pages
 			}
 		}
 
-		private void OnCreateGameClick(object sender, RoutedEventArgs e)
-		{
-			try
-			{
-                                var lobbyManager = new LobbyManager();
-                                var lobby = lobbyManager.CreateLobby(_userId, _profile.Username, false);
+        private void OnCreateGameClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var lobbyManager = new LobbyManager();
+                var lobby = lobbyManager.CreateLobby(_userId, _profile.Username, false);
 
-                                var preLobbyPage = new PreLobby(lobby, _profile.Username);
-				NavigationService?.Navigate(preLobbyPage);
-			}
-			catch (Exception ex)
-			{
-				ShowError($"Error al crear la partida: {ex.Message}", "Create Game");
-			}
-		}
+                var preLobbyPage = new PreLobby(lobby, _userId, _profile.Username);
+                NavigationService?.Navigate(preLobbyPage);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error al crear la partida: {ex.Message}", "Create Game");
+            }
+        }
+
 
         private void OnJoinPartyClick(object sender, RoutedEventArgs e)
         {
