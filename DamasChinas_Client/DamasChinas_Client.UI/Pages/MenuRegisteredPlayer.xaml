@@ -95,7 +95,7 @@
                             Content="{DynamicResource createGame}"
                             Width="220" Height="64"
                             Margin="0,0,20,0"
-                            Click="OnCreateGameClick"/>
+                            Click="OnCreateGameClick" Cursor="Hand"/>
                     <Button Style="{DynamicResource BaseGameButton}"
                             Content="{DynamicResource joinParty}"
                             Width="220" Height="64"

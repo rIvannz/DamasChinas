@@ -94,6 +94,7 @@
                         <TextBlock Text="{DynamicResource sound}"
                                    FontWeight="Bold"
                                    FontSize="20"
+                                   FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                                    Foreground="White"
                                    VerticalAlignment="Center"
                                    Margin="15,6,0,6"/>

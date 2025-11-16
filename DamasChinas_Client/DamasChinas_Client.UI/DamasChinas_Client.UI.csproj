@@ -101,6 +101,9 @@
     <Compile Include="Pages\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ForgotPassword.xaml.cs">
+      <DependentUpon>ForgotPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\JoinParty.xaml.cs">
       <DependentUpon>JoinParty.xaml</DependentUpon>
     </Compile>
@@ -110,10 +113,25 @@
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PopUps\ConfirmPopupWindow.xaml.cs">
+      <DependentUpon>ConfirmPopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PopUps\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PopUps\MessagePopupWindow.xaml.cs">
+      <DependentUpon>MessagePopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PopUps\VerificationCodeWindow.xaml.cs">
+      <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\FriendList.cs" />
     <Compile Include="Utilities\ClientSession.cs" />
     <Compile Include="Utilities\Hasher.cs" />
     <Compile Include="Utilities\HostVisibilityConverter.cs" />
+    <Compile Include="Utilities\LoaderBar.xaml.cs">
+      <DependentUpon>LoaderBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\MessageHerlper.cs" />
     <Compile Include="Utilities\MessageTranslator.cs" />
     <Compile Include="Utilities\ServiceHelper.cs" />
@@ -145,6 +163,10 @@
     <Compile Include="Pages\ConfiSound.xaml.cs">
       <DependentUpon>ConfiSound.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\ForgotPassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Friends.xaml" />
     <Compile Include="Pages\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
@@ -193,11 +215,35 @@
     <Compile Include="Pages\SignIn.xaml.cs">
       <DependentUpon>SignIn.xaml</DependentUpon>
     </Compile>
+    <Page Include="PopUps\ConfirmPopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PopUps\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PopUps\MessagePopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PopUps\VerificationCodeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <!-- Recursos -->
     <Page Include="Resources\Lang.en.xaml" />
     <Page Include="Resources\Lang.es.xaml" />
     <Page Include="Styles\Buttons.xaml" />
+    <Page Include="Styles\Shadows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Theme.xaml" />
+    <Page Include="Utilities\LoaderBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <!-- Archivos de configuración -->
   <ItemGroup>
@@ -261,6 +307,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\item32.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\LoginService1.wsdl" />
@@ -350,6 +399,7 @@
     <Resource Include="Assets\Icons\languageIcon.png" />
     <Resource Include="Assets\Icons\soundIcon.png" />
     <Resource Include="Assets\Icons\stadisticsIcon.png" />
+    <Resource Include="Assets\Icons\greenCheck.png" />
     <Content Include="Assets\Sounds\background_music.mp3" />
   </ItemGroup>
   <!-- Recursos .resx -->

@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:utilities="clr-namespace:DamasChinas_Client.UI.Utilities"
       mc:Ignorable="d"
       Background="{DynamicResource SurfaceBrush}">
 
@@ -116,7 +117,17 @@
                     Width="220" Height="54"
                     HorizontalAlignment="Center"
                     Click="OnCreateAccountClick"/>
+
+            <!-- Barra de carga del registro -->
+            <utilities:LoaderBar x:Name="loadingBarRegister"
+                     Visibility="Collapsed"
+                     Margin="0 15 0 0"
+                     HorizontalAlignment="Center"/>
+
+
+
         </StackPanel>
+        
 
         <!-- ===== Iconos inferiores derechos ===== -->
         <Grid VerticalAlignment="Bottom"

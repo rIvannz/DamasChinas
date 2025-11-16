@@ -45,6 +45,7 @@
 						   Text="Friends"
 						   Foreground="White"
 						   FontSize="58"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
 						   FontWeight="Bold"
 						   TextAlignment="Center"
 						   VerticalAlignment="Center"/>

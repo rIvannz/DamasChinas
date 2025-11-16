@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="DamasChinas_Client.UI.Utilities.LoaderBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="14" Width="300">
+
+    <UserControl.Resources>
+        <!-- Animación de progreso en 4 segundos -->
+        <Storyboard x:Key="LoadingStoryboard">
+            <DoubleAnimation Storyboard.TargetName="Bar"
+                             Storyboard.TargetProperty="Width"
+                             From="0"
+                             To="300"
+                             Duration="0:0:4"
+                             AutoReverse="False"
+                             FillBehavior="Stop"/>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Border Background="#33000000"
+            CornerRadius="6">
+        <Rectangle x:Name="Bar"
+                   Height="14"
+                   Width="0"
+                   Fill="{DynamicResource MarbleYellowBrush}"
+                   RadiusX="6"
+                   RadiusY="6"/>
+    </Border>
+</UserControl>

@@ -42,6 +42,7 @@
                 <TextBlock Text="{DynamicResource preLobby}"
                            FontSize="22"
                            FontWeight="Bold"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            Foreground="White"
                            VerticalAlignment="Center"
                            Margin="12,0,0,0"/>

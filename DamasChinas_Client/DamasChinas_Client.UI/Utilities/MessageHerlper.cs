@@ -1,48 +1,67 @@
-using System.Windows;
+using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Utilities;
+using System;
+using System.Windows;
+
 
 
 namespace DamasChinas_Client.UI.Utilities
 {
     public static class MessageHelper
     {
-        public static void ShowSuccess(string message, string title = "Success")
+   
+        public static void ShowPopup(string message, string type = "info", bool autoClose = false)
         {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+            var popup = new MessagePopupWindow(message, type, autoClose)
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            popup.ShowDialog();
         }
 
-        public static void ShowError(string message, string title = "Error")
+        public static void ShowFromCode(Enum code, string type = "info")
         {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+            string message = MessageTranslator.GetLocalizedMessage(code);
+            ShowPopup(message, type);
         }
 
-        public static void ShowWarning(string message, string title = "Warning")
+        public static bool ShowConfirmLogout()
         {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+            var popup = new ConfirmPopupWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            popup.ShowDialog();
+            return popup.Result;
         }
 
-        public static void ShowInfo(string message, string title = "Information")
-        {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
 
-        /// <summary>
-        /// Displays a localized message from any OperationResult object.
-        /// </summary>
+
         public static void ShowFromResult(dynamic result)
         {
             if (result == null)
             {
-                ShowError("An unexpected error occurred.");
+                ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    "error"
+                );
                 return;
             }
 
-            string message = MessageTranslator.GetLocalizedMessage(result.Code);
+            string msg = MessageTranslator.GetLocalizedMessage(result.Code);
 
             if (result.Success)
-                ShowSuccess(message);
+            {
+                ShowPopup(msg, "success");
+            }
             else
-                ShowError(message);
+            {
+                ShowPopup(msg, "error");
+            }
         }
     }
 }
+
+

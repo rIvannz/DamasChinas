@@ -1,6 +1,7 @@
-using System.ServiceModel;
+using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
+using System.ServiceModel;
 
 namespace DamasChinas_Server
 {
@@ -17,6 +18,7 @@ namespace DamasChinas_Server
 		void OnLoginSuccess(PublicProfile profile);
 
 		[OperationContract(IsOneWay = true)]
-		void OnLoginError(string message);
-	}
+        void OnLoginError(MessageCode code);
+
+    }
 }

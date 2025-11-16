@@ -1,102 +1,132 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                  
 
+
+
+    <!-- ========================================================= -->
+    <!--  GENERAL SYSTEM TEXTS                                     -->
+    <!-- ========================================================= -->
 
     <sys:String x:Key="back">Back</sys:String>
-    <sys:String x:Key="sound">Sound</sys:String>
-    <sys:String x:Key="gameTitle">CHINESE CHECKERS</sys:String>
-    <sys:String x:Key="firstName">Name</sys:String>
-    <sys:String x:Key="lastName">Last Name</sys:String>
-    <sys:String x:Key="databaseError">Connection error. Please try again.</sys:String>
-    <sys:String x:Key="email">Email</sys:String>
-    <sys:String x:Key="emailError">The email address must contain a valid format.</sys:String>
-    <sys:String x:Key="emailExists">Email is already registered.</sys:String>
-    <sys:String x:Key="emptyCredentials">Fields can’t be empty.</sys:String>
-    <sys:String x:Key="english">English</sys:String>
     <sys:String x:Key="exit">Exit</sys:String>
-    <sys:String x:Key="fullName">Full Name</sys:String>
-    <sys:String x:Key="hello">Hello</sys:String>
-    <sys:String x:Key="instructionLanguage">Select a language and press Apply Language.</sys:String>
-    <sys:String x:Key="language">Language</sys:String>
-    <sys:String x:Key="loadMain">Load Main</sys:String>
-    <sys:String x:Key="login">Log in</sys:String>
-    <sys:String x:Key="loginErrorMessage">Username or password is incorrect.</sys:String>
     <sys:String x:Key="ok">OK</sys:String>
-    <sys:String x:Key="password">Password</sys:String>
-    <sys:String x:Key="confirmPassword">Confirm your password</sys:String>
-    <sys:String x:Key="passwordDontMatchErrorMessage">Passwords don’t match.</sys:String>
-    <sys:String x:Key="passwordMax10Error">Password must be 10 characters or fewer.</sys:String>
-    <sys:String x:Key="passwordMax10Rule">Password must not exceed 10 characters.</sys:String>
-    <sys:String x:Key="registerMessage">Register in DAMAS CHINAS</sys:String>
-    <sys:String x:Key="rewritePassword">Rewrite Password</sys:String>
-    <sys:String x:Key="selectLanguage">Select Language</sys:String>
-    <sys:String x:Key="signin">Sign in</sys:String>
-    <sys:String x:Key="spanish">Spanish</sys:String>
-    <sys:String x:Key="success">Success</sys:String>
-    <sys:String x:Key="unexpectedError">An unexpected error occurred. Please try again.</sys:String>
-    <sys:String x:Key="userCreatedSuccesfully">User created successfully.</sys:String>
-    <sys:String x:Key="username">Username</sys:String>
-    <sys:String x:Key="usernameExists">Username is already taken.</sys:String>
-    <sys:String x:Key="welcome">Welcome to CHINESE CHECKERS</sys:String>
-    <sys:String x:Key="applyLanguage">Apply Language</sys:String>
-    <sys:String x:Key="playasGuest">Play as Guest</sys:String>
-    <sys:String x:Key="forgotPassword">Forgot your password?</sys:String>
-    <sys:String x:Key="createAccount">Create Account</sys:String>
-    <sys:String x:Key="createGame">Create Game</sys:String>
-    <sys:String x:Key="joinParty">Join a Party</sys:String>
-    <sys:String x:Key="howToPlay">How to Play</sys:String>
-    <sys:String x:Key="profile">Profile</sys:String>
-    <sys:String x:Key="statistics">Statistics</sys:String>
-    <sys:String x:Key="guestUser">GUEST1</sys:String>
-    <sys:String x:Key="configuration">Configuration</sys:String>
-    <sys:String x:Key="fillFields">Fill in each of the fields</sys:String>
-    <sys:String x:Key="volume">Volume</sys:String>
+    <sys:String x:Key="errorTitle">Error</sys:String>
+    <sys:String x:Key="infoTitle">Information</sys:String>
+    <sys:String x:Key="confirmTitle">Confirmation</sys:String>
     <sys:String x:Key="music">Music</sys:String>
     <sys:String x:Key="effects">Sound Effects</sys:String>
-    <sys:String x:Key="confirm">Confirm</sys:String>
-    <sys:String x:Key="yourProfile">YOUR PROFILE</sys:String>
-    <sys:String x:Key="fullname">Full Name</sys:String>
-    <sys:String x:Key="socialmedia">Social Media</sys:String>
-    <sys:String x:Key="changeData">CHANGE DATA</sys:String>
+    <sys:String x:Key="yesWord">Yes</sys:String>
+    <sys:String x:Key="noWord">No</sys:String>
+
+    <!-- ========================================================= -->
+    <!--  MAIN MENU / CONFIGURATION                                -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="gameTitle">CHINESE CHECKERS</sys:String>
+    <sys:String x:Key="sound">Sound</sys:String>
+    <sys:String x:Key="language">Language</sys:String>
+    <sys:String x:Key="applyLanguage">Apply Language</sys:String>
+    <sys:String x:Key="spanish">Spanish</sys:String>
+    <sys:String x:Key="english">English</sys:String>
+    <sys:String x:Key="instructionLanguage">
+        Select a language and press Apply Language.
+    </sys:String>
+
+    <!-- MENU REGISTERED PLAYER -->
+    <sys:String x:Key="createGame">Create Game</sys:String>
+    <sys:String x:Key="joinParty">Join Party</sys:String>
+    <sys:String x:Key="howToPlay">How to Play</sys:String>
     <sys:String x:Key="logout">LOG OUT</sys:String>
-    <sys:String x:Key="matchesPlayed">MATCHED PLAYED</sys:String>
+
+    <!-- ========================================================= -->
+    <!--  SIGN IN / REGISTRATION                                   -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="signin">Sign in</sys:String>
+    <sys:String x:Key="fillFields">Fill in each of the fields</sys:String>
+    <sys:String x:Key="firstName">Name</sys:String>
+    <sys:String x:Key="lastName">Last Name</sys:String>
+    <sys:String x:Key="email">Email</sys:String>
+    <sys:String x:Key="username">Username</sys:String>
+    <sys:String x:Key="password">Password</sys:String>
+    <sys:String x:Key="confirmPassword">Confirm your password</sys:String>
+
+    <!-- Local validations -->
+    <sys:String x:Key="emptyCredentials">Fields can't be empty.</sys:String>
+    <sys:String x:Key="passwordDontMatchErrorMessage">Passwords don’t match.</sys:String>
+    <sys:String x:Key="passwordMax10Error">Password must be 10 characters or fewer.</sys:String>
+    <sys:String x:Key="emailError">The email address must contain a valid format.</sys:String>
+
+    <!-- Buttons -->
+    <sys:String x:Key="createAccount">Create Account</sys:String>
+
+    <!-- LOADING / PROGRESS -->
+    <sys:String x:Key="loadingTitle">Loading...</sys:String>
+    <sys:String x:Key="loading_Login">Signing in...</sys:String>
+    <sys:String x:Key="loading_Register">Creating your account...</sys:String>
+
+
+    <!-- ========================================================= -->
+    <!--  PROFILE / USER DATA                                      -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="yourProfile">YOUR PROFILE</sys:String>
+    <sys:String x:Key="fullName">Full Name</sys:String>
+    <sys:String x:Key="socialmedia">Social Media</sys:String>
+    <sys:String x:Key="profile">Profile</sys:String>
+    <sys:String x:Key="statistics">Statistics</sys:String>
+    <sys:String x:Key="matchesPlayed">MATCHES PLAYED</sys:String>
     <sys:String x:Key="wins">WINS</sys:String>
     <sys:String x:Key="loses">LOSES</sys:String>
+
+   
+
+
+    <!-- LOGOUT CONFIRMATION -->
+    <sys:String x:Key="title_Confirm">Confirm</sys:String>
+    <sys:String x:Key="msg_LogoutConfirm">Do you want to log out?</sys:String>
+
+
+
+    <!-- Change Data -->
+    <sys:String x:Key="changeData">CHANGE DATA</sys:String>
     <sys:String x:Key="changeDataInstruction">Enter the new data in the corresponding fields.</sys:String>
     <sys:String x:Key="saveChanges">Save Changes</sys:String>
-    <sys:String x:Key="chat">Chat</sys:String>
-    <sys:String x:Key="viewProfile">View Profile</sys:String>
-    <sys:String x:Key="errorTitle">Error</sys:String>
-    <sys:String x:Key="codeHint">Enter verification code</sys:String>
-    <sys:String x:Key="currentData">Current Data</sys:String>
+
     <sys:String x:Key="changeUsername">Change Username</sys:String>
     <sys:String x:Key="saveUsername">Save Username</sys:String>
     <sys:String x:Key="changePassword">Change Password</sys:String>
-    <sys:String x:Key="passwordInstruction">To change your password, a verification code will be sent to your email.</sys:String>
+    <sys:String x:Key="passwordInstruction">
+        To change your password, a verification code will be sent to your email.
+    </sys:String>
+    <sys:String x:Key="newUsername">New Username</sys:String>
+    <sys:String x:Key="codePassword">Verification Code</sys:String>
     <sys:String x:Key="sendCode">Send Code</sys:String>
     <sys:String x:Key="savePassword">Save Password</sys:String>
     <sys:String x:Key="usernameUpdated">Username updated successfully.</sys:String>
-    <sys:String x:Key="passwordUpdated">Password updated successfully.</sys:String>
     <sys:String x:Key="codeSentMessage">Verification code sent to your email.</sys:String>
-    <sys:String x:Key="newUsername">New Username</sys:String>
-    <sys:String x:Key="codePassword">Verification Code</sys:String>
+
+    <!-- Extra UI -->
+    <sys:String x:Key="userProfile">User Profile</sys:String>
+    <sys:String x:Key="chatError">Chat could not be opened.</sys:String>
+
+    <!-- ========================================================= -->
+    <!--  LOGIN                                                     -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="login">Log in</sys:String>
+    <sys:String x:Key="loginErrorMessage">Username or password is incorrect.</sys:String>
+    <sys:String x:Key="playasGuest">Play as Guest</sys:String>
+    <sys:String x:Key="forgotPassword">Forgot your password?</sys:String>
+    <sys:String x:Key="welcome">Welcome to CHINESE CHECKERS</sys:String>
+    <sys:String x:Key="loadMain">Load Main</sys:String>
+
+    <!-- ========================================================= -->
+    <!--  PRE-LOBBY / GAME LIST                                    -->
+    <!-- ========================================================= -->
+
     <sys:String x:Key="preLobby">Pre-Lobby</sys:String>
-    <sys:String x:Key="friendsList">Friends</sys:String>
-    <sys:String x:Key="membersList">Members</sys:String>
-    <sys:String x:Key="invite">Invite</sys:String>
-    <sys:String x:Key="chatPlaceholder">Type your message...</sys:String>
-    <sys:String x:Key="send">Send</sys:String>
-    <sys:String x:Key="startGame">Start Game</sys:String>
-    <sys:String x:Key="leaveLobby">Leave Lobby</sys:String>
-    <sys:String x:Key="lobbyCode">Lobby Code</sys:String>
-    <sys:String x:Key="players">Players</sys:String>
-    <sys:String x:Key="waitingForPlayers">Waiting for players...</sys:String>
-    <sys:String x:Key="lobbyCreated">Lobby created successfully!</sys:String>
-    <sys:String x:Key="youJoinedLobby">You joined the lobby.</sys:String>
-    <sys:String x:Key="gameStarting">The game is starting!</sys:String>
-    <sys:String x:Key="lobbyClosed">The lobby has been closed.</sys:String>
     <sys:String x:Key="availableGames">Available Games</sys:String>
     <sys:String x:Key="refresh">Refresh</sys:String>
     <sys:String x:Key="joinSelected">Join Selected</sys:String>
@@ -106,8 +136,27 @@
     <sys:String x:Key="invalidCodeWarning">Please enter a valid code.</sys:String>
     <sys:String x:Key="errorLoadingLobbies">Error loading public games.</sys:String>
     <sys:String x:Key="joiningLobbyError">Unable to join the selected lobby.</sys:String>
-    <sys:String x:Key="yes">Yes</sys:String>
-    <sys:String x:Key="no">No</sys:String>
+
+    <!-- ========================================================= -->
+    <!--  LOBBY / GAME                                              -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="friendsList">Friends</sys:String>
+    <sys:String x:Key="membersList">Members</sys:String>
+    <sys:String x:Key="invite">Invite</sys:String>
+    <sys:String x:Key="chat">Chat</sys:String>
+    <sys:String x:Key="chatPlaceholder">Type your message...</sys:String>
+    <sys:String x:Key="send">Send</sys:String>
+    <sys:String x:Key="startGame">Start Game</sys:String>
+    <sys:String x:Key="leaveLobby">Leave Lobby</sys:String>
+
+    <sys:String x:Key="lobbyCode">Lobby Code</sys:String>
+    <sys:String x:Key="players">Players</sys:String>
+    <sys:String x:Key="waitingForPlayers">Waiting for players...</sys:String>
+    <sys:String x:Key="lobbyCreated">Lobby created successfully!</sys:String>
+    <sys:String x:Key="youJoinedLobby">You joined the lobby.</sys:String>
+    <sys:String x:Key="gameStarting">The game is starting!</sys:String>
+    <sys:String x:Key="lobbyClosed">The lobby has been closed.</sys:String>
     <sys:String x:Key="lobbyInactive">This lobby is no longer active.</sys:String>
     <sys:String x:Key="onlyHostCanStart">Only the host can start the game.</sys:String>
     <sys:String x:Key="errorStartingGame">Failed to start the game.</sys:String>
@@ -115,17 +164,29 @@
     <sys:String x:Key="private">Private</sys:String>
     <sys:String x:Key="public">Public</sys:String>
     <sys:String x:Key="confirmExitLobby">Are you sure you want to leave the lobby?</sys:String>
-    <sys:String x:Key="confirmTitle">Confirmation</sys:String>
     <sys:String x:Key="lobbyLeft">You have left the lobby.</sys:String>
-    <sys:String x:Key="infoTitle">Information</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- POPUPS                                                     -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="verificationCodeTitle">VERIFICATION CODE</sys:String>
+    <sys:String x:Key="verificationCodeInstruction">
+        Enter the code sent to your email to complete your registration.
+    </sys:String>
+    <sys:String x:Key="codeHint">Enter verification code</sys:String>
+    <sys:String x:Key="cancel">Cancel</sys:String>
+    <sys:String x:Key="verify">Verify</sys:String>
+
+    <sys:String x:Key="processCompletedTitle">Process completed</sys:String>
+    <sys:String x:Key="processCompletedInstruction">Your registration has been successfully completed.</sys:String>
+  
 
 
+    <!-- ========================================================= -->
+    <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                    -->
+    <!-- ========================================================= -->
 
-
-
-
-
-    <!-- ===== Result messages (Server responses) ===== -->
     <sys:String x:Key="msg_Success">Operation completed successfully.</sys:String>
     <sys:String x:Key="msg_LoginInvalidCredentials">Invalid username or password.</sys:String>
     <sys:String x:Key="msg_UserDuplicateEmail">Email is already registered.</sys:String>
@@ -134,6 +195,40 @@
     <sys:String x:Key="msg_ServerUnavailable">Server unavailable, please try again later.</sys:String>
     <sys:String x:Key="msg_NetworkLatency">Network latency detected.</sys:String>
     <sys:String x:Key="msg_UnknownError">An unexpected error occurred. Please try again.</sys:String>
+    <sys:String x:Key="msg_PasswordUpdated">Password updated successfully.</sys:String>
+    <sys:String x:Key="msg_FeatureUnavailable">This feature is not available yet.</sys:String>
+    <sys:String x:Key="msg_GuestFeatureOnly">This feature is only available for registered users.</sys:String>
+    <sys:String x:Key="msg_TutorialUnavailable">The tutorial is not available yet.</sys:String>
+    <sys:String x:Key="msg_GuestStatsUnavailable">Statistics are not available for guest users.</sys:String>
+    <sys:String x:Key="msg_ProfileOpenError">Could not open the profile page.</sys:String>
+    <sys:String x:Key="msg_CreateLobbyError">Could not create the game lobby.</sys:String>
+    <sys:String x:Key="msg_JoinPartyOpenError">Could not open the join party page.</sys:String>
+    <sys:String x:Key="msg_StatsUnavailable">Statistics are not available yet.</sys:String>
+    <sys:String x:Key="msg_FriendsOpenError">Could not open the friends list.</sys:String>
+    <sys:String x:Key="msg_ProfileChangeError">Unable to open the change data page.</sys:String>
+    <sys:String x:Key="msg_FriendRemoved">Friend removed successfully.</sys:String>
+    <sys:String x:Key="msg_ChatComingSoon">Chat feature coming soon.</sys:String>
+    <sys:String x:Key="msg_SelectLanguageFirst">Select a language before applying.</sys:String>
+    <sys:String x:Key="msg_EmptyVerificationCode">Please enter the verification code.</sys:String>
+    <sys:String x:Key="msg_VerificationSuccess">Verification completed successfully.</sys:String>
+    <sys:String x:Key="msg_InvalidVerificationCode">The verification code is incorrect.</sys:String>
+
+    <sys:String x:Key="msg_EmptyEmail">Email cannot be empty.</sys:String>
+    <sys:String x:Key="msg_RecoveryCodeSent">We have sent you a verification code.</sys:String>
+    <sys:String x:Key="msg_PasswordChangeSuccess">Your password has been updated successfully.</sys:String>
+
+
+
+    <!-- ========================================================= -->
+    <!--  Tittle                   -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="title_Success">Success</sys:String>
+    <sys:String x:Key="title_Warning">Warning</sys:String>
+    <sys:String x:Key="title_Error">Error</sys:String>
+    <sys:String x:Key="title_Fail">Failure</sys:String>
+    <sys:String x:Key="title_Information">Información</sys:String>
+    <sys:String x:Key="forgotPasswordTitle">Forgot Password</sys:String>
+    <sys:String x:Key="newPassword">New Password</sys:String>
 
 
 
@@ -141,8 +236,35 @@
 
 
 
+    <!-- Specific Module Messages -->
+    <sys:String x:Key="msg_SoundSettingsUpdated">Sound settings updated successfully.</sys:String>
+    <sys:String x:Key="msg_SoundSettingsError">Could not update sound settings.</sys:String>
 
+    <!-- Universal / Validation Codes -->
+    <sys:String x:Key="msg_EmptyCredentials">Fields cannot be empty.</sys:String>
+    <sys:String x:Key="msg_PasswordsDontMatch">Passwords do not match.</sys:String>
+    <sys:String x:Key="msg_InvalidPassword">The password does not meet the requirements.</sys:String>
+    <sys:String x:Key="msg_InvalidEmail">Email format is invalid.</sys:String>
+    <sys:String x:Key="msg_FieldLengthExceeded">Field length exceeds allowed limit.</sys:String>
+    <sys:String x:Key="msg_UsernameEmpty">Username cannot be empty.</sys:String>
+    <sys:String x:Key="msg_UsernameExists">Username is already taken.</sys:String>
+    <sys:String x:Key="msg_UserProfileNotFound">User profile not found.</sys:String>
+    <sys:String x:Key="msg_FriendsLoadError">Could not load friends list.</sys:String>
 
+    <!-- Interaction / Navigation -->
+    <sys:String x:Key="msg_ChatOpenError">Unable to open chat.</sys:String>
+    <sys:String x:Key="msg_ChatUnavailable">Chat feature is unavailable at this time.</sys:String>
+    <sys:String x:Key="msg_NavigationError">An error occurred while navigating.</sys:String>
+
+    <!-- Verification / Codes -->
+    <sys:String x:Key="msg_CodeSendingError">Error sending verification code.</sys:String>
+    <sys:String x:Key="msg_CodeSentSuccessfully">Verification code sent successfully.</sys:String>
+
+    <!-- Sound / UI Internal -->
+    <sys:String x:Key="msg_SoundVolumeInvalid">Invalid sound volume value.</sys:String>
+
+    <!-- Operations -->
+    <sys:String x:Key="msg_OperationInterrupted">Operation interrupted due to a validation failure.</sys:String>
 
 
 

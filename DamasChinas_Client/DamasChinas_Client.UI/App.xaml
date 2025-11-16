@@ -17,6 +17,9 @@
                 <!-- ===== Estilos personalizados de botones ===== -->
                 <ResourceDictionary Source="Styles/Buttons.xaml"/>
 
+                <!-- ===== Sombras globales ===== -->
+                <ResourceDictionary Source="Styles/Shadows.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
 
             <!-- ===== Converters globales ===== -->

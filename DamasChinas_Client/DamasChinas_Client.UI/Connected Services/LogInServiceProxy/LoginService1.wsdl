@@ -13,6 +13,7 @@
       <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
+      <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ILoginService_Login_InputMessage">

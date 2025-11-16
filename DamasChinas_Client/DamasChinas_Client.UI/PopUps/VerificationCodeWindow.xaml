@@ -1,0 +1,99 @@
+﻿<Window x:Class="DamasChinas_Client.UI.PopUps.VerificationCodeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="#AA000000"
+        AllowsTransparency="True"
+        Width="450"
+        Height="300">
+
+    <Grid>
+        <!-- Fondo oscuro -->
+        <Rectangle Fill="#66000000"/>
+
+        <!-- Contenedor principal -->
+        <Border Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="15"
+                Padding="40"
+                Width="420"
+                Height="280"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Effect="{StaticResource DefaultShadow}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Título -->
+                <TextBlock Text="{DynamicResource verificationCodeTitle}"
+                           Foreground="{DynamicResource MarbleYellowBrush}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Margin="0 0 0 20"/>
+
+                <!-- Texto + entrada código -->
+                <StackPanel Grid.Row="1"
+                            Orientation="Vertical"
+                            HorizontalAlignment="Center">
+
+                    <TextBlock Text="{DynamicResource verificationCodeInstruction}"
+                               Foreground="White"
+                               FontSize="16"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Width="320"
+                               HorizontalAlignment="Center"
+                               Margin="0 0 0 10"/>
+
+                    <TextBox x:Name="txtVerificationCode"
+                             Width="200"
+                             Height="35"
+                             FontSize="18"
+                             MaxLength="6"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             Background="#1E1E1E"
+                             Foreground="White"
+                             BorderBrush="{DynamicResource MarbleYellowBrush}"
+                             BorderThickness="2"
+                             Margin="0 0 0 10"/>
+                </StackPanel>
+
+                <!-- Botones -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0 20 0 0">
+
+                    <!-- Exit -->
+                    <Button x:Name="btnExit"
+                            Content="{DynamicResource exit}"
+                            Width="120"
+                            Height="40"
+                            Margin="0,0,10,0"
+                            Style="{StaticResource PopupPrimaryButton}"
+                            Click="OnExitClick"/>
+
+                    <!-- Verify -->
+                    <Button x:Name="btnVerify"
+                            Content="{DynamicResource verify}"
+                            Width="140"
+                            Height="40"
+                            Margin="0"
+                            Style="{StaticResource PopupPrimaryButton}"
+                            Click="OnVerifyClick"/>
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </Grid>
+
+</Window>

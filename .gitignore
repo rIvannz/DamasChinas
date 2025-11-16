@@ -11,4 +11,3 @@ obj/
 
 # Mantener configuración de VS Code
 !.vscode/
-/DamasChinas_Client/DamasChinas_Client.UI/Pages/ChangeData.xaml.cs

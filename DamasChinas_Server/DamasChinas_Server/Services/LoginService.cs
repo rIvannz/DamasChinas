@@ -1,8 +1,9 @@
-using System;
-using System.ServiceModel;
+using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
+using System;
+using System.ServiceModel;
 
 namespace DamasChinas_Server
 {
@@ -33,10 +34,12 @@ namespace DamasChinas_Server
 
 				callback.OnLoginSuccess(profile);
 			}
-			catch (Exception ex)
-			{
-				callback.OnLoginError($"Error al iniciar sesión: {ex.Message}");
-			}
-		}
-	}
+            catch (Exception ex)
+            {
+             
+                callback.OnLoginError(MessageCode.LoginInvalidCredentials);
+            }
+
+        }
+    }
 }

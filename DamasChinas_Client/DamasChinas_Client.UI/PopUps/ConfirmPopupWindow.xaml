@@ -1,0 +1,70 @@
+﻿<Window x:Class="DamasChinas_Client.UI.PopUps.ConfirmPopupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="#AA000000"
+        AllowsTransparency="True"
+        Width="420"
+        Height="250">
+
+    <Grid>
+
+        <Rectangle Fill="#66000000"/>
+
+        <Border Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="20"
+                Width="360"
+                Height="200"
+                Padding="20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Effect="{StaticResource DefaultShadow}">
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <!-- Title -->
+                <TextBlock x:Name="TitleText"
+                           Text="{DynamicResource title_Confirm}"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
+                           Foreground="White"
+                           FontSize="32"
+                           TextAlignment="Center"
+                           Margin="0 0 0 10"/>
+
+                <!-- Message -->
+                <TextBlock x:Name="MessageText"
+                           Text="{DynamicResource msg_LogoutConfirm}"
+                           Foreground="White"
+                           FontSize="18"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="0 0 0 20"/>
+
+                <!-- Buttons -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center" Cursor="">
+
+                    <Button x:Name="BtnYes"
+                            Content="{DynamicResource yesWord}"
+                            Style="{DynamicResource BaseGameButton}"
+                            Width="120"
+                            Margin="0 0 15 0"
+                            Click="OnYesClick"/>
+
+                    <Button x:Name="BtnNo"
+                            Content="{DynamicResource noWord}"
+                            Style="{DynamicResource BaseGameButton}"
+                            Width="120"
+                            Background="#444"
+                            Click="OnNoClick"/>
+
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+
+    </Grid>
+
+</Window>

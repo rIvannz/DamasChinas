@@ -10,16 +10,17 @@ namespace DamasChinas_Client.UI
     public class LoginCallbackHandler : ILoginServiceCallback
     {
         public event Action<PublicProfile> LoginSuccess;
-        public event Action<string> LoginError;
+        public event Action<MessageCode> LoginError;
 
         public void OnLoginSuccess(PublicProfile profile)
         {
             LoginSuccess?.Invoke(profile);
         }
 
-        public void OnLoginError(string message)
+        public void OnLoginError(MessageCode code)
         {
-            LoginError?.Invoke(message);
+            LoginError?.Invoke(code);
         }
     }
 }
+

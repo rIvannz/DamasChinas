@@ -226,6 +226,57 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UnknownError = 9999,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EmptyCredentials = 3001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordsDontMatch = 3002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 3003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameEmpty = 3004,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserProfileNotFound = 3005,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendsLoadError = 3006,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmail = 3007,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FieldLengthExceeded = 3008,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatOpenError = 3009,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NavigationError = 3010,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoundVolumeInvalid = 3011,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OperationInterrupted = 3012,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendingError = 3013,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSentSuccessfully = 3014,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatUnavailable = 3015,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoundSettingsUpdated = 4001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoundSettingsError = 4002,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

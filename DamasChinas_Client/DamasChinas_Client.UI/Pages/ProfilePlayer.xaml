@@ -109,7 +109,7 @@
 
                             <!-- Full Name -->
                             <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,20,0">
-                                <TextBlock Text="{DynamicResource fullname}" FontSize="25" Foreground="White"/>
+                                <TextBlock Text="{DynamicResource fullName}" FontSize="25" Foreground="White"/>
                                 <TextBlock x:Name="FullNameTextBlock" Text="Iván Rodríguez" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
@@ -154,7 +154,10 @@
                             <Button Style="{DynamicResource BaseGameButton}"
                                     Content="{DynamicResource logout}"
                                     Width="180" Height="44"
-                                    Background="#444" BorderBrush="#333"/>
+                                    Background="#444" BorderBrush="#333"
+                                    Click="OnLogoutClick"/>
+                            
+    
                         </StackPanel>
                     </Grid>
 

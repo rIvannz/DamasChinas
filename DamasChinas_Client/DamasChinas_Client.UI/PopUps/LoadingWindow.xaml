@@ -1,0 +1,50 @@
+﻿<Window x:Class="DamasChinas_Client.UI.PopUps.LoadingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DamasChinas_Client.UI.Utilities"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="#AA000000"
+        AllowsTransparency="True"
+        Width="480"
+        Height="240">
+
+    <Grid>
+        <!-- Fondo difuso -->
+        <Rectangle Fill="#66000000"/>
+
+        <!-- Contenedor principal -->
+        <Border Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="15"
+                Padding="30"
+                Width="430"
+                Height="190"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Effect="{StaticResource DefaultShadow}">
+
+            <StackPanel HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="10 0 0 0">
+
+                <!-- Texto LOADING (internacionalizado) -->
+                <TextBlock x:Name="TitleText"
+                           Text="{DynamicResource loadingTitle}"
+                           Foreground="White"
+                           FontSize="34"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
+                           Margin="0 0 0 12"
+                           HorizontalAlignment="Left"/>
+
+                <!-- Barra reutilizada -->
+                <local:LoaderBar x:Name="Loader"
+                                 Width="300"
+                                 HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
+
+
+

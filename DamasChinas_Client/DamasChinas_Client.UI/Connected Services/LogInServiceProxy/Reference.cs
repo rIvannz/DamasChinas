@@ -183,6 +183,86 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+    public enum MessageCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoginInvalidCredentials = 1001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserDuplicateEmail = 1002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserNotFound = 1003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MatchCreationFailed = 1100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ServerUnavailable = 2001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NetworkLatency = 2100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UnknownError = 9999,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EmptyCredentials = 3001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordsDontMatch = 3002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 3003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameEmpty = 3004,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserProfileNotFound = 3005,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendsLoadError = 3006,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmail = 3007,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FieldLengthExceeded = 3008,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatOpenError = 3009,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NavigationError = 3010,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoundVolumeInvalid = 3011,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OperationInterrupted = 3012,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendingError = 3013,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSentSuccessfully = 3014,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatUnavailable = 3015,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoundSettingsUpdated = 4001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SoundSettingsError = 4002,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInServiceProxy.ILoginService", CallbackContract=typeof(DamasChinas_Client.UI.LogInServiceProxy.ILoginServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface ILoginService {
@@ -201,7 +281,7 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         void OnLoginSuccess(DamasChinas_Client.UI.LogInServiceProxy.PublicProfile profile);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/OnLoginError")]
-        void OnLoginError(string message);
+        void OnLoginError(DamasChinas_Client.UI.LogInServiceProxy.MessageCode code);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

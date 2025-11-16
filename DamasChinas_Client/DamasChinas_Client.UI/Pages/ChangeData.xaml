@@ -203,7 +203,7 @@
 
                         <!-- Código -->
                         <TextBlock Text="{DynamicResource codePassword}" Foreground="White" FontSize="15"/>
-                        <TextBox x:Name="txtCode"
+                        <TextBox x:Name="txtVerificationCode"
                                  Width="420" Height="38"
                                  Background="White"
                                  Foreground="Black"

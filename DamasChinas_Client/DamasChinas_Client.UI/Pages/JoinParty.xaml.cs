@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 
 namespace DamasChinas_Client.UI.Pages
@@ -32,27 +34,37 @@ namespace DamasChinas_Client.UI.Pages
             _lobbyManager = new LobbyManager();
             _userId = userId;
             _username = username;
+
             LoadPublicLobbies();
         }
+
+        // ============================================================
+        // 🔹 Load Public Lobbies
+        // ============================================================
 
         private void LoadPublicLobbies()
         {
             try
             {
                 var publicLobbies = _lobbyManager.GetPublicLobbies() ?? new List<Lobby>();
+
                 var activeLobbies = publicLobbies
                     .Where(l => l.Members != null && l.Members.Length > 0)
                     .ToList();
 
                 var list = new List<LobbySummary>();
+
                 foreach (var lobby in activeLobbies)
                 {
                     int playerCount = lobby.Members?.Length ?? 0;
 
                     string hostUsername = $"User {lobby.HostUserId}";
                     var host = lobby.Members?.FirstOrDefault(m => m.IsHost);
+
                     if (host != null && !string.IsNullOrWhiteSpace(host.Username))
+                    {
                         hostUsername = host.Username;
+                    }
 
                     list.Add(new LobbySummary
                     {
@@ -60,8 +72,8 @@ namespace DamasChinas_Client.UI.Pages
                         HostUsername = hostUsername,
                         PlayerCount = $"{playerCount}/6",
                         IsPrivate = lobby.IsPrivate
-                            ? (string)FindResource("private")
-                            : (string)FindResource("public")
+                            ? MessageTranslator.GetLocalizedMessage("private")
+                            : MessageTranslator.GetLocalizedMessage("public")
                     });
                 }
 
@@ -69,88 +81,220 @@ namespace DamasChinas_Client.UI.Pages
                 lstPublicLobbies.ItemsSource = list;
                 lstPublicLobbies.Items.Refresh();
             }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[JoinParty.LoadPublicLobbies - Communication] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
+                    "error"
+                );
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[JoinParty.LoadPublicLobbies - Timeout] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
+                    "error"
+                );
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"{FindResource("joiningLobbyError")} ({ex.Message})",
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                Debug.WriteLine($"[JoinParty.LoadPublicLobbies - General] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    "error"
+                );
             }
         }
 
-        private void OnRefreshClick(object sender, RoutedEventArgs e) => LoadPublicLobbies();
+        private void OnRefreshClick(object sender, RoutedEventArgs e)
+        {
+            LoadPublicLobbies();
+        }
+
+        // ============================================================
+        // 🔹 Join by selected lobby
+        // ============================================================
 
         private void OnJoinSelectedClick(object sender, RoutedEventArgs e)
         {
-            if (lstPublicLobbies.SelectedItem is LobbySummary selected)
+            try
             {
-                TryJoinLobby(selected.Code);
+                if (lstPublicLobbies.SelectedItem is LobbySummary selected)
+                {
+                    TryJoinLobby(selected.Code);
+                }
+                else
+                {
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage("noLobbySelected"),
+                        "warning"
+                    );
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show(
-                    (string)FindResource("noLobbySelected"),
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                Debug.WriteLine($"[JoinParty.OnJoinSelectedClick] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    "error"
+                );
             }
         }
 
+        // ============================================================
+        // 🔹 Join by code
+        // ============================================================
+
         private void OnJoinByCodeClick(object sender, RoutedEventArgs e)
         {
-            var code = txtLobbyCode.Text.Trim();
-            if (string.IsNullOrEmpty(code))
+            try
             {
-                MessageBox.Show((string)FindResource("invalidCodeWarning"),
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                string code = txtLobbyCode.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(code))
+                {
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage("invalidCodeWarning"),
+                        "warning"
+                    );
+                    return;
+                }
+
+                TryJoinLobby(code);
             }
-            TryJoinLobby(code);
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[JoinParty.OnJoinByCodeClick] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    "error"
+                );
+            }
         }
+
+        // ============================================================
+        // 🔹 Try to join lobby
+        // ============================================================
 
         private void TryJoinLobby(string code)
         {
             try
             {
                 var lobby = _lobbyManager.JoinLobby(code, _userId, _username);
+
                 if (lobby == null)
-                    throw new Exception("No lobby returned");
+                {
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
+                        "error"
+                    );
+                    return;
+                }
 
                 NavigationService?.Navigate(new PreLobby(lobby, _userId, _username));
             }
-            catch (TimeoutException)
+            catch (TimeoutException ex)
             {
-                MessageBox.Show((string)FindResource("lobbyExpired"),
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                Debug.WriteLine($"[JoinParty.TryJoinLobby - Timeout] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
+                    "warning"
+                );
+
                 LoadPublicLobbies();
             }
-            catch (FaultException fault)
+            catch (FaultException ex)
             {
-                MessageBox.Show(fault.Message,
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                Debug.WriteLine($"[JoinParty.TryJoinLobby - Fault] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
+                    "error"
+                );
+
                 LoadPublicLobbies();
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[JoinParty.TryJoinLobby - Communication] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
+                    "error"
+                );
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[JoinParty.TryJoinLobby - InvalidOperation] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    "error"
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{FindResource("joiningLobbyError")} ({ex.Message})",
-                    (string)FindResource("errorTitle"),
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine($"[JoinParty.TryJoinLobby - General] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
+                    "error"
+                );
             }
         }
 
+        // ============================================================
+        // 🔹 Placeholder CodeBox
+        // ============================================================
+
         private void OnCodeBoxGotFocus(object sender, RoutedEventArgs e)
-            => txtCodePlaceholder.Visibility = Visibility.Collapsed;
+        {
+            txtCodePlaceholder.Visibility = Visibility.Collapsed;
+        }
 
         private void OnCodeBoxLostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtLobbyCode.Text))
+            {
                 txtCodePlaceholder.Visibility = Visibility.Visible;
+            }
         }
 
-        private void OnBackClick(object sender, RoutedEventArgs e) => NavigationService?.GoBack();
+        // ============================================================
+        // 🔹 Back Navigation
+        // ============================================================
+
+        private void OnBackClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                NavigationService?.GoBack();
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[JoinParty.OnBackClick - InvalidOperation] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    "error"
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[JoinParty.OnBackClick - General] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    "error"
+                );
+            }
+        }
     }
 }

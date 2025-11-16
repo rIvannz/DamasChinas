@@ -15,14 +15,13 @@
         <Setter Property="Background">
             <Setter.Value>
                 <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/wood-texture.png"
-                    Stretch="UniformToFill"
-                    TileMode="Tile"
-                    Viewport="0,0,0.3,0.3"
-                    ViewportUnits="Absolute"
-                    Opacity="0.9"/>
+                            Stretch="UniformToFill"
+                            TileMode="Tile"
+                            Viewport="0,0,0.3,0.3"
+                            ViewportUnits="Absolute"
+                            Opacity="0.9"/>
             </Setter.Value>
         </Setter>
-
 
         <Setter Property="BorderBrush" Value="{DynamicResource BoardEdgeBrush}"/>
 
@@ -30,27 +29,27 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd"
-                  CornerRadius="16"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
-                  Background="{TemplateBinding Background}">
+                            CornerRadius="16"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}">
                         <Border.Effect>
-                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.45"/>
+                            <DropShadowEffect Color="Black"
+                                              BlurRadius="10"
+                                              ShadowDepth="2"
+                                              Opacity="0.45"/>
                         </Border.Effect>
                         <ContentPresenter HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              RecognizesAccessKey="True"/>
+                                          VerticalAlignment="Center"
+                                          RecognizesAccessKey="True"/>
                     </Border>
 
-                
                     <ControlTemplate.Triggers>
 
-                    
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="Opacity" Value="0.8"/>
                         </Trigger>
 
-                  
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="bd" Property="RenderTransform">
                                 <Setter.Value>
@@ -59,7 +58,6 @@
                             </Setter>
                         </Trigger>
 
-                        
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.6"/>
                         </Trigger>
@@ -70,4 +68,50 @@
         </Setter>
     </Style>
 
+
+    <!-- =================================================== -->
+    <!--   NUEVOS ESTILOS PARA POPUPS  -->
+    <!-- =================================================== -->
+
+
+    <!-- Botón primario para popups (confirmar / aceptar) -->
+    <Style x:Key="PopupPrimaryButton"
+           TargetType="Button"
+           BasedOn="{StaticResource BaseGameButton}">
+
+        <!-- Más compacto -->
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="FontSize" Value="16"/>
+
+        <!-- Fondo dorado (sin textura de madera) -->
+        <Setter Property="Background" Value="{DynamicResource MarbleYellowBrush}"/>
+
+        <!-- Texto oscuro para contrastar -->
+        <Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
+
+        <!-- Borde dorado -->
+        <Setter Property="BorderBrush" Value="{DynamicResource MarbleYellowBrush}"/>
+    </Style>
+
+
+    <!-- Botón secundario para popups (cancelar / cerrar) -->
+    <Style x:Key="PopupSecondaryButton"
+           TargetType="Button"
+           BasedOn="{StaticResource BaseGameButton}">
+
+        <!-- Más compacto -->
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="FontSize" Value="16"/>
+
+        <!-- Fondo gris oscuro (sin textura de madera) -->
+        <Setter Property="Background" Value="#222222"/>
+
+        <!-- Texto claro -->
+        <Setter Property="Foreground" Value="{DynamicResource TextInverseBrush}"/>
+
+        <!-- Borde dorado -->
+        <Setter Property="BorderBrush" Value="{DynamicResource MarbleYellowBrush}"/>
+    </Style>
+
 </ResourceDictionary>
+
