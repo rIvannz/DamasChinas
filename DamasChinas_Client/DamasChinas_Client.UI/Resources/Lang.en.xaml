@@ -20,6 +20,17 @@
     <sys:String x:Key="noWord">No</sys:String>
 
     <!-- ========================================================= -->
+    <!-- ADD FRIENDS                           -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="addFriend">Add friend</sys:String>
+    <sys:String x:Key="pendingFriendRequests">Friend requests</sys:String>
+
+    <sys:String x:Key="friendRequestSentTitle">Friend request sent</sys:String>
+    <sys:String x:Key="friendRequestSentOk">Your friend request was sent successfully.</sys:String>
+
+    <sys:String x:Key="msg_FriendUserNotFound">The user you want to add was not found.</sys:String>
+ 
+    <!-- ========================================================= -->
     <!--  MAIN MENU / CONFIGURATION                                -->
     <!-- ========================================================= -->
 
@@ -110,6 +121,11 @@
     <!-- Extra UI -->
     <sys:String x:Key="userProfile">User Profile</sys:String>
     <sys:String x:Key="chatError">Chat could not be opened.</sys:String>
+    <sys:String x:Key="reviewRequest">Review request</sys:String>
+    <sys:String x:Key="acceptRequest">Accept request</sys:String>
+    <sys:String x:Key="rejectRequest">Reject request</sys:String>
+
+
 
     <!-- ========================================================= -->
     <!--  LOGIN                                                     -->

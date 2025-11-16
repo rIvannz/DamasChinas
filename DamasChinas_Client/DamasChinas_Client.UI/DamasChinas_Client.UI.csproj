@@ -98,6 +98,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Models\LobbySummary.cs" />
+    <Compile Include="Pages\AddFriend.xaml.cs">
+      <DependentUpon>AddFriend.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
@@ -110,11 +113,17 @@
     <Compile Include="Pages\MatchRoom.xaml.cs">
       <DependentUpon>MatchRoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PendingFriendRequests.xaml.cs">
+      <DependentUpon>PendingFriendRequests.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
     <Compile Include="PopUps\ConfirmPopupWindow.xaml.cs">
       <DependentUpon>ConfirmPopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PopUps\FriendRequestSent.xaml.cs">
+      <DependentUpon>FriendRequestSent.xaml</DependentUpon>
     </Compile>
     <Compile Include="PopUps\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
@@ -150,6 +159,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\AddFriend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <!-- Páginas -->
     <Page Include="Pages\ChangeData.xaml" />
     <Compile Include="Pages\ChangeData.xaml.cs">
@@ -195,6 +208,10 @@
     <Compile Include="Pages\MenuRegisteredPlayer.xaml.cs">
       <DependentUpon>MenuRegisteredPlayer.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\PendingFriendRequests.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\PreLobby.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -216,6 +233,10 @@
       <DependentUpon>SignIn.xaml</DependentUpon>
     </Compile>
     <Page Include="PopUps\ConfirmPopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PopUps\FriendRequestSent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

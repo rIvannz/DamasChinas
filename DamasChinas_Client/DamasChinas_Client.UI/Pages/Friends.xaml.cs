@@ -209,6 +209,43 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        private void OnAddFriendClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                NavigationService?.Navigate(new AddFriend());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Friends.OnAddFriendClick] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    "error");
+            }
+        }
+
+        private void OnViewPendingRequestsClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                NavigationService?.Navigate(new PendingFriendRequests());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Friends.OnViewPendingRequestsClick] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    "error");
+            }
+        }
+
+
+
+
+
+
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
             try

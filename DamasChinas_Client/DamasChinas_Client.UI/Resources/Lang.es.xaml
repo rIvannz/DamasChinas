@@ -17,6 +17,21 @@
     <sys:String x:Key="noWord">No</sys:String>
 
     <!-- ========================================================= -->
+    <!--  Modulo de agregar amigos                     -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="addFriend">Agregar amigo</sys:String>
+    <sys:String x:Key="pendingFriendRequests">Solicitudes de amistad</sys:String>
+
+    <!-- Para la ventana de enviado -->
+    <sys:String x:Key="friendRequestSentTitle">Solicitud enviada</sys:String>
+    <sys:String x:Key="friendRequestSentOk">Tu solicitud fue enviada correctamente.</sys:String>
+
+    <!-- Mensajes de error relacionados -->
+    <sys:String x:Key="msg_FriendUserNotFound">El usuario que quieres agregar no se encontró.</sys:String>
+
+
+    <!-- ========================================================= -->
     <!--  MENÚ PRINCIPAL / CONFIGURACIÓN                           -->
     <!-- ========================================================= -->
     <sys:String x:Key="gameTitle">DAMAS CHINAS</sys:String>
@@ -99,6 +114,9 @@
     <!-- Extra UI -->
     <sys:String x:Key="chatError">No se pudo abrir el chat.</sys:String>
     <sys:String x:Key="userProfile">Perfil de usuario</sys:String>
+    <sys:String x:Key="reviewRequest">Revisar solicitud</sys:String>
+    <sys:String x:Key="acceptRequest">Aceptar solicitud</sys:String>
+    <sys:String x:Key="rejectRequest">Rechazar solicitud</sys:String>
 
     <!-- ========================================================= -->
     <!--  LOGIN                                                     -->
