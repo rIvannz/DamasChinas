@@ -7,7 +7,6 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class ChangeData : Page
@@ -26,8 +25,6 @@ namespace DamasChinas_Client.UI.Pages
             LoadProfileData();
         }
 
-    
-
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -43,13 +40,13 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
+            catch (NullReferenceException ex)
             {
-                Debug.WriteLine($"[ChangeData.OnBackClick - General] {ex.Message}");
+                Debug.WriteLine($"[ChangeData.OnBackClick - NullNavigation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Warning
+                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    PopupType.Error
                 );
             }
         }
@@ -58,7 +55,6 @@ namespace DamasChinas_Client.UI.Pages
         {
             TryExecuteAction(() =>
             {
-        
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_CodeSentSuccessfully"),
                     PopupType.Success
@@ -82,7 +78,6 @@ namespace DamasChinas_Client.UI.Pages
             }, "msg_NavigationError");
         }
 
-     
         private void OnSaveUsernameClick(object sender, RoutedEventArgs e)
         {
             TryExecuteAction(() =>
@@ -160,15 +155,6 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ChangeData.ChangeUsername - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
-            }
         }
 
         private void UpdateUsernameState(string newUsername)
@@ -182,13 +168,10 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
- 
-
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
         {
             TryExecuteAction(() =>
             {
-           
                 if (!ValidateVerificationCodeInput())
                 {
                     return;
@@ -199,13 +182,11 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-             
                 if (!ValidatePasswordStrength(txtPassword.Password))
                 {
                     return;
                 }
 
-           
                 string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
                 ChangePassword(_profile.Username, hashedPassword);
             }, "msg_UnknownError");
@@ -213,7 +194,6 @@ namespace DamasChinas_Client.UI.Pages
 
         private bool ValidateVerificationCodeInput()
         {
-          
             string code = txtVerificationCode.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(code))
@@ -252,26 +232,16 @@ namespace DamasChinas_Client.UI.Pages
             return true;
         }
 
-        private bool ValidatePasswordStrength(string password)
+        private static bool ValidatePasswordStrength(string password)
         {
             try
             {
                 Validator.ValidatePassword(password);
-               
                 return true;
             }
             catch (ArgumentException ex)
             {
                 Debug.WriteLine($"[ChangeData.ValidatePasswordStrength - Argument] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_InvalidPassword"),
-                    PopupType.Warning
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ChangeData.ValidatePasswordStrength - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_InvalidPassword"),
@@ -294,7 +264,6 @@ namespace DamasChinas_Client.UI.Pages
 
                     if (result.Success)
                     {
-                 
                         MessageHelper.ShowPopup(message, PopupType.Success);
                         ClearPasswordInputs();
                     }
@@ -331,25 +300,13 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ChangeData.ChangePassword - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
-            }
         }
 
         private void ClearPasswordInputs()
         {
             txtPassword.Password = string.Empty;
             txtConfirmPassword.Password = string.Empty;
-            
         }
-
-    
 
         private void LoadProfileData()
         {
@@ -372,16 +329,16 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (NullReferenceException ex)
             {
-                Debug.WriteLine($"[ChangeData.LoadProfileData - NullReference] {ex.Message}");
+                Debug.WriteLine($"[ChangeData.LoadProfileData - NullRef] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UserProfileNotFound"),
+                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[ChangeData.LoadProfileData - General] {ex.Message}");
+                Debug.WriteLine($"[ChangeData.LoadProfileData - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
@@ -405,9 +362,9 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
+            catch (NullReferenceException ex)
             {
-                Debug.WriteLine($"[ChangeData.TryExecuteAction - General] {ex.Message}");
+                Debug.WriteLine($"[ChangeData.TryExecuteAction - NullReference] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(errorKey),

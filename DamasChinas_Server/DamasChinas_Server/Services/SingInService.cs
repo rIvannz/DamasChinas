@@ -149,7 +149,7 @@ namespace DamasChinas_Server
                     createdAt = data.Created;
                 }
 
-                if (DateTime.Now - createdAt > TimeSpan.FromMinutes(5))
+                if (DateTime.UtcNow - createdAt > TimeSpan.FromMinutes(5))
                 {
                     lock (_codes)
                     {

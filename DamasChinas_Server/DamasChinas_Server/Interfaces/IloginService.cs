@@ -12,7 +12,8 @@ namespace DamasChinas_Server
 		void Login(LoginRequest loginRequest);
 	}
 
-	public interface ILoginCallback : ISessionCallback
+    [ServiceContract]
+    public interface ILoginCallback : ISessionCallback
 	{
 		[OperationContract(IsOneWay = true)]
 		void OnLoginSuccess(PublicProfile profile);

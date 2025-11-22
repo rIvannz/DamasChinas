@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 namespace DamasChinas_Server
@@ -10,7 +12,7 @@ namespace DamasChinas_Server
 
 		private static readonly ConcurrentDictionary<string, IChatCallback> clients = new ConcurrentDictionary<string, IChatCallback>();
 
-		private ChatRepository _repo = new ChatRepository();
+		private readonly ChatRepository _repo = new ChatRepository();
 
 		public void RegistrateClient(string username)
 		{
@@ -21,29 +23,36 @@ namespace DamasChinas_Server
 			}
 		}
 
-		public void SendMessage(Message message)
+        public void SendMessage(Message message)
+        {
+
+            string idUserSender = message.UsarnameSender;
+            int idUserRecipient = _repo.GetIdByUsername(message.DestinationUsername);
+
+            _repo.SaveMessage(idUserSender, idUserRecipient, message.Text);
+
+            if (clients.ContainsKey(message.DestinationUsername))
+            {
+                try
+                {
+                    clients[message.DestinationUsername].ReceiveMessage(message);
+                }
+                catch (CommunicationException ex)
+                {
+                    Debug.WriteLine($"[SendMessage] Error comunicando con el cliente '{message.DestinationUsername}': {ex.Message}");
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    Debug.WriteLine($"[SendMessage] Canal cerrado para '{message.DestinationUsername}': {ex.Message}");
+                }
+ 
+            }
+        }
+
+
+        public Message[] GetHistoricalMessages(string usernameSender, string usernameRecipient)
 		{
-
-			string idUserSender = message.UsarnameSender;
-			int idUserRecipient = _repo.GetIdByUsername(message.DestinationUsername);
-
-			_repo.SaveMessage(idUserSender, idUserRecipient, message.Text);
-
-			if (clients.ContainsKey(message.DestinationUsername))
-			{
-				try
-				{
-					clients[message.DestinationUsername].ReceiveMessage(message);
-				}
-				catch
-				{
-				}
-			}
-		}
-
-		public Message[] GetHistoricalMessages(string usernameSender, string usernameDestino)
-		{
-			return _repo.GetChatByUsername(usernameSender, usernameDestino).ToArray();
+			return _repo.GetChatByUsername(usernameSender, usernameRecipient).ToArray();
 		}
 
 	}

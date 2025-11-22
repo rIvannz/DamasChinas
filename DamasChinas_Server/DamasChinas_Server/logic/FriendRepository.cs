@@ -17,10 +17,7 @@ namespace DamasChinas_Server
             return new damas_chinasEntities();
         }
 
-        // ============================================================
-        // ================= VALIDACIONES REUTILIZABLES ===============
-        // ============================================================
-
+  
         private void EnsureDifferentUsers(int u1, int u2)
         {
             if (u1 == u2)

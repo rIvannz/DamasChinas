@@ -8,6 +8,7 @@ using DamasChinas_Server.Dtos;
 
 namespace DamasChinas_Server.Interfaces
 {
+    [ServiceContract]
     public interface ILobbyCallback
     {
         [OperationContract(IsOneWay = true)]
@@ -57,7 +58,7 @@ namespace DamasChinas_Server.Interfaces
 
 
         [OperationContract]
-        bool StartGame(string code); // Notifica vía callback
+        bool StartGame(string code); 
     }
 }
 
