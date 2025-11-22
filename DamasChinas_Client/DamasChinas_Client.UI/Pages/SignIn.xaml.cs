@@ -151,7 +151,7 @@ namespace DamasChinas_Client.UI.Pages
 
             MessageHelper.ShowPopup(
                 MessageTranslator.GetLocalizedMessage("msg_CodeSentSuccessfully"),
-                "success"
+                PopupType.Success
             );
 
             return true;
@@ -177,13 +177,13 @@ namespace DamasChinas_Client.UI.Pages
 
         private void ShowWarning(string code)
         {
-            MessageHelper.ShowPopup(MessageTranslator.GetLocalizedMessage(code), "warning");
+            MessageHelper.ShowPopup(MessageTranslator.GetLocalizedMessage(code), PopupType.Warning);
         }
 
 
-        private void ShowError(string msg)
+        private static void ShowError(string msg)
         {
-            MessageHelper.ShowPopup(msg, "error");
+            MessageHelper.ShowPopup(msg, PopupType.Error);
         }
 
 
@@ -207,26 +207,17 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
-        private void ShowSuccessPopup()
+        private static void ShowSuccessPopup()
         {
             MessageHelper.ShowPopup(
                 MessageTranslator.GetLocalizedMessage("msg_AccountCreated"),
-                "success"
+                PopupType.Success
             );
         }
 
+        
 
-        private void HandleUnexpectedError(Exception ex)
-        {
-            Debug.WriteLine($"[SignIn] {ex.Message}");
-            MessageHelper.ShowPopup(
-                MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                "error"
-            );
-        }
-
-
-        private async void CloseLoaderIfOpen(LoadingWindow loader)
+        private static async void CloseLoaderIfOpen(LoadingWindow loader)
         {
             if (loader != null)
             {
@@ -264,16 +255,6 @@ private bool ValidatePassword()
             };
         }
 
-        private void ClearInputs()
-        {
-            txtFirstName.Clear();
-            txtLastName.Clear();
-            txtEmail.Clear();
-            txtUsername.Clear();
-            txtPassword.Clear();
-            txtConfirmPassword.Clear();
-        }
-
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
@@ -287,7 +268,7 @@ private bool ValidatePassword()
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        "warning"
+                        PopupType.Warning
                     );
                 }
             }
@@ -297,7 +278,7 @@ private bool ValidatePassword()
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -316,7 +297,7 @@ private bool ValidatePassword()
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -335,7 +316,7 @@ private bool ValidatePassword()
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }

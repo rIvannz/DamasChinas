@@ -1,3 +1,4 @@
+using DamasChinas_Client.UI.Utilities;
 using System.Windows;
 
 namespace DamasChinas_Client.UI
@@ -6,8 +7,12 @@ namespace DamasChinas_Client.UI
 	{
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			base.OnStartup(e);
-			// SoundManager.Initialize(); // inicia la música
-		}
+            bool enableMusic = false;
+
+            if (enableMusic)
+            {
+                SoundManager.Initialize();
+            }
+        }
 	}
 }

@@ -230,7 +230,9 @@ namespace DamasChinas_Server
             return usuario;
         }
 
-        private static perfiles CreatePerfil(damas_chinasEntities db, usuarios usuario, UserDto userDto)
+
+        // aca le quite el return de void y el tipo perfiles.
+        private static void CreatePerfil(damas_chinasEntities dataBase, usuarios usuario, UserDto userDto)
         {
             var perfil = new perfiles
             {
@@ -243,9 +245,8 @@ namespace DamasChinas_Server
                 ultimo_login = null
             };
 
-            db.perfiles.Add(perfil);
-            SaveChangesSafely(db);
-            return perfil;
+            dataBase.perfiles.Add(perfil);
+            SaveChangesSafely(dataBase);
         }
 
         private static void SaveChangesSafely(damas_chinasEntities db)

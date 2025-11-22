@@ -27,7 +27,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_SoundSettingsError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -62,7 +62,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_SoundVolumeInvalid"),
-                    "warning"
+                    PopupType.Warning
                 );
             }
             catch (InvalidOperationException ex)
@@ -71,7 +71,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_SoundSettingsError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -100,7 +100,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_SoundSettingsUpdated"),
-                    "success"
+                    PopupType.Success
                 );
             }
             catch (ArgumentOutOfRangeException ex)
@@ -109,7 +109,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_SoundVolumeInvalid"),
-                    "warning"
+                    PopupType.Warning
                 );
             }
             catch (InvalidOperationException ex)
@@ -118,7 +118,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_SoundSettingsError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -127,7 +127,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error 
                 );
             }
         }
@@ -146,7 +146,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        "warning"
+                        PopupType.Warning
                     );
                 }
             }
@@ -156,7 +156,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -165,7 +165,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }

@@ -41,7 +41,7 @@ namespace DamasChinas_Client.UI.PopUps
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("msg_EmptyVerificationCode"),
-                        "warning"
+                        PopupType.Warning
                     );
                     return;
                 }
@@ -56,7 +56,7 @@ namespace DamasChinas_Client.UI.PopUps
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }

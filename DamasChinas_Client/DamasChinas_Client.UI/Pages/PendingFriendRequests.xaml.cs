@@ -50,19 +50,19 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("msg_NoPendingRequests"),
-                        "info");
+                        PopupType.Error);
                     return;
                 }
             }
             catch (FaultException fault)
             {
-                MessageHelper.ShowPopup(fault.Message, "warning");
+                MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
             }
             catch (Exception ex)
             {
                 MessageHelper.ShowPopup(
                     "Error al comunicarse con el servidor: " + ex.Message,
-                    "error");
+                    PopupType.Error);
             }
         }
 
@@ -76,7 +76,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error");
+                    PopupType.Error);
             }
         }
 
@@ -103,18 +103,18 @@ namespace DamasChinas_Client.UI.Pages
 
                         MessageHelper.ShowPopup(
                             MessageTranslator.GetLocalizedMessage("msg_FriendRequestAccepted"),
-                            "success");
+                            PopupType.Success);
                     }
                 }
                 catch (FaultException fault)
                 {
-                    MessageHelper.ShowPopup(fault.Message, "warning");
+                    MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
                 }
                 catch (Exception ex)
                 {
                     MessageHelper.ShowPopup(
                         "Error al aceptar la solicitud: " + ex.Message,
-                        "error");
+                        PopupType.Error);
                 }
             }
         }
@@ -142,18 +142,18 @@ namespace DamasChinas_Client.UI.Pages
 
                         MessageHelper.ShowPopup(
                             MessageTranslator.GetLocalizedMessage("msg_FriendRequestRejected"),
-                            "info");
+                            PopupType.Info);
                     }
                 }
                 catch (FaultException fault)
                 {
-                    MessageHelper.ShowPopup(fault.Message, "warning");
+                    MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
                 }
                 catch (Exception ex)
                 {
                     MessageHelper.ShowPopup(
                         "Error al rechazar la solicitud: " + ex.Message,
-                        "error");
+                        PopupType.Error);
                 }
             }
         }

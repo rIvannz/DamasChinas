@@ -9,8 +9,6 @@ namespace DamasChinasHost
 	{
 		static void Main(string[] args)
 		{
-			Console.Title = "DAMAS";
-
 			ServiceHost[] hosts =
 			{
 				new ServiceHost(typeof(LoginService)),

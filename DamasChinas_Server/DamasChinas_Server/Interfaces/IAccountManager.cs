@@ -19,7 +19,7 @@ namespace DamasChinas_Server.Interfaces
 
    
         [OperationContract]
-        OperationResult ChangePassword(string correo, string newPassword);
+        OperationResult ChangePassword(string email, string newPassword);
     }
 }
 

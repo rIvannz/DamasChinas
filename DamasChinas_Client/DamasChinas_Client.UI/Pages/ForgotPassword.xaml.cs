@@ -56,7 +56,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - InvalidEmail] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_InvalidEmail"),
-                    "warning"
+                    PopupType.Warning
                 );
             }
             catch (InvalidOperationException ex)
@@ -64,7 +64,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -72,7 +72,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - General] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                   PopupType.Error
                 );
             }
         }
@@ -90,7 +90,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("msg_EmptyCredentials"),
-                        "warning"
+                        PopupType.Warning
                     );
                     return;
                 }
@@ -99,7 +99,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("msg_PasswordsDontMatch"),
-                        "error"
+                        PopupType.Warning
                     );
                     return;
                 }
@@ -120,7 +120,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_PasswordUpdated"),
-                    "success"
+                    PopupType.Warning
                 );
 
              
@@ -131,7 +131,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - InvalidPassword] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_InvalidPassword"),
-                    "warning"
+                    PopupType.Warning
                 );
             }
             catch (InvalidOperationException ex)
@@ -139,7 +139,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Warning
                 );
             }
             catch (Exception ex)
@@ -147,7 +147,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - General] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -182,7 +182,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnBackClick] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -200,7 +200,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -209,7 +209,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -225,7 +225,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnLanguageClick] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }

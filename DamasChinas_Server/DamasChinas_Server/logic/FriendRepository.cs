@@ -8,237 +8,259 @@ using System.ServiceModel;
 
 namespace DamasChinas_Server
 {
-        public class FriendRepository
+    public class FriendRepository
+    {
+        private readonly RepositoryUsers _userRepo = new RepositoryUsers();
+
+        protected virtual damas_chinasEntities CréateDbContext()
         {
-                private readonly RepositoryUsers _userRepo = new RepositoryUsers();
+            return new damas_chinasEntities();
+        }
 
-                protected virtual damas_chinasEntities CreateDbContext()
+        // ============================================================
+        // ================= VALIDACIONES REUTILIZABLES ===============
+        // ============================================================
+
+        private void EnsureDifferentUsers(int u1, int u2)
+        {
+            if (u1 == u2)
+                throw new FaultException("Un usuario no puede interactuar consigo mismo.");
+        }
+
+        private void EnsureUsersExist(damas_chinasEntities db, int u1, int u2)
+        {
+            bool exist1 = db.usuarios.Any(u => u.id_usuario == u1);
+            bool exist2 = db.usuarios.Any(u => u.id_usuario == u2);
+
+            if (!exist1 || !exist2)
+                throw new FaultException("Uno o ambos usuarios no existen.");
+        }
+
+        private void EnsureNotFriends(damas_chinasEntities db, int u1, int u2)
+        {
+            if (FriendshipExists(db, u1, u2))
+                throw new FaultException("Los usuarios ya son amigos.");
+        }
+
+        private void EnsureFriends(damas_chinasEntities db, int u1, int u2)
+        {
+            if (!FriendshipExists(db, u1, u2))
+                throw new FaultException("Los usuarios no son amigos.");
+        }
+
+        private void EnsureNotBlocked(damas_chinasEntities db, int u1, int u2)
+        {
+            if (IsBlocked(db, u1, u2))
+                throw new FaultException("La relación está bloqueada entre los usuarios.");
+        }
+
+        private void EnsureNotBlockedSelf(int u1, int u2)
+        {
+            if (u1 == u2)
+                throw new InvalidOperationException("Un usuario no puede bloquearse a sí mismo.");
+        }
+
+        private void EnsureNoPendingRequest(damas_chinasEntities db, int u1, int u2)
+        {
+            if (PendingRequestExists(db, u1, u2))
+                throw new FaultException("Ya existe una solicitud pendiente entre los usuarios.");
+        }
+
+        private void EnsurePendingRequestExists(damas_chinasEntities db, int sender, int receiver)
+        {
+            if (!PendingRequestExists(db, sender, receiver))
+                throw new FaultException("No existe una solicitud pendiente entre los usuarios.");
+        }
+
+        // ============================================================
+        // ==================== CHECKERS BÁSICOS ======================
+        // ============================================================
+
+        private bool FriendshipExists(damas_chinasEntities db, int u1, int u2)
+        {
+            return db.amistades.Any(a =>
+                (a.id_usuario1 == u1 && a.id_usuario2 == u2) ||
+                (a.id_usuario1 == u2 && a.id_usuario2 == u1));
+        }
+
+        private bool IsBlocked(damas_chinasEntities db, int u1, int u2)
+        {
+            return db.bloqueos.Any(b =>
+                (b.id_bloqueador == u1 && b.id_bloqueado == u2) ||
+                (b.id_bloqueador == u2 && b.id_bloqueado == u1));
+        }
+
+        private bool PendingRequestExists(damas_chinasEntities db, int u1, int u2)
+        {
+            return db.solicitudes_amistad.Any(s =>
+                ((s.id_emisor == u1 && s.id_receptor == u2) ||
+                 (s.id_emisor == u2 && s.id_receptor == u1))
+                 && s.estado == "pendiente");
+        }
+
+        private FriendDto MapToFriendDto(usuarios user)
+        {
+            var profile = user.perfiles.FirstOrDefault();
+            string username = profile?.username ?? "N/A";
+            bool isOnline = !string.IsNullOrWhiteSpace(username) && SessionManager.IsOnline(username);
+
+            return new FriendDto
+            {
+                IdFriend = user.id_usuario,
+                Username = username,
+                ConnectionState = isOnline,
+                Avatar = profile?.imagen_perfil ?? "default.png"
+            };
+        }
+
+        private (int senderId, int receiverId) GetUserIds(string senderUsername, string receiverUsername)
+        {
+            int senderId = _userRepo.GetUserIdByUsername(senderUsername);
+            int receiverId = _userRepo.GetUserIdByUsername(receiverUsername);
+            EnsureDifferentUsers(senderId, receiverId);
+            return (senderId, receiverId);
+        }
+
+        // ============================================================
+        // ===================== HELPERS BLOQUEO ======================
+        // ============================================================
+
+        private void ApplyBlock(damas_chinasEntities db, int blockerId, int blockedId)
+        {
+            if (IsBlocked(db, blockerId, blockedId))
+                throw new InvalidOperationException("El usuario ya está bloqueado.");
+
+            RemoveFriendshipIfExists(db, blockerId, blockedId);
+            RemovePendingRequests(db, blockerId, blockedId);
+
+            db.bloqueos.Add(new bloqueos
+            {
+                id_bloqueador = blockerId,
+                id_bloqueado = blockedId,
+                fecha_bloqueo = DateTime.Now
+            });
+        }
+
+        private void RemoveBlock(damas_chinasEntities db, int blockerId, int blockedId)
+        {
+            var blockEntry = db.bloqueos.FirstOrDefault(b =>
+                b.id_bloqueador == blockerId &&
+                b.id_bloqueado == blockedId);
+
+            if (blockEntry == null)
+                throw new InvalidOperationException("No existe un bloqueo entre los usuarios.");
+
+            db.bloqueos.Remove(blockEntry);
+        }
+
+        private void RemoveFriendshipIfExists(damas_chinasEntities db, int u1, int u2)
+        {
+            var friendship = db.amistades.FirstOrDefault(a =>
+                (a.id_usuario1 == u1 && a.id_usuario2 == u2) ||
+                (a.id_usuario1 == u2 && a.id_usuario2 == u1));
+
+            if (friendship != null)
+                db.amistades.Remove(friendship);
+        }
+
+        private void RemovePendingRequests(damas_chinasEntities db, int u1, int u2)
+        {
+            var pending = db.solicitudes_amistad
+                .Where(s =>
+                    (s.id_emisor == u1 && s.id_receptor == u2) ||
+                    (s.id_emisor == u2 && s.id_receptor == u1))
+                .ToList();
+
+            if (pending.Any())
+                db.solicitudes_amistad.RemoveRange(pending);
+        }
+
+        // ============================================================
+        // ===================== MÉTODOS PÚBLICOS ======================
+        // ============================================================
+
+        public List<FriendDto> GetFriends(string username)
+        {
+            int id = _userRepo.GetUserIdByUsername(username);
+
+            using (var db = CréateDbContext())
+            {
+                var friendships = db.amistades
+                    .Include(a => a.usuarios.perfiles)
+                    .Include(a => a.usuarios1.perfiles)
+                    .Where(a => a.id_usuario1 == id || a.id_usuario2 == id)
+                    .ToList();
+
+                return friendships.Select(a =>
                 {
-                        return new damas_chinasEntities();
-                }
+                    var friend = (a.id_usuario1 == id) ? a.usuarios1 : a.usuarios;
+                    return MapToFriendDto(friend);
+                }).ToList();
+            }
+        }
 
-                public List<FriendDto> GetFriends(string username)
+        public List<FriendDto> GetFriendRequests(string username)
+        {
+            int userId = _userRepo.GetUserIdByUsername(username);
+
+            using (var db = CréateDbContext())
+            {
+                var requests = db.solicitudes_amistad
+                    .Include(s => s.usuarios.perfiles)
+                    .Where(s => s.id_receptor == userId && s.estado == "pendiente")
+                    .ToList();
+
+                return requests.Select(r => MapToFriendDto(r.usuarios)).ToList();
+            }
+        }
+
+        public bool SendFriendRequest(string senderUsername, string receiverUsername)
+        {
+            var ids = GetUserIds(senderUsername, receiverUsername);
+
+            using (var db = CréateDbContext())
+            {
+                EnsureUsersExist(db, ids.senderId, ids.receiverId);
+                EnsureNotFriends(db, ids.senderId, ids.receiverId);
+                EnsureNotBlocked(db, ids.senderId, ids.receiverId);
+                EnsureNoPendingRequest(db, ids.senderId, ids.receiverId);
+
+                db.solicitudes_amistad.Add(new solicitudes_amistad
                 {
-                        int id = _userRepo.GetUserIdByUsername(username);
+                    id_emisor = ids.senderId,
+                    id_receptor = ids.receiverId,
+                    fecha_envio = DateTime.Now,
+                    estado = "pendiente"
+                });
 
-                        using (var db = CreateDbContext())
-                        {
-                                var friends = db.amistades
-                                                .Include(a => a.usuarios.perfiles)
-                                                .Include(a => a.usuarios1.perfiles)
-                                                .Where(a => a.id_usuario1 == id || a.id_usuario2 == id)
-                                                .ToList();
-
-                                if (friends == null || friends.Count == 0)
-                                        return new List<FriendDto>();
-
-                                var friendships = friends.Select(a =>
-                                {
-                                        var friendUser = a.id_usuario1 == id ? a.usuarios1 : a.usuarios;
-
-                                        var profile = friendUser.perfiles.FirstOrDefault();
-
-                                        string friendUsername = profile?.username ?? "N/A";
-                                        bool isOnline = !string.IsNullOrWhiteSpace(friendUsername) &&
-                                                        SessionManager.IsOnline(friendUsername);
-
-                                        return new FriendDto
-                                        {
-                                                IdFriend = friendUser.id_usuario,
-                                                Username = friendUsername,
-                                                ConnectionState = isOnline,
-                                                Avatar = profile?.imagen_perfil ?? "default.png"
-                                        };
-                                }).ToList();
-
-                                return friendships;
-                        }
-                }
-
-                public List<FriendDto> GetFriendRequests(string username)
-                {
-                        int userId = _userRepo.GetUserIdByUsername(username);
-
-                        using (var db = CreateDbContext())
-                        {
-                                var pendingRequests = db.solicitudes_amistad
-                                                .Include(s => s.usuarios.perfiles)
-                                                .Where(s => s.id_receptor == userId && s.estado == "pendiente")
-                                                .ToList();
-
-                                if (!pendingRequests.Any())
-                                {
-                                        return new List<FriendDto>();
-                                }
-
-                                return pendingRequests.Select(s =>
-                                {
-                                        var senderProfile = s.usuarios.perfiles.FirstOrDefault();
-                                        string senderUsername = senderProfile?.username ?? "N/A";
-                                        bool isOnline = !string.IsNullOrWhiteSpace(senderUsername) && SessionManager.IsOnline(senderUsername);
-
-                                        return new FriendDto
-                                        {
-                                                IdFriend = s.id_emisor,
-                                                Username = senderUsername,
-                                                ConnectionState = isOnline,
-                                                Avatar = senderProfile?.imagen_perfil ?? "default.png"
-                                        };
-                                }).ToList();
-                        }
-                }
-
-                public bool AddFriend(int senderUsername, int receiverUsername)
-                {
-                        if (senderUsername == receiverUsername)
-                        {
-                                throw new Exception("Un usuario no puede agregarse a sí mismo.");
-                        }
-
-                        using (var db = CreateDbContext())
-                        {
-                                var exist1 = db.usuarios.Any(u => u.id_usuario == senderUsername);
-                                var exist2 = db.usuarios.Any(u => u.id_usuario == receiverUsername);
-
-                                if (!exist1 || !exist2)
-                                {
-                                        throw new Exception("Uno o ambos usuarios no existen.");
-                                }
-                                bool friendshipexist = db.amistades.Any(a =>
-                                        (a.id_usuario1 == senderUsername && a.id_usuario2 == receiverUsername) ||
-                                        (a.id_usuario1 == receiverUsername && a.id_usuario2 == senderUsername)
-                                );
-
-                                if (friendshipexist)
-                                {
-                                        throw new Exception("Estos usuarios ya son amigos.");
-                                }
-                                var newfriendship = new amistades
-                                {
-                                        id_usuario1 = senderUsername,
-                                        id_usuario2 = receiverUsername,
-                                        fecha_amistad = DateTime.Now
-                                };
-
-                                db.amistades.Add(newfriendship);
-                                db.SaveChanges();
-
-                                return true;
-                        }
-                }
-
-                public bool DeleteFriend(int senderUsername, int receiverUsername)
-                {
-                        using (var db = CreateDbContext())
-                        {
-                                var amistad = db.amistades.FirstOrDefault(a =>
-                                        (a.id_usuario1 == senderUsername && a.id_usuario2 == receiverUsername) ||
-                                        (a.id_usuario1 == receiverUsername && a.id_usuario2 == senderUsername)
-                                );
-
-                                if (amistad == null)
-                                {
-                                        throw new Exception("No existe una amistad entre estos usuarios.");
-                                }
-
-                                db.amistades.Remove(amistad);
-                                db.SaveChanges();
-                                return true;
-                        }
-                }
-
-                public bool SendFriendRequest(string senderUsername, string receiverUsername)
-                {
-                        int senderId = _userRepo.GetUserIdByUsername(senderUsername);
-                        int receiverId = _userRepo.GetUserIdByUsername(receiverUsername);
-
-                        if (senderId == receiverId)
-                        {
-                                throw new FaultException("Un usuario no puede enviarse una solicitud a sí mismo.");
-                        }
-
-                        using (var db = CreateDbContext())
-                        {
-                                bool friendshipExists = db.amistades.Any(a =>
-                                    (a.id_usuario1 == senderId && a.id_usuario2 == receiverId) ||
-                                    (a.id_usuario1 == receiverId && a.id_usuario2 == senderId));
-
-                                if (friendshipExists)
-                                {
-                                        throw new FaultException("Los usuarios ya son amigos.");
-                                }
-
-                                bool isBlocked = db.bloqueos.Any(b =>
-                                    (b.id_bloqueador == senderId && b.id_bloqueado == receiverId) ||
-                                    (b.id_bloqueador == receiverId && b.id_bloqueado == senderId));
-
-                                if (isBlocked)
-                                {
-                                        throw new FaultException("La relación está bloqueada entre los usuarios.");
-                                }
-
-                                bool pendingRequest = db.solicitudes_amistad.Any(s =>
-                                    ((s.id_emisor == senderId && s.id_receptor == receiverId) ||
-                                     (s.id_emisor == receiverId && s.id_receptor == senderId)) &&
-                                    s.estado == "pendiente");
-
-                                if (pendingRequest)
-                                {
-                                        throw new FaultException("Ya existe una solicitud pendiente entre los usuarios.");
-                                }
-
-                                var request = new solicitudes_amistad
-                                {
-                                        id_emisor = senderId,
-                                        id_receptor = receiverId,
-                                        fecha_envio = DateTime.Now,
-                                        estado = "pendiente"
-                                };
-
-                                db.solicitudes_amistad.Add(request);
-                                db.SaveChanges();
-                                return true;
-                        }
-                }
+                db.SaveChanges();
+                return true;
+            }
+        }
 
         public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept)
         {
-            int receiverId = _userRepo.GetUserIdByUsername(receiverUsername);
-            int senderId = _userRepo.GetUserIdByUsername(senderUsername);
+            var ids = GetUserIds(receiverUsername, senderUsername);
 
-            using (var db = CreateDbContext())
+            using (var db = CréateDbContext())
             {
-                var request = db.solicitudes_amistad.FirstOrDefault(s =>
-                    s.id_emisor == senderId &&
-                    s.id_receptor == receiverId &&
-                    s.estado == "pendiente");
+                EnsurePendingRequestExists(db, ids.receiverId, ids.senderId);
 
-                if (request == null)
-                {
-                    throw new FaultException("No existe una solicitud pendiente entre los usuarios.");
-                }
+                var request = db.solicitudes_amistad
+                    .First(s => s.id_emisor == ids.senderId &&
+                                s.id_receptor == ids.receiverId &&
+                                s.estado == "pendiente");
 
                 if (accept)
                 {
-                    bool isBlocked = db.bloqueos.Any(b =>
-                        (b.id_bloqueador == senderId && b.id_bloqueado == receiverId) ||
-                        (b.id_bloqueador == receiverId && b.id_bloqueado == senderId));
+                    EnsureNotBlocked(db, ids.senderId, ids.receiverId);
 
-                    if (isBlocked)
-                    {
-                        throw new FaultException("La relación está bloqueada entre los usuarios.");
-                    }
-
-                    bool friendshipExists = db.amistades.Any(a =>
-                        (a.id_usuario1 == senderId && a.id_usuario2 == receiverId) ||
-                        (a.id_usuario1 == receiverId && a.id_usuario2 == senderId));
-
-                    if (!friendshipExists)
+                    if (!FriendshipExists(db, ids.senderId, ids.receiverId))
                     {
                         db.amistades.Add(new amistades
                         {
-                            id_usuario1 = senderId,
-                            id_usuario2 = receiverId,
+                            id_usuario1 = ids.senderId,
+                            id_usuario2 = ids.receiverId,
                             fecha_amistad = DateTime.Now
                         });
                     }
@@ -255,76 +277,40 @@ namespace DamasChinas_Server
             }
         }
 
+        public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
+        {
+            var ids = GetUserIds(blockerUsername, blockedUsername);
 
-        public bool DeleteFriend(string username, string friendUsername)
-                {
-                        int userId = _userRepo.GetUserIdByUsername(username);
-                        int friendId = _userRepo.GetUserIdByUsername(friendUsername);
+            using (var db = CréateDbContext())
+            {
+                EnsureNotBlockedSelf(ids.senderId, ids.receiverId);
 
-                        return DeleteFriend(userId, friendId);
-                }
+                if (block)
+                    ApplyBlock(db, ids.senderId, ids.receiverId);
+                else
+                    RemoveBlock(db, ids.senderId, ids.receiverId);
 
-                public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
-                {
-                        int blockerId = _userRepo.GetUserIdByUsername(blockerUsername);
-                        int blockedId = _userRepo.GetUserIdByUsername(blockedUsername);
-
-                        if (blockerId == blockedId)
-                        {
-                                throw new InvalidOperationException("Un usuario no puede bloquearse a sí mismo.");
-                        }
-
-                        using (var db = CreateDbContext())
-                        {
-                                if (block)
-                                {
-                                        bool alreadyBlocked = db.bloqueos.Any(b => b.id_bloqueador == blockerId && b.id_bloqueado == blockedId);
-
-                                        if (alreadyBlocked)
-                                        {
-                                                throw new InvalidOperationException("El usuario ya está bloqueado.");
-                                        }
-
-                                        var existingFriendship = db.amistades.FirstOrDefault(a =>
-                                            (a.id_usuario1 == blockerId && a.id_usuario2 == blockedId) ||
-                                            (a.id_usuario1 == blockedId && a.id_usuario2 == blockerId));
-
-                                        if (existingFriendship != null)
-                                        {
-                                                db.amistades.Remove(existingFriendship);
-                                        }
-
-                                        var pendingRequests = db.solicitudes_amistad.Where(s =>
-                                            (s.id_emisor == blockerId && s.id_receptor == blockedId) ||
-                                            (s.id_emisor == blockedId && s.id_receptor == blockerId)).ToList();
-
-                                        if (pendingRequests.Any())
-                                        {
-                                                db.solicitudes_amistad.RemoveRange(pendingRequests);
-                                        }
-
-                                        db.bloqueos.Add(new bloqueos
-                                        {
-                                                id_bloqueador = blockerId,
-                                                id_bloqueado = blockedId,
-                                                fecha_bloqueo = DateTime.Now
-                                        });
-                                }
-                                else
-                                {
-                                        var bloq = db.bloqueos.FirstOrDefault(b => b.id_bloqueador == blockerId && b.id_bloqueado == blockedId);
-
-                                        if (bloq == null)
-                                        {
-                                                throw new InvalidOperationException("No existe un bloqueo entre los usuarios.");
-                                        }
-
-                                        db.bloqueos.Remove(bloq);
-                                }
-
-                                db.SaveChanges();
-                                return true;
-                        }
-                }
+                db.SaveChanges();
+                return true;
+            }
         }
+        public bool DeleteFriend(string username1, string username2)
+        {
+            var ids = GetUserIds(username1, username2);
+
+            using (var db = CréateDbContext())
+            {
+                EnsureUsersExist(db, ids.senderId, ids.receiverId);
+                EnsureFriends(db, ids.senderId, ids.receiverId);
+
+                RemoveFriendshipIfExists(db, ids.senderId, ids.receiverId);
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+    }
+
 }
+

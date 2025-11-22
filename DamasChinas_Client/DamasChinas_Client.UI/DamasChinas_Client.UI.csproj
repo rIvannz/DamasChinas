@@ -65,7 +65,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChatCallback.cs" />
-    <Compile Include="Dto\UserDto.cs" />
     <Compile Include="LoginCallbackHandler.cs" />
     <Compile Include="Connected Services\AccountManagerServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -134,6 +133,7 @@
     <Compile Include="PopUps\VerificationCodeWindow.xaml.cs">
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\FriendList.cs" />
     <Compile Include="Utilities\ClientSession.cs" />
     <Compile Include="Utilities\Hasher.cs" />
@@ -143,6 +143,7 @@
     </Compile>
     <Compile Include="Utilities\MessageHerlper.cs" />
     <Compile Include="Utilities\MessageTranslator.cs" />
+    <Compile Include="Utilities\PopupType.cs" />
     <Compile Include="Utilities\ServiceHelper.cs" />
     <Compile Include="Utilities\Validator.cs" />
     <Compile Include="Utilities\LanguageManager.cs" />
@@ -442,6 +443,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Logos\" />
+    <Folder Include="Dto\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

@@ -1,18 +1,16 @@
 using DamasChinas_Client.UI.PopUps;
-using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Windows;
-
-
 
 namespace DamasChinas_Client.UI.Utilities
 {
     public static class MessageHelper
     {
-   
-        public static void ShowPopup(string message, string type = "info", bool autoClose = false)
+        private const PopupType DefaultType = PopupType.Info;
+
+        public static void ShowPopup(string message, PopupType type = DefaultType, bool autoClose = false)
         {
-            var popup = new MessagePopupWindow(message, type, autoClose)
+            var popup = new MessagePopupWindow(message, type.ToString().ToLower(), autoClose)
             {
                 Owner = Application.Current.MainWindow
             };
@@ -20,7 +18,7 @@ namespace DamasChinas_Client.UI.Utilities
             popup.ShowDialog();
         }
 
-        public static void ShowFromCode(Enum code, string type = "info")
+        public static void ShowFromCode(Enum code, PopupType type = DefaultType)
         {
             string message = MessageTranslator.GetLocalizedMessage(code);
             ShowPopup(message, type);
@@ -37,31 +35,22 @@ namespace DamasChinas_Client.UI.Utilities
             return popup.Result;
         }
 
-
-
         public static void ShowFromResult(dynamic result)
         {
             if (result == null)
             {
                 ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
                 return;
             }
 
             string msg = MessageTranslator.GetLocalizedMessage(result.Code);
 
-            if (result.Success)
-            {
-                ShowPopup(msg, "success");
-            }
-            else
-            {
-                ShowPopup(msg, "error");
-            }
+            ShowPopup(msg,
+                result.Success ? PopupType.Success : PopupType.Error
+            );
         }
     }
 }
-
-

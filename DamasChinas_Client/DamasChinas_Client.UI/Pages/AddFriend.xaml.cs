@@ -25,7 +25,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error");
+                    PopupType.Error);
             }
         }
 
@@ -37,7 +37,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_EmptyCredentials"),
-                    "warning");
+                    PopupType.Warning);
                 return;
             }
 

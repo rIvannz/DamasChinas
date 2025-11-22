@@ -150,6 +150,7 @@
     <Compile Include="Utilities\Email.cs" />
     <Compile Include="Utilities\EmailSender.cs" />
     <Compile Include="Utilities\DbContextFactory.cs" />
+    <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>
   <ItemGroup>

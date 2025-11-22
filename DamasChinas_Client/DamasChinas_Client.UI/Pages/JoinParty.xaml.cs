@@ -85,7 +85,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (TimeoutException ex)
@@ -94,7 +94,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -103,7 +103,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -126,7 +126,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("noLobbySelected"),
-                        "warning"
+                        PopupType.Warning
                     );
                 }
             }
@@ -136,7 +136,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error 
                 );
             }
         }
@@ -153,7 +153,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("invalidCodeWarning"),
-                        "warning"
+                        PopupType.Warning
                     );
                     return;
                 }
@@ -166,7 +166,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Warning   
                 );
             }
         }
@@ -182,7 +182,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
-                        "error"
+                        PopupType.Warning
                     );
                     return;
                 }
@@ -195,7 +195,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
-                    "warning"
+                    PopupType.Warning
                 );
 
                 LoadPublicLobbies();
@@ -206,7 +206,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
-                    "error"
+                    PopupType.Error
                 );
 
                 LoadPublicLobbies();
@@ -217,7 +217,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (InvalidOperationException ex)
@@ -226,7 +226,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -235,7 +235,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
@@ -269,7 +269,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    "error"
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -278,7 +278,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    "error"
+                    PopupType.Error
                 );
             }
         }
