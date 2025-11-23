@@ -142,7 +142,9 @@
       <DependentUpon>LoaderBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\MessageHerlper.cs" />
+    <Compile Include="Utilities\MessageKey.cs" />
     <Compile Include="Utilities\MessageTranslator.cs" />
+    <Compile Include="Utilities\PathProvider.cs" />
     <Compile Include="Utilities\PopupType.cs" />
     <Compile Include="Utilities\ServiceHelper.cs" />
     <Compile Include="Utilities\Validator.cs" />
@@ -422,7 +424,9 @@
     <Resource Include="Assets\Icons\soundIcon.png" />
     <Resource Include="Assets\Icons\stadisticsIcon.png" />
     <Resource Include="Assets\Icons\greenCheck.png" />
-    <Content Include="Assets\Sounds\background_music.mp3" />
+    <Content Include="Assets\Sounds\background_music.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <!-- Recursos .resx -->
   <ItemGroup>

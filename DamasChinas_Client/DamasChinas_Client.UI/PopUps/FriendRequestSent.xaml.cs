@@ -1,20 +1,7 @@
 ﻿using DamasChinas_Client.UI.Utilities;
-
 using System;
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DamasChinas_Client.UI.PopUps
 {
@@ -28,21 +15,24 @@ namespace DamasChinas_Client.UI.PopUps
 
         private void Configure(bool success)
         {
-            string iconPath;
+            Uri iconUri;
             string messageKey;
 
             if (success)
             {
-                iconPath = "pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/greenCheck.png";
+             
+                iconUri = PathProvider.GetPackUri("Assets/Icons/greenCheck.png");
                 messageKey = "friendRequestSentOk";
             }
             else
             {
-                iconPath = "pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/redCross.png";
+              
+                iconUri = PathProvider.GetPackUri("Assets/Icons/redCross.png");
                 messageKey = "msg_FriendUserNotFound";
             }
 
-            StatusIcon.Source = new BitmapImage(new Uri(iconPath, UriKind.Absolute));
+        
+            StatusIcon.Source = new BitmapImage(iconUri);
             StatusMessage.Text = MessageTranslator.GetLocalizedMessage(messageKey);
         }
 
@@ -53,6 +43,7 @@ namespace DamasChinas_Client.UI.PopUps
         }
     }
 }
+
 
 
 

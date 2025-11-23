@@ -34,20 +34,12 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (NullReferenceException ex)
             {
                 Debug.WriteLine($"[ChangeData.OnBackClick - NullNavigation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
@@ -55,11 +47,8 @@ namespace DamasChinas_Client.UI.Pages
         {
             TryExecuteAction(() =>
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_CodeSentSuccessfully"),
-                    PopupType.Success
-                );
-            }, "msg_CodeSendingError");
+                MessageHelper.ShowPopup(MessageKeys.CodeSentSuccessfully, PopupType.Success);
+            }, MessageKeys.VerificationCodeSendError);
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
@@ -67,7 +56,7 @@ namespace DamasChinas_Client.UI.Pages
             TryExecuteAction(() =>
             {
                 NavigationService?.Navigate(new ConfiSound());
-            }, "msg_NavigationError");
+            }, MessageKeys.NavigationError);
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
@@ -75,7 +64,7 @@ namespace DamasChinas_Client.UI.Pages
             TryExecuteAction(() =>
             {
                 NavigationService?.Navigate(new SelectLanguage());
-            }, "msg_NavigationError");
+            }, MessageKeys.NavigationError);
         }
 
         private void OnSaveUsernameClick(object sender, RoutedEventArgs e)
@@ -83,22 +72,17 @@ namespace DamasChinas_Client.UI.Pages
             TryExecuteAction(() =>
             {
                 if (!ValidateUsernameInput())
-                {
                     return;
-                }
 
                 ChangeUsername(txtUsername.Text.Trim());
-            }, "msg_UnknownError");
+            }, MessageKeys.UnknownError);
         }
 
         private bool ValidateUsernameInput()
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UsernameEmpty"),
-                    PopupType.Warning
-                );
+                MessageHelper.ShowPopup(MessageKeys.UsernameEmpty, PopupType.Warning);
                 return false;
             }
 
@@ -119,7 +103,7 @@ namespace DamasChinas_Client.UI.Pages
                     {
                         UpdateUsernameState(newUsername);
 
-                        MessageHelper.ShowPopup(message, PopupType.Warning);
+                        MessageHelper.ShowPopup(message, PopupType.Success);
                         NavigationService?.GoBack();
                     }
                     else
@@ -131,29 +115,17 @@ namespace DamasChinas_Client.UI.Pages
             catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ChangeData.ChangeUsername - Communication] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
             catch (TimeoutException ex)
             {
                 Debug.WriteLine($"[ChangeData.ChangeUsername - Timeout] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.ChangeUsername - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -173,23 +145,17 @@ namespace DamasChinas_Client.UI.Pages
             TryExecuteAction(() =>
             {
                 if (!ValidateVerificationCodeInput())
-                {
                     return;
-                }
 
                 if (!ValidatePasswordInputs())
-                {
                     return;
-                }
 
                 if (!ValidatePasswordStrength(txtPassword.Password))
-                {
                     return;
-                }
 
                 string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
                 ChangePassword(_profile.Username, hashedPassword);
-            }, "msg_UnknownError");
+            }, MessageKeys.UnknownError);
         }
 
         private bool ValidateVerificationCodeInput()
@@ -198,10 +164,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (string.IsNullOrWhiteSpace(code))
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_EmptyVerificationCode"),
-                    PopupType.Warning
-                );
+                MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
                 return false;
             }
 
@@ -213,19 +176,13 @@ namespace DamasChinas_Client.UI.Pages
             if (string.IsNullOrWhiteSpace(txtPassword.Password) ||
                 string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_EmptyCredentials"),
-                    PopupType.Warning
-                );
+                MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
                 return false;
             }
 
             if (txtPassword.Password != txtConfirmPassword.Password)
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_PasswordsDontMatch"),
-                    PopupType.Warning
-                );
+                MessageHelper.ShowPopup(MessageKeys.PasswordsDontMatch, PopupType.Warning);
                 return false;
             }
 
@@ -242,11 +199,7 @@ namespace DamasChinas_Client.UI.Pages
             catch (ArgumentException ex)
             {
                 Debug.WriteLine($"[ChangeData.ValidatePasswordStrength - Argument] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_InvalidPassword"),
-                    PopupType.Warning
-                );
+                MessageHelper.ShowPopup(MessageKeys.InvalidPassword, PopupType.Warning);
             }
 
             return false;
@@ -276,29 +229,17 @@ namespace DamasChinas_Client.UI.Pages
             catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ChangeData.ChangePassword - Communication] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
             catch (TimeoutException ex)
             {
                 Debug.WriteLine($"[ChangeData.ChangePassword - Timeout] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.ChangePassword - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -321,29 +262,18 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_UserProfileNotFound"),
-                        PopupType.Warning
-                    );
+                    MessageHelper.ShowPopup(MessageKeys.UserProfileNotFound, PopupType.Warning);
                 }
             }
             catch (NullReferenceException ex)
             {
                 Debug.WriteLine($"[ChangeData.LoadProfileData - NullRef] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.LoadProfileData - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -356,20 +286,12 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.TryExecuteAction - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage(errorKey),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(errorKey, PopupType.Error);
             }
             catch (NullReferenceException ex)
             {
                 Debug.WriteLine($"[ChangeData.TryExecuteAction - NullReference] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage(errorKey),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(errorKey, PopupType.Error);
             }
         }
     }

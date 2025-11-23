@@ -8,8 +8,11 @@ namespace DamasChinas_Client.UI.Utilities
     {
         private const PopupType DefaultType = PopupType.Info;
 
-        public static void ShowPopup(string message, PopupType type = DefaultType, bool autoClose = false)
+    
+        public static void ShowPopup(string messageKey, PopupType type = DefaultType, bool autoClose = false)
         {
+            string message = MessageTranslator.GetLocalizedMessage(messageKey);
+
             var popup = new MessagePopupWindow(message, type.ToString().ToLower(), autoClose)
             {
                 Owner = Application.Current.MainWindow
@@ -20,10 +23,19 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static void ShowFromCode(Enum code, PopupType type = DefaultType)
         {
-            string message = MessageTranslator.GetLocalizedMessage(code);
-            ShowPopup(message, type);
+            if (code == null)
+            {
+                ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                return;
+            }
+
+       
+            string resourceKey = "msg_" + code.ToString();
+
+            ShowPopup(resourceKey, type);
         }
 
+      
         public static bool ShowConfirmLogout()
         {
             var popup = new ConfirmPopupWindow
@@ -35,22 +47,22 @@ namespace DamasChinas_Client.UI.Utilities
             return popup.Result;
         }
 
+    
         public static void ShowFromResult(dynamic result)
         {
             if (result == null)
             {
-                ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                ShowPopup(MessageKeys.UnknownError, PopupType.Error);
                 return;
             }
 
-            string msg = MessageTranslator.GetLocalizedMessage(result.Code);
+            var popupType = result.Success ? PopupType.Success : PopupType.Error;
 
-            ShowPopup(msg,
-                result.Success ? PopupType.Success : PopupType.Error
-            );
+            string key = result.Code?.ToString() ?? nameof(MessageKeys.UnknownError);
+            string resourceKey = "msg_" + key;
+
+            ShowPopup(resourceKey, popupType);
         }
     }
 }
+

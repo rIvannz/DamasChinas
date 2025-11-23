@@ -7,7 +7,7 @@ namespace DamasChinas_Client.UI
 	{
 		protected override void OnStartup(StartupEventArgs e)
 		{
-            bool enableMusic = false;
+            bool enableMusic = true;
 
             if (enableMusic)
             {
