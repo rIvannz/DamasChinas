@@ -18,7 +18,7 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
         }
 
-     
+
 
         private async void OnCreateAccountClick(object sender, RoutedEventArgs e)
         {
@@ -28,41 +28,88 @@ namespace DamasChinas_Client.UI.Pages
             SingInServiceClient client = null;
             LoadingWindow loader = null;
 
+            string pendingMessage = null;
+            PopupType pendingMessageType = PopupType.Error;
+            bool shouldShowPopup = false;
+
             try
             {
+                // VALIDACIONES LOCALES
                 if (!ValidateLocalInputs())
+                {
+                    btn.IsEnabled = true;
                     return;
+                }
 
+                // MOSTRAR LOADER
                 loader = ShowLoader();
 
                 client = new SingInServiceClient();
                 var userDto = GetUserFromInputs();
 
-                if (!await ValidateWithServerAsync(client, userDto, loader))
+                // VALIDAR INFORMACIÓN CON EL SERVIDOR
+                var isValid = await ValidateWithServerAsync(client, userDto, loader);
+
+                if (!isValid)
+                {
+                    pendingMessage = MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable");
+                    pendingMessageType = PopupType.Error;
+                    shouldShowPopup = true;
+                    btn.IsEnabled = true;
                     return;
+                }
 
-                loader.Close();
+                // EL LOADER FUE CERRADO EN ValidateWithServerAsync
+                loader = null;
 
+                // SOLICITAR CÓDIGO DE VERIFICACIÓN
                 if (!await RequestVerificationCodeAsync(client, userDto))
+                {
+                    pendingMessage = MessageTranslator.GetLocalizedMessage("msg_CodeSendingError");
+                    pendingMessageType = PopupType.Error;
+                    shouldShowPopup = true;
+                    btn.IsEnabled = true;
                     return;
+                }
 
+                // MOSTRAR POPUP PARA INGRESAR EL CÓDIGO
                 var codeValue = ShowVerificationCodeWindow();
 
                 if (string.IsNullOrWhiteSpace(codeValue))
+                {
+                    btn.IsEnabled = true;
                     return;
+                }
 
+                // NUEVO LOADER PARA CREACIÓN DE USUARIO
                 loader = ShowLoader();
 
                 if (!await CreateUserAsync(client, userDto, codeValue, loader))
+                {
+                    pendingMessage = MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable");
+                    pendingMessageType = PopupType.Error;
+                    shouldShowPopup = true;
+                    btn.IsEnabled = true;
                     return;
+                }
 
-                ShowSuccessPopup();
+                // ÉXITO TOTAL
+                pendingMessage = MessageTranslator.GetLocalizedMessage("msg_AccountCreated");
+                pendingMessageType = PopupType.Success;
+                shouldShowPopup = true;
             }
             finally
             {
                 btn.IsEnabled = true;
                 ServiceHelper.SafeClose(client);
-                CloseLoaderIfOpen(loader);
+
+                if (loader != null && loader.IsVisible)
+                    loader.Close();
+
+                if (shouldShowPopup && !string.IsNullOrEmpty(pendingMessage))
+                {
+                    MessageHelper.ShowPopup(pendingMessage, pendingMessageType);
+                }
             }
         }
 
@@ -110,19 +157,39 @@ namespace DamasChinas_Client.UI.Pages
 
         private async Task<bool> ValidateWithServerAsync(SingInServiceClient client, UserDto dto, LoadingWindow loader)
         {
-            var result = await Task.Run(() => client.ValidateUserData(dto));
-
-            await loader.WaitMinimumAsync();
-            loader.Close();
-
-            if (result?.Success != true)
+            try
             {
-                ShowError(MessageTranslator.GetLocalizedMessage(result.Code));
+                var result = await client.ValidateUserDataAsync(dto);
+
+                await loader.WaitMinimumAsync();
+                loader.Close();
+
+                // Aquí NO mostramos popup nunca
+                return result?.Success == true;
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - EndpointNotFound] {ex.Message}");
                 return false;
             }
-
-            return true;
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Communication] {ex.Message}");
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Timeout] {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Unknown] {ex.Message}");
+                return false;
+            }
         }
+
+
 
 
         private string ShowVerificationCodeWindow()
@@ -160,19 +227,44 @@ namespace DamasChinas_Client.UI.Pages
 
         private async Task<bool> CreateUserAsync(SingInServiceClient client, UserDto dto, string code, LoadingWindow loader)
         {
-            var result = await Task.Run(() => client.CreateUser(dto, code));
-
-            await loader.WaitMinimumAsync();
-            loader.Close();
-
-            if (result?.Success != true)
+            try
             {
-                HandleCodeCreationError(result);
+          
+                var result = await client.CreateUserAsync(dto, code);
+
+                await loader.WaitMinimumAsync();
+
+                if (result?.Success != true)
+                {
+                    HandleCodeCreationError(result);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - EndpointNotFound] {ex.Message}");
                 return false;
             }
-
-            return true;
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Communication] {ex.Message}");
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Timeout] {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Unknown] {ex.Message}");
+                return false;
+            }
         }
+
+
 
 
         private void ShowWarning(string code)

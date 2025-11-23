@@ -33,7 +33,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 string hashedPassword = Hasher.HashPassword(password);
 
-       
                 loadingWindow = new LoadingWindow
                 {
                     Owner = Application.Current.MainWindow
@@ -41,7 +40,9 @@ namespace DamasChinas_Client.UI.Pages
                 loadingWindow.Show();
 
                 var client = CreateLoginClient(out var callback);
-                ConfigureCallback(callback, loadingWindow);
+
+               
+                ConfigureCallback(callback, loadingWindow, client);
 
                 ExecuteLogin(client, username, hashedPassword);
             }
@@ -49,47 +50,31 @@ namespace DamasChinas_Client.UI.Pages
             {
                 Debug.WriteLine($"[Login.OnLoginClick - EndpointNotFound] {ex.Message}");
                 loadingWindow?.Close();
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+               
             }
             catch (TimeoutException ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - Timeout] {ex.Message}");
                 loadingWindow?.Close();
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
-                    PopupType.Error
-                );
+              
             }
             catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - Communication] {ex.Message}");
                 loadingWindow?.Close();
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+           
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - General] {ex.Message}");
                 loadingWindow?.Close();
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+               
             }
         }
 
 
 
-        
+
 
         private (string username, string password) GetCredentials()
         {
@@ -125,14 +110,43 @@ namespace DamasChinas_Client.UI.Pages
 
 
 
-        private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loadingWindow)
+        private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loadingWindow, LoginServiceClient client)
         {
-       
+           
+            var channel = client.InnerChannel;
+
+            channel.Faulted += (s, e) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (loadingWindow.IsVisible)
+                        loadingWindow.Close();
+
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
+                        PopupType.Error
+                    );
+                });
+            };
+
+            channel.Closed += (s, e) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (loadingWindow.IsVisible)
+                        loadingWindow.Close();
+
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
+                        PopupType.Error
+                    );
+                });
+            };
+
             callback.LoginSuccess += async profile =>
             {
                 try
                 {
-                   
                     await loadingWindow.WaitMinimumAsync();
                 }
                 catch (Exception ex)
@@ -145,9 +159,7 @@ namespace DamasChinas_Client.UI.Pages
                     try
                     {
                         if (loadingWindow.IsVisible)
-                        {
                             loadingWindow.Close();
-                        }
 
                         var convertedProfile = new AccountManagerServiceProxy.PublicProfile
                         {
@@ -184,14 +196,12 @@ namespace DamasChinas_Client.UI.Pages
                 });
             };
 
-          
             callback.LoginError += async code =>
             {
                 string msg = MessageTranslator.GetLocalizedMessage(code);
 
                 try
                 {
-                  
                     await loadingWindow.WaitMinimumAsync();
                 }
                 catch (Exception ex)
@@ -202,9 +212,7 @@ namespace DamasChinas_Client.UI.Pages
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     if (loadingWindow.IsVisible)
-                    {
                         loadingWindow.Close();
-                    }
 
                     MessageHelper.ShowPopup(
                         msg,
@@ -213,10 +221,6 @@ namespace DamasChinas_Client.UI.Pages
                 });
             };
         }
-
-
-
-
 
 
         private void ExecuteLogin(LogInServiceProxy.LoginServiceClient client, string username, string hashedPassword)
@@ -234,32 +238,21 @@ namespace DamasChinas_Client.UI.Pages
             catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[Login.ExecuteLogin - Communication] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+           
             }
             catch (TimeoutException ex)
             {
                 Debug.WriteLine($"[Login.ExecuteLogin - Timeout] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
-                    PopupType.Error
-                );
+     
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Login.ExecuteLogin - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+               
             }
         }
-      
+
+
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
