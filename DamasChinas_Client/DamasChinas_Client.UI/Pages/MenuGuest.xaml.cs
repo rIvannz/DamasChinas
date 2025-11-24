@@ -14,8 +14,6 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
         }
 
-     
-
         private void OnJoinPartyClick(object sender, RoutedEventArgs e)
         {
             try
@@ -30,14 +28,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnJoinPartyClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
         }
-
-     
-   
 
         private void OnHowToPlayClick(object sender, RoutedEventArgs e)
         {
@@ -53,13 +48,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnHowToPlayClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
         }
-
-       
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {
@@ -75,13 +68,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnStatisticsClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
         }
-
-      
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
@@ -94,7 +85,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnSoundClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    MessageKeys.NavigationError,
                     PopupType.Error
                 );
             }
@@ -103,12 +94,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnSoundClick - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
         }
-
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
@@ -121,7 +111,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnBackClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    MessageKeys.NavigationError,
                     PopupType.Error
                 );
             }
@@ -130,13 +120,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnBackClick - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
         }
-
-     
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -149,8 +137,8 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnLanguageClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error     
+                    MessageKeys.NavigationError,
+                    PopupType.Error
                 );
             }
             catch (Exception ex)
@@ -158,7 +146,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuGuest.OnLanguageClick - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }

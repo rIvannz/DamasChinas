@@ -58,6 +58,32 @@ namespace DamasChinas_Client.UI.Utilities
         public const string UsernameExists = "msg_UsernameExists";
 
         // ========================
+        // UI / Menús (nuevos keys)
+        // ========================
+        public const string TutorialUnavailable = "msg_TutorialUnavailable";
+        public const string JoinPartyOpenError = "msg_JoinPartyOpenError";
+        public const string CreateLobbyError = "msg_CreateLobbyError";
+        public const string ProfileOpenError = "msg_ProfileOpenError";
+        public const string StatsUnavailable = "msg_StatsUnavailable";
+        public const string FriendsOpenError = "msg_FriendsOpenError";
+        public const string GuestFeatureOnly = "msg_GuestFeatureOnly";
+        public const string GuestStatsUnavailable = "msg_GuestStatsUnavailable";
+        public const string ProfileChangeError = "msg_ProfileChangeError";
+        public const string FriendRemoved = "msg_FriendRemoved";
+        public const string ChatComingSoon = "msg_ChatComingSoon";
+
+        // ========================
+        // Lobby / Join Party
+        // ========================
+        public const string PrivateLobby = "private";
+        public const string PublicLobby = "public";
+
+        public const string NoLobbySelected = "noLobbySelected";
+        public const string InvalidCodeWarning = "invalidCodeWarning";
+
+        public const string JoiningLobbyError = "joiningLobbyError";
+
+        // ========================
         // Validaciones específicas – Nombre
         // ========================
         public const string InvalidNameEmpty = "msg_InvalidNameEmpty";
@@ -95,3 +121,4 @@ namespace DamasChinas_Client.UI.Utilities
         public const string SoundSettingsError = "msg_SoundSettingsError";
     }
 }
+

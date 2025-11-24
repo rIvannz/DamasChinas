@@ -7,7 +7,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-
+using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -20,179 +20,76 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnLoginClick(object sender, RoutedEventArgs e)
         {
-            LoadingWindow loadingWindow = null;
+            LoadingWindow loading = null;
 
             try
             {
                 var (username, password) = GetCredentials();
-
                 if (!ValidateCredentials(username, password))
-                {
                     return;
-                }
 
-                string hashedPassword = Hasher.HashPassword(password);
-
-                loadingWindow = new LoadingWindow
-                {
-                    Owner = Application.Current.MainWindow
-                };
-                loadingWindow.Show();
+                string hashed = Hasher.HashPassword(password);
+                loading = ShowLoading();
 
                 var client = CreateLoginClient(out var callback);
-
-               
-                ConfigureCallback(callback, loadingWindow, client);
-
-                ExecuteLogin(client, username, hashedPassword);
+                ConfigureCallback(callback, loading, client);
+                ExecuteLogin(client, username, hashed);
             }
-            catch (EndpointNotFoundException ex)
+            catch (Exception ex) when (
+                ex is EndpointNotFoundException ||
+                ex is TimeoutException ||
+                ex is CommunicationException)
             {
-                Debug.WriteLine($"[Login.OnLoginClick - EndpointNotFound] {ex.Message}");
-                loadingWindow?.Close();
-               
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[Login.OnLoginClick - Timeout] {ex.Message}");
-                loadingWindow?.Close();
-              
-            }
-            catch (CommunicationException ex)
-            {
-                Debug.WriteLine($"[Login.OnLoginClick - Communication] {ex.Message}");
-                loadingWindow?.Close();
-           
+                Debug.WriteLine($"[Login.OnLoginClick] {ex}");
+                loading?.Close();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Login.OnLoginClick - General] {ex.Message}");
-                loadingWindow?.Close();
-               
+                Debug.WriteLine($"[Login.OnLoginClick - General] {ex}");
+                loading?.Close();
             }
         }
-
-
-
-
 
         private (string username, string password) GetCredentials()
-        {
-            string username = txtUsername.Text.Trim();
-            string password = txtPassword.Password.Trim();
-            return (username, password);
-        }
+            => (txtUsername.Text.Trim(), txtPassword.Password.Trim());
 
-
-        private static bool ValidateCredentials(string username, string password)
+        private static bool ValidateCredentials(string u, string p)
         {
-            if (string.IsNullOrWhiteSpace(username) ||
-                string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(u) || string.IsNullOrWhiteSpace(p))
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_EmptyCredentials"),
-                    PopupType.Warning
-                );
+                MessageHelper.ShowPopup(EmptyCredentials, PopupType.Warning);
                 return false;
             }
-
             return true;
         }
 
-    
-
-        private static LogInServiceProxy.LoginServiceClient CreateLoginClient(out LoginCallbackHandler callback)
+        private LoadingWindow ShowLoading()
         {
-            callback = new LoginCallbackHandler();
-            var context = new InstanceContext(callback);
-            return new LogInServiceProxy.LoginServiceClient(context);
+            var w = new LoadingWindow { Owner = Application.Current.MainWindow };
+            w.Show();
+            return w;
         }
 
-
-
-        private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loadingWindow, LoginServiceClient client)
+        private static LoginServiceClient CreateLoginClient(out LoginCallbackHandler callback)
         {
-           
+            callback = new LoginCallbackHandler();
+            return new LoginServiceClient(new InstanceContext(callback));
+        }
+
+        private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loading, LoginServiceClient client)
+        {
             var channel = client.InnerChannel;
 
-            channel.Faulted += (s, e) =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (loadingWindow.IsVisible)
-                        loadingWindow.Close();
-
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                        PopupType.Error
-                    );
-                });
-            };
-
-            channel.Closed += (s, e) =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (loadingWindow.IsVisible)
-                        loadingWindow.Close();
-
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                        PopupType.Error
-                    );
-                });
-            };
+            channel.Faulted += (_, __) => HandleConnectionLoss(loading);
+            channel.Closed += (_, __) => HandleConnectionLoss(loading);
 
             callback.LoginSuccess += async profile =>
             {
-                try
-                {
-                    await loadingWindow.WaitMinimumAsync();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[Login.CallbackSuccess - WaitMinimum] {ex.Message}");
-                }
+                await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    try
-                    {
-                        if (loadingWindow.IsVisible)
-                            loadingWindow.Close();
-
-                        var convertedProfile = new AccountManagerServiceProxy.PublicProfile
-                        {
-                            Name = profile.Name,
-                            Username = profile.Username,
-                            Email = profile.Email,
-                            LastName = profile.LastName,
-                            SocialUrl = profile.SocialUrl,
-                        };
-
-                        ClientSession.Initialize(profile);
-
-                        var menuPage = new MenuRegisteredPlayer(convertedProfile);
-                        NavigationService?.Navigate(menuPage);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        Debug.WriteLine($"[Login.CallbackSuccess - InvalidOperation] {ex.Message}");
-
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                            PopupType.Error
-                        );
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"[Login.CallbackSuccess - General] {ex.Message}");
-
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                            PopupType.Error
-                        );
-                    }
+                    TryNavigateToMenu(profile, loading);
                 });
             };
 
@@ -200,170 +97,129 @@ namespace DamasChinas_Client.UI.Pages
             {
                 string msg = MessageTranslator.GetLocalizedMessage(code);
 
-                try
-                {
-                    await loadingWindow.WaitMinimumAsync();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[Login.CallbackError - WaitMinimum] {ex.Message}");
-                }
+                await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (loadingWindow.IsVisible)
-                        loadingWindow.Close();
-
-                    MessageHelper.ShowPopup(
-                        msg,
-                        PopupType.Warning
-                    );
+                    loading.Close();
+                    MessageHelper.ShowPopup(msg, PopupType.Warning);
                 });
             };
         }
 
+        private static void HandleConnectionLoss(LoadingWindow loading)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (loading.IsVisible) loading.Close();
+                MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
+            });
+        }
 
-        private void ExecuteLogin(LogInServiceProxy.LoginServiceClient client, string username, string hashedPassword)
+        private static async System.Threading.Tasks.Task SafeWait(LoadingWindow loading)
+        {
+            try { await loading.WaitMinimumAsync(); }
+            catch (Exception ex) { Debug.WriteLine($"[Login.SafeWait] {ex}"); }
+        }
+
+        private void TryNavigateToMenu(PublicProfile profile, LoadingWindow loading)
         {
             try
             {
-                var loginRequest = new LogInServiceProxy.LoginRequest
+                if (loading.IsVisible) loading.Close();
+
+                var converted = new AccountManagerServiceProxy.PublicProfile
                 {
-                    Username = username,
-                    Password = hashedPassword
+                    Name = profile.Name,
+                    Username = profile.Username,
+                    Email = profile.Email,
+                    LastName = profile.LastName,
+                    SocialUrl = profile.SocialUrl
                 };
 
-                client.Login(loginRequest);
+                ClientSession.Initialize(profile);
+                NavigationService?.Navigate(new MenuRegisteredPlayer(converted));
             }
-            catch (CommunicationException ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[Login.ExecuteLogin - Communication] {ex.Message}");
-           
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[Login.ExecuteLogin - Timeout] {ex.Message}");
-     
+                Debug.WriteLine($"[Login.TryNavigateToMenu - InvalidOp] {ex}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Login.ExecuteLogin - General] {ex.Message}");
-               
+                Debug.WriteLine($"[Login.TryNavigateToMenu - General] {ex}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
+        private void ExecuteLogin(LoginServiceClient client, string username, string hashedPassword)
+        {
+            try
+            {
+                client.Login(new LoginRequest
+                {
+                    Username = username,
+                    Password = hashedPassword
+                });
+            }
+            catch (Exception ex) when (
+                ex is CommunicationException ||
+                ex is TimeoutException)
+            {
+                Debug.WriteLine($"[Login.ExecuteLogin - Network] {ex}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Login.ExecuteLogin - General] {ex}");
+            }
+        }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (NavigationService?.CanGoBack == true)
-                {
                     NavigationService.GoBack();
-                }
                 else
-                {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        PopupType.Warning
-                    );
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[Login.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                    MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Login.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                Debug.WriteLine($"[Login.OnBackClick] {ex}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new SelectLanguage());
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[Login.OnLanguageClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Login.OnLanguageClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
-            }
+            TryNavigate(() => NavigationService?.Navigate(new SelectLanguage()));
         }
 
         private void OnForgotPasswordClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new ForgotPassword());
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[Login.OnForgotPasswordClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error 
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Login.OnForgotPasswordClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
-            }
+            TryNavigate(() => NavigationService?.Navigate(new ForgotPassword()));
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
+            TryNavigate(() => NavigationService?.Navigate(new ConfiSound()));
+        }
+
+        private static void TryNavigate(Action action)
+        {
             try
             {
-                NavigationService?.Navigate(new ConfiSound());
+                action.Invoke();
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[Login.OnSoundClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                Debug.WriteLine($"[Login.TryNavigate - InvalidOp] {ex}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Login.OnSoundClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                Debug.WriteLine($"[Login.TryNavigate - General] {ex}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
     }

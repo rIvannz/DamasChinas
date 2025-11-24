@@ -29,16 +29,18 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.GoBack();
+                if (NavigationService == null)
+                {
+                    Debug.WriteLine("[ChangeData.OnBackClick] NavigationService is null.");
+                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                    return;
+                }
+
+                NavigationService.GoBack();
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.OnBackClick - InvalidOperation] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (NullReferenceException ex)
-            {
-                Debug.WriteLine($"[ChangeData.OnBackClick - NullNavigation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -72,7 +74,9 @@ namespace DamasChinas_Client.UI.Pages
             TryExecuteAction(() =>
             {
                 if (!ValidateUsernameInput())
+                {
                     return;
+                }
 
                 ChangeUsername(txtUsername.Text.Trim());
             }, MessageKeys.UnknownError);
@@ -145,13 +149,19 @@ namespace DamasChinas_Client.UI.Pages
             TryExecuteAction(() =>
             {
                 if (!ValidateVerificationCodeInput())
+                {
                     return;
+                }
 
                 if (!ValidatePasswordInputs())
+                {
                     return;
+                }
 
                 if (!ValidatePasswordStrength(txtPassword.Password))
+                {
                     return;
+                }
 
                 string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
                 ChangePassword(_profile.Username, hashedPassword);
@@ -253,22 +263,26 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                if (_profile != null)
-                {
-                    txtFirstName.Text = _profile.Name;
-                    txtLastName.Text = _profile.LastName;
-                    txtEmail.Text = _profile.Email;
-                    txtCurrentUsername.Text = _profile.Username;
-                }
-                else
+                if (_profile == null)
                 {
                     MessageHelper.ShowPopup(MessageKeys.UserProfileNotFound, PopupType.Warning);
+                    return;
                 }
-            }
-            catch (NullReferenceException ex)
-            {
-                Debug.WriteLine($"[ChangeData.LoadProfileData - NullRef] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+
+                if (txtFirstName == null ||
+                    txtLastName == null ||
+                    txtEmail == null ||
+                    txtCurrentUsername == null)
+                {
+                    Debug.WriteLine("[ChangeData.LoadProfileData] One or more UI controls are null.");
+                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                    return;
+                }
+
+                txtFirstName.Text = _profile.Name;
+                txtLastName.Text = _profile.LastName;
+                txtEmail.Text = _profile.Email;
+                txtCurrentUsername.Text = _profile.Username;
             }
             catch (InvalidOperationException ex)
             {
@@ -277,20 +291,22 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        private void TryExecuteAction(Action action, string errorKey)
+        private static void TryExecuteAction(Action action, string errorKey)
         {
             try
             {
+                if (action == null)
+                {
+                    Debug.WriteLine("[ChangeData.TryExecuteAction] action is null.");
+                    MessageHelper.ShowPopup(errorKey, PopupType.Error);
+                    return;
+                }
+
                 action.Invoke();
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ChangeData.TryExecuteAction - InvalidOperation] {ex.Message}");
-                MessageHelper.ShowPopup(errorKey, PopupType.Error);
-            }
-            catch (NullReferenceException ex)
-            {
-                Debug.WriteLine($"[ChangeData.TryExecuteAction - NullReference] {ex.Message}");
                 MessageHelper.ShowPopup(errorKey, PopupType.Error);
             }
         }

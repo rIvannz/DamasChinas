@@ -9,6 +9,10 @@ using DamasChinas_Server.Utilidades;
 
 namespace DamasChinas_Server
 {
+    /// <summary>
+    /// Repositorio principal para gestión de usuarios y perfiles.
+    /// Implementa un patrón limpio, seguro y mantenible.
+    /// </summary>
     public class RepositoryUsers
     {
         private readonly Func<damas_chinasEntities> _contextFactory;
@@ -23,6 +27,13 @@ namespace DamasChinas_Server
             _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         }
 
+        // =========================================================
+        // VALIDACIONES
+        // =========================================================
+
+        /// <summary>
+        /// Valida localmente el UserDto y verifica existencia de email/username.
+        /// </summary>
         public void ValidateCreateUser(UserDto userDto)
         {
             Validator.ValidateUserDto(userDto);
@@ -34,7 +45,8 @@ namespace DamasChinas_Server
                     throw new RepositoryValidationException(MessageCode.UserDuplicateEmail);
                 }
 
-                if (EntityExists<perfiles>(db, p => p.username.Equals(userDto.Username, StringComparison.OrdinalIgnoreCase)))
+                if (EntityExists<perfiles>(db,
+                    p => p.username.Equals(userDto.Username, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new RepositoryValidationException(MessageCode.UsernameExists);
                 }
@@ -43,6 +55,13 @@ namespace DamasChinas_Server
             });
         }
 
+        // =========================================================
+        // CREACIÓN
+        // =========================================================
+
+        /// <summary>
+        /// Crea usuario + perfil y retorna usuario completo con perfil cargado.
+        /// </summary>
         public usuarios CreateUser(UserDto userDto)
         {
             return ExecuteInContext(db =>
@@ -53,6 +72,10 @@ namespace DamasChinas_Server
                 return GetUserWithProfile(db, nuevoUsuario.id_usuario);
             });
         }
+
+        // =========================================================
+        // LOGIN
+        // =========================================================
 
         public PublicProfile Login(LoginRequest loginRequest)
         {
@@ -71,6 +94,7 @@ namespace DamasChinas_Server
             });
         }
 
+
         public PublicProfile GetPublicProfile(int idUsuario)
         {
             return ExecuteInContext(db =>
@@ -79,6 +103,16 @@ namespace DamasChinas_Server
                 return BuildPublicProfile(user);
             });
         }
+
+  
+        public bool UserExists(string email, string username)
+        {
+            return ExecuteInContext(db =>
+                db.usuarios.Any(u => u.correo == email) ||
+                db.perfiles.Any(p => p.username.Equals(username, StringComparison.OrdinalIgnoreCase))
+            );
+        }
+
 
         public bool ChangeUsername(string username, string newUsername)
         {
@@ -92,7 +126,8 @@ namespace DamasChinas_Server
 
             return ExecuteInContext(db =>
             {
-                if (EntityExists<perfiles>(db, p => p.username.Equals(newUsername, StringComparison.OrdinalIgnoreCase)))
+                if (EntityExists<perfiles>(db,
+                    p => p.username.Equals(newUsername, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new RepositoryValidationException(MessageCode.UsernameExists);
                 }
@@ -101,8 +136,8 @@ namespace DamasChinas_Server
 
                 perfil.username = newUsername;
                 db.Entry(perfil).Property(p => p.username).IsModified = true;
-                SaveChangesSafely(db);
 
+                SaveChangesSafely(db);
                 return true;
             });
         }
@@ -135,11 +170,12 @@ namespace DamasChinas_Server
 
             return ExecuteInContext(db =>
             {
-
                 var perfil = GetPerfilByUsername(db, username);
                 return perfil.id_usuario;
             });
         }
+
+
 
         private damas_chinasEntities CreateContext()
         {
@@ -154,6 +190,12 @@ namespace DamasChinas_Server
             }
         }
 
+        private static bool EntityExists<T>(damas_chinasEntities db, Expression<Func<T, bool>> predicate)
+            where T : class
+        {
+            return db.Set<T>().Any(predicate);
+        }
+
         private static usuarios FindUserForLogin(damas_chinasEntities db, string credential)
         {
             return db.usuarios
@@ -161,12 +203,6 @@ namespace DamasChinas_Server
                      .FirstOrDefault(u =>
                          u.correo == credential ||
                          u.perfiles.Any(p => p.username == credential));
-        }
-
-        private static bool EntityExists<T>(damas_chinasEntities db, Expression<Func<T, bool>> predicate)
-            where T : class
-        {
-            return db.Set<T>().Any(predicate);
         }
 
         private static perfiles GetPerfilByUsername(damas_chinasEntities db, string username)
@@ -196,6 +232,40 @@ namespace DamasChinas_Server
             return user;
         }
 
+
+
+        private static usuarios CreateUsuario(damas_chinasEntities db, UserDto userDto)
+        {
+            var usuario = new usuarios
+            {
+                correo = userDto.Email,
+                password_hash = userDto.Password,
+                rol = "cliente",
+                fecha_creacion = DateTime.UtcNow
+            };
+
+            db.usuarios.Add(usuario);
+            SaveChangesSafely(db);
+            return usuario;
+        }
+
+        private static void CreatePerfil(damas_chinasEntities db, usuarios usuario, UserDto userDto)
+        {
+            var perfil = new perfiles
+            {
+                id_usuario = usuario.id_usuario,
+                username = userDto.Username,
+                nombre = userDto.Name,
+                apellido_materno = userDto.LastName,
+                url = string.Empty,
+                imagen_perfil = null,
+                ultimo_login = null
+            };
+
+            db.perfiles.Add(perfil);
+            SaveChangesSafely(db);
+        }
+
         private static PublicProfile BuildPublicProfile(usuarios user)
         {
             if (user == null)
@@ -213,40 +283,6 @@ namespace DamasChinas_Server
                 SocialUrl = perfil?.url ?? "N/A",
                 Email = user.correo
             };
-        }
-
-        private static usuarios CreateUsuario(damas_chinasEntities db, UserDto userDto)
-        {
-            var usuario = new usuarios
-            {
-                correo = userDto.Email,
-                password_hash = userDto.Password,
-                rol = "cliente",
-                fecha_creacion = DateTime.UtcNow
-            };
-
-            db.usuarios.Add(usuario);
-            SaveChangesSafely(db);
-            return usuario;
-        }
-
-
-        // aca le quite el return de void y el tipo perfiles.
-        private static void CreatePerfil(damas_chinasEntities dataBase, usuarios usuario, UserDto userDto)
-        {
-            var perfil = new perfiles
-            {
-                id_usuario = usuario.id_usuario,
-                username = userDto.Username,
-                nombre = userDto.Name,
-                apellido_materno = userDto.LastName,
-                url = string.Empty,
-                imagen_perfil = null,
-                ultimo_login = null
-            };
-
-            dataBase.perfiles.Add(perfil);
-            SaveChangesSafely(dataBase);
         }
 
         private static void SaveChangesSafely(damas_chinasEntities db)

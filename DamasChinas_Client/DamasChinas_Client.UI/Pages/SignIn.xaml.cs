@@ -7,7 +7,6 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -18,103 +17,94 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
         }
 
-
-
+        // =========================================================
+        // EVENTO PRINCIPAL (ORQUESTA TODO EL FLUJO)
+        // =========================================================
         private async void OnCreateAccountClick(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
+            if (btn == null)
+            {
+                return;
+            }
+
             btn.IsEnabled = false;
 
             SingInServiceClient client = null;
             LoadingWindow loader = null;
 
-            string pendingMessage = null;
-            PopupType pendingMessageType = PopupType.Error;
-            bool shouldShowPopup = false;
-
             try
             {
-                // VALIDACIONES LOCALES
+                // 1) VALIDACIONES LOCALES
                 if (!ValidateLocalInputs())
                 {
-                    btn.IsEnabled = true;
                     return;
                 }
 
-                // MOSTRAR LOADER
+                // 2) MOSTRAR LOADER E INSTANCIAR CLIENTE
                 loader = ShowLoader();
-
                 client = new SingInServiceClient();
                 var userDto = GetUserFromInputs();
 
-                // VALIDAR INFORMACIÓN CON EL SERVIDOR
-                var isValid = await ValidateWithServerAsync(client, userDto, loader);
+                // 3) VALIDAR INFORMACIÓN CON EL SERVIDOR
+                bool isValid = await ValidateWithServerAsync(client, userDto, loader);
+                loader = null; // ValidateWithServerAsync se encarga de cerrar el loader
 
                 if (!isValid)
                 {
-                    pendingMessage = MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable");
-                    pendingMessageType = PopupType.Error;
-                    shouldShowPopup = true;
-                    btn.IsEnabled = true;
+                    // Ya se mostró el mensaje correspondiente dentro de ValidateWithServerAsync
                     return;
                 }
 
-                // EL LOADER FUE CERRADO EN ValidateWithServerAsync
-                loader = null;
-
-                // SOLICITAR CÓDIGO DE VERIFICACIÓN
-                if (!await RequestVerificationCodeAsync(client, userDto))
+                // 4) SOLICITAR CÓDIGO DE VERIFICACIÓN
+                bool codeRequested = await RequestVerificationCodeAsync(client, userDto);
+                if (!codeRequested)
                 {
-                    pendingMessage = MessageTranslator.GetLocalizedMessage("msg_CodeSendingError");
-                    pendingMessageType = PopupType.Error;
-                    shouldShowPopup = true;
-                    btn.IsEnabled = true;
+                    // Ya se mostró el mensaje correspondiente dentro de RequestVerificationCodeAsync
                     return;
                 }
 
-                // MOSTRAR POPUP PARA INGRESAR EL CÓDIGO
-                var codeValue = ShowVerificationCodeWindow();
-
+                // 5) MOSTRAR POPUP PARA INGRESAR EL CÓDIGO
+                string codeValue = ShowVerificationCodeWindow();
                 if (string.IsNullOrWhiteSpace(codeValue))
                 {
-                    btn.IsEnabled = true;
+                    // Usuario canceló o cerró el popup; no es error.
                     return;
                 }
 
-                // NUEVO LOADER PARA CREACIÓN DE USUARIO
+                // 6) NUEVO LOADER PARA CREAR USUARIO
                 loader = ShowLoader();
 
-                if (!await CreateUserAsync(client, userDto, codeValue, loader))
+                bool userCreated = await CreateUserAsync(client, userDto, codeValue, loader);
+                loader = null; // CreateUserAsync también cierra el loader
+
+                if (!userCreated)
                 {
-                    pendingMessage = MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable");
-                    pendingMessageType = PopupType.Error;
-                    shouldShowPopup = true;
-                    btn.IsEnabled = true;
+                    // Ya se mostró el mensaje correspondiente dentro de CreateUserAsync
                     return;
                 }
 
-                // ÉXITO TOTAL
-                pendingMessage = MessageTranslator.GetLocalizedMessage("msg_AccountCreated");
-                pendingMessageType = PopupType.Success;
-                shouldShowPopup = true;
+                // 7) ÉXITO FINAL: CUENTA CREADA
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_AccountCreated"),
+                    PopupType.Success);
             }
             finally
             {
                 btn.IsEnabled = true;
+
                 ServiceHelper.SafeClose(client);
 
                 if (loader != null && loader.IsVisible)
-                    loader.Close();
-
-                if (shouldShowPopup && !string.IsNullOrEmpty(pendingMessage))
                 {
-                    MessageHelper.ShowPopup(pendingMessage, pendingMessageType);
+                    loader.Close();
                 }
             }
         }
 
-
-
+        // =========================================================
+        // VALIDACIONES LOCALES
+        // =========================================================
         private bool ValidateLocalInputs()
         {
             if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
@@ -124,25 +114,58 @@ namespace DamasChinas_Client.UI.Pages
                 string.IsNullOrWhiteSpace(txtPassword.Password) ||
                 string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
             {
-                ShowWarning("msg_EmptyCredentials");
+                ShowWarning(MessageKeys.EmptyCredentials);
                 return false;
             }
 
             if (txtPassword.Password != txtConfirmPassword.Password)
             {
-                ShowWarning("msg_PasswordsDontMatch");
+                ShowWarning(MessageKeys.PasswordsDontMatch);
                 return false;
             }
 
             if (!ValidatePassword())
             {
-                ShowWarning("msg_InvalidPassword");
+                ShowWarning(MessageKeys.InvalidPassword);
                 return false;
             }
 
             return true;
         }
 
+        private bool ValidatePassword()
+        {
+            try
+            {
+                Validator.ValidatePassword(txtPassword.Password);
+                return true;
+            }
+            catch (ArgumentException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidatePassword] {ex.Message}");
+                return false;
+            }
+        }
+
+        // =========================================================
+        // HELPERS DE UI
+        // =========================================================
+        private static void ShowWarning(string messageKey)
+        {
+            string message = MessageTranslator.GetLocalizedMessage(messageKey);
+            MessageHelper.ShowPopup(message, PopupType.Warning);
+        }
+
+        private static void ShowErrorByKey(string messageKey)
+        {
+            string message = MessageTranslator.GetLocalizedMessage(messageKey);
+            MessageHelper.ShowPopup(message, PopupType.Error);
+        }
+
+        private static void ShowError(string message)
+        {
+            MessageHelper.ShowPopup(message, PopupType.Error);
+        }
 
         private LoadingWindow ShowLoader()
         {
@@ -150,47 +173,32 @@ namespace DamasChinas_Client.UI.Pages
             {
                 Owner = Application.Current.MainWindow
             };
+
             loader.Show();
             return loader;
         }
 
-
-        private async Task<bool> ValidateWithServerAsync(SingInServiceClient client, UserDto dto, LoadingWindow loader)
+        private static async Task CloseLoaderSafeAsync(LoadingWindow loader)
         {
+            if (loader == null)
+            {
+                return;
+            }
+
             try
             {
-                var result = await client.ValidateUserDataAsync(dto);
-
                 await loader.WaitMinimumAsync();
-                loader.Close();
 
-                // Aquí NO mostramos popup nunca
-                return result?.Success == true;
-            }
-            catch (EndpointNotFoundException ex)
-            {
-                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - EndpointNotFound] {ex.Message}");
-                return false;
-            }
-            catch (CommunicationException ex)
-            {
-                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Communication] {ex.Message}");
-                return false;
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Timeout] {ex.Message}");
-                return false;
+                if (loader.IsVisible)
+                {
+                    loader.Close();
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Unknown] {ex.Message}");
-                return false;
+                Debug.WriteLine($"[SignIn.CloseLoaderSafeAsync] {ex.Message}");
             }
         }
-
-
-
 
         private string ShowVerificationCodeWindow()
         {
@@ -200,139 +208,6 @@ namespace DamasChinas_Client.UI.Pages
             };
 
             return popup.ShowDialog() == true ? popup.CodeValue : null;
-        }
-
-
-        private async Task<bool> RequestVerificationCodeAsync(SingInServiceClient client, UserDto dto)
-        {
-            var result = await Task.Run(() => client.RequestVerificationCode(dto.Email));
-
-            if (result?.Success != true)
-            {
-                var message = result != null
-                    ? MessageTranslator.GetLocalizedMessage(result.Code)
-                    : MessageTranslator.GetLocalizedMessage("msg_CodeSendingError");
-                ShowError(message);
-                return false;
-            }
-
-            MessageHelper.ShowPopup(
-                MessageTranslator.GetLocalizedMessage("msg_CodeSentSuccessfully"),
-                PopupType.Success
-            );
-
-            return true;
-        }
-
-
-        private async Task<bool> CreateUserAsync(SingInServiceClient client, UserDto dto, string code, LoadingWindow loader)
-        {
-            try
-            {
-          
-                var result = await client.CreateUserAsync(dto, code);
-
-                await loader.WaitMinimumAsync();
-
-                if (result?.Success != true)
-                {
-                    HandleCodeCreationError(result);
-                    return false;
-                }
-
-                return true;
-            }
-            catch (EndpointNotFoundException ex)
-            {
-                Debug.WriteLine($"[SignIn.CreateUserAsync - EndpointNotFound] {ex.Message}");
-                return false;
-            }
-            catch (CommunicationException ex)
-            {
-                Debug.WriteLine($"[SignIn.CreateUserAsync - Communication] {ex.Message}");
-                return false;
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[SignIn.CreateUserAsync - Timeout] {ex.Message}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[SignIn.CreateUserAsync - Unknown] {ex.Message}");
-                return false;
-            }
-        }
-
-
-
-
-        private void ShowWarning(string code)
-        {
-            MessageHelper.ShowPopup(MessageTranslator.GetLocalizedMessage(code), PopupType.Warning);
-        }
-
-
-        private static void ShowError(string msg)
-        {
-            MessageHelper.ShowPopup(msg, PopupType.Error);
-        }
-
-
-        private void HandleCodeCreationError(OperationResult result)
-        {
-            switch (result?.TechnicalDetail)
-            {
-                case "invalid":
-                    ShowError(MessageTranslator.GetLocalizedMessage("msg_InvalidVerificationCode"));
-                    break;
-                case "expired":
-                    ShowError(MessageTranslator.GetLocalizedMessage("msg_VerificationCodeExpired"));
-                    break;
-                case "not_found":
-                    ShowError(MessageTranslator.GetLocalizedMessage("msg_VerificationCodeNotFound"));
-                    break;
-                default:
-                    ShowError(MessageTranslator.GetLocalizedMessage("msg_UnknownError"));
-                    break;
-            }
-        }
-
-
-        private static void ShowSuccessPopup()
-        {
-            MessageHelper.ShowPopup(
-                MessageTranslator.GetLocalizedMessage("msg_AccountCreated"),
-                PopupType.Success
-            );
-        }
-
-        
-
-        private static async void CloseLoaderIfOpen(LoadingWindow loader)
-        {
-            if (loader != null)
-            {
-                await loader.WaitMinimumAsync();
-                if (loader.IsVisible)
-                    loader.Close();
-            }
-        }
-
-
-
-
-private bool ValidatePassword()
-        {
-            try
-            {
-                Validator.ValidatePassword(txtPassword.Password);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         private UserDto GetUserFromInputs()
@@ -347,7 +222,215 @@ private bool ValidatePassword()
             };
         }
 
+        // =========================================================
+        // LLAMADAS AL SERVIDOR
+        // =========================================================
 
+        /// <summary>
+        /// Valida los datos del usuario contra el servidor.
+        /// Muestra mensajes de error en caso de validaciones de negocio o fallos de red.
+        /// Siempre intenta cerrar el loader.
+        /// </summary>
+        private static async Task<bool> ValidateWithServerAsync(
+            SingInServiceClient client,
+            UserDto dto,
+            LoadingWindow loader)
+        {
+            try
+            {
+                var result = await client.ValidateUserDataAsync(dto);
+
+                await CloseLoaderSafeAsync(loader);
+
+                if (result == null)
+                {
+                    ShowErrorByKey(MessageKeys.ServerUnavailable);
+                    return false;
+                }
+
+                if (!result.Success)
+                {
+                    // Aquí usamos el MessageCode que viene del servidor
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                    ShowError(message);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - EndpointNotFound] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.ServerUnavailable);
+                return false;
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Communication] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.ServerUnavailable);
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Timeout] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.NetworkLatency);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Unknown] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.UnknownError);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Solicita al servidor el envío del código de verificación.
+        /// Muestra el popup de éxito o error según corresponda.
+        /// </summary>
+        private static async Task<bool> RequestVerificationCodeAsync(
+            SingInServiceClient client,
+            UserDto dto)
+        {
+            try
+            {
+                var result = await Task.Run(() => client.RequestVerificationCode(dto.Email));
+
+                if (result == null)
+                {
+                    ShowErrorByKey(MessageKeys.ServerUnavailable);
+                    return false;
+                }
+
+                if (!result.Success)
+                {
+                    // Mensaje proveniente del servidor (MessageCode)
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                    ShowError(message);
+                    return false;
+                }
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.CodeSentSuccessfully),
+                    PopupType.Success);
+
+                return true;
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - EndpointNotFound] {ex.Message}");
+                ShowErrorByKey(MessageKeys.ServerUnavailable);
+                return false;
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - Communication] {ex.Message}");
+                ShowErrorByKey(MessageKeys.ServerUnavailable);
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - Timeout] {ex.Message}");
+                ShowErrorByKey(MessageKeys.NetworkLatency);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - Unknown] {ex.Message}");
+                ShowErrorByKey(MessageKeys.UnknownError);
+                return false;
+            }
+        }
+
+        private static async Task<bool> CreateUserAsync(
+    SingInServiceClient client,
+    UserDto dto,
+    string code,
+    LoadingWindow loader)
+        {
+            try
+            {
+                var result = await client.CreateUserAsync(dto, code);
+
+                await CloseLoaderSafeAsync(loader);
+
+                if (result == null)
+                {
+                    ShowErrorByKey(MessageKeys.ServerUnavailable);
+                    return false;
+                }
+
+                if (!result.Success)
+                {
+                    // ?? DEBUG CRÍTICO PARA DETECTAR EL PROBLEMA REAL
+                    Debug.WriteLine($"[DEBUG] RESULT: Success={result?.Success}, Code={result?.Code}, Technical={result?.TechnicalDetail}");
+
+                    HandleCodeCreationError(result);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - EndpointNotFound] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.ServerUnavailable);
+                return false;
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Communication] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.ServerUnavailable);
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Timeout] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.NetworkLatency);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Unknown] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.UnknownError);
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Mapea el TechnicalDetail que viene del servidor a mensajes específicos de verificación.
+        /// </summary>
+        private static void HandleCodeCreationError(OperationResult result)
+        {
+            switch (result?.TechnicalDetail)
+            {
+                case "invalid":
+                    ShowErrorByKey(MessageKeys.InvalidVerificationCode);
+                    break;
+                case "expired":
+                    ShowErrorByKey(MessageKeys.VerificationCodeExpired);
+                    break;
+                case "not_found":
+                    ShowErrorByKey(MessageKeys.VerificationCodeNotFound);
+                    break;
+                default:
+                    ShowErrorByKey(MessageKeys.UnknownError);
+                    break;
+            }
+        }
+
+        // =========================================================
+        // NAVEGACIÓN
+        // =========================================================
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -359,9 +442,8 @@ private bool ValidatePassword()
                 else
                 {
                     MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        PopupType.Warning
-                    );
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.NavigationError),
+                        PopupType.Warning);
                 }
             }
             catch (Exception ex)
@@ -369,13 +451,10 @@ private bool ValidatePassword()
                 Debug.WriteLine($"[SignIn.OnBackClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
+                    PopupType.Error);
             }
         }
-
-       
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
@@ -388,13 +467,10 @@ private bool ValidatePassword()
                 Debug.WriteLine($"[SignIn.OnSoundClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.NavigationError),
+                    PopupType.Error);
             }
         }
-
-      
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -407,9 +483,8 @@ private bool ValidatePassword()
                 Debug.WriteLine($"[SignIn.OnLanguageClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
+                    PopupType.Error);
             }
         }
     }

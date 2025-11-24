@@ -49,6 +49,17 @@
     <sys:String x:Key="howToPlay">Cómo Jugar</sys:String>
     <sys:String x:Key="logout">Cerrar Sesión</sys:String>
 
+    <sys:String x:Key="msg_TutorialUnavailable">El tutorial no está disponible por el momento.</sys:String>
+    <sys:String x:Key="msg_JoinPartyOpenError">No se pudo abrir la ventana para unirse a una partida.</sys:String>
+    <sys:String x:Key="msg_CreateLobbyError">No se pudo crear el lobby.</sys:String>
+    <sys:String x:Key="msg_ProfileOpenError">No se pudo abrir el perfil del jugador.</sys:String>
+    <sys:String x:Key="msg_StatsUnavailable">Las estadísticas no están disponibles por el momento.</sys:String>
+    <sys:String x:Key="msg_FriendsOpenError">No se pudo abrir la lista de amigos.</sys:String>
+    <sys:String x:Key="msg_GuestFeatureOnly">Esta función solo está disponible para usuarios registrados.</sys:String>
+    <sys:String x:Key="msg_GuestStatsUnavailable">Los invitados no pueden visualizar estadísticas.</sys:String>
+
+
+
     <!-- ========================================================= -->
     <!--  SIGN IN / REGISTRO                                       -->
     <!-- ========================================================= -->
@@ -60,6 +71,10 @@
     <sys:String x:Key="username">Nombre de usuario</sys:String>
     <sys:String x:Key="password">Contraseña</sys:String>
     <sys:String x:Key="confirmPassword">Confirma tu contraseña</sys:String>
+    <sys:String x:Key="msg_AccountCreated">
+        Cuenta creada correctamente. ¡Bienvenido a Damas Chinas!
+    </sys:String>
+
 
     <!-- Validaciones locales -->
     <sys:String x:Key="emptyCredentials">Los campos no pueden estar vacíos.</sys:String>
@@ -209,16 +224,10 @@
 
     <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">Esta función aún no está disponible.</sys:String>
-    <sys:String x:Key="msg_GuestFeatureOnly">Esta función está disponible solo para usuarios registrados.</sys:String>
-    <sys:String x:Key="msg_TutorialUnavailable">El tutorial aún no está disponible.</sys:String>
-    <sys:String x:Key="msg_GuestStatsUnavailable">Las estadísticas no están disponibles para usuarios invitados.</sys:String>
+
 
     <!-- Navegación / módulos -->
-    <sys:String x:Key="msg_ProfileOpenError">No se pudo abrir el perfil.</sys:String>
-    <sys:String x:Key="msg_CreateLobbyError">No se pudo crear la partida.</sys:String>
-    <sys:String x:Key="msg_JoinPartyOpenError">No se pudo abrir la página para unirse a partidas.</sys:String>
-    <sys:String x:Key="msg_StatsUnavailable">Las estadísticas aún no están disponibles.</sys:String>
-    <sys:String x:Key="msg_FriendsOpenError">No se pudo abrir la lista de amigos.</sys:String>
+
     <sys:String x:Key="msg_ProfileChangeError">No se pudo abrir la pantalla para cambiar datos.</sys:String>
     <sys:String x:Key="msg_FriendRemoved">Amigo eliminado correctamente.</sys:String>
     <sys:String x:Key="msg_ChatComingSoon">La función de chat estará disponible pronto.</sys:String>

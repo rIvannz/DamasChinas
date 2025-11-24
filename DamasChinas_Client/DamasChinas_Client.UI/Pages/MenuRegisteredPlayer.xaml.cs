@@ -7,7 +7,6 @@ using DamasChinas_Client.UI.Utilities;
 using System.Diagnostics;
 using System.ServiceModel;
 
-
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class MenuRegisteredPlayer : Page
@@ -24,8 +23,6 @@ namespace DamasChinas_Client.UI.Pages
             txtUsername.Text = _profile.Username;
         }
 
-   
-
         private void OnAvatarClick(object sender, RoutedEventArgs e)
         {
             try
@@ -36,25 +33,14 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnAvatarClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnAvatarClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ProfileOpenError"),
-                        PopupType.Error
-
-                );
+                MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
             }
         }
-
-    
 
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
         {
@@ -69,33 +55,19 @@ namespace DamasChinas_Client.UI.Pages
             catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnCreateGameClick - Communication] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
             catch (TimeoutException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnCreateGameClick - Timeout] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnCreateGameClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_CreateLobbyError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.CreateLobbyError, PopupType.Error);
             }
         }
-
-  
 
         private void OnJoinPartyClick(object sender, RoutedEventArgs e)
         {
@@ -107,41 +79,23 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnJoinPartyClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnJoinPartyClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_JoinPartyOpenError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
             }
         }
 
-   
-
         private void OnHowToPlayClick(object sender, RoutedEventArgs e)
         {
-            MessageHelper.ShowPopup(
-                MessageTranslator.GetLocalizedMessage("msg_TutorialUnavailable"),
-                PopupType.Info
-            );
+            MessageHelper.ShowPopup(MessageKeys.TutorialUnavailable, PopupType.Info);
         }
-
-
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {
-            MessageHelper.ShowPopup(
-                MessageTranslator.GetLocalizedMessage("msg_StatsUnavailable"),
-                PopupType.Info
-            );
+            MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Info);
         }
 
         private void OnFriendsClick(object sender, RoutedEventArgs e)
@@ -153,23 +107,14 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnFriendsClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnFriendsClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_FriendsOpenError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.FriendsOpenError, PopupType.Error);
             }
         }
-
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
@@ -180,24 +125,14 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnSoundClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnSoundClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
-     
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -208,21 +143,14 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnLanguageClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnLanguageClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
     }
 }
+

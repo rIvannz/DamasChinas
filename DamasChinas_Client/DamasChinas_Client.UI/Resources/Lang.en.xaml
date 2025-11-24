@@ -50,6 +50,15 @@
     <sys:String x:Key="howToPlay">How to Play</sys:String>
     <sys:String x:Key="logout">LOG OUT</sys:String>
 
+    <sys:String x:Key="msg_TutorialUnavailable">The tutorial is currently unavailable.</sys:String>
+    <sys:String x:Key="msg_JoinPartyOpenError">Unable to open the join party window.</sys:String>
+    <sys:String x:Key="msg_CreateLobbyError">Failed to create the lobby.</sys:String>
+    <sys:String x:Key="msg_ProfileOpenError">Unable to open the player profile.</sys:String>
+    <sys:String x:Key="msg_StatsUnavailable">Statistics are not available at the moment.</sys:String>
+    <sys:String x:Key="msg_FriendsOpenError">Unable to open the friends list.</sys:String>
+    <sys:String x:Key="msg_GuestFeatureOnly">This feature is only available for registered users.</sys:String>
+    <sys:String x:Key="msg_GuestStatsUnavailable">Guests cannot view statistics.</sys:String>
+  
     <!-- ========================================================= -->
     <!--  SIGN IN / REGISTRATION                                   -->
     <!-- ========================================================= -->
@@ -62,6 +71,10 @@
     <sys:String x:Key="username">Username</sys:String>
     <sys:String x:Key="password">Password</sys:String>
     <sys:String x:Key="confirmPassword">Confirm your password</sys:String>
+    <sys:String x:Key="msg_AccountCreated">
+        Account successfully created. You are ready to play!
+    </sys:String>
+
 
     <!-- Local validations -->
     <sys:String x:Key="emptyCredentials">Fields can't be empty.</sys:String>
@@ -227,16 +240,10 @@
 
     <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">This feature is not available yet.</sys:String>
-    <sys:String x:Key="msg_GuestFeatureOnly">This feature is only available for registered users.</sys:String>
-    <sys:String x:Key="msg_TutorialUnavailable">The tutorial is not available yet.</sys:String>
-    <sys:String x:Key="msg_GuestStatsUnavailable">Statistics are not available for guest users.</sys:String>
+ 
 
     <!-- Navegación / módulos -->
-    <sys:String x:Key="msg_ProfileOpenError">Could not open the profile page.</sys:String>
-    <sys:String x:Key="msg_CreateLobbyError">Could not create the game lobby.</sys:String>
-    <sys:String x:Key="msg_JoinPartyOpenError">Could not open the join party page.</sys:String>
-    <sys:String x:Key="msg_StatsUnavailable">Statistics are not available yet.</sys:String>
-    <sys:String x:Key="msg_FriendsOpenError">Could not open the friends list.</sys:String>
+
     <sys:String x:Key="msg_ProfileChangeError">Unable to open the change data page.</sys:String>
     <sys:String x:Key="msg_FriendRemoved">Friend removed successfully.</sys:String>
     <sys:String x:Key="msg_ChatComingSoon">Chat feature coming soon.</sys:String>

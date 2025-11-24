@@ -3,11 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using DamasChinas_Client.UI.AccountManagerServiceProxy;
-
 using System.Diagnostics;
-
 using DamasChinas_Client.UI.Utilities;
-
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -27,8 +24,6 @@ namespace DamasChinas_Client.UI.Pages
             UpdateProfileDisplay();
         }
 
-      
-
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -39,84 +34,50 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        PopupType.Warning
-                    );
+                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
                 }
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
 
         private void OnLogoutClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 bool confirm = MessageHelper.ShowConfirmLogout();
-
                 if (!confirm)
-                {
                     return;
-                }
 
-          
                 ClientSession.Clear();
 
-          
                 if (NavigationService == null)
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        PopupType.Error
-                    );
+                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
                     return;
                 }
 
-              
                 NavigationService.Navigate(new MainWindow());
-
-             
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnLogoutClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnLogoutClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                        PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
-
-
 
         private void OnChangeDataClick(object sender, RoutedEventArgs e)
         {
@@ -127,24 +88,15 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ProfileChangeError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.ProfileChangeError, PopupType.Error);
             }
         }
 
-      
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             try
@@ -154,23 +106,14 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnSoundClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnSoundClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -181,33 +124,21 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnLanguageClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.OnLanguageClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
-      
 
         private void UpdateProfileDisplay()
         {
             try
             {
                 if (_profile == null)
-                {
                     return;
-                }
 
                 UsernameTextBlock.Text = _profile.Username;
                 FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
@@ -216,12 +147,9 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfilePlayer.UpdateProfileDisplay] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
     }
 }
+

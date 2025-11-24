@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
 using DamasChinas_Client.UI.Utilities;
 using DamasChinas_Client.UI.PopUps;
-
-
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -28,17 +15,15 @@ namespace DamasChinas_Client.UI.Pages
             DisablePasswordFields();
         }
 
- 
+     
         private void OnSendCodeClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 string email = txtEmail.Text.Trim();
 
-          
                 Validator.ValidateEmail(email);
 
-             
                 var codeWindow = new VerificationCodeWindow
                 {
                     Owner = Application.Current.MainWindow
@@ -46,7 +31,8 @@ namespace DamasChinas_Client.UI.Pages
 
                 bool? dialogResult = codeWindow.ShowDialog();
 
-                if (dialogResult == true) // Código correcto (1234)
+               
+                if (dialogResult == true)
                 {
                     EnablePasswordFields();
                 }
@@ -54,31 +40,33 @@ namespace DamasChinas_Client.UI.Pages
             catch (ArgumentException ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - InvalidEmail] {ex.Message}");
+
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_InvalidEmail"),
+                    MessageKeys.InvalidEmail,
                     PopupType.Warning
                 );
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - InvalidOperation] {ex.Message}");
+
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    MessageKeys.NavigationError,
                     PopupType.Error
                 );
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - General] {ex.Message}");
+
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                   PopupType.Error
+                    MessageKeys.UnknownError,
+                    PopupType.Error
                 );
             }
         }
 
-
-       
+    
         private async void OnChangePasswordClick(object sender, RoutedEventArgs e)
         {
             try
@@ -88,25 +76,18 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (string.IsNullOrWhiteSpace(newPass) || string.IsNullOrWhiteSpace(confirmPass))
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_EmptyCredentials"),
-                        PopupType.Warning
-                    );
+                    MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
                     return;
                 }
 
                 if (newPass != confirmPass)
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_PasswordsDontMatch"),
-                        PopupType.Warning
-                    );
+                    MessageHelper.ShowPopup(MessageKeys.PasswordsDontMatch, PopupType.Warning);
                     return;
                 }
 
                 Validator.ValidatePassword(newPass);
 
-            
                 var loading = new LoadingWindow
                 {
                     Owner = Application.Current.MainWindow
@@ -116,43 +97,33 @@ namespace DamasChinas_Client.UI.Pages
                 await loading.WaitMinimumAsync();
                 loading.Close();
 
-               
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_PasswordUpdated"),
-                    PopupType.Warning
-                );
-
              
+                MessageHelper.ShowPopup(MessageKeys.Success, PopupType.Success);
+
                 NavigationService?.Navigate(new Login());
             }
             catch (ArgumentException ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - InvalidPassword] {ex.Message}");
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_InvalidPassword"),
-                    PopupType.Warning
-                );
+
+                MessageHelper.ShowPopup(MessageKeys.InvalidPassword, PopupType.Warning);
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - InvalidOperation] {ex.Message}");
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Warning
-                );
+
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
-      
+        
+       
         private void DisablePasswordFields()
         {
             txtNewPassword.IsEnabled = false;
@@ -167,7 +138,7 @@ namespace DamasChinas_Client.UI.Pages
             btnChangePassword.IsEnabled = true;
         }
 
-   
+    
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -180,14 +151,11 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnBackClick] {ex.Message}");
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
-   
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             try
@@ -196,21 +164,15 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnSoundClick - InvalidOperation] {ex.Message}");
+                Debug.WriteLine($"[ForgotPassword.OnSoundClick - InvalidOperation] {ex.Message}");
 
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnSoundClick - General] {ex.Message}");
+                Debug.WriteLine($"[ForgotPassword.OnSoundClick - General] {ex.Message}");
 
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -223,11 +185,10 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnLanguageClick] {ex.Message}");
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
     }
 }
+

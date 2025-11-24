@@ -5,20 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -37,8 +27,6 @@ namespace DamasChinas_Client.UI.Pages
 
             LoadPublicLobbies();
         }
-
-   
 
         private void LoadPublicLobbies()
         {
@@ -70,8 +58,8 @@ namespace DamasChinas_Client.UI.Pages
                         HostUsername = hostUsername,
                         PlayerCount = $"{playerCount}/6",
                         IsPrivate = lobby.IsPrivate
-                            ? MessageTranslator.GetLocalizedMessage("private")
-                            : MessageTranslator.GetLocalizedMessage("public")
+                            ? MessageTranslator.GetLocalizedMessage(MessageKeys.PrivateLobby)
+                            : MessageTranslator.GetLocalizedMessage(MessageKeys.PublicLobby)
                     });
                 }
 
@@ -84,7 +72,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.LoadPublicLobbies - Communication] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
+                    MessageKeys.ServerUnavailable,
                     PopupType.Error
                 );
             }
@@ -93,7 +81,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.LoadPublicLobbies - Timeout] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
+                    MessageKeys.NetworkLatency,
                     PopupType.Error
                 );
             }
@@ -102,7 +90,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.LoadPublicLobbies - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
@@ -112,7 +100,6 @@ namespace DamasChinas_Client.UI.Pages
         {
             LoadPublicLobbies();
         }
-
 
         private void OnJoinSelectedClick(object sender, RoutedEventArgs e)
         {
@@ -125,7 +112,7 @@ namespace DamasChinas_Client.UI.Pages
                 else
                 {
                     MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("noLobbySelected"),
+                        MessageKeys.NoLobbySelected,
                         PopupType.Warning
                     );
                 }
@@ -135,13 +122,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.OnJoinSelectedClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error 
+                    MessageKeys.UnknownError,
+                    PopupType.Error
                 );
             }
         }
-
-     
 
         private void OnJoinByCodeClick(object sender, RoutedEventArgs e)
         {
@@ -152,7 +137,7 @@ namespace DamasChinas_Client.UI.Pages
                 if (string.IsNullOrWhiteSpace(code))
                 {
                     MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("invalidCodeWarning"),
+                        MessageKeys.InvalidCodeWarning,
                         PopupType.Warning
                     );
                     return;
@@ -165,13 +150,12 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.OnJoinByCodeClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Warning   
+                    MessageKeys.UnknownError,
+                    PopupType.Warning
                 );
             }
         }
 
-    
         private void TryJoinLobby(string code)
         {
             try
@@ -181,7 +165,7 @@ namespace DamasChinas_Client.UI.Pages
                 if (lobby == null)
                 {
                     MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
+                        MessageKeys.JoiningLobbyError,
                         PopupType.Warning
                     );
                     return;
@@ -194,7 +178,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.TryJoinLobby - Timeout] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NetworkLatency"),
+                    MessageKeys.NetworkLatency,
                     PopupType.Warning
                 );
 
@@ -205,7 +189,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.TryJoinLobby - Fault] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
+                    MessageKeys.JoiningLobbyError,
                     PopupType.Error
                 );
 
@@ -216,7 +200,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.TryJoinLobby - Communication] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ServerUnavailable"),
+                    MessageKeys.ServerUnavailable,
                     PopupType.Error
                 );
             }
@@ -225,7 +209,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.TryJoinLobby - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    MessageKeys.NavigationError,
                     PopupType.Error
                 );
             }
@@ -234,13 +218,11 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.TryJoinLobby - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("joiningLobbyError"),
+                    MessageKeys.JoiningLobbyError,
                     PopupType.Error
                 );
             }
         }
-
-
 
         private void OnCodeBoxGotFocus(object sender, RoutedEventArgs e)
         {
@@ -255,8 +237,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        
-
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -268,7 +248,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.OnBackClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    MessageKeys.NavigationError,
                     PopupType.Error
                 );
             }
@@ -277,7 +257,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[JoinParty.OnBackClick - General] {ex.Message}");
 
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
+                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }

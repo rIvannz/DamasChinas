@@ -14,7 +14,6 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
         }
 
-
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -25,33 +24,21 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        PopupType.Warning
-                    );
+                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
                 }
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
-       
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             try
@@ -61,24 +48,14 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnSoundClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnSoundClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
-      
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
@@ -89,65 +66,39 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnLanguageClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnLanguageClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
-     
 
         private void OnDeleteFriendClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_FriendRemoved"),
-                    PopupType.Success
-                );
+                MessageHelper.ShowPopup(MessageKeys.FriendRemoved, PopupType.Success);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnDeleteFriendClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
-
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_ChatComingSoon"),
-                    PopupType.Info
-                );
+                MessageHelper.ShowPopup(MessageKeys.ChatComingSoon, PopupType.Info);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ProfileUser.OnSendMessageClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
     }
 }
-
