@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace DamasChinas_Server.Game
 {
-
     public class ChineseCheckersBoard
     {
         private const int DefaultBoardRadius = 4;
@@ -40,7 +39,10 @@ namespace DamasChinas_Server.Game
 
         public IEnumerable<HexCell> Cells
         {
-            get { return _cells.Values; }
+            get
+            {
+                return _cells.Values;
+            }
         }
 
         public bool TryGetCell(HexCoordinate coordinate, out HexCell cell)
@@ -133,7 +135,6 @@ namespace DamasChinas_Server.Game
             }
         }
 
-
         public void MovePiece(HexCoordinate origin, HexCoordinate destination)
         {
             HexCell originCell = GetCell(origin);
@@ -165,7 +166,7 @@ namespace DamasChinas_Server.Game
             }
         }
 
-        private IEnumerable<HexCell> GenerateCompleteBoard(int radius)
+        private static IEnumerable<HexCell> GenerateCompleteBoard(int radius)
         {
             var cells = new List<HexCell>();
 

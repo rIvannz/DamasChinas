@@ -11,19 +11,25 @@ using DamasChinas_Server.Interfaces;
 namespace DamasChinas_Server.Services
 {
     [ServiceBehavior(
-        InstanceContextMode = InstanceContextMode.Single,
-        ConcurrencyMode = ConcurrencyMode.Multiple)]
+    InstanceContextMode = InstanceContextMode.Single,
+    ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class LobbyService : ILobbyService
     {
+        
+        protected LobbyService()
+        {
+        }
+
         private readonly ConcurrentDictionary<string, Lobby> _lobbies =
             new ConcurrentDictionary<string, Lobby>();
 
         private readonly ConcurrentDictionary<int, ILobbyCallback> _connections =
             new ConcurrentDictionary<int, ILobbyCallback>();
 
-
+      
         private ILobbyCallback CurrentCallback =>
             OperationContext.Current.GetCallbackChannel<ILobbyCallback>();
+
 
         private static string NewCode() =>
             Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
@@ -115,7 +121,7 @@ namespace DamasChinas_Server.Services
 
         public List<Lobby> GetPublicLobbies()
         {
-            // Limpieza con SELECT (Sonar)
+            
             var inactiveCodes = _lobbies.Values
                 .Where(l => !_connections.ContainsKey(l.HostUserId))
                 .Select(l => l.Code)

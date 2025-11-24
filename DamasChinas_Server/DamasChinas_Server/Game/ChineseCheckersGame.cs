@@ -5,9 +5,6 @@ using System.Linq;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Authoritative engine that keeps the official state of the match on the server.
-    /// </summary>
     public class ChineseCheckersGame
     {
         private const int MinimumPlayers = 2;
@@ -21,6 +18,10 @@ namespace DamasChinas_Server.Game
         private readonly Dictionary<PlayerColor, Player> _players;
         private readonly List<PlayerColor> _turnOrder;
         private readonly Dictionary<PlayerColor, PlayerColor> _targetZones;
+
+        public ChineseCheckersBoard Board { get; }
+        public PlayerColor CurrentTurn { get; private set; }
+        public PlayerColor? Winner { get; private set; }
 
         public ChineseCheckersGame(IEnumerable<Player> players)
         {
@@ -51,19 +52,32 @@ namespace DamasChinas_Server.Game
             InitializePieces();
         }
 
-        public ChineseCheckersBoard Board { get; }
 
-        public PlayerColor CurrentTurn { get; private set; }
-
-        public PlayerColor? Winner { get; private set; }
-
-        public IReadOnlyCollection<Player> Players
+        private static Dictionary<PlayerColor, PlayerColor> CreateTargetZones()
         {
-            get
+            return new Dictionary<PlayerColor, PlayerColor>
             {
-                return _players.Values.ToList().AsReadOnly();
+                { PlayerColor.Red,    PlayerColor.Green },
+                { PlayerColor.Green,  PlayerColor.Red },
+                { PlayerColor.Blue,   PlayerColor.Yellow },
+                { PlayerColor.Yellow, PlayerColor.Blue },
+                { PlayerColor.Orange, PlayerColor.Purple },
+                { PlayerColor.Purple, PlayerColor.Orange }
+            };
+        }
+
+        private void InitializePieces()
+        {
+            foreach (PlayerColor color in _players.Keys)
+            {
+                foreach (HexCell cell in Board.GetZoneCells(color))
+                {
+                    cell.PlacePiece(new Piece(color));
+                }
             }
         }
+
+
 
         public MoveResult TryApplyMove(PlayerMove move)
         {
@@ -104,25 +118,6 @@ namespace DamasChinas_Server.Game
             return MoveResult.Success();
         }
 
-        public IReadOnlyDictionary<HexCoordinate, PlayerColor?> GetBoardState()
-        {
-            var snapshot = Board.Cells.ToDictionary(
-                cell => cell.Coordinate,
-                cell => cell.IsOccupied ? (PlayerColor?)cell.Piece.Color : null);
-
-            return new ReadOnlyDictionary<HexCoordinate, PlayerColor?>(snapshot);
-        }
-
-        public PlayerColor GetTargetZone(PlayerColor player)
-        {
-            if (!_targetZones.TryGetValue(player, out PlayerColor targetZone))
-            {
-                throw new ArgumentException("The player does not have a configured target zone.", nameof(player));
-            }
-
-            return targetZone;
-        }
-
         public bool HasWon(PlayerColor player)
         {
             if (!_targetZones.TryGetValue(player, out PlayerColor targetZone))
@@ -134,75 +129,66 @@ namespace DamasChinas_Server.Game
                 .All(cell => cell.IsOccupied && cell.Piece.Color == player);
         }
 
-        // ============================================================
-        // Initialization helpers
-        // ============================================================
-
-        private static Dictionary<PlayerColor, PlayerColor> CreateTargetZones()
-        {
-            return new Dictionary<PlayerColor, PlayerColor>
-            {
-                { PlayerColor.Red,    PlayerColor.Green },
-                { PlayerColor.Green,  PlayerColor.Red },
-                { PlayerColor.Blue,   PlayerColor.Yellow },
-                { PlayerColor.Yellow, PlayerColor.Blue },
-                { PlayerColor.Orange, PlayerColor.Purple },
-                { PlayerColor.Purple, PlayerColor.Orange }
-            };
-        }
-
-        private void InitializePieces()
-        {
-            foreach (PlayerColor color in _players.Keys)
-            {
-                foreach (HexCell cell in Board.GetZoneCells(color))
-                {
-                    cell.PlacePiece(new Piece(color));
-                }
-            }
-        }
-
-        // ============================================================
-        // Move validation (refactored for low complexity)
-        // ============================================================
-
         private bool ValidateMove(PlayerMove move, out string errorMessage)
         {
             errorMessage = null;
 
-            if (!TryValidateOrigin(move, out errorMessage, out HexCell originCell))
+ 
+            if (!Board.TryGetCell(move.Origin, out HexCell origin))
             {
+                errorMessage = "The origin cell does not exist on the board.";
+                return false;
+            }
+
+            if (!origin.IsOccupied || origin.Piece.Color != move.Player)
+            {
+                errorMessage = "The origin cell does not contain one of the player's pieces.";
                 return false;
             }
 
             var visited = new HashSet<HexCoordinate> { move.Origin };
             bool performedJump = false;
-            HexCoordinate currentPosition = move.Origin;
+            HexCoordinate current = move.Origin;
 
             for (int index = FirstDestinationIndex; index < move.Path.Count; index++)
             {
                 HexCoordinate destination = move.Path[index];
 
-                if (!TryValidateDestinationCell(destination, visited, out errorMessage, out HexCell destinationCell))
+      
+                if (!visited.Add(destination))
                 {
+                    errorMessage = "The path cannot visit the same cell twice.";
                     return false;
                 }
 
+                if (!Board.TryGetCell(destination, out HexCell destCell))
+                {
+                    errorMessage = "One of the destination cells is outside the board.";
+                    return false;
+                }
+
+                if (destCell.IsOccupied)
+                {
+                    errorMessage = "The path ends on an occupied cell.";
+                    return false;
+                }
+
+        
                 if (!TryValidateStep(
-                        move,
-                        currentPosition,
-                        destination,
-                        index,
-                        out errorMessage,
-                        out bool isJump,
-                        out HexCoordinate middleCoordinate))
+                    move,
+                    current,
+                    destination,
+                    index,
+                    out errorMessage,
+                    out bool isJump,
+                    out HexCoordinate middle))
                 {
                     return false;
                 }
 
                 if (isJump)
                 {
-                    if (!TryValidateJump(middleCoordinate, out errorMessage))
+                    if (!TryValidateJump(middle, out errorMessage))
                     {
                         return false;
                     }
@@ -210,66 +196,13 @@ namespace DamasChinas_Server.Game
                     performedJump = true;
                 }
 
-                currentPosition = destination;
+                current = destination;
             }
 
             return ValidateFinalJumpRule(move, performedJump, out errorMessage);
         }
 
-        private bool TryValidateOrigin(
-            PlayerMove move,
-            out string errorMessage,
-            out HexCell originCell)
-        {
-            errorMessage = null;
-            originCell = null;
-
-            if (!Board.TryGetCell(move.Origin, out originCell))
-            {
-                errorMessage = "The origin cell does not exist on the board.";
-                return false;
-            }
-
-            if (!originCell.IsOccupied || originCell.Piece.Color != move.Player)
-            {
-                errorMessage = "The origin cell does not contain one of the player's pieces.";
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool TryValidateDestinationCell(
-            HexCoordinate destination,
-            HashSet<HexCoordinate> visited,
-            out string errorMessage,
-            out HexCell destinationCell)
-        {
-            errorMessage = null;
-            destinationCell = null;
-
-            if (!visited.Add(destination))
-            {
-                errorMessage = "The path cannot visit the same cell twice.";
-                return false;
-            }
-
-            if (!Board.TryGetCell(destination, out destinationCell))
-            {
-                errorMessage = "One of the destination cells is outside the board.";
-                return false;
-            }
-
-            if (destinationCell.IsOccupied)
-            {
-                errorMessage = "The path ends on an occupied cell.";
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool TryValidateStep(
+        private static bool TryValidateStep(
             PlayerMove move,
             HexCoordinate current,
             HexCoordinate destination,
@@ -279,11 +212,8 @@ namespace DamasChinas_Server.Game
             out HexCoordinate middle)
         {
             errorMessage = null;
-            isJump = false;
-            middle = default;
-
-            bool isAdjacent = ChineseCheckersBoard.IsAdjacentMove(current, destination);
             isJump = ChineseCheckersBoard.IsJumpMove(current, destination, out middle);
+            bool isAdjacent = ChineseCheckersBoard.IsAdjacentMove(current, destination);
 
             if (!isAdjacent && !isJump)
             {
@@ -324,7 +254,7 @@ namespace DamasChinas_Server.Game
             return true;
         }
 
-        private bool ValidateFinalJumpRule(
+        private static bool ValidateFinalJumpRule(
             PlayerMove move,
             bool performedJump,
             out string errorMessage)
@@ -340,6 +270,8 @@ namespace DamasChinas_Server.Game
             return true;
         }
 
+
+
         private void ExecuteMove(PlayerMove move)
         {
             HexCell originCell = Board.GetCell(move.Origin);
@@ -351,8 +283,7 @@ namespace DamasChinas_Server.Game
         private void AdvanceTurn()
         {
             int currentIndex = _turnOrder.IndexOf(CurrentTurn);
-            currentIndex = (currentIndex + NextTurnOffset) % _turnOrder.Count;
-            CurrentTurn = _turnOrder[currentIndex];
+            CurrentTurn = _turnOrder[(currentIndex + NextTurnOffset) % _turnOrder.Count];
         }
     }
 }

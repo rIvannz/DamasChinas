@@ -19,14 +19,14 @@ namespace DamasChinas_Server
             return new damas_chinasEntities();
         }
 
-
+        // ============================================================
+        // VALIDADORES ESTÁTICOS — Requeridos por SonarQube
+        // ============================================================
 
         private static void EnsureDifferentUsers(int u1, int u2)
         {
             if (u1 == u2)
-            {
                 throw new FaultException("Un usuario no puede interactuar consigo mismo.");
-            }
         }
 
         private static void EnsureUsersExist(damas_chinasEntities db, int u1, int u2)
@@ -35,60 +35,48 @@ namespace DamasChinas_Server
             bool exist2 = db.usuarios.Any(u => u.id_usuario == u2);
 
             if (!exist1 || !exist2)
-            {
                 throw new FaultException("Uno o ambos usuarios no existen.");
-            }
         }
 
-        private void EnsureNotFriends(damas_chinasEntities db, int u1, int u2)
+        private static void EnsureNotFriends(damas_chinasEntities db, int u1, int u2)
         {
             if (FriendshipExists(db, u1, u2))
-            {
                 throw new FaultException("Los usuarios ya son amigos.");
-            }
         }
 
-        private void EnsureFriends(damas_chinasEntities db, int u1, int u2)
+        private static void EnsureFriends(damas_chinasEntities db, int u1, int u2)
         {
             if (!FriendshipExists(db, u1, u2))
-            {
                 throw new FaultException("Los usuarios no son amigos.");
-            }
         }
 
-        private void EnsureNotBlocked(damas_chinasEntities db, int u1, int u2)
+        private static void EnsureNotBlocked(damas_chinasEntities db, int u1, int u2)
         {
             if (IsBlocked(db, u1, u2))
-            {
                 throw new FaultException("La relación está bloqueada entre los usuarios.");
-            }
         }
 
         private static void EnsureNotBlockedSelf(int u1, int u2)
         {
             if (u1 == u2)
-            {
                 throw new InvalidOperationException("Un usuario no puede bloquearse a sí mismo.");
-            }
         }
 
-        private void EnsureNoPendingRequest(damas_chinasEntities db, int u1, int u2)
+        private static void EnsureNoPendingRequest(damas_chinasEntities db, int u1, int u2)
         {
             if (PendingRequestExists(db, u1, u2))
-            {
                 throw new FaultException("Ya existe una solicitud pendiente entre los usuarios.");
-            }
         }
 
-        private void EnsurePendingRequestExists(damas_chinasEntities db, int sender, int receiver)
+        private static void EnsurePendingRequestExists(damas_chinasEntities db, int sender, int receiver)
         {
             if (!PendingRequestExists(db, sender, receiver))
-            {
                 throw new FaultException("No existe una solicitud pendiente entre los usuarios.");
-            }
         }
 
-
+        // ============================================================
+        // CHECKERS BÁSICOS (estáticos)
+        // ============================================================
 
         private static bool FriendshipExists(damas_chinasEntities db, int u1, int u2)
         {
@@ -108,15 +96,20 @@ namespace DamasChinas_Server
         {
             return db.solicitudes_amistad.Any(s =>
                 ((s.id_emisor == u1 && s.id_receptor == u2) ||
-                 (s.id_emisor == u2 && s.id_receptor == u1))
-                 && s.estado == PendingStatus);
+                 (s.id_emisor == u2 && s.id_receptor == u1)) &&
+                s.estado == PendingStatus);
         }
+
+        // ============================================================
+        // MAPEO
+        // ============================================================
 
         private static FriendDto MapToFriendDto(usuarios user)
         {
             var profile = user.perfiles.FirstOrDefault();
             string username = profile?.username ?? "N/A";
-            bool isOnline = !string.IsNullOrWhiteSpace(username) && SessionManager.IsOnline(username);
+            bool isOnline = !string.IsNullOrWhiteSpace(username) &&
+                            SessionManager.IsOnline(username);
 
             return new FriendDto
             {
@@ -127,22 +120,28 @@ namespace DamasChinas_Server
             };
         }
 
+        // ============================================================
+        // GET IDs
+        // ============================================================
+
         private (int senderId, int receiverId) GetUserIds(string senderUsername, string receiverUsername)
         {
             int senderId = _userRepo.GetUserIdByUsername(senderUsername);
             int receiverId = _userRepo.GetUserIdByUsername(receiverUsername);
+
             EnsureDifferentUsers(senderId, receiverId);
+
             return (senderId, receiverId);
         }
 
-
+        // ============================================================
+        // BLOQUEO — Métodos estáticos
+        // ============================================================
 
         private static void ApplyBlock(damas_chinasEntities db, int blockerId, int blockedId)
         {
             if (IsBlocked(db, blockerId, blockedId))
-            {
                 throw new InvalidOperationException("El usuario ya está bloqueado.");
-            }
 
             RemoveFriendshipIfExists(db, blockerId, blockedId);
             RemovePendingRequests(db, blockerId, blockedId);
@@ -162,9 +161,7 @@ namespace DamasChinas_Server
                 b.id_bloqueado == blockedId);
 
             if (blockEntry == null)
-            {
                 throw new InvalidOperationException("No existe un bloqueo entre los usuarios.");
-            }
 
             db.bloqueos.Remove(blockEntry);
         }
@@ -176,9 +173,7 @@ namespace DamasChinas_Server
                 (a.id_usuario1 == u2 && a.id_usuario2 == u1));
 
             if (friendship != null)
-            {
                 db.amistades.Remove(friendship);
-            }
         }
 
         private static void RemovePendingRequests(damas_chinasEntities db, int u1, int u2)
@@ -190,12 +185,12 @@ namespace DamasChinas_Server
                 .ToList();
 
             if (pending.Any())
-            {
                 db.solicitudes_amistad.RemoveRange(pending);
-            }
         }
 
-
+        // ============================================================
+        // MÉTODOS PÚBLICOS — SIN CAMBIAR LÓGICA
+        // ============================================================
 
         public List<FriendDto> GetFriends(string username)
         {
@@ -221,18 +216,16 @@ namespace DamasChinas_Server
 
         public List<FriendDto> GetFriendRequests(string username)
         {
-            int userId = _userRepo.GetUserIdByUsername(username);
+            int id = _userRepo.GetUserIdByUsername(username);
 
             using (var db = CréateDbContext())
             {
                 var requests = db.solicitudes_amistad
                     .Include(s => s.usuarios.perfiles)
-                    .Where(s => s.id_receptor == userId && s.estado == PendingStatus)
+                    .Where(s => s.id_receptor == id && s.estado == PendingStatus)
                     .ToList();
 
-                return requests
-                    .Select(r => MapToFriendDto(r.usuarios))
-                    .ToList();
+                return requests.Select(r => MapToFriendDto(r.usuarios)).ToList();
             }
         }
 
@@ -269,9 +262,10 @@ namespace DamasChinas_Server
                 EnsurePendingRequestExists(db, ids.receiverId, ids.senderId);
 
                 var request = db.solicitudes_amistad
-                    .First(s => s.id_emisor == ids.senderId &&
-                                s.id_receptor == ids.receiverId &&
-                                s.estado == PendingStatus);
+                    .First(s =>
+                        s.id_emisor == ids.senderId &&
+                        s.id_receptor == ids.receiverId &&
+                        s.estado == PendingStatus);
 
                 if (accept)
                 {
@@ -308,13 +302,9 @@ namespace DamasChinas_Server
                 EnsureNotBlockedSelf(ids.senderId, ids.receiverId);
 
                 if (block)
-                {
                     ApplyBlock(db, ids.senderId, ids.receiverId);
-                }
                 else
-                {
                     RemoveBlock(db, ids.senderId, ids.receiverId);
-                }
 
                 db.SaveChanges();
                 return true;
