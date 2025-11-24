@@ -17,9 +17,7 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
         }
 
-        // =========================================================
-        // EVENTO PRINCIPAL (ORQUESTA TODO EL FLUJO)
-        // =========================================================
+
         private async void OnCreateAccountClick(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
@@ -35,56 +33,56 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                // 1) VALIDACIONES LOCALES
+        
                 if (!ValidateLocalInputs())
                 {
                     return;
                 }
 
-                // 2) MOSTRAR LOADER E INSTANCIAR CLIENTE
+              
                 loader = ShowLoader();
                 client = new SingInServiceClient();
                 var userDto = GetUserFromInputs();
 
-                // 3) VALIDAR INFORMACIÓN CON EL SERVIDOR
+                
                 bool isValid = await ValidateWithServerAsync(client, userDto, loader);
-                loader = null; // ValidateWithServerAsync se encarga de cerrar el loader
+                loader = null;
 
                 if (!isValid)
                 {
-                    // Ya se mostró el mensaje correspondiente dentro de ValidateWithServerAsync
+                 
                     return;
                 }
 
-                // 4) SOLICITAR CÓDIGO DE VERIFICACIÓN
+     
                 bool codeRequested = await RequestVerificationCodeAsync(client, userDto);
                 if (!codeRequested)
                 {
-                    // Ya se mostró el mensaje correspondiente dentro de RequestVerificationCodeAsync
+                
                     return;
                 }
 
-                // 5) MOSTRAR POPUP PARA INGRESAR EL CÓDIGO
+   
                 string codeValue = ShowVerificationCodeWindow();
                 if (string.IsNullOrWhiteSpace(codeValue))
                 {
-                    // Usuario canceló o cerró el popup; no es error.
+                
                     return;
                 }
 
-                // 6) NUEVO LOADER PARA CREAR USUARIO
+            
                 loader = ShowLoader();
 
                 bool userCreated = await CreateUserAsync(client, userDto, codeValue, loader);
-                loader = null; // CreateUserAsync también cierra el loader
+                loader = null; 
 
                 if (!userCreated)
                 {
-                    // Ya se mostró el mensaje correspondiente dentro de CreateUserAsync
+                   
                     return;
                 }
 
-                // 7) ÉXITO FINAL: CUENTA CREADA
+       
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_AccountCreated"),
                     PopupType.Success);
@@ -102,9 +100,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        // VALIDACIONES LOCALES
-        // =========================================================
+    
         private bool ValidateLocalInputs()
         {
             if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
@@ -147,9 +143,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        // HELPERS DE UI
-        // =========================================================
+    
         private static void ShowWarning(string messageKey)
         {
             string message = MessageTranslator.GetLocalizedMessage(messageKey);
@@ -222,15 +216,6 @@ namespace DamasChinas_Client.UI.Pages
             };
         }
 
-        // =========================================================
-        // LLAMADAS AL SERVIDOR
-        // =========================================================
-
-        /// <summary>
-        /// Valida los datos del usuario contra el servidor.
-        /// Muestra mensajes de error en caso de validaciones de negocio o fallos de red.
-        /// Siempre intenta cerrar el loader.
-        /// </summary>
         private static async Task<bool> ValidateWithServerAsync(
             SingInServiceClient client,
             UserDto dto,
@@ -288,10 +273,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        /// <summary>
-        /// Solicita al servidor el envío del código de verificación.
-        /// Muestra el popup de éxito o error según corresponda.
-        /// </summary>
         private static async Task<bool> RequestVerificationCodeAsync(
             SingInServiceClient client,
             UserDto dto)
@@ -308,7 +289,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (!result.Success)
                 {
-                    // Mensaje proveniente del servidor (MessageCode)
+            
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
                     ShowError(message);
                     return false;
@@ -366,7 +347,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (!result.Success)
                 {
-                    // ?? DEBUG CRÍTICO PARA DETECTAR EL PROBLEMA REAL
+               
                     Debug.WriteLine($"[DEBUG] RESULT: Success={result?.Success}, Code={result?.Code}, Technical={result?.TechnicalDetail}");
 
                     HandleCodeCreationError(result);
@@ -405,10 +386,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
-        /// <summary>
-        /// Mapea el TechnicalDetail que viene del servidor a mensajes específicos de verificación.
-        /// </summary>
         private static void HandleCodeCreationError(OperationResult result)
         {
             switch (result?.TechnicalDetail)
@@ -428,9 +405,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        // NAVEGACIÓN
-        // =========================================================
+       
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try

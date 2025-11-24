@@ -216,6 +216,10 @@
     <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                    -->
     <!-- ========================================================= -->
 
+    <sys:String x:Key="msg_ChatServerUnavailable">The chat server is unavailable.</sys:String>
+    <sys:String x:Key="msg_ChatCommunicationError">A communication error occurred in the chat.</sys:String>
+
+
     <!-- Resultados generales -->
     <sys:String x:Key="msg_Success">Operation completed successfully.</sys:String>
     <sys:String x:Key="msg_LoginInvalidCredentials">Invalid username or password.</sys:String>
@@ -309,6 +313,9 @@
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->
     <!-- ========================================================= -->
+
+   
+
 
     <!-- NAME -->
     <sys:String x:Key="msg_InvalidNameEmpty">Name cannot be empty.</sys:String>

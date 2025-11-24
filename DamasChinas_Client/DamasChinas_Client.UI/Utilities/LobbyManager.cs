@@ -88,7 +88,7 @@ namespace DamasChinas_Client.UI.Utilities
             return result != null ? result.ToList() : new List<Lobby>();
         }
 
-        // ===== CALLBACKS =====
+        
 
         void ILobbyServiceCallback.OnMemberJoined(LobbyMember member)
         {
@@ -100,10 +100,11 @@ namespace DamasChinas_Client.UI.Utilities
             _uiContext.Post(_ => MemberLeft?.Invoke(userId), null);
         }
 
-        void ILobbyServiceCallback.OnMessageReceived(int userId, string username, string message, string utc)
+        void ILobbyServiceCallback.OnMessageReceived(int userId, string username, string message, string utcIso)
         {
-            _uiContext.Post(_ => MessageReceived?.Invoke(userId, username, message, utc), null);
+            _uiContext.Post(_ => MessageReceived?.Invoke(userId, username, message, utcIso), null);
         }
+
 
         void ILobbyServiceCallback.OnLobbyClosed(string reason)
         {

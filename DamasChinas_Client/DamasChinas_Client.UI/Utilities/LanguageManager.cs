@@ -4,10 +4,8 @@ using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities
 {
-   
     public static class LanguageManager
     {
-     
         public static void ChangeLanguage(string cultureCode)
         {
             try
@@ -19,7 +17,7 @@ namespace DamasChinas_Client.UI.Utilities
                 EnsureThemeResources();
                 UpdateCulture(cultureCode);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 MessageBox.Show(
                     $"Error while changing language: {ex.Message}",
@@ -27,20 +25,22 @@ namespace DamasChinas_Client.UI.Utilities
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(
+                    $"Invalid parameter while changing language: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
+     
         private static ResourceDictionary CreateLanguageDictionary(string cultureCode)
         {
-            string relativePath;
-
-            if (cultureCode == "es-MX")
-            {
-                relativePath = "Resources/Lang.es.xaml";
-            }
-            else
-            {
-                relativePath = "Resources/Lang.en.xaml";
-            }
+            string relativePath = cultureCode == "es-MX"
+                ? "Resources/Lang.es.xaml"
+                : "Resources/Lang.en.xaml";
 
             return new ResourceDictionary
             {
@@ -48,7 +48,7 @@ namespace DamasChinas_Client.UI.Utilities
             };
         }
 
-      
+    
         private static ResourceDictionary FindExistingLanguageDictionary()
         {
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
@@ -64,24 +64,33 @@ namespace DamasChinas_Client.UI.Utilities
                 }
             }
 
-            return null;
+         
+            return new ResourceDictionary();
         }
 
-        
+      
         private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)
         {
-            if (existingDictionary != null)
+           
+            if (existingDictionary.Source == null)
             {
-                int index = Application.Current.Resources.MergedDictionaries.IndexOf(existingDictionary);
+                Application.Current.Resources.MergedDictionaries.Add(newDictionary);
+                return;
+            }
+
+            int index = Application.Current.Resources.MergedDictionaries.IndexOf(existingDictionary);
+            if (index >= 0)
+            {
                 Application.Current.Resources.MergedDictionaries[index] = newDictionary;
             }
             else
             {
+             
                 Application.Current.Resources.MergedDictionaries.Add(newDictionary);
             }
         }
 
-      
+ 
         private static void EnsureThemeResources()
         {
             ResourceDictionary themeDictionary = new ResourceDictionary
@@ -98,7 +107,6 @@ namespace DamasChinas_Client.UI.Utilities
             Application.Current.Resources.MergedDictionaries.Add(buttonsDictionary);
         }
 
-     
         private static void UpdateCulture(string cultureCode)
         {
             CultureInfo culture = new CultureInfo(cultureCode);

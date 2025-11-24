@@ -26,13 +26,25 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ConfiSound.Init - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                Debug.WriteLine($"[ConfiSound.Init - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                Debug.WriteLine($"[ConfiSound.Init - ArgumentException] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
         }
 
+        // ============================================================
+        // VALIDACIÓN CENTRALIZADA — elimina repetición y mejora Sonar
+        // ============================================================
+        private static void ValidateVolume(double volume)
+        {
+            if (volume < 0 || volume > 1)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(volume),
+                    "Volume must be between 0 and 1.");
+            }
+        }
 
         private void OnMusicVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -40,11 +52,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 _pendingVolume = e.NewValue / 100;
 
-                if (_pendingVolume < 0 || _pendingVolume > 1)
-                {
-                  
-                    throw new ArgumentOutOfRangeException("pendingVolume");
-                }
+                ValidateVolume(_pendingVolume);
 
                 SoundManager.ApplyVolume(_pendingVolume);
             }
@@ -58,23 +66,18 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ConfiSound.OnMusicVolumeChanged - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                Debug.WriteLine($"[ConfiSound.OnMusicVolumeChanged - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                Debug.WriteLine($"[ConfiSound.OnMusicVolumeChanged - ArgumentException] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
         }
-
 
         private void OnConfirmClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (_pendingVolume < 0 || _pendingVolume > 1)
-                {
-                    
-                    throw new ArgumentOutOfRangeException("pendingVolume");
-                }
+                ValidateVolume(_pendingVolume);
 
                 SoundManager.ApplyVolume(_pendingVolume);
 
@@ -90,13 +93,12 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ConfiSound.OnConfirmClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                Debug.WriteLine($"[ConfiSound.OnConfirmClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                Debug.WriteLine($"[ConfiSound.OnConfirmClick - ArgumentException] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
         }
-
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
@@ -116,9 +118,9 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ConfiSound.OnBackClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                Debug.WriteLine($"[ConfiSound.OnBackClick - General] {ex.Message}");
+                Debug.WriteLine($"[ConfiSound.OnBackClick - ArgumentException] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
