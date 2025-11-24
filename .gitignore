@@ -1,34 +1,90 @@
-# Ignorar archivos temporales de Visual Studio (no VS Code)
-.vs/
-bin/
-obj/
+##############################
+#   Visual Studio / C#       #
+##############################
+
+# Archivos de usuario y configuración personal
 *.user
 *.suo
-*.vsidx
-*.dbmdl
-*.cache/
-*.log
+*.userosscache
+*.sln.docstates
 
-# Mantener configuración de VS Code
-!.vscode/
+# Cache interno de Visual Studio
+.vs/
 
-# Ignorar carpeta de análisis de SonarQube (siempre se genera de nuevo)
-.sonarqube/
+##############################
+#         Build output       #
+##############################
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
 
-# Ignorar reportes temporales del Scanner
-.scannerwork/
-
-# Ignorar archivos generados por MSBuild
+# Artifacts MSBuild
 *.opendb
 *.tlog
 *.lastcodeanalysissucceeded
 *.FileListAbsolute.txt
 
-# Ignorar configuración de Rider (si algún día lo usas)
+##############################
+#        IDE configs         #
+##############################
+# VSCode – mantener solo configuración del workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# JetBrains Rider
 .idea/
 
-# Ignorar paquetes NuGet descargados
+##############################
+#         NuGet              #
+##############################
+# Paquetes descargados
 packages/
+*.nupkg
 
-# Ignorar configuraciones de usuario que cambian por máquina
+# Cache de NuGet
+*.nuget/
+.nuget/
+
+##############################
+#       SonarQube            #
+##############################
+.sonarqube/
+.scannerwork/
+
+##############################
+#   Archivos de base de datos
+##############################
+*.mdf
+*.ldf
+*.log
+*.dbmdl
+
+##############################
+#     Otros temporales
+##############################
+*.cache
+*.log
+*.tmp
+*.temp
+*.bak
+
+##############################
+#  Publicaciones (Web/ClickOnce)
+##############################
+publish/
 *.pubxml.user
+
+##############################
+#       Config auto-gen      #
+##############################
+Generated\ Files/
+

@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace DamasChinas_Server.Game
 {
-
     public class ChineseCheckersGame
     {
         private const int MinimumPlayers = 2;
@@ -158,14 +157,13 @@ namespace DamasChinas_Server.Game
             }
         }
 
-       
 
 
         private bool ValidateMove(PlayerMove move, out string errorMessage)
         {
             errorMessage = null;
 
-            if (!TryValidateOrigin(move, out errorMessage, out HexCell origin))
+            if (!TryValidateOrigin(move, out errorMessage, out _))
             {
                 return false;
             }
@@ -332,8 +330,7 @@ namespace DamasChinas_Server.Game
             return true;
         }
 
-
-
+ 
         private void ExecuteMove(PlayerMove move)
         {
             Piece piece = Board.GetCell(move.Origin).RemovePiece();
