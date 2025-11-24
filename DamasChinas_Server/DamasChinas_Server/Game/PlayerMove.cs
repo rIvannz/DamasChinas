@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Game
 {
@@ -12,6 +10,8 @@ namespace DamasChinas_Server.Game
     /// </summary>
     public class PlayerMove
     {
+        private const int MinimumMoveLength = 2;
+
         private readonly IReadOnlyList<HexCoordinate> _path;
 
         public PlayerColor Player { get; }
@@ -28,7 +28,8 @@ namespace DamasChinas_Server.Game
         {
             get
             {
-                return _path.First();
+                // Reemplazo recomendado por SonarQube
+                return _path[0];
             }
         }
 
@@ -36,7 +37,8 @@ namespace DamasChinas_Server.Game
         {
             get
             {
-                return _path.Last();
+                // Reemplazo recomendado por SonarQube
+                return _path[_path.Count - 1];
             }
         }
 
@@ -50,14 +52,13 @@ namespace DamasChinas_Server.Game
             var coordinates = path.ToList();
             if (coordinates.Count < MinimumMoveLength)
             {
-                throw new ArgumentException("A move must contain at least an origin and a destination.", nameof(path));
+                throw new ArgumentException(
+                    "A move must contain at least an origin and a destination.",
+                    nameof(path));
             }
 
             Player = player;
             _path = new ReadOnlyCollection<HexCoordinate>(coordinates);
         }
-
-        private const int MinimumMoveLength = 2;
     }
 }
-

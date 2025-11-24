@@ -31,12 +31,6 @@ namespace DamasChinas_Client.UI.Pages
                 var callback = new ChatCallback(ReceiveMessage);
                 var context = new InstanceContext(callback);
 
-                var binding = new NetTcpBinding
-                {
-                    Security = { Mode = SecurityMode.None },
-                    ReceiveTimeout = TimeSpan.MaxValue
-                };
-
                 var factory = new DuplexChannelFactory<IChatService>(context, "NetTcpBinding_IChatService");
                 _client = factory.CreateChannel();
 

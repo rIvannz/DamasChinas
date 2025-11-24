@@ -12,12 +12,9 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server
 {
- 
     public class SingInService : ISingInService
     {
-        // =========================================================
-        // CÓDIGOS DE VERIFICACIÓN (EN MEMORIA)
-        // =========================================================
+
 
         private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)>
             _codes = new Dictionary<string, (string Code, DateTime CreatedUtc)>();
@@ -29,9 +26,6 @@ namespace DamasChinas_Server
             _repository = new RepositoryUsers();
         }
 
-        // =========================================================
-        // 1) VALIDACIÓN DE DATOS – SIN CREAR USUARIO
-        // =========================================================
 
         public OperationResult ValidateUserData(UserDto userDto)
         {
@@ -81,9 +75,6 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // 2) ENVÍO DE CÓDIGO DE VERIFICACIÓN
-        // =========================================================
 
         public OperationResult RequestVerificationCode(string email)
         {
@@ -116,16 +107,12 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // 3) CREACIÓN DE USUARIO FINAL
-        // =========================================================
+
 
         public OperationResult CreateUser(UserDto userDto, string code)
         {
             try
             {
-                // ========== CÓDIGO ALMACENADO ==========
-
                 string storedCode;
                 DateTime createdAtUtc;
 
@@ -143,8 +130,6 @@ namespace DamasChinas_Server
                     createdAtUtc = data.CreatedUtc;
                 }
 
-                // ========== EXPIRACIÓN ==========
-
                 if (DateTime.UtcNow - createdAtUtc > TimeSpan.FromMinutes(5))
                 {
                     RemoveStoredCode(userDto.Email);
@@ -155,8 +140,6 @@ namespace DamasChinas_Server
                     );
                 }
 
-                // ========== CÓDIGO INCORRECTO ==========
-
                 if (!string.Equals(storedCode, code, StringComparison.Ordinal))
                 {
                     return OperationResult.Fail(
@@ -165,13 +148,12 @@ namespace DamasChinas_Server
                     );
                 }
 
-                // ========== CREACIÓN DE USUARIO ==========
-
                 RemoveStoredCode(userDto.Email);
 
                 var user = _repository.CreateUser(userDto);
 
-                SendWelcomeEmail(MapToUserInfo(user, userDto));
+       
+                SingInService.SendWelcomeEmail(MapToUserInfo(user, userDto));
 
                 return OperationResult.Ok();
             }
@@ -195,9 +177,7 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // MÉTODOS PRIVADOS
-        // =========================================================
+ 
 
         private static void RemoveStoredCode(string email)
         {
@@ -216,7 +196,7 @@ namespace DamasChinas_Server
             return random.Next(1000, 10000).ToString();
         }
 
-        private void SendWelcomeEmail(UserInfo user)
+        private static void SendWelcomeEmail(UserInfo user)
         {
             Task.Run(async () =>
             {

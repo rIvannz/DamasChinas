@@ -1,28 +1,34 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 using System.ServiceModel;
+using System.Threading.Tasks;
+using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
-using DamasChinas_Server.Common;
 
 namespace DamasChinas_Server.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single,
-                     ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(
+        InstanceContextMode = InstanceContextMode.Single,
+        ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class LobbyService : ILobbyService
     {
-        private readonly ConcurrentDictionary<string, Lobby> _lobbies = new ConcurrentDictionary<string, Lobby>();
-        private readonly ConcurrentDictionary<int, ILobbyCallback> _connections = new ConcurrentDictionary<int, ILobbyCallback>();
+        private readonly ConcurrentDictionary<string, Lobby> _lobbies =
+            new ConcurrentDictionary<string, Lobby>();
+
+        private readonly ConcurrentDictionary<int, ILobbyCallback> _connections =
+            new ConcurrentDictionary<int, ILobbyCallback>();
+
 
         private ILobbyCallback CurrentCallback =>
             OperationContext.Current.GetCallbackChannel<ILobbyCallback>();
 
-        private static string NewCode()
-            => Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+        private static string NewCode() =>
+            Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+
+
 
         public Lobby CreateLobby(int hostUserId, string hostUsername, bool isPrivate)
         {
@@ -64,21 +70,25 @@ namespace DamasChinas_Server.Services
 
             if (!lobby.Members.Any(m => m.UserId == userId))
             {
-                var member = new LobbyMember
+                lobby.Members.Add(new LobbyMember
                 {
                     UserId = userId,
                     Username = username,
                     IsHost = false
-                };
-
-                lobby.Members.Add(member);
+                });
             }
 
             _connections[userId] = CurrentCallback;
 
-            foreach (var m in lobby.Members.ToList())
+         
+            var recipients = lobby.Members
+                .Where(m => _connections.ContainsKey(m.UserId))
+                .Select(m => m.UserId)
+                .ToList();
+
+            foreach (var memberId in recipients)
             {
-                if (_connections.TryGetValue(m.UserId, out var cb))
+                if (_connections.TryGetValue(memberId, out var cb))
                 {
                     Task.Run(() =>
                     {
@@ -93,7 +103,7 @@ namespace DamasChinas_Server.Services
                         }
                         catch
                         {
-                            _connections.TryRemove(m.UserId, out _);
+                            _connections.TryRemove(memberId, out _);
                         }
                     });
                 }
@@ -102,8 +112,10 @@ namespace DamasChinas_Server.Services
             return lobby;
         }
 
+
         public List<Lobby> GetPublicLobbies()
         {
+            // Limpieza con SELECT (Sonar)
             var inactiveCodes = _lobbies.Values
                 .Where(l => !_connections.ContainsKey(l.HostUserId))
                 .Select(l => l.Code)
@@ -112,18 +124,33 @@ namespace DamasChinas_Server.Services
             foreach (var code in inactiveCodes)
                 _lobbies.TryRemove(code, out _);
 
-            var activeLobbies = _lobbies.Values
+            return _lobbies.Values
                 .Where(l => !l.IsPrivate && _connections.ContainsKey(l.HostUserId))
                 .ToList();
-
-            return activeLobbies;
         }
+
+
 
         public bool LeaveLobby(string code, int userId)
         {
             if (!_lobbies.TryGetValue(code, out var lobby))
                 return false;
 
+            if (!TryHandleMemberLeaving(lobby, userId))
+                return false;
+
+            NotifyMembersLeft(lobby, userId);
+
+            if (userId == lobby.HostUserId || lobby.Members.Count == 0)
+                CloseLobby(lobby);
+
+            CleanupInactiveLobbies();
+
+            return true;
+        }
+
+        private bool TryHandleMemberLeaving(Lobby lobby, int userId)
+        {
             var member = lobby.Members.FirstOrDefault(m => m.UserId == userId);
             if (member == null)
                 return false;
@@ -131,9 +158,19 @@ namespace DamasChinas_Server.Services
             lobby.Members.Remove(member);
             _connections.TryRemove(userId, out _);
 
-            foreach (var m in lobby.Members.ToList())
+            return true;
+        }
+
+        private void NotifyMembersLeft(Lobby lobby, int userId)
+        {
+            var recipients = lobby.Members
+                .Where(m => _connections.ContainsKey(m.UserId))
+                .Select(m => m.UserId)
+                .ToList();
+
+            foreach (var id in recipients)
             {
-                if (_connections.TryGetValue(m.UserId, out var cb))
+                if (_connections.TryGetValue(id, out var cb))
                 {
                     try
                     {
@@ -141,41 +178,49 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        _connections.TryRemove(m.UserId, out _);
+                        _connections.TryRemove(id, out _);
                     }
                 }
             }
+        }
 
-            if (userId == lobby.HostUserId || lobby.Members.Count == 0)
+        private void CloseLobby(Lobby lobby)
+        {
+            var recipients = lobby.Members
+                .Where(m => _connections.ContainsKey(m.UserId))
+                .Select(m => m.UserId)
+                .ToList();
+
+            foreach (var id in recipients)
             {
-                foreach (var m in lobby.Members.ToList())
+                if (_connections.TryGetValue(id, out var cb))
                 {
-                    if (_connections.TryGetValue(m.UserId, out var cb))
+                    try
                     {
-                        try
-                        {
-                            cb.OnLobbyClosed(MessageCode.LobbyClosed.ToString());
-                        }
-                        catch
-                        {
-                            _connections.TryRemove(m.UserId, out _);
-                        }
+                        cb.OnLobbyClosed(MessageCode.LobbyClosed.ToString());
+                    }
+                    catch
+                    {
+                        _connections.TryRemove(id, out _);
                     }
                 }
-
-                _lobbies.TryRemove(code, out _);
             }
 
-            var inactiveLobbies = _lobbies.Values
+            _lobbies.TryRemove(lobby.Code, out _);
+        }
+
+        private void CleanupInactiveLobbies()
+        {
+            var inactiveCodes = _lobbies.Values
                 .Where(l => !_connections.ContainsKey(l.HostUserId))
                 .Select(l => l.Code)
                 .ToList();
 
-            foreach (var inactiveCode in inactiveLobbies)
-                _lobbies.TryRemove(inactiveCode, out _);
-
-            return true;
+            foreach (var code in inactiveCodes)
+                _lobbies.TryRemove(code, out _);
         }
+
+
 
         public void SendLobbyMessage(string code, int userId, string username, string message)
         {
@@ -184,24 +229,32 @@ namespace DamasChinas_Server.Services
 
             var utc = DateTime.UtcNow.ToString("o");
 
-            foreach (var m in lobby.Members)
+            var recipients = lobby.Members
+                .Select(m => m.UserId)
+                .ToList();
+
+            foreach (var id in recipients)
             {
-                if (_connections.TryGetValue(m.UserId, out var cb))
+                if (_connections.TryGetValue(id, out var cb))
                 {
                     cb.OnMessageReceived(userId, username, message, utc);
                 }
             }
         }
 
-        public Lobby GetLobby(string code)
-            => _lobbies.TryGetValue(code, out var lobby) ? lobby : null;
+
+
+        public Lobby GetLobby(string code) =>
+            _lobbies.TryGetValue(code, out var lobby) ? lobby : null;
 
         public bool KickMember(string code, int targetUserId)
         {
-            if (!_lobbies.TryGetValue(code, out var lobby)) return false;
+            if (!_lobbies.TryGetValue(code, out var lobby))
+                return false;
 
             var target = lobby.Members.FirstOrDefault(m => m.UserId == targetUserId);
-            if (target == null) return false;
+            if (target == null)
+                return false;
 
             lobby.Members.Remove(target);
             _connections.TryRemove(targetUserId, out _);

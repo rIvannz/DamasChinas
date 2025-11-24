@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Game
 {
@@ -34,7 +32,9 @@ namespace DamasChinas_Server.Game
             var playerList = players.ToList();
             if (playerList.Count < MinimumPlayers || playerList.Count > MaximumPlayers)
             {
-                throw new ArgumentException($"The match requires between {MinimumPlayers} and {MaximumPlayers} players.", nameof(players));
+                throw new ArgumentException(
+                    $"The match requires between {MinimumPlayers} and {MaximumPlayers} players.",
+                    nameof(players));
             }
 
             _players = playerList.ToDictionary(player => player.Color);
@@ -107,8 +107,9 @@ namespace DamasChinas_Server.Game
         public IReadOnlyDictionary<HexCoordinate, PlayerColor?> GetBoardState()
         {
             var snapshot = Board.Cells.ToDictionary(
-                    cell => cell.Coordinate,
-                    cell => cell.IsOccupied ? (PlayerColor?)cell.Piece.Color : null);
+                cell => cell.Coordinate,
+                cell => cell.IsOccupied ? (PlayerColor?)cell.Piece.Color : null);
+
             return new ReadOnlyDictionary<HexCoordinate, PlayerColor?>(snapshot);
         }
 
@@ -130,20 +131,24 @@ namespace DamasChinas_Server.Game
             }
 
             return Board.GetZoneCells(targetZone)
-                    .All(cell => cell.IsOccupied && cell.Piece.Color == player);
+                .All(cell => cell.IsOccupied && cell.Piece.Color == player);
         }
 
-        private Dictionary<PlayerColor, PlayerColor> CreateTargetZones()
+        // ============================================================
+        // Initialization helpers
+        // ============================================================
+
+        private static Dictionary<PlayerColor, PlayerColor> CreateTargetZones()
         {
             return new Dictionary<PlayerColor, PlayerColor>
-                        {
-                                { PlayerColor.Red, PlayerColor.Green },
-                                { PlayerColor.Green, PlayerColor.Red },
-                                { PlayerColor.Blue, PlayerColor.Yellow },
-                                { PlayerColor.Yellow, PlayerColor.Blue },
-                                { PlayerColor.Orange, PlayerColor.Purple },
-                                { PlayerColor.Purple, PlayerColor.Orange }
-                        };
+            {
+                { PlayerColor.Red,    PlayerColor.Green },
+                { PlayerColor.Green,  PlayerColor.Red },
+                { PlayerColor.Blue,   PlayerColor.Yellow },
+                { PlayerColor.Yellow, PlayerColor.Blue },
+                { PlayerColor.Orange, PlayerColor.Purple },
+                { PlayerColor.Purple, PlayerColor.Orange }
+            };
         }
 
         private void InitializePieces()
@@ -157,19 +162,16 @@ namespace DamasChinas_Server.Game
             }
         }
 
+        // ============================================================
+        // Move validation (refactored for low complexity)
+        // ============================================================
+
         private bool ValidateMove(PlayerMove move, out string errorMessage)
         {
             errorMessage = null;
 
-            if (!Board.TryGetCell(move.Origin, out HexCell originCell))
+            if (!TryValidateOrigin(move, out errorMessage, out HexCell originCell))
             {
-                errorMessage = "The origin cell does not exist on the board.";
-                return false;
-            }
-
-            if (!originCell.IsOccupied || originCell.Piece.Color != move.Player)
-            {
-                errorMessage = "The origin cell does not contain one of the player's pieces.";
                 return false;
             }
 
@@ -181,53 +183,27 @@ namespace DamasChinas_Server.Game
             {
                 HexCoordinate destination = move.Path[index];
 
-                if (!visited.Add(destination))
+                if (!TryValidateDestinationCell(destination, visited, out errorMessage, out HexCell destinationCell))
                 {
-                    errorMessage = "The path cannot visit the same cell twice.";
                     return false;
                 }
 
-                if (!Board.TryGetCell(destination, out HexCell destinationCell))
+                if (!TryValidateStep(
+                        move,
+                        currentPosition,
+                        destination,
+                        index,
+                        out errorMessage,
+                        out bool isJump,
+                        out HexCoordinate middleCoordinate))
                 {
-                    errorMessage = "One of the destination cells is outside the board.";
                     return false;
-                }
-
-                if (destinationCell.IsOccupied)
-                {
-                    errorMessage = "The path ends on an occupied cell.";
-                    return false;
-                }
-
-                bool isAdjacent = Board.IsAdjacentMove(currentPosition, destination);
-                bool isJump = Board.IsJumpMove(currentPosition, destination, out HexCoordinate middleCoordinate);
-
-                if (!isAdjacent && !isJump)
-                {
-                    errorMessage = "The move is neither an adjacent step nor a valid jump.";
-                    return false;
-                }
-
-                if (isAdjacent)
-                {
-                    if (move.Path.Count > SingleStepLength)
-                    {
-                        errorMessage = "Multi-step moves must be performed exclusively through jumps.";
-                        return false;
-                    }
-
-                    if (index != move.Path.Count - LastIndexOffset)
-                    {
-                        errorMessage = "Adjacent moves can only consist of a single step.";
-                        return false;
-                    }
                 }
 
                 if (isJump)
                 {
-                    if (!Board.TryGetCell(middleCoordinate, out HexCell jumpCell) || !jumpCell.IsOccupied)
+                    if (!TryValidateJump(middleCoordinate, out errorMessage))
                     {
-                        errorMessage = "There is no piece to jump over in the intermediate cell.";
                         return false;
                     }
 
@@ -236,6 +212,124 @@ namespace DamasChinas_Server.Game
 
                 currentPosition = destination;
             }
+
+            return ValidateFinalJumpRule(move, performedJump, out errorMessage);
+        }
+
+        private bool TryValidateOrigin(
+            PlayerMove move,
+            out string errorMessage,
+            out HexCell originCell)
+        {
+            errorMessage = null;
+            originCell = null;
+
+            if (!Board.TryGetCell(move.Origin, out originCell))
+            {
+                errorMessage = "The origin cell does not exist on the board.";
+                return false;
+            }
+
+            if (!originCell.IsOccupied || originCell.Piece.Color != move.Player)
+            {
+                errorMessage = "The origin cell does not contain one of the player's pieces.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool TryValidateDestinationCell(
+            HexCoordinate destination,
+            HashSet<HexCoordinate> visited,
+            out string errorMessage,
+            out HexCell destinationCell)
+        {
+            errorMessage = null;
+            destinationCell = null;
+
+            if (!visited.Add(destination))
+            {
+                errorMessage = "The path cannot visit the same cell twice.";
+                return false;
+            }
+
+            if (!Board.TryGetCell(destination, out destinationCell))
+            {
+                errorMessage = "One of the destination cells is outside the board.";
+                return false;
+            }
+
+            if (destinationCell.IsOccupied)
+            {
+                errorMessage = "The path ends on an occupied cell.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool TryValidateStep(
+            PlayerMove move,
+            HexCoordinate current,
+            HexCoordinate destination,
+            int index,
+            out string errorMessage,
+            out bool isJump,
+            out HexCoordinate middle)
+        {
+            errorMessage = null;
+            isJump = false;
+            middle = default;
+
+            bool isAdjacent = ChineseCheckersBoard.IsAdjacentMove(current, destination);
+            isJump = ChineseCheckersBoard.IsJumpMove(current, destination, out middle);
+
+            if (!isAdjacent && !isJump)
+            {
+                errorMessage = "The move is neither an adjacent step nor a valid jump.";
+                return false;
+            }
+
+            if (isAdjacent)
+            {
+                if (move.Path.Count > SingleStepLength)
+                {
+                    errorMessage = "Multi-step moves must be performed exclusively through jumps.";
+                    return false;
+                }
+
+                if (index != move.Path.Count - LastIndexOffset)
+                {
+                    errorMessage = "Adjacent moves can only consist of a single step.";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool TryValidateJump(
+            HexCoordinate middle,
+            out string errorMessage)
+        {
+            errorMessage = null;
+
+            if (!Board.TryGetCell(middle, out HexCell jumpCell) || !jumpCell.IsOccupied)
+            {
+                errorMessage = "There is no piece to jump over in the intermediate cell.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateFinalJumpRule(
+            PlayerMove move,
+            bool performedJump,
+            out string errorMessage)
+        {
+            errorMessage = null;
 
             if (move.Path.Count > SingleStepLength && !performedJump)
             {
