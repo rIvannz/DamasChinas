@@ -6,17 +6,14 @@ namespace DamasChinas_Client.UI.Utilities
 {
     internal static class Validator
     {
-        // ============================================================
-        //  NORMALIZACIÓN
-        // ============================================================
+ 
+  
         private static string Normalize(string value)
         {
             return UserValidationRules.Normalize(value);
         }
 
-        // ============================================================
-        //  VALIDACIÓN DE NOMBRE
-        // ============================================================
+
         public static void ValidateName(string name)
         {
             name = Normalize(name);
@@ -38,9 +35,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        //  VALIDACIÓN DE USERNAME
-        // ============================================================
+  
         public static void ValidateUsername(string username)
         {
             username = Normalize(username);
@@ -62,47 +57,44 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        //  VALIDACIÓN DE PASSWORD
-        // ============================================================
+
         public static void ValidatePassword(string password)
         {
             password = Normalize(password);
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                throw new ClientValidationException("msg_PasswordEmpty");
+                throw new ClientValidationException(MessageKeys.InvalidPasswordEmpty);
             }
 
             if (password.Length < UserValidationRules.PasswordMinLength)
             {
-                throw new ClientValidationException("msg_PasswordTooShort");
+                throw new ClientValidationException(MessageKeys.InvalidPasswordLength);
             }
 
             if (!UserValidationRules.PasswordUppercaseRegex.IsMatch(password))
             {
-                throw new ClientValidationException("msg_PasswordRequiresUpper");
+                throw new ClientValidationException(MessageKeys.InvalidPasswordUppercase);
             }
 
             if (!UserValidationRules.PasswordLowercaseRegex.IsMatch(password))
             {
-                throw new ClientValidationException("msg_PasswordRequiresLower");
+                throw new ClientValidationException(MessageKeys.InvalidPasswordLowercase);
             }
 
             if (!UserValidationRules.PasswordDigitRegex.IsMatch(password))
             {
-                throw new ClientValidationException("msg_PasswordRequiresDigit");
+                throw new ClientValidationException(MessageKeys.InvalidPasswordDigit);
             }
 
             if (!UserValidationRules.PasswordSpecialRegex.IsMatch(password))
             {
-                throw new ClientValidationException("msg_PasswordRequiresSpecial");
+                throw new ClientValidationException(MessageKeys.InvalidPasswordSpecial);
             }
         }
 
-        // ============================================================
-        //  VALIDACIÓN DE EMAIL
-        // ============================================================
+
+
         public static void ValidateEmail(string email)
         {
             email = Normalize(email);
@@ -123,9 +115,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        //  VALIDACIÓN DE LOGIN REQUEST
-        // ============================================================
+ 
         public static void ValidateLoginRequest(LoginRequest loginRequest)
         {
             if (loginRequest == null)

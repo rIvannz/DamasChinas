@@ -20,7 +20,7 @@ namespace DamasChinas_Server
         }
 
         // ============================================================
-        // VALIDADORES ESTÁTICOS — Requeridos por SonarQube
+        // VALIDADORES ESTÁTICOS — Requeridos
         // ============================================================
 
         private static void EnsureDifferentUsers(int u1, int u2)
@@ -262,7 +262,7 @@ namespace DamasChinas_Server
                 EnsurePendingRequestExists(db, ids.receiverId, ids.senderId);
 
                 var request = db.solicitudes_amistad
-                    .First(s =>
+                    .FirstOrDefault(s =>
                         s.id_emisor == ids.senderId &&
                         s.id_receptor == ids.receiverId &&
                         s.estado == PendingStatus);
@@ -281,11 +281,11 @@ namespace DamasChinas_Server
                         });
                     }
 
-                    request.estado = "aceptada";
+                    
                 }
                 else
                 {
-                    request.estado = "rechazada";
+                    
                 }
 
                 db.SaveChanges();
