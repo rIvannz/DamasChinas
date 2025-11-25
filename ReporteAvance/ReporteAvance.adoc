@@ -942,3 +942,90 @@ En conjunto con lo anterior, se realizó una refactorización general del servid
 - Elaboracion del reporte ASCI-DOC → **80%**
 - Manejo unificado de mensajes con MessageCode → **10%**
 - Implementación del sistema centralizado de popups → **80%**
+
+
+== Quinto reporte de avance del proyecto final: Juego Damas Chinas
+
+=== Sistema Unificado de Validación y Mensajería (Cliente–Servidor)
+
+Durante esta semana se completó la refactorización total del manejo de validaciones, mensajes de error y flujo de comunicación entre cliente y servidor.  
+El objetivo principal fue eliminar duplicación, evitar textos hardcodeados y garantizar coherencia en todos los módulos relacionados con entradas del usuario, errores y notificaciones.
+
+==== Consolidación de reglas en DamasChinas_Shared
+
+Se creó un nuevo proyecto **DamasChinas_Shared**, donde ahora residen todas las reglas universales de validación:
+
+- Regex estandarizadas  
+- Límites de longitud  
+- Normalización de cadenas  
+
+Tanto el cliente como el servidor consumen estas reglas, evitando duplicación y divergencias de comportamiento.
+
+Esto asegura que el sistema valide exactamente igual en ambos lados.
+
+==== ClientValidationException y RepositoryValidationException
+
+La validación ahora está completamente separada por capas:
+
+- **Cliente** → Lanza `ClientValidationException("msg_*")`
+- **Servidor** → Lanza `RepositoryValidationException(MessageCode.XYZ)`
+
+Esto permite:
+
+- Mensajes consistentes entre capas  
+- Evitar textos directos en código  
+- Mantener un control total desde la UI sobre cómo se muestran las notificaciones  
+
+==== Integración completa con MessageCode
+
+El servidor ya no envía textos.  
+Cada operación retorna únicamente un **MessageCode**, lo que permite que el cliente controle la traducción final.
+
+Este cambio elimina completamente los mensajes “plano” enviados desde WCF.
+
+==== MessageTranslator (Cliente)
+
+El cliente recibe:
+
+- OperationResult → MessageCode
+- Y `MessageTranslator` convierte ese código en la clave correcta del recurso: MessageCode.InvalidPasswordDigit → msg_InvalidPasswordDigit
+
+El traductor revisa los diccionarios `Lang.es.xaml` y `Lang.en.xaml`, devolviendo la versión correspondiente al idioma activo.  
+Esto habilita multilenguaje real sin modificar la lógica del cliente.
+
+===== MessageHelper (Cliente)
+
+Toda la interfaz utiliza ahora `MessageHelper` como capa centralizada de presentación:
+
+- Muestra popups de éxito/error  
+- Aplica estilos globales  
+- Define comportamientos estándar  
+- Evita duplicación en cada ventana o vista  
+
+En conjunto:
+
+- **MessageTranslator decide qué mensaje mostrar**
+- **MessageHelper decide cómo mostrarlo**
+
+===== Limpieza y reorganización de diccionarios de idioma
+
+Los archivos `lang.es.xaml` y `lang.en.xaml` fueron reorganizados y alineados con:
+
+- `MessageKeys`  
+- `MessageCode`  
+- Validaciones del servidor  
+- Validaciones locales del cliente  
+
+Las claves ahora siguen un formato unificado `msg_*`, lo que facilita mantener consistencia y ampliar el sistema en futuras funciones.
+
+===== Beneficios finales del sistema
+
+- Eliminación total de textos hardcodeados en cliente y servidor  
+- Flujo limpio y seguro Cliente ↔ Servidor  
+- Soporte completo para múltiples idiomas  
+- Validaciones consistentes gracias al módulo Shared  
+- Menor riesgo de errores y duplicación  
+- Arquitectura profesional, extensible y lista para SonarQube  
+
+Este sistema deja estable toda la base de notificaciones, validaciones y manejo de errores del proyecto Damas Chinas.
+

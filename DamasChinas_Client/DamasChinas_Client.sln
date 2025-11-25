@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Client.Logic", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Client.Test", "DamasChinas_Client.Test\DamasChinas_Client.Test.csproj", "{5EE79A42-F001-4DD2-9D29-A1CA45A36DBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Shared", "..\DamasChinas_Shared\DamasChinas_Shared.csproj", "{8045C89F-F922-4E55-856F-D7F3F6409B57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5EE79A42-F001-4DD2-9D29-A1CA45A36DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE79A42-F001-4DD2-9D29-A1CA45A36DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE79A42-F001-4DD2-9D29-A1CA45A36DBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,95 +1,137 @@
-using DamasChinas_Client.UI.LogInServiceProxy;
 using System;
-using System.Text.RegularExpressions;
+using DamasChinas_Client.UI.LogInServiceProxy;
+using DamasChinas_Shared.Validation;
 
 namespace DamasChinas_Client.UI.Utilities
 {
     internal static class Validator
     {
-        private static readonly Regex NameRegex = new Regex("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$", RegexOptions.Compiled);
-        private static readonly Regex UsernameRegex = new Regex("^[a-zA-Z0-9_-]+$", RegexOptions.Compiled);
-        private static readonly Regex PasswordUppercaseRegex = new Regex("[A-Z]", RegexOptions.Compiled);
-        private static readonly Regex PasswordLowercaseRegex = new Regex("[a-z]", RegexOptions.Compiled);
-        private static readonly Regex PasswordDigitRegex = new Regex("[0-9]", RegexOptions.Compiled);
-        private static readonly Regex PasswordSpecialRegex = new Regex("[\\W_]", RegexOptions.Compiled);
-        private static readonly Regex EmailRegex = new Regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", RegexOptions.Compiled);
+        // ============================================================
+        //  NORMALIZACIÓN
+        // ============================================================
+        private static string Normalize(string value)
+        {
+            return UserValidationRules.Normalize(value);
+        }
 
-        private static string Normalize(string value) => value?.Trim();
-
-       
+        // ============================================================
+        //  VALIDACIÓN DE NOMBRE
+        // ============================================================
         public static void ValidateName(string name)
         {
             name = Normalize(name);
 
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("msg_NameEmpty");
+            {
+                throw new ClientValidationException("msg_NameEmpty");
+            }
 
-            if (name.Length < 2 || name.Length > 50)
-                throw new ArgumentException("msg_NameLengthInvalid");
+            if (name.Length < UserValidationRules.NameMinLength ||
+                name.Length > UserValidationRules.NameMaxLength)
+            {
+                throw new ClientValidationException("msg_NameLengthInvalid");
+            }
 
-            if (!NameRegex.IsMatch(name))
-                throw new ArgumentException("msg_NameInvalidCharacters");
+            if (!UserValidationRules.NameRegex.IsMatch(name))
+            {
+                throw new ClientValidationException("msg_NameInvalidCharacters");
+            }
         }
 
-      
+        // ============================================================
+        //  VALIDACIÓN DE USERNAME
+        // ============================================================
         public static void ValidateUsername(string username)
         {
             username = Normalize(username);
 
             if (string.IsNullOrWhiteSpace(username))
-                throw new ArgumentException("msg_UsernameEmpty");
+            {
+                throw new ClientValidationException("msg_UsernameEmpty");
+            }
 
-            if (username.Length < 3 || username.Length > 15)
-                throw new ArgumentException("msg_UsernameLengthInvalid");
+            if (username.Length < UserValidationRules.UsernameMinLength ||
+                username.Length > UserValidationRules.UsernameMaxLength)
+            {
+                throw new ClientValidationException("msg_UsernameLengthInvalid");
+            }
 
-            if (!UsernameRegex.IsMatch(username))
-                throw new ArgumentException("msg_UsernameInvalidCharacters");
+            if (!UserValidationRules.UsernameRegex.IsMatch(username))
+            {
+                throw new ClientValidationException("msg_UsernameInvalidCharacters");
+            }
         }
 
-     
+        // ============================================================
+        //  VALIDACIÓN DE PASSWORD
+        // ============================================================
         public static void ValidatePassword(string password)
         {
             password = Normalize(password);
 
             if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("msg_PasswordEmpty");
+            {
+                throw new ClientValidationException("msg_PasswordEmpty");
+            }
 
-            if (password.Length < 8)
-                throw new ArgumentException("msg_PasswordTooShort");
+            if (password.Length < UserValidationRules.PasswordMinLength)
+            {
+                throw new ClientValidationException("msg_PasswordTooShort");
+            }
 
-            if (!PasswordUppercaseRegex.IsMatch(password))
-                throw new ArgumentException("msg_PasswordRequiresUpper");
+            if (!UserValidationRules.PasswordUppercaseRegex.IsMatch(password))
+            {
+                throw new ClientValidationException("msg_PasswordRequiresUpper");
+            }
 
-            if (!PasswordLowercaseRegex.IsMatch(password))
-                throw new ArgumentException("msg_PasswordRequiresLower");
+            if (!UserValidationRules.PasswordLowercaseRegex.IsMatch(password))
+            {
+                throw new ClientValidationException("msg_PasswordRequiresLower");
+            }
 
-            if (!PasswordDigitRegex.IsMatch(password))
-                throw new ArgumentException("msg_PasswordRequiresDigit");
+            if (!UserValidationRules.PasswordDigitRegex.IsMatch(password))
+            {
+                throw new ClientValidationException("msg_PasswordRequiresDigit");
+            }
 
-            if (!PasswordSpecialRegex.IsMatch(password))
-                throw new ArgumentException("msg_PasswordRequiresSpecial");
+            if (!UserValidationRules.PasswordSpecialRegex.IsMatch(password))
+            {
+                throw new ClientValidationException("msg_PasswordRequiresSpecial");
+            }
         }
 
-        
+        // ============================================================
+        //  VALIDACIÓN DE EMAIL
+        // ============================================================
         public static void ValidateEmail(string email)
         {
             email = Normalize(email);
 
             if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("msg_EmptyEmail");
+            {
+                throw new ClientValidationException("msg_EmptyEmail");
+            }
 
-            if (email.Length > 100)
-                throw new ArgumentException("msg_EmailTooLong");
+            if (email.Length > UserValidationRules.EmailMaxLength)
+            {
+                throw new ClientValidationException("msg_EmailTooLong");
+            }
 
-            if (!EmailRegex.IsMatch(email))
-                throw new ArgumentException("msg_InvalidEmail");
+            if (!UserValidationRules.EmailRegex.IsMatch(email))
+            {
+                throw new ClientValidationException("msg_InvalidEmail");
+            }
         }
 
-       
+        // ============================================================
+        //  VALIDACIÓN DE LOGIN REQUEST
+        // ============================================================
         public static void ValidateLoginRequest(LoginRequest loginRequest)
         {
             if (loginRequest == null)
+            {
                 throw new ArgumentNullException(nameof(loginRequest));
+            }
 
             loginRequest.Username = Normalize(loginRequest.Username);
             loginRequest.Password = Normalize(loginRequest.Password);
@@ -97,13 +139,17 @@ namespace DamasChinas_Client.UI.Utilities
             if (string.IsNullOrWhiteSpace(loginRequest.Username) ||
                 string.IsNullOrWhiteSpace(loginRequest.Password))
             {
-                throw new ArgumentException("msg_EmptyCredentials");
+                throw new ClientValidationException("msg_EmptyCredentials");
             }
 
             if (loginRequest.Username.Contains("@"))
+            {
                 ValidateEmail(loginRequest.Username);
+            }
             else
+            {
                 ValidateUsername(loginRequest.Username);
+            }
         }
     }
 }

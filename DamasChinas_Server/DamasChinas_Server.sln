@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host\Host.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Server", "DamasChinas_Server\DamasChinas_Server.csproj", "{3E751113-C65C-458A-B22A-ACA914F8FA9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Shared", "..\DamasChinas_Shared\DamasChinas_Shared.csproj", "{8045C89F-F922-4E55-856F-D7F3F6409B57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3E751113-C65C-458A-B22A-ACA914F8FA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E751113-C65C-458A-B22A-ACA914F8FA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E751113-C65C-458A-B22A-ACA914F8FA9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8045C89F-F922-4E55-856F-D7F3F6409B57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
