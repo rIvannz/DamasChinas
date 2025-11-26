@@ -1,8 +1,8 @@
 ﻿using DamasChinas_Client.UI.FriendServiceProxy;
-using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,29 +30,35 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                var client = new FriendServiceClient();
-
-                var dtos = client.GetFriendRequests(currentUsername);
-
-                client.Close();
-
-                foreach (var dto in dtos)
+                using (var client = new FriendServiceClient())
                 {
-                    Requests.Add(new PendingRequest
+                    var dtos = client.GetFriendRequests(currentUsername);
+
+                    foreach (var dto in dtos)
                     {
-                        Username = dto.Username,
-                        Avatar = dto.Avatar,
-                        IsOnline = dto.ConnectionState
-                    });
+                        Requests.Add(new PendingRequest
+                        {
+                            Username = dto.Username,
+                            Avatar = dto.Avatar,
+                            IsOnline = dto.ConnectionState
+                        });
+                    }
                 }
 
                 if (Requests.Count == 0)
                 {
                     MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NoPendingRequests"),
-                        PopupType.Error);
-                    return;
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.NoPendingRequests),
+                        PopupType.Info);
                 }
+            }
+            catch (EndpointNotFoundException)
+            {
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+            }
+            catch (TimeoutException)
+            {
+                MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
             }
             catch (FaultException fault)
             {
@@ -60,10 +66,13 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"[PendingFriendRequests.LoadRequests - General] {ex.Message}");
+
                 MessageHelper.ShowPopup(
-                    "Error al comunicarse con el servidor: " + ex.Message,
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);
             }
+
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
@@ -72,48 +81,46 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new Friends(ClientSession.CurrentProfile.Username));
             }
-            catch
+            catch (InvalidOperationException)
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error);
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
         private void OnAcceptClick(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is PendingRequest req)
+            if (sender is FrameworkElement element &&
+                element.DataContext is PendingRequest req)
             {
                 string currentUsername = ClientSession.CurrentProfile.Username;
 
                 try
                 {
-                    var client = new FriendServiceClient();
-
-                    bool success = client.UpdateFriendRequestStatus(
-                        receiverUsername: currentUsername,
-                        senderUsername: req.Username,
-                        accept: true);
-
-                    client.Close();
-
-                    if (success)
+                    using (var client = new FriendServiceClient())
                     {
-                        Requests.Remove(req);
+                        bool success = client.UpdateFriendRequestStatus(
+                            receiverUsername: currentUsername,
+                            senderUsername: req.Username,
+                            accept: true);
 
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage("msg_FriendRequestAccepted"),
-                            PopupType.Success);
+                        if (success)
+                        {
+                            Requests.Remove(req);
+
+                            MessageHelper.ShowPopup(
+                                MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted),
+                                PopupType.Success);
+                        }
                     }
                 }
                 catch (FaultException fault)
                 {
                     MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageHelper.ShowPopup(
-                        "Error al aceptar la solicitud: " + ex.Message,
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                         PopupType.Error);
                 }
             }
@@ -121,38 +128,38 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnRejectClick(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is PendingRequest req)
+            if (sender is FrameworkElement element &&
+                element.DataContext is PendingRequest req)
             {
                 string currentUsername = ClientSession.CurrentProfile.Username;
 
                 try
                 {
-                    var client = new FriendServiceClient();
-
-                    bool success = client.UpdateFriendRequestStatus(
-                        receiverUsername: currentUsername,
-                        senderUsername: req.Username,
-                        accept: false);
-
-                    client.Close();
-
-                    if (success)
+                    using (var client = new FriendServiceClient())
                     {
-                        Requests.Remove(req);
+                        bool success = client.UpdateFriendRequestStatus(
+                            receiverUsername: currentUsername,
+                            senderUsername: req.Username,
+                            accept: false);
 
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage("msg_FriendRequestRejected"),
-                            PopupType.Info);
+                        if (success)
+                        {
+                            Requests.Remove(req);
+
+                            MessageHelper.ShowPopup(
+                                MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestRejected),
+                                PopupType.Info);
+                        }
                     }
                 }
                 catch (FaultException fault)
                 {
                     MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageHelper.ShowPopup(
-                        "Error al rechazar la solicitud: " + ex.Message,
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                         PopupType.Error);
                 }
             }

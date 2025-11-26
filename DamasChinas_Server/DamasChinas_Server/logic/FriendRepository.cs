@@ -259,18 +259,25 @@ namespace DamasChinas_Server
 
             using (var db = CréateDbContext())
             {
+            
                 EnsurePendingRequestExists(db, ids.receiverId, ids.senderId);
 
+            
                 var request = db.solicitudes_amistad
                     .FirstOrDefault(s =>
                         s.id_emisor == ids.senderId &&
                         s.id_receptor == ids.receiverId &&
                         s.estado == PendingStatus);
 
+                if (request == null)
+                    throw new FaultException("No existe la solicitud pendiente.");
+
                 if (accept)
                 {
+                
                     EnsureNotBlocked(db, ids.senderId, ids.receiverId);
 
+               
                     if (!FriendshipExists(db, ids.senderId, ids.receiverId))
                     {
                         db.amistades.Add(new amistades
@@ -280,18 +287,16 @@ namespace DamasChinas_Server
                             fecha_amistad = DateTime.Now
                         });
                     }
+                }
 
-                    
-                }
-                else
-                {
-                    
-                }
+             
+                db.solicitudes_amistad.Remove(request);
 
                 db.SaveChanges();
                 return true;
             }
         }
+
 
         public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
         {

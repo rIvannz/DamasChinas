@@ -31,6 +31,18 @@ namespace DamasChinas_Client.UI.Utilities
         public const string LobbyUserBanned = "msg_LobbyUserBanned";
         public const string LobbyClosed = "msg_LobbyClosed";
 
+
+        // ========================
+        // Amigos
+        // ========================
+        public const string FriendUserNotFound = "msg_FriendUserNotFound";
+        public const string FriendRequestAccepted = "msg_FriendRequestAccepted";
+        public const string FriendRequestRejected = "msg_FriendRequestRejected";
+        public const string NoPendingRequests = "msg_NoPendingRequests";
+        public const string FriendRequestSentOk = "friendRequestSentOk";
+
+
+
         // ========================
         // Backend / Servidor
         // ========================

@@ -5,6 +5,7 @@ using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -21,10 +22,12 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.GoBack();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine($"[AddFriend.OnCancelClick] {ex.Message}");
+
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.NavigationError),
                     PopupType.Error);
             }
         }
@@ -36,49 +39,61 @@ namespace DamasChinas_Client.UI.Pages
             if (string.IsNullOrWhiteSpace(username))
             {
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_EmptyCredentials"),
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.EmptyCredentials),
                     PopupType.Warning);
+
                 return;
             }
 
-            var senderUsername = ClientSession.CurrentProfile.Username;
+            string senderUsername = ClientSession.CurrentProfile.Username;
 
             try
             {
-                var client = new FriendServiceClient();
-
-                bool success = client.SendFriendRequest(senderUsername, username);
-
-                client.Close();
-
-                if (success)
+                using (var client = new FriendServiceClient())
                 {
-                    MessageBox.Show(
-                        "Solicitud enviada correctamente.",
-                        "Éxito",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    bool success = client.SendFriendRequest(senderUsername, username);
 
-                    NavigationService?.GoBack();
+                    if (success)
+                    {
+                        MessageHelper.ShowPopup(
+                            MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestSentOk),
+                            PopupType.Success);
+
+                        NavigationService?.GoBack();
+                    }
                 }
             }
             catch (FaultException fault)
             {
-                MessageBox.Show(
-                    fault.Message,
-                    "Solicitud no enviada",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                Debug.WriteLine($"[AddFriend.Send - Fault] {fault.Message}");
+
+                // Mensaje enviado desde servidor, ya traducible
+                MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[AddFriend.Send - Endpoint] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.ServerUnavailable),
+                    PopupType.Error);
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[AddFriend.Send - Timeout] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.NetworkLatency),
+                    PopupType.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $":\n{ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                Debug.WriteLine($"[AddFriend.Send - General] {ex.Message}");
+
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
+                    PopupType.Error);
             }
         }
-
     }
 }

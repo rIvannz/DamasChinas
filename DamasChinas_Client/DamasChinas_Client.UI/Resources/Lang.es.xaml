@@ -29,6 +29,14 @@
 
     <!-- Mensajes de error relacionados -->
     <sys:String x:Key="msg_FriendUserNotFound">El usuario que quieres agregar no se encontró.</sys:String>
+    <!-- Resultados módulo de amigos -->
+    <sys:String x:Key="msg_FriendRequestAccepted">
+        Has aceptado la solicitud de amistad correctamente.</sys:String>
+    <sys:String x:Key="msg_FriendRequestRejected">
+        Has rechazado la solicitud de amistad.</sys:String>
+    <sys:String x:Key="msg_NoPendingRequests">
+        No tienes solicitudes pendientes.
+    </sys:String>
 
 
     <!-- ========================================================= -->

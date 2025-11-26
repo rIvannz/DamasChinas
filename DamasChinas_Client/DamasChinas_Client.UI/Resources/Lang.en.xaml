@@ -29,7 +29,15 @@
     <sys:String x:Key="friendRequestSentOk">Your friend request was sent successfully.</sys:String>
 
     <sys:String x:Key="msg_FriendUserNotFound">The user you want to add was not found.</sys:String>
- 
+
+    <!-- Friends module result messages -->
+    <sys:String x:Key="msg_FriendRequestAccepted">Friend request accepted successfully.</sys:String>
+    <sys:String x:Key="msg_FriendRequestRejected">Friend request rejected.</sys:String>
+    <sys:String x:Key="msg_NoPendingRequests">
+        You have no pending friend requests.
+    </sys:String>
+
+
     <!-- ========================================================= -->
     <!--  MAIN MENU / CONFIGURATION                                -->
     <!-- ========================================================= -->
