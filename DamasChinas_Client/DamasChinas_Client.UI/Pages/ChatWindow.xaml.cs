@@ -36,13 +36,13 @@ namespace DamasChinas_Client.UI.Pages
 
                 string normalizedUsername = _myUsername.Trim().ToLower();
 
-                // Debug: muestra el original
+                
                 MessageBox.Show("previo: " + _myUsername);
 
-                // Registras en el servidor usando el normalizado
+              
                 _client.RegistrateClient(normalizedUsername);
 
-                // Debug: muestra el NORMALIZADO
+              
                 MessageBox.Show("registrado como: " + normalizedUsername);
                 _ = LoadHistoryAsync();
             }

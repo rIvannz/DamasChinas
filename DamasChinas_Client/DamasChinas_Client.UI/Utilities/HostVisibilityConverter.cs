@@ -9,10 +9,7 @@ using System.Windows.Data;
 
 namespace DamasChinas_Client.UI.Utilities
 {
-    /// <summary>
-    /// Converts a boolean indicating if the user is host
-    /// into a Visibility value for UI controls.
-    /// </summary>
+
     public class HostVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

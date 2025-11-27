@@ -67,7 +67,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 Debug.WriteLine($"[AddFriend.Send - Fault] {fault.Message}");
 
-                // Mensaje enviado desde servidor, ya traducible
+           
                 MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
             }
             catch (EndpointNotFoundException ex)

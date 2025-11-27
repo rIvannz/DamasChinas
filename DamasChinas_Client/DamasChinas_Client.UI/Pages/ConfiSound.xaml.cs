@@ -33,9 +33,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // VALIDACIÓN CENTRALIZADA — elimina repetición y mejora Sonar
-        // ============================================================
+
         private static void ValidateVolume(double volume)
         {
             if (volume < 0 || volume > 1)

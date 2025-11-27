@@ -32,9 +32,7 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                // =========================
-                //  VALIDACIÓN LOCAL
-                // =========================
+            
                 if (!ValidateLocalInputs())
                 {
                     return;
@@ -44,9 +42,6 @@ namespace DamasChinas_Client.UI.Pages
                 client = new SingInServiceClient();
                 var userDto = GetUserFromInputs();
 
-                // =========================
-                //  VALIDACIÓN EN SERVIDOR
-                // =========================
                 bool isValid = await ValidateWithServerAsync(client, userDto, loader);
                 loader = null;
 
@@ -55,18 +50,14 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                // =========================
-                //  SOLICITAR CÓDIGO
-                // =========================
+         
                 bool codeRequested = await RequestVerificationCodeAsync(client, userDto);
                 if (!codeRequested)
                 {
                     return;
                 }
 
-                // =========================
-                //  POPUP PARA INGRESAR CÓDIGO
-                // =========================
+              
                 string codeValue = ShowVerificationCodeWindow();
                 if (string.IsNullOrWhiteSpace(codeValue))
                 {
@@ -75,9 +66,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 loader = ShowLoader();
 
-                // =========================
-                //  CREAR USUARIO FINALMENTE
-                // =========================
+
                 bool userCreated = await CreateUserAsync(client, userDto, codeValue, loader);
                 loader = null;
 
@@ -86,9 +75,7 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                // =========================
-                //  ÉXITO
-                // =========================
+
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_AccountCreated"),
                     PopupType.Success);
@@ -106,9 +93,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // VALIDACIONES LOCALES
-        // ============================================================
+
         private bool ValidateLocalInputs()
         {
             if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
@@ -128,14 +113,14 @@ namespace DamasChinas_Client.UI.Pages
                 return false;
             }
 
-            // Validación mínima local (UX)
+
             if (txtPassword.Password.Length < 8)
             {
                 ShowWarning(MessageKeys.InvalidPasswordLength);
                 return false;
             }
 
-            // Validación completa (cliente)
+      
             if (!ValidatePassword())
             {
                 return false;
@@ -159,9 +144,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // MENSAJERÍA
-        // ============================================================
         private static void ShowWarning(string messageKey)
         {
             string message = MessageTranslator.GetLocalizedMessage(messageKey);
@@ -179,9 +161,7 @@ namespace DamasChinas_Client.UI.Pages
             MessageHelper.ShowPopup(message, PopupType.Error);
         }
 
-        // ============================================================
-        // LOADER
-        // ============================================================
+
         private LoadingWindow ShowLoader()
         {
             var loader = new LoadingWindow
@@ -215,9 +195,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // POPUP DEL CÓDIGO
-        // ============================================================
+
         private string ShowVerificationCodeWindow()
         {
             var popup = new VerificationCodeWindow
@@ -228,9 +206,7 @@ namespace DamasChinas_Client.UI.Pages
             return popup.ShowDialog() == true ? popup.CodeValue : null;
         }
 
-        // ============================================================
-        // DTO
-        // ============================================================
+
         private UserDto GetUserFromInputs()
         {
             return new UserDto
@@ -243,9 +219,7 @@ namespace DamasChinas_Client.UI.Pages
             };
         }
 
-        // ============================================================
-        // VALIDACIÓN EN SERVIDOR
-        // ============================================================
+
         private static async Task<bool> ValidateWithServerAsync(
             SingInServiceClient client,
             UserDto dto,
@@ -302,9 +276,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // REQUEST CODE
-        // ============================================================
+
         private static async Task<bool> RequestVerificationCodeAsync(
             SingInServiceClient client,
             UserDto dto)
@@ -358,9 +330,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // CREATE USER
-        // ============================================================
+
         private static async Task<bool> CreateUserAsync(
             SingInServiceClient client,
             UserDto dto,
@@ -438,9 +408,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // NAVEGACIÓN
-        // ============================================================
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try

@@ -15,20 +15,11 @@ namespace DamasChinas_Client.UI.Utilities
     {
         private static PublicProfile _currentProfile;
 
-        /// <summary>
-        /// Cliente WCF que mantiene viva la sesión duplex.
-        /// Debe ser global para evitar que el GC destruya la conexión.
-        /// </summary>
         public static LoginServiceClient LoginClient { get; private set; }
 
-        /// <summary>
-        /// Callback del usuario autenticado.
-        /// </summary>
+   
         public static ILoginServiceCallback CallbackHandler { get; private set; }
 
-        /// <summary>
-        /// Perfil actual del usuario.
-        /// </summary>
         public static PublicProfile CurrentProfile
         {
             get
@@ -42,12 +33,7 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static bool IsLoggedIn => _currentProfile != null;
 
-        /// <summary>
-        /// Inicializa sesión guardando:
-        ///  - Perfil
-        ///  - Cliente WCF
-        ///  - Callback
-        /// </summary>
+
         public static void Initialize(
             PublicProfile profile,
             LoginServiceClient client,
@@ -58,9 +44,7 @@ namespace DamasChinas_Client.UI.Utilities
             CallbackHandler = callback ?? throw new ArgumentNullException(nameof(callback));
         }
 
-        /// <summary>
-        /// Limpia la sesión actual (logout).
-        /// </summary>
+
         public static void Clear()
         {
             _currentProfile = null;

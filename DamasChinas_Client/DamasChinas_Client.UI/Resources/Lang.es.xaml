@@ -82,6 +82,8 @@
     <sys:String x:Key="msg_AccountCreated">
         Cuenta creada correctamente. ¡Bienvenido a Damas Chinas!
     </sys:String>
+    <sys:String x:Key="deleteFriend">ELIMINAR AMIGO</sys:String>
+    <sys:String x:Key="blockUser">BLOQUEAR USUARIO</sys:String>
 
 
     <!-- Validaciones locales -->

@@ -65,7 +65,7 @@ namespace DamasChinas_Client.UI.PopUps
 
         private void OnExitClick(object sender, RoutedEventArgs e)
         {
-            // Indica que NO se verificó
+           
             this.DialogResult = false;
             this.Close();
         }

@@ -112,7 +112,9 @@
     <sys:String x:Key="wins">WINS</sys:String>
     <sys:String x:Key="loses">LOSES</sys:String>
 
-   
+
+    <sys:String x:Key="deleteFriend">DELETE FRIEND</sys:String>
+    <sys:String x:Key="blockUser">BLOCK USER</sys:String>
 
 
     <!-- LOGOUT CONFIRMATION -->
