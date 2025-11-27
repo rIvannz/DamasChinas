@@ -1,4 +1,4 @@
-using DamasChinas_Client.UI.LogInServiceProxy;
+﻿using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Utilities;
 using System;
@@ -18,38 +18,67 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
         }
 
+        // ============================================================
+        // LOGIN CLICK
+        // ============================================================
         private void OnLoginClick(object sender, RoutedEventArgs e)
         {
+           // btnLogin.IsEnabled = false;
             LoadingWindow loading = null;
 
             try
             {
                 var (username, password) = GetCredentials();
-                if (!ValidateCredentials(username, password))
-                    return;
 
-                string hashed = Hasher.HashPassword(password);
+                if (!ValidateCredentials(username, password))
+                {
+                  //  btnLogin.IsEnabled = true;
+                    return;
+                }
+
+                var hashedPassword = Hasher.HashPassword(password);
                 loading = ShowLoading();
 
                 var client = CreateLoginClient(out var callback);
                 ConfigureCallback(callback, loading, client);
-                ExecuteLogin(client, username, hashed);
+
+                ExecuteLogin(client, username, hashedPassword);
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is TimeoutException ||
-                ex is CommunicationException)
+            catch (EndpointNotFoundException ex)
             {
-                Debug.WriteLine($"[Login.OnLoginClick] {ex}");
-                loading?.Close();
+                Debug.WriteLine($"[Login.OnLoginClick - EndpointNotFound] {ex}");
+                MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (TimeoutException ex)
             {
-                Debug.WriteLine($"[Login.OnLoginClick - General] {ex}");
+                Debug.WriteLine($"[Login.OnLoginClick - Timeout] {ex}");
+             //   MessageHelper.ShowPopup(NetworkTimeout, PopupType.Warning);
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[Login.OnLoginClick - Communication] {ex}");
+            //    MessageHelper.ShowPopup(CommunicationFailed, PopupType.Error);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[Login.OnLoginClick - InvalidOperation] {ex}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+            }
+            finally
+            {
                 loading?.Close();
+
+                if (!ClientSession.IsLoggedIn)
+                {
+              //      btnLogin.IsEnabled = true;
+                }
             }
         }
 
+
+        // ============================================================
+        // UTILIDADES INPUT
+        // ============================================================
         private (string username, string password) GetCredentials()
             => (txtUsername.Text.Trim(), txtPassword.Password.Trim());
 
@@ -70,12 +99,18 @@ namespace DamasChinas_Client.UI.Pages
             return w;
         }
 
+        // ============================================================
+        // CREACIÓN DEL CLIENTE
+        // ============================================================
         private static LoginServiceClient CreateLoginClient(out LoginCallbackHandler callback)
         {
             callback = new LoginCallbackHandler();
             return new LoginServiceClient(new InstanceContext(callback));
         }
 
+        // ============================================================
+        // CALLBACKS WCF
+        // ============================================================
         private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loading, LoginServiceClient client)
         {
             var channel = client.InnerChannel;
@@ -83,16 +118,26 @@ namespace DamasChinas_Client.UI.Pages
             channel.Faulted += (_, __) => HandleConnectionLoss(loading);
             channel.Closed += (_, __) => HandleConnectionLoss(loading);
 
+            // ---------------------------
+            // LOGIN SUCCESS
+            // ---------------------------
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    // ⭐⭐⭐ IMPORTANTE ⭐⭐⭐
+                    // Guardamos la sesión global para que el callback NO muera
+                    ClientSession.Initialize(profile, client, callback);
+
                     TryNavigateToMenu(profile, loading);
                 });
             };
 
+            // ---------------------------
+            // LOGIN ERROR
+            // ---------------------------
             callback.LoginError += async code =>
             {
                 string msg = MessageTranslator.GetLocalizedMessage(code);
@@ -107,6 +152,9 @@ namespace DamasChinas_Client.UI.Pages
             };
         }
 
+        // ============================================================
+        // CONEXIÓN PERDIDA
+        // ============================================================
         private static void HandleConnectionLoss(LoadingWindow loading)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -122,6 +170,9 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex) { Debug.WriteLine($"[Login.SafeWait] {ex}"); }
         }
 
+        // ============================================================
+        // NAVEGAR AL MENÚ
+        // ============================================================
         private void TryNavigateToMenu(PublicProfile profile, LoadingWindow loading)
         {
             try
@@ -137,7 +188,6 @@ namespace DamasChinas_Client.UI.Pages
                     SocialUrl = profile.SocialUrl
                 };
 
-                ClientSession.Initialize(profile);
                 NavigationService?.Navigate(new MenuRegisteredPlayer(converted));
             }
             catch (InvalidOperationException ex)
@@ -152,6 +202,9 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        // ============================================================
+        // EJECUTAR LOGIN EN EL SERVIDOR
+        // ============================================================
         private void ExecuteLogin(LoginServiceClient client, string username, string hashedPassword)
         {
             try
@@ -174,6 +227,9 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        // ============================================================
+        // BOTONES Y NAVEGACIÓN
+        // ============================================================
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try

@@ -13,6 +13,9 @@ namespace DamasChinas_Server.Interfaces
         [OperationContract]
         PublicProfile GetPublicProfile(int idUser);
 
+        [OperationContract]
+        PublicFriendProfile GetFriendPublicProfile(string username);
+
 
         [OperationContract]
         OperationResult ChangeUsername(string username, string newUsername);

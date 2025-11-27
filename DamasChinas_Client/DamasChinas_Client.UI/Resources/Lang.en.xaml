@@ -120,6 +120,10 @@
     <sys:String x:Key="msg_LogoutConfirm">Do you want to log out?</sys:String>
 
 
+    <!-- FRIENDS CONFIRMATION -->
+    <sys:String x:Key="msg_BlockConfirm"> are you shure to bloch the user ?</sys:String>
+    <sys:String x:Key="msg_DeleteFriendConfirm">are you shure to delete ypur friend ?</sys:String>
+
 
     <!-- Change Data -->
     <sys:String x:Key="changeData">CHANGE DATA</sys:String>

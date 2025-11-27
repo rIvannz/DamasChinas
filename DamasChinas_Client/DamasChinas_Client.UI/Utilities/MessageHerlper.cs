@@ -35,10 +35,10 @@ namespace DamasChinas_Client.UI.Utilities
             ShowPopup(resourceKey, type);
         }
 
-      
-        public static bool ShowConfirmLogout()
+
+        public static bool ShowConfirm(string messageResourceKey)
         {
-            var popup = new ConfirmPopupWindow
+            var popup = new ConfirmPopupWindow(messageResourceKey)
             {
                 Owner = Application.Current.MainWindow
             };
@@ -47,7 +47,8 @@ namespace DamasChinas_Client.UI.Utilities
             return popup.Result;
         }
 
-    
+
+
         public static void ShowFromResult(dynamic result)
         {
             if (result == null)

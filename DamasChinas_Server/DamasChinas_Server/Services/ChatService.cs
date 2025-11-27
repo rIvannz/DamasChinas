@@ -13,68 +13,58 @@ namespace DamasChinas_Server
         private static readonly ConcurrentDictionary<string, IChatCallback> Clients =
             new ConcurrentDictionary<string, IChatCallback>();
 
-        // Repositorio SOLO para métodos de instancia (ya GetIdByUsername es estático)
         private readonly ChatRepository _repo = new ChatRepository();
 
         public void RegistrateClient(string username)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
 
-            if (!Clients.ContainsKey(username))
-            {
-                Clients[username] = callback;
-            }
+            string key = username.Trim().ToLower();
+
+            Clients[key] = callback;
+
+            Debug.WriteLine($"[RegistrateClient] Registrado: {key}");
         }
 
         public void SendMessage(Message message)
         {
-            if (message == null)
+            if (message == null) return;
+
+            string destinationKey = message.DestinationUsername?.Trim().ToLower();
+
+            // Guarda en la BD
+            string senderUsername = message.UsarnameSender;
+            int idRecipient = _repo.GetIdByUsername(message.DestinationUsername.Trim().ToLower());
+            _repo.SaveMessage(senderUsername, idRecipient, message.Text);
+
+            if
+                (destinationKey != null && Clients.TryGetValue(destinationKey, out var callback))
             {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            try
-            {
-                string senderUsername = message.UsarnameSender;
-
-                int recipientId = ChatRepository.GetIdByUsername(message.DestinationUsername);
-
-                _repo.SaveMessage(senderUsername, recipientId, message.Text);
-
-                if (Clients.TryGetValue(message.DestinationUsername, out IChatCallback callback))
+                try
                 {
-                    try
-                    {
-                        callback.ReceiveMessage(message);
-                    }
-                    catch (CommunicationException cex)
-                    {
-                        Debug.WriteLine(
-                            $"[ChatService.SendMessage] Communication error with '{message.DestinationUsername}': {cex.Message}");
-                    }
-                    catch (ObjectDisposedException odex)
-                    {
-                        Debug.WriteLine(
-                            $"[ChatService.SendMessage] Channel disposed for '{message.DestinationUsername}': {odex.Message}");
-                    }
+                    Debug.WriteLine($"[ChatService] Enviando mensaje a {destinationKey}");
+                    callback.ReceiveMessage(message);
+                }
+                catch (CommunicationException ex)
+                {
+                    Debug.WriteLine($"[SendMessage] Error comunicando con '{destinationKey}': {ex.Message}");
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    Debug.WriteLine($"[SendMessage] Canal cerrado para '{destinationKey}': {ex.Message}");
                 }
             }
-            catch (ArgumentException aex)
+            else
             {
-                Debug.WriteLine($"[ChatService.SendMessage] Argument error: {aex.Message}");
-            }
-            catch (InvalidOperationException ioex)
-            {
-                Debug.WriteLine($"[ChatService.SendMessage] Invalid operation: {ioex.Message}");
+                Debug.WriteLine($"[ChatService] Cliente '{destinationKey}' no conectado.");
             }
         }
-
         public Message[] GetHistoricalMessages(string usernameSender, string usernameRecipient)
         {
             try
             {
-                var list = _repo.GetChatByUsername(usernameSender, usernameRecipient);
-                return list.ToArray();
+                return _repo.GetChatByUsername(usernameSender, usernameRecipient).ToArray();
+
             }
             catch (ArgumentException aex)
             {

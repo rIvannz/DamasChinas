@@ -69,6 +69,15 @@
   <wsdl:message name="IFriendService_UpdateFriendRequestStatus_StringFault_FaultMessage">
     <wsdl:part xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/" name="detail" element="q6:string" />
   </wsdl:message>
+  <wsdl:message name="IFriendService_DeleteFriendAndBlock_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteFriendAndBlock" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_DeleteFriendAndBlock_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteFriendAndBlockResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_DeleteFriendAndBlock_StringFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" name="detail" element="q7:string" />
+  </wsdl:message>
   <wsdl:portType name="IFriendService">
     <wsdl:operation name="GetFriends">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriends" message="tns:IFriendService_GetFriends_InputMessage" />
@@ -99,6 +108,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus" message="tns:IFriendService_UpdateFriendRequestStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse" message="tns:IFriendService_UpdateFriendRequestStatus_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusStringFault" name="StringFault" message="tns:IFriendService_UpdateFriendRequestStatus_StringFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFriendAndBlock">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock" message="tns:IFriendService_DeleteFriendAndBlock_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse" message="tns:IFriendService_DeleteFriendAndBlock_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockStringFault" name="StringFault" message="tns:IFriendService_DeleteFriendAndBlock_StringFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IFriendService" type="tns:IFriendService">
@@ -166,6 +180,18 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateFriendRequestStatus">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StringFault">
+        <soap12:fault use="literal" name="StringFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFriendAndBlock">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/DeleteFriendAndBlock" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

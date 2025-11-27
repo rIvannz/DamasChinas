@@ -296,6 +296,36 @@ namespace DamasChinas_Server
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
         }
+
+        public  PublicFriendProfile GetFriendPublicProfile(string friendUsername)
+{
+    if (string.IsNullOrWhiteSpace(friendUsername))
+    {
+        throw new RepositoryValidationException(MessageCode.UsernameEmpty);
+    }
+
+    return ExecuteInContext(db =>
+    {
+        var perfil = db.perfiles
+                       .Include(p => p.usuarios)
+                       .SingleOrDefault(p =>
+                           p.username.Equals(friendUsername, StringComparison.OrdinalIgnoreCase));
+
+        if (perfil == null)
+        {
+            throw new RepositoryValidationException(MessageCode.UserProfileNotFound);
+        }
+
+        return new PublicFriendProfile
+        {
+            Username = perfil.username,
+            Name = perfil.nombre,
+            LastName = perfil.apellido_materno,
+            SocialUrl = perfil.url
+        };
+    });
+}
+
     }
 }
 

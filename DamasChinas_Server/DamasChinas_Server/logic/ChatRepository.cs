@@ -10,7 +10,7 @@ namespace DamasChinas_Server
     {
         public void SaveMessage(string usernameSender, int recipientId, string texto)
         {
-            int senderId = GetIdByUsername(usernameSender);
+            var senderId = GetIdByUsername(usernameSender);
 
             using (var context = new damas_chinasEntities())
             {
@@ -27,6 +27,7 @@ namespace DamasChinas_Server
             }
         }
 
+
         public List<Message> GetChatByUsername(string usernameSender, string usernameRecipient)
         {
             int idSender = GetIdByUsername(usernameSender);
@@ -34,10 +35,11 @@ namespace DamasChinas_Server
 
             using (var context = new damas_chinasEntities())
             {
-                return context.mensajes
+                var mensajes = context.mensajes
                     .Where(m =>
                         (m.id_usuario_remitente == idSender && m.id_usuario_destino == idRecipient) ||
-                        (m.id_usuario_remitente == idRecipient && m.id_usuario_destino == idSender))
+                        (m.id_usuario_remitente == idRecipient && m.id_usuario_destino == idSender)
+                    )
                     .OrderBy(m => m.fecha_envio)
                     .Select(m => new Message
                     {
@@ -47,17 +49,20 @@ namespace DamasChinas_Server
                         SendDate = m.fecha_envio
                     })
                     .ToList();
+
+                return mensajes;
+
             }
         }
 
 
-        public static int GetIdByUsername(string username)
+
+        public int GetIdByUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
                 throw new ArgumentException("El nombre de usuario no puede estar vacío.");
             }
-
             using (var context = new damas_chinasEntities())
             {
                 int userId = context.usuarios
@@ -67,12 +72,11 @@ namespace DamasChinas_Server
 
                 if (userId == 0)
                 {
-                    throw new InvalidOperationException(
-                        $"No se encontró el usuario con username '{username}'");
+                    throw new InvalidOperationException($"No se encontró el usuario con username '{username}'");
                 }
-
                 return userId;
             }
+
         }
     }
 }

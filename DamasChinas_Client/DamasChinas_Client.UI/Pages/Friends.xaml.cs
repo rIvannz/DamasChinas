@@ -96,22 +96,25 @@ namespace DamasChinas_Client.UI.Pages
         }
 
         private void OnViewProfileClick(object sender, RoutedEventArgs e)
+{
+    try
+    {
+        if (sender is FrameworkElement element &&
+            element.DataContext is FriendList friend)
         {
-            try
-            {
-                NavigationService?.Navigate(new ProfileUser());
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[Friends.OnViewProfileClick - InvalidOperation] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Friends.OnViewProfileClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
+            var profilePage = new ProfileUser(friend.Username);
+
+            NavigationService?.Navigate(profilePage);
         }
+    }
+    catch (Exception ex)
+    {
+        Debug.WriteLine($"[Friends.OnViewProfileClick - General] {ex.Message}");
+        MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+    }
+}
+
+
 
         private void OnChatClick(object sender, RoutedEventArgs e)
         {
@@ -129,11 +132,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[Friends.OnChatClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ChatOpenError, PopupType.Error);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Friends.OnChatClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.ChatOpenError, PopupType.Error);
-            }
+
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)

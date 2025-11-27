@@ -116,6 +116,10 @@
     <sys:String x:Key="title_Confirm">Confirmar</sys:String>
     <sys:String x:Key="msg_LogoutConfirm">¿Deseas cerrar tu sesión?</sys:String>
 
+    <!-- FRIENDS CONFIRMATION -->
+    <sys:String x:Key="msg_BlockConfirm">¿Estas seguro de este bloqueo?</sys:String>
+    <sys:String x:Key="msg_DeleteFriendConfirm">¿Estas seguro de eliminar a tu amigo?</sys:String>
+
 
     <!-- Cambio de datos -->
     <sys:String x:Key="changeData">CAMBIAR DATOS</sys:String>

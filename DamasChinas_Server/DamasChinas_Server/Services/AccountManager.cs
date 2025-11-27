@@ -29,6 +29,13 @@ namespace DamasChinas_Server.Services
             return _repository.GetPublicProfile(idUser);
         }
 
+
+        public PublicFriendProfile GetFriendPublicProfile(string username)
+        {
+            return _repository.GetFriendPublicProfile(username);
+        }
+
+
         public OperationResult ChangeUsername(string username, string newUsername)
         {
             return ExecuteAccountOperation(

@@ -60,6 +60,7 @@
     <Compile Include="Contracts\OperationResult.cs" />
     <Compile Include="Dtos\Lobby.cs" />
     <Compile Include="Dtos\LoginRequest.cs" />
+    <Compile Include="Dtos\PublicFriendProfile.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Game\ChineseCheckersBoard.cs" />
     <Compile Include="Game\ChineseCheckersGame.cs" />

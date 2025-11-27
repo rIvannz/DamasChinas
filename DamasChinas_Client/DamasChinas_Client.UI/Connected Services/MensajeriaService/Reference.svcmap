@@ -25,7 +25,7 @@
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="61abe438-9dd1-4bcf-8229-c9146fe7fe80" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="6d0be7e5-1f4f-4335-bcf4-4ea8cfc7a2e5" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="abfb3393-7871-4494-b1ff-5c27514ba000" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
-    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="917cd506-7cf5-4303-9304-3d77a2e22e78" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
+    <MetadataFile FileName="DamasChinas_Server.Dtos.xsd" MetadataType="Schema" ID="b16a217e-f8f2-46c2-bad1-d2184025eaaa" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

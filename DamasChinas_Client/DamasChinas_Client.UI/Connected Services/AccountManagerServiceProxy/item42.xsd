@@ -10,4 +10,13 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PublicProfile" nillable="true" type="tns:PublicProfile" />
+  <xs:complexType name="PublicFriendProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SocialUrl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PublicFriendProfile" nillable="true" type="tns:PublicFriendProfile" />
 </xs:schema>

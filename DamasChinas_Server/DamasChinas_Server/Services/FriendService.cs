@@ -41,5 +41,10 @@ namespace DamasChinas_Server
                 {
                         return repo.UpdateFriendRequestStatus(receiverUsername, senderUsername, accept);
                 }
+
+                public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername)
+                { 
+                       return repo.DeleteFriendAndBlock(blockerUsername, blockedUsername);
+                }
         }
 }

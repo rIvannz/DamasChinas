@@ -34,8 +34,16 @@ namespace DamasChinas_Client.UI.Pages
                 var factory = new DuplexChannelFactory<IChatService>(context, "NetTcpBinding_IChatService");
                 _client = factory.CreateChannel();
 
-                _client.RegistrateClient(_myUsername);
+                string normalizedUsername = _myUsername.Trim().ToLower();
 
+                // Debug: muestra el original
+                MessageBox.Show("previo: " + _myUsername);
+
+                // Registras en el servidor usando el normalizado
+                _client.RegistrateClient(normalizedUsername);
+
+                // Debug: muestra el NORMALIZADO
+                MessageBox.Show("registrado como: " + normalizedUsername);
                 _ = LoadHistoryAsync();
             }
             catch (EndpointNotFoundException ex)
@@ -138,8 +146,12 @@ namespace DamasChinas_Client.UI.Pages
 
         public void ReceiveMessage(Message message)
         {
-            Messages.Add(message);
-            MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Messages.Add(message);
+                MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
+            });
         }
     }
+
 }

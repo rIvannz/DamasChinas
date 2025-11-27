@@ -1,40 +1,132 @@
-using System.Windows;
-using System.Windows.Controls;
-
+using DamasChinas_Client.UI.AccountManagerServiceProxy;
+using DamasChinas_Client.UI.FriendServiceProxy;
+using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Diagnostics;
-using DamasChinas_Client.UI.Utilities;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class ProfileUser : Page
     {
-        public ProfileUser()
+        private readonly string _username;
+        private PublicFriendProfile _profile;
+
+        public ProfileUser(string username)
         {
             InitializeComponent();
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentNullException(nameof(username));
+            }
+
+            _username = username;
+
+            Loaded += ProfileUser_Loaded;
+        }
+
+        private void ProfileUser_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= ProfileUser_Loaded;
+            LoadProfile();
+        }
+
+        private void LoadProfile()
+        {
+            try
+            {
+                using (var client = new AccountManagerClient())
+                {
+                    _profile = client.GetFriendPublicProfile(_username);
+                }
+
+                UpdateProfileDisplay();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfileUser.LoadProfile] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
+        }
+
+        private void UpdateProfileDisplay()
+        {
+            try
+            {
+                if (_profile == null)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                    return;
+                }
+
+                UsernameTextBlock.Text = _profile.Username;
+                FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfileUser.UpdateProfileDisplay] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (NavigationService?.CanGoBack == true)
-                {
-                    NavigationService.GoBack();
-                }
-                else
-                {
-                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
-                }
+                NavigationService?.Navigate(new Friends(ClientSession.CurrentProfile.Username));
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ProfileUser.OnBackClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
+        }
+
+        private void OnDeleteFriendClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                bool confirm = MessageHelper.ShowConfirm("¿Eliminar a este amigo?");
+                if (!confirm)
+                {
+                    return;
+                }
+
+                using (var client = new FriendServiceClient())
+                {
+                    client.DeleteFriendAndBlock(
+                        ClientSession.CurrentProfile.Username,
+                        _username
+                    );
+                }
+
+                MessageHelper.ShowPopup(MessageKeys.FriendRemoved, PopupType.Success);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ProfileUser.OnBackClick - General] {ex.Message}");
+                Debug.WriteLine($"[ProfileUser.OnDeleteFriendClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
+        }
+
+
+        private void OnBlockUserClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                bool confirm = MessageHelper.ShowConfirm("¿Bloquear a este usuario?");
+                if (!confirm)
+                {
+                    return;
+                }
+
+                MessageHelper.ShowPopup("Usuario bloqueado", PopupType.Info);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfileUser.OnBlockUserClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
@@ -45,14 +137,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[ProfileUser.OnSoundClick - InvalidOperation] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ProfileUser.OnSoundClick - General] {ex.Message}");
+                Debug.WriteLine($"[ProfileUser.OnSoundClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
@@ -63,40 +150,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[ProfileUser.OnLanguageClick - InvalidOperation] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ProfileUser.OnLanguageClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
-        }
-
-        private void OnDeleteFriendClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MessageHelper.ShowPopup(MessageKeys.FriendRemoved, PopupType.Success);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfileUser.OnDeleteFriendClick] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
-        }
-
-        private void OnSendMessageClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MessageHelper.ShowPopup(MessageKeys.ChatComingSoon, PopupType.Info);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfileUser.OnSendMessageClick] {ex.Message}");
+                Debug.WriteLine($"[ProfileUser.OnLanguageClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }

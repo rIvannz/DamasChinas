@@ -16,6 +16,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetFriendPublicProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendPublicProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="GetFriendPublicProfileResult" nillable="true" type="q2:PublicFriendProfile" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ChangeUsername">
     <xs:complexType>
       <xs:sequence>
@@ -27,14 +41,14 @@
   <xs:element name="ChangeUsernameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="ChangeUsernameResult" nillable="true" type="q2:OperationResult" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="ChangeUsernameResult" nillable="true" type="q3:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ChangePassword">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="correo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="newPassword" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -42,7 +56,7 @@
   <xs:element name="ChangePasswordResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="ChangePasswordResult" nillable="true" type="q3:OperationResult" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="ChangePasswordResult" nillable="true" type="q4:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

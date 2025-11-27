@@ -53,7 +53,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                bool confirm = MessageHelper.ShowConfirmLogout();
+                bool confirm = MessageHelper.ShowConfirm("msg_LogoutConfirm");
                 if (!confirm)
                     return;
 

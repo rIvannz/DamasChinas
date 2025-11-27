@@ -135,6 +135,13 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse")]
         System.Threading.Tasks.Task<bool> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse")]
+        System.Threading.Tasks.Task<bool> DeleteFriendAndBlockAsync(string blockerUsername, string blockedUsername);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -210,6 +217,14 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         
         public System.Threading.Tasks.Task<bool> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept) {
             return base.Channel.UpdateFriendRequestStatusAsync(receiverUsername, senderUsername, accept);
+        }
+        
+        public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername) {
+            return base.Channel.DeleteFriendAndBlock(blockerUsername, blockedUsername);
+        }
+        
+        public System.Threading.Tasks.Task<bool> DeleteFriendAndBlockAsync(string blockerUsername, string blockedUsername) {
+            return base.Channel.DeleteFriendAndBlockAsync(blockerUsername, blockedUsername);
         }
     }
 }

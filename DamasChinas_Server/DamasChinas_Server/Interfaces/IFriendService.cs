@@ -34,5 +34,9 @@ namespace DamasChinas_Server
         [OperationContract]
         [FaultContract(typeof(string))]
         bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept);
+
+        [OperationContract]
+        [FaultContract(typeof(string))]
+        bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
     }
 }

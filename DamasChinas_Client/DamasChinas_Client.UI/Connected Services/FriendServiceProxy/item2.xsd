@@ -91,4 +91,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="DeleteFriendAndBlock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="blockerUsername" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="blockedUsername" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteFriendAndBlockResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteFriendAndBlockResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

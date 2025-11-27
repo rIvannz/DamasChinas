@@ -15,7 +15,7 @@ namespace DamasChinas_Client.UI.MensajeriaService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Message", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Message", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
     public partial class Message : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -110,16 +110,16 @@ namespace DamasChinas_Client.UI.MensajeriaService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="MensajeriaService.IChatService", CallbackContract=typeof(DamasChinas_Client.UI.MensajeriaService.IChatServiceCallback))]
     public interface IChatService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/SendMessage")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChatService/SendMessage", ReplyAction="http://tempuri.org/IChatService/SendMessageResponse")]
         void SendMessage(DamasChinas_Client.UI.MensajeriaService.Message message);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/SendMessage")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChatService/SendMessage", ReplyAction="http://tempuri.org/IChatService/SendMessageResponse")]
         System.Threading.Tasks.Task SendMessageAsync(DamasChinas_Client.UI.MensajeriaService.Message message);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/RegistrateClient")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChatService/RegistrateClient", ReplyAction="http://tempuri.org/IChatService/RegistrateClientResponse")]
         void RegistrateClient(string username);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/RegistrateClient")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChatService/RegistrateClient", ReplyAction="http://tempuri.org/IChatService/RegistrateClientResponse")]
         System.Threading.Tasks.Task RegistrateClientAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChatService/GetHistoricalMessages", ReplyAction="http://tempuri.org/IChatService/GetHistoricalMessagesResponse")]

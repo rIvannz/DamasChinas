@@ -23,6 +23,12 @@
   <wsdl:message name="IAccountManager_GetPublicProfile_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPublicProfileResponse" />
   </wsdl:message>
+  <wsdl:message name="IAccountManager_GetFriendPublicProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendPublicProfile" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_GetFriendPublicProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendPublicProfileResponse" />
+  </wsdl:message>
   <wsdl:message name="IAccountManager_ChangeUsername_InputMessage">
     <wsdl:part name="parameters" element="tns:ChangeUsername" />
   </wsdl:message>
@@ -40,6 +46,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/GetPublicProfile" message="tns:IAccountManager_GetPublicProfile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/GetPublicProfileResponse" message="tns:IAccountManager_GetPublicProfile_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetFriendPublicProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/GetFriendPublicProfile" message="tns:IAccountManager_GetFriendPublicProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/GetFriendPublicProfileResponse" message="tns:IAccountManager_GetFriendPublicProfile_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ChangeUsername">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/ChangeUsername" message="tns:IAccountManager_ChangeUsername_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/ChangeUsernameResponse" message="tns:IAccountManager_ChangeUsername_OutputMessage" />
@@ -54,6 +64,15 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GetPublicProfile">
       <soap12:operation soapAction="http://tempuri.org/IAccountManager/GetPublicProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendPublicProfile">
+      <soap12:operation soapAction="http://tempuri.org/IAccountManager/GetFriendPublicProfile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -35,11 +35,6 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MenuRegisteredPlayer.OnAvatarClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnAvatarClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
-            }
         }
 
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
