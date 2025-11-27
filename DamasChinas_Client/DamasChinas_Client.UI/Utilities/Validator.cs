@@ -6,8 +6,6 @@ namespace DamasChinas_Client.UI.Utilities
 {
     internal static class Validator
     {
- 
-  
         private static string Normalize(string value)
         {
             return UserValidationRules.Normalize(value);
@@ -20,40 +18,46 @@ namespace DamasChinas_Client.UI.Utilities
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ClientValidationException("msg_NameEmpty");
+                // msg_InvalidNameEmpty
+                throw new ClientValidationException(MessageKeys.InvalidNameEmpty);
             }
 
             if (name.Length < UserValidationRules.NameMinLength ||
                 name.Length > UserValidationRules.NameMaxLength)
             {
-                throw new ClientValidationException("msg_NameLengthInvalid");
+                // msg_InvalidNameLength
+                throw new ClientValidationException(MessageKeys.InvalidNameLength);
             }
 
             if (!UserValidationRules.NameRegex.IsMatch(name))
             {
-                throw new ClientValidationException("msg_NameInvalidCharacters");
+                // msg_InvalidNameCharacters
+                throw new ClientValidationException(MessageKeys.InvalidNameCharacters);
             }
         }
 
-  
+
         public static void ValidateUsername(string username)
         {
             username = Normalize(username);
 
             if (string.IsNullOrWhiteSpace(username))
             {
-                throw new ClientValidationException("msg_UsernameEmpty");
+                // msg_InvalidUsernameEmpty
+                throw new ClientValidationException(MessageKeys.InvalidUsernameEmpty);
             }
 
             if (username.Length < UserValidationRules.UsernameMinLength ||
                 username.Length > UserValidationRules.UsernameMaxLength)
             {
-                throw new ClientValidationException("msg_UsernameLengthInvalid");
+                // msg_InvalidUsernameLength
+                throw new ClientValidationException(MessageKeys.InvalidUsernameLength);
             }
 
             if (!UserValidationRules.UsernameRegex.IsMatch(username))
             {
-                throw new ClientValidationException("msg_UsernameInvalidCharacters");
+                // msg_InvalidUsernameCharacters
+                throw new ClientValidationException(MessageKeys.InvalidUsernameCharacters);
             }
         }
 
@@ -94,28 +98,30 @@ namespace DamasChinas_Client.UI.Utilities
         }
 
 
-
         public static void ValidateEmail(string email)
         {
             email = Normalize(email);
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                throw new ClientValidationException("msg_EmptyEmail");
+                // msg_InvalidEmailEmpty
+                throw new ClientValidationException(MessageKeys.InvalidEmailEmpty);
             }
 
             if (email.Length > UserValidationRules.EmailMaxLength)
             {
-                throw new ClientValidationException("msg_EmailTooLong");
+                // msg_InvalidEmailTooLong
+                throw new ClientValidationException(MessageKeys.InvalidEmailTooLong);
             }
 
             if (!UserValidationRules.EmailRegex.IsMatch(email))
             {
-                throw new ClientValidationException("msg_InvalidEmail");
+                // msg_InvalidEmailFormat
+                throw new ClientValidationException(MessageKeys.InvalidEmailFormat);
             }
         }
 
- 
+
         public static void ValidateLoginRequest(LoginRequest loginRequest)
         {
             if (loginRequest == null)
@@ -129,7 +135,8 @@ namespace DamasChinas_Client.UI.Utilities
             if (string.IsNullOrWhiteSpace(loginRequest.Username) ||
                 string.IsNullOrWhiteSpace(loginRequest.Password))
             {
-                throw new ClientValidationException("msg_EmptyCredentials");
+                // msg_EmptyCredentials (validación universal)
+                throw new ClientValidationException(MessageKeys.EmptyCredentials);
             }
 
             if (loginRequest.Username.Contains("@"))

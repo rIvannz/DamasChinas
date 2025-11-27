@@ -127,7 +127,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // Mantener viva la sesión y el callback
+             
                     ClientSession.Initialize(profile, client, callback);
                     TryNavigateToMenu(profile, loading);
                 });
