@@ -14,9 +14,9 @@ namespace DamasChinas_Server.Services
     {
         private readonly RepositoryUsers _repository;
 
-        public AccountManager()
-            : this(new RepositoryUsers())
+        public AccountManager(): this(new RepositoryUsers())
         {
+
         }
 
         internal AccountManager(RepositoryUsers repository)
