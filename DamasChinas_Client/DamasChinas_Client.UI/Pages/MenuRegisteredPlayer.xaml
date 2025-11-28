@@ -44,11 +44,15 @@
                         BorderThickness="0"
                         Cursor="Hand"
                         Click="OnAvatarClick">
-                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/avatarIcon.png"
-                           Width="54" Height="54"
-                           Stretch="Uniform"
-                           RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                    <Image x:Name="AvatarImage"
+                        Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/avatarIcon.png"
+                        Width="54" Height="54"
+                        Stretch="Uniform"
+                        ClipToBounds="True"
+                         RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
+
 
                 <TextBlock x:Name="txtUsername"
                               Foreground="White"

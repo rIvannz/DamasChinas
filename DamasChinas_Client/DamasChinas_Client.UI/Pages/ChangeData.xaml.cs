@@ -14,11 +14,10 @@ namespace DamasChinas_Client.UI.Pages
         public ChangeData()
         {
             InitializeComponent();
-            LoadProfileData(); 
+            LoadProfileData();
         }
 
- 
-
+     
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -31,11 +30,12 @@ namespace DamasChinas_Client.UI.Pages
 
                 NavigationService.GoBack();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
+
 
         private void OnSendCodeClick(object sender, RoutedEventArgs e)
         {
@@ -45,6 +45,7 @@ namespace DamasChinas_Client.UI.Pages
             }, MessageKeys.VerificationCodeSendError);
         }
 
+   
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             TryExecuteAction(() =>
@@ -91,6 +92,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 using (var client = new AccountManagerClient())
                 {
+                    
                     var result = client.ChangeUsername(ClientSession.safeUsername, newUsername);
 
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
@@ -100,7 +102,8 @@ namespace DamasChinas_Client.UI.Pages
                         UpdateUsernameState(newUsername);
 
                         MessageHelper.ShowPopup(message, PopupType.Success);
-                        var profilePage = new ProfilePlayer();
+
+                        var profilePage = new ProfilePlayer(ClientSession.CurrentProfile);
                         NavigationService?.Navigate(profilePage);
                     }
                     else
@@ -109,8 +112,6 @@ namespace DamasChinas_Client.UI.Pages
                     }
                 }
             }
-
-
             catch (CommunicationException)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
@@ -135,6 +136,9 @@ namespace DamasChinas_Client.UI.Pages
             txtCurrentUsername.Text = newUsername;
         }
 
+        // ============================================================
+        // CAMBIO DE CONTRASEÑA
+        // ============================================================
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
         {
             TryExecuteAction(() =>
@@ -214,6 +218,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 using (var client = new AccountManagerClient())
                 {
+                   
                     var result = client.ChangePassword(ClientSession.safeUsername, hashedPassword);
 
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
@@ -252,6 +257,9 @@ namespace DamasChinas_Client.UI.Pages
             txtConfirmPassword.Password = string.Empty;
         }
 
+        // ============================================================
+        // CARGA DE PERFIL — NO SE BORRA NADA
+        // ============================================================
         private void LoadProfileData()
         {
             try
@@ -276,6 +284,9 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        // ============================================================
+        // MÉTODO CENTRALIZADO DE ACCIONES
+        // ============================================================
         private static void TryExecuteAction(Action action, string errorKey)
         {
             try

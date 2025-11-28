@@ -20,6 +20,7 @@ namespace DamasChinas_Server.Interfaces
         OperationResult ChangePassword(string email, string newPassword);
 
         [OperationContract]
-        OperationResult ChangeAvatar(string username, string avatarFile);
+        OperationResult ChangeAvatar(int idUser, string avatarFile);
+
     }
 }

@@ -15,7 +15,7 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/")]
     [System.SerializableAttribute()]
     public partial class PublicProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -27,6 +27,9 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdUserField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
@@ -72,6 +75,19 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
                 if ((object.ReferenceEquals(this.EmailField, value) != true)) {
                     this.EmailField = value;
                     this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int IdUser {
+            get {
+                return this.IdUserField;
+            }
+            set {
+                if ((this.IdUserField.Equals(value) != true)) {
+                    this.IdUserField = value;
+                    this.RaisePropertyChanged("IdUser");
                 }
             }
         }
@@ -480,10 +496,10 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangePasswordAsync(string email, string newPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeAvatar", ReplyAction="http://tempuri.org/IAccountManager/ChangeAvatarResponse")]
-        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeAvatar(string username, string avatarFile);
+        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeAvatar(int idUser, string avatarFile);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeAvatar", ReplyAction="http://tempuri.org/IAccountManager/ChangeAvatarResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeAvatarAsync(string username, string avatarFile);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeAvatarAsync(int idUser, string avatarFile);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -545,12 +561,12 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
             return base.Channel.ChangePasswordAsync(email, newPassword);
         }
         
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeAvatar(string username, string avatarFile) {
-            return base.Channel.ChangeAvatar(username, avatarFile);
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeAvatar(int idUser, string avatarFile) {
+            return base.Channel.ChangeAvatar(idUser, avatarFile);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeAvatarAsync(string username, string avatarFile) {
-            return base.Channel.ChangeAvatarAsync(username, avatarFile);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeAvatarAsync(int idUser, string avatarFile) {
+            return base.Channel.ChangeAvatarAsync(idUser, avatarFile);
         }
     }
 }

@@ -28,6 +28,7 @@
     <MetadataFile FileName="item32.xsd" MetadataType="Schema" ID="69efd921-5628-4515-90ae-1ba8e70a4c9b" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd0" />
     <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="c95c324b-5827-42e8-a19a-903a9f985285" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?disco" />
     <MetadataFile FileName="item31.xsd" MetadataType="Schema" ID="ecc0dd24-d0e3-48b8-b68f-8d0968ab4042" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd1" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="463a8b0e-951a-4e13-b7c1-938f2e6338ad" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd4" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

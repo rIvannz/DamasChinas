@@ -11,16 +11,51 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class MenuRegisteredPlayer : Page
     {
+
+        public static bool ForceAvatarRefresh = false;
+
         private readonly PublicProfile _profile;
         private readonly int _userId;
 
         public MenuRegisteredPlayer(PublicProfile profile)
         {
             InitializeComponent();
+
             _profile = profile ?? throw new ArgumentNullException(nameof(profile));
             _userId = 1;
 
             txtUsername.Text = _profile.Username;
+
+          
+            Loaded += OnPageLoaded;
+            LoadAvatar();
+        }
+
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            if (ForceAvatarRefresh)
+            {
+                LoadAvatar();
+                ForceAvatarRefresh = false;
+            }
+        }
+
+    
+        private void LoadAvatar()
+        {
+            try
+            {
+                string avatar = ClientSession.CurrentProfile.AvatarFile;
+
+                if (!string.IsNullOrWhiteSpace(avatar))
+                {
+                    AvatarImage.Source = PathProvider.LoadAvatar(avatar);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer.LoadAvatar] {ex.Message}");
+            }
         }
 
         private void OnAvatarClick(object sender, RoutedEventArgs e)
@@ -30,7 +65,7 @@ namespace DamasChinas_Client.UI.Pages
                 var profilePage = new ProfilePlayer();
                 NavigationService?.Navigate(profilePage);
             }
-            catch (InvalidOperationException )
+            catch (InvalidOperationException)
             {
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
@@ -46,15 +81,14 @@ namespace DamasChinas_Client.UI.Pages
                 var preLobbyPage = new PreLobby(lobby, _userId, _profile.Username);
                 NavigationService?.Navigate(preLobbyPage);
             }
-            catch (CommunicationException )
+            catch (CommunicationException)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
-            catch (TimeoutException )
+            catch (TimeoutException)
             {
                 MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
             }
-      
         }
 
         private void OnJoinPartyClick(object sender, RoutedEventArgs e)
@@ -64,11 +98,11 @@ namespace DamasChinas_Client.UI.Pages
                 var joinPartyPage = new JoinParty(_userId, _profile.Username);
                 NavigationService?.Navigate(joinPartyPage);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
             }
@@ -139,4 +173,3 @@ namespace DamasChinas_Client.UI.Pages
         }
     }
 }
-

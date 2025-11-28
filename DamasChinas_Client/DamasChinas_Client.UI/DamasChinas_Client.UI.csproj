@@ -312,6 +312,9 @@
     <None Include="Connected Services\AccountManagerServiceProxy\item5.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item6.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.FriendDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -323,6 +326,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\FriendServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendServiceProxy\item33.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\Arrays.xsd">
@@ -351,6 +357,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\item4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item5.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\LoginService1.wsdl" />

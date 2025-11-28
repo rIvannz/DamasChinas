@@ -71,17 +71,17 @@ namespace DamasChinas_Server.Services
             );
         }
 
-        // AHORA recibe username
-        public OperationResult ChangeAvatar(string username, string avatarFile)
+        public OperationResult ChangeAvatar(int idUser, string avatarFile)
         {
             return ExecuteAccountOperation(
-                () => _repository.ChangeAvatar(username, avatarFile),
+                () => _repository.ChangeAvatar(idUser, avatarFile),
                 MessageCode.AvatarUpdateSuccess,
                 MessageCode.AvatarUpdateFailed,
                 MessageCode.ServerUnavailable,
                 OperationChangeAvatar
             );
         }
+
 
         private static OperationResult ExecuteAccountOperation(
             Func<bool> operation,

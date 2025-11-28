@@ -76,7 +76,7 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicProfile", Namespace="http://schemas.datacontract.org/2004/07/")]
     [System.SerializableAttribute()]
     public partial class PublicProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -88,6 +88,9 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdUserField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
@@ -133,6 +136,19 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
                 if ((object.ReferenceEquals(this.EmailField, value) != true)) {
                     this.EmailField = value;
                     this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int IdUser {
+            get {
+                return this.IdUserField;
+            }
+            set {
+                if ((this.IdUserField.Equals(value) != true)) {
+                    this.IdUserField = value;
+                    this.RaisePropertyChanged("IdUser");
                 }
             }
         }

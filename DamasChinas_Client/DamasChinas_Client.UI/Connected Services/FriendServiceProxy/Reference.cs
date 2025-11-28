@@ -90,54 +90,197 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+    public enum MessageCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AvatarUpdateSuccess = 5002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSentSuccessfully = 3014,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoginInvalidCredentials = 1001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserDuplicateEmail = 1002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserNotFound = 1003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserValidationError = 1201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeNotFound = 1202,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeExpired = 1203,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeInvalid = 1204,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeSendError = 1205,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MatchCreationFailed = 1100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyNotFound = 1101,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInactive = 1102,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyUserBanned = 1103,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyClosed = 1104,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ServerUnavailable = 2001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NetworkLatency = 2100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UnknownError = 9999,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EmptyCredentials = 3001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordsDontMatch = 3002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 3003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameEmpty = 3004,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserProfileNotFound = 3005,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendsLoadError = 3006,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmail = 3007,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FieldLengthExceeded = 3008,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatOpenError = 3009,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NavigationError = 3010,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNameEmpty = 3100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNameLength = 3101,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNameCharacters = 3102,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsernameEmpty = 3110,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsernameLength = 3111,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsernameCharacters = 3112,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameExists = 3113,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordEmpty = 3120,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordLength = 3121,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordUppercase = 3122,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordLowercase = 3123,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordDigit = 3124,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordSpecial = 3125,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmailEmpty = 3130,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmailTooLong = 3131,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmailFormat = 3132,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AvatarUpdateFailed = 5001,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="FriendServiceProxy.IFriendService")]
     public interface IFriendService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/GetFriendsStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/GetFriendsMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
         System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendsAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriendRequests", ReplyAction="http://tempuri.org/IFriendService/GetFriendRequestsResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/GetFriendRequestsStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/GetFriendRequestsMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriendRequests(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriendRequests", ReplyAction="http://tempuri.org/IFriendService/GetFriendRequestsResponse")]
         System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendRequestsAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendService/SendFriendRequestResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/SendFriendRequestStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/SendFriendRequestMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         bool SendFriendRequest(string senderUsername, string receiverUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendService/SendFriendRequestResponse")]
         System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string senderUsername, string receiverUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriend", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/DeleteFriendStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/DeleteFriendMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         bool DeleteFriend(string username, string friendUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriend", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendResponse")]
         System.Threading.Tasks.Task<bool> DeleteFriendAsync(string username, string friendUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateBlockStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateBlockStatusResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/UpdateBlockStatusStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/UpdateBlockStatusMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateBlockStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateBlockStatusResponse")]
         System.Threading.Tasks.Task<bool> UpdateBlockStatusAsync(string blockerUsername, string blockedUsername, bool block);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse")]
         System.Threading.Tasks.Task<bool> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(string), Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockStringFault", Name="string", Namespace="http://schemas.microsoft.com/2003/10/Serialization/")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
         bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse")]

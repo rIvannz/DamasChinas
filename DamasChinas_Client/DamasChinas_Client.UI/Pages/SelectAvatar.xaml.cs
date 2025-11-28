@@ -20,9 +20,6 @@ namespace DamasChinas_Client.UI.Pages
             LoadAvatars();
         }
 
-        // ============================================
-        // CARGAR AVATARES
-        // ============================================
         private void LoadAvatars()
         {
             try
@@ -42,9 +39,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================
-        // SELECCIONAR AVATAR
-        // ============================================
         private void OnAvatarChecked(object sender, RoutedEventArgs e)
         {
             if (sender is RadioButton rb && rb.Tag is string fullPath)
@@ -52,7 +46,6 @@ namespace DamasChinas_Client.UI.Pages
                 _selectedAvatarFile = System.IO.Path.GetFileName(fullPath);
             }
         }
-
 
         private async void OnApplyClick(object sender, RoutedEventArgs e)
         {
@@ -66,8 +59,11 @@ namespace DamasChinas_Client.UI.Pages
 
                 await UpdateAvatarOnServerAsync(_selectedAvatarFile);
 
-                // Actualizamos sesión local
+         
                 ClientSession.CurrentProfile.AvatarFile = _selectedAvatarFile;
+
+                
+                MenuRegisteredPlayer.ForceAvatarRefresh = true;
 
                 MessageHelper.ShowPopup(Success, PopupType.Success);
 
@@ -96,7 +92,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
         private static async Task UpdateAvatarOnServerAsync(string avatarFile)
         {
             AccountManagerClient client = null;
@@ -105,9 +100,10 @@ namespace DamasChinas_Client.UI.Pages
             {
                 client = new AccountManagerClient();
 
-                int userId = ClientSession.CurrentProfile.IdUser;
+                // ⭐ AHORA USAMOS EL ID DEL USUARIO
+                int idUser = ClientSession.CurrentProfile.IdUser;
 
-                await client.ChangeAvatarAsync(userId, avatarFile);
+                await client.ChangeAvatarAsync(idUser, avatarFile);
             }
             finally
             {

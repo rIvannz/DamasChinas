@@ -206,15 +206,14 @@ namespace DamasChinas_Server
             });
         }
 
-        // =========================================================
-        // CAMBIO DE AVATAR (USANDO USERNAME)
-        // =========================================================
 
-        public bool ChangeAvatar(string username, string avatarFile)
+        public bool ChangeAvatar(int idUser, string avatarFile)
         {
-            if (string.IsNullOrWhiteSpace(username))
+            
+
+            if (idUser <= 0)
             {
-                throw new RepositoryValidationException(MessageCode.InvalidUsernameEmpty);
+                throw new RepositoryValidationException(MessageCode.UserNotFound);
             }
 
             if (string.IsNullOrWhiteSpace(avatarFile))
@@ -224,7 +223,13 @@ namespace DamasChinas_Server
 
             return ExecuteInContext(db =>
             {
-                var perfil = GetPerfilByUsername(db, username);
+          
+                var perfil = db.perfiles.SingleOrDefault(p => p.id_usuario == idUser);
+
+                if (perfil == null)
+                {
+                    throw new RepositoryValidationException(MessageCode.UserProfileNotFound);
+                }
 
                 perfil.imagen_perfil = avatarFile;
                 db.Entry(perfil).Property(p => p.imagen_perfil).IsModified = true;
@@ -233,6 +238,7 @@ namespace DamasChinas_Server
                 return true;
             });
         }
+
 
         // =========================================================
         // UTILIDADES INTERNAS
@@ -312,6 +318,7 @@ namespace DamasChinas_Server
 
             return new PublicProfile
             {
+                IdUser = user.id_usuario,                          
                 Username = perfil?.username ?? "N/A",
                 Name = perfil?.nombre ?? "N/A",
                 LastName = perfil?.apellido_materno ?? "N/A",
@@ -320,6 +327,7 @@ namespace DamasChinas_Server
                 AvatarFile = perfil?.imagen_perfil ?? DefaultAvatarFile
             };
         }
+
 
         private static bool EntityExists<T>(damas_chinasEntities db, Expression<Func<T, bool>> predicate)
             where T : class
