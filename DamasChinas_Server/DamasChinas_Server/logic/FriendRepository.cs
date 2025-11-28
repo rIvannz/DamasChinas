@@ -81,7 +81,7 @@ namespace DamasChinas_Server
 
         private static void EnsurePendingRequestExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            if (!PendingRequestExists(db, idUserSender, idUserReciever))
+            if (!PendingRequestExists(db, idUserReciever , idUserSender))
             {
                 throw new FaultException("No existe una solicitud pendiente entre los usuarios.");
             }
