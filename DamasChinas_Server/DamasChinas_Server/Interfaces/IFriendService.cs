@@ -10,10 +10,10 @@ namespace DamasChinas_Server.Interfaces
     public interface IFriendService
     {
 
+
         [OperationContract]
         [FaultContract(typeof(MessageCode))]
         List<FriendDto> GetFriends(string username);
-
 
         [OperationContract]
         [FaultContract(typeof(MessageCode))]
@@ -23,25 +23,16 @@ namespace DamasChinas_Server.Interfaces
         [OperationContract]
         OperationResult SendFriendRequest(string senderUsername, string receiverUsername);
 
-
+        [OperationContract]
+        OperationResult DeleteFriend(string username, string friendUsername);
 
         [OperationContract]
-        [FaultContract(typeof(MessageCode))]
-        bool DeleteFriend(string username, string friendUsername);
-
+        OperationResult UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block);
 
         [OperationContract]
-        [FaultContract(typeof(MessageCode))]
-        bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block);
-
+        OperationResult UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept);
 
         [OperationContract]
-        [FaultContract(typeof(MessageCode))]
-        bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept);
-
-
-        [OperationContract]
-        [FaultContract(typeof(MessageCode))]
-        bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
+        OperationResult DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
     }
 }

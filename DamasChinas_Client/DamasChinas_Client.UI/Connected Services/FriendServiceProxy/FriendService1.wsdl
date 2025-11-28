@@ -47,17 +47,11 @@
   <wsdl:message name="IFriendService_DeleteFriend_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteFriendResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_DeleteFriend_MessageCodeFault_FaultMessage">
-    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q3:MessageCode" />
-  </wsdl:message>
   <wsdl:message name="IFriendService_UpdateBlockStatus_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateBlockStatus" />
   </wsdl:message>
   <wsdl:message name="IFriendService_UpdateBlockStatus_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateBlockStatusResponse" />
-  </wsdl:message>
-  <wsdl:message name="IFriendService_UpdateBlockStatus_MessageCodeFault_FaultMessage">
-    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q4:MessageCode" />
   </wsdl:message>
   <wsdl:message name="IFriendService_UpdateFriendRequestStatus_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateFriendRequestStatus" />
@@ -65,17 +59,11 @@
   <wsdl:message name="IFriendService_UpdateFriendRequestStatus_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateFriendRequestStatusResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_UpdateFriendRequestStatus_MessageCodeFault_FaultMessage">
-    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q5:MessageCode" />
-  </wsdl:message>
   <wsdl:message name="IFriendService_DeleteFriendAndBlock_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteFriendAndBlock" />
   </wsdl:message>
   <wsdl:message name="IFriendService_DeleteFriendAndBlock_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteFriendAndBlockResponse" />
-  </wsdl:message>
-  <wsdl:message name="IFriendService_DeleteFriendAndBlock_MessageCodeFault_FaultMessage">
-    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q6:MessageCode" />
   </wsdl:message>
   <wsdl:portType name="IFriendService">
     <wsdl:operation name="GetFriends">
@@ -95,22 +83,18 @@
     <wsdl:operation name="DeleteFriend">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/DeleteFriend" message="tns:IFriendService_DeleteFriend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendResponse" message="tns:IFriendService_DeleteFriend_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_DeleteFriend_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateBlockStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/UpdateBlockStatus" message="tns:IFriendService_UpdateBlockStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UpdateBlockStatusResponse" message="tns:IFriendService_UpdateBlockStatus_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/UpdateBlockStatusMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_UpdateBlockStatus_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateFriendRequestStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus" message="tns:IFriendService_UpdateFriendRequestStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse" message="tns:IFriendService_UpdateFriendRequestStatus_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_UpdateFriendRequestStatus_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="DeleteFriendAndBlock">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock" message="tns:IFriendService_DeleteFriendAndBlock_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse" message="tns:IFriendService_DeleteFriendAndBlock_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_DeleteFriendAndBlock_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IFriendService" type="tns:IFriendService">
@@ -157,9 +141,6 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
-      <wsdl:fault name="MessageCodeFault">
-        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
-      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateBlockStatus">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/UpdateBlockStatus" style="document" />
@@ -169,9 +150,6 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
-      <wsdl:fault name="MessageCodeFault">
-        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
-      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="UpdateFriendRequestStatus">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatus" style="document" />
@@ -181,9 +159,6 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
-      <wsdl:fault name="MessageCodeFault">
-        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
-      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteFriendAndBlock">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/DeleteFriendAndBlock" style="document" />
@@ -193,9 +168,6 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
-      <wsdl:fault name="MessageCodeFault">
-        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
-      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="FriendService">

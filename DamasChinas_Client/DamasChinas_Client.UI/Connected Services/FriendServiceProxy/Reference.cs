@@ -335,32 +335,28 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> SendFriendRequestAsync(string senderUsername, string receiverUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriend", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/DeleteFriendMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        bool DeleteFriend(string username, string friendUsername);
+        DamasChinas_Client.UI.FriendServiceProxy.OperationResult DeleteFriend(string username, string friendUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriend", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendResponse")]
-        System.Threading.Tasks.Task<bool> DeleteFriendAsync(string username, string friendUsername);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> DeleteFriendAsync(string username, string friendUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateBlockStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateBlockStatusResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/UpdateBlockStatusMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block);
+        DamasChinas_Client.UI.FriendServiceProxy.OperationResult UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateBlockStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateBlockStatusResponse")]
-        System.Threading.Tasks.Task<bool> UpdateBlockStatusAsync(string blockerUsername, string blockedUsername, bool block);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> UpdateBlockStatusAsync(string blockerUsername, string blockedUsername, bool block);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept);
+        DamasChinas_Client.UI.FriendServiceProxy.OperationResult UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus", ReplyAction="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse")]
-        System.Threading.Tasks.Task<bool> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
+        DamasChinas_Client.UI.FriendServiceProxy.OperationResult DeleteFriendAndBlock(string blockerUsername, string blockedUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse")]
-        System.Threading.Tasks.Task<bool> DeleteFriendAndBlockAsync(string blockerUsername, string blockedUsername);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> DeleteFriendAndBlockAsync(string blockerUsername, string blockedUsername);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -414,35 +410,35 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
             return base.Channel.SendFriendRequestAsync(senderUsername, receiverUsername);
         }
         
-        public bool DeleteFriend(string username, string friendUsername) {
+        public DamasChinas_Client.UI.FriendServiceProxy.OperationResult DeleteFriend(string username, string friendUsername) {
             return base.Channel.DeleteFriend(username, friendUsername);
         }
         
-        public System.Threading.Tasks.Task<bool> DeleteFriendAsync(string username, string friendUsername) {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> DeleteFriendAsync(string username, string friendUsername) {
             return base.Channel.DeleteFriendAsync(username, friendUsername);
         }
         
-        public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block) {
+        public DamasChinas_Client.UI.FriendServiceProxy.OperationResult UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block) {
             return base.Channel.UpdateBlockStatus(blockerUsername, blockedUsername, block);
         }
         
-        public System.Threading.Tasks.Task<bool> UpdateBlockStatusAsync(string blockerUsername, string blockedUsername, bool block) {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> UpdateBlockStatusAsync(string blockerUsername, string blockedUsername, bool block) {
             return base.Channel.UpdateBlockStatusAsync(blockerUsername, blockedUsername, block);
         }
         
-        public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept) {
+        public DamasChinas_Client.UI.FriendServiceProxy.OperationResult UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept) {
             return base.Channel.UpdateFriendRequestStatus(receiverUsername, senderUsername, accept);
         }
         
-        public System.Threading.Tasks.Task<bool> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept) {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> UpdateFriendRequestStatusAsync(string receiverUsername, string senderUsername, bool accept) {
             return base.Channel.UpdateFriendRequestStatusAsync(receiverUsername, senderUsername, accept);
         }
         
-        public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername) {
+        public DamasChinas_Client.UI.FriendServiceProxy.OperationResult DeleteFriendAndBlock(string blockerUsername, string blockedUsername) {
             return base.Channel.DeleteFriendAndBlock(blockerUsername, blockedUsername);
         }
         
-        public System.Threading.Tasks.Task<bool> DeleteFriendAndBlockAsync(string blockerUsername, string blockedUsername) {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> DeleteFriendAndBlockAsync(string blockerUsername, string blockedUsername) {
             return base.Channel.DeleteFriendAndBlockAsync(blockerUsername, blockedUsername);
         }
     }

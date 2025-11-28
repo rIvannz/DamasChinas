@@ -56,7 +56,7 @@
   <xs:element name="DeleteFriendResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="DeleteFriendResult" type="xs:boolean" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="DeleteFriendResult" nillable="true" type="q4:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -72,7 +72,7 @@
   <xs:element name="UpdateBlockStatusResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="UpdateBlockStatusResult" type="xs:boolean" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="UpdateBlockStatusResult" nillable="true" type="q5:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -88,7 +88,7 @@
   <xs:element name="UpdateFriendRequestStatusResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="UpdateFriendRequestStatusResult" type="xs:boolean" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="UpdateFriendRequestStatusResult" nillable="true" type="q6:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -103,7 +103,7 @@
   <xs:element name="DeleteFriendAndBlockResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="DeleteFriendAndBlockResult" type="xs:boolean" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="DeleteFriendAndBlockResult" nillable="true" type="q7:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

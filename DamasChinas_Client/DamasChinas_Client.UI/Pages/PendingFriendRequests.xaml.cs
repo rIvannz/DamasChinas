@@ -52,22 +52,9 @@ namespace DamasChinas_Client.UI.Pages
                         PopupType.Info);
                 }
             }
-            catch (EndpointNotFoundException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (TimeoutException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
-            }
-            catch (FaultException fault)
-            {
-                MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
-            }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[PendingFriendRequests.LoadRequests - General] {ex.Message}");
-
+                Debug.WriteLine($"[PendingFriendRequests.LoadRequests] {ex.Message}");
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);
@@ -81,7 +68,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new Friends());
             }
-            catch (InvalidOperationException)
+            catch
             {
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
@@ -98,27 +85,28 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     using (var client = new FriendServiceClient())
                     {
-                        bool success = client.UpdateFriendRequestStatus(
-                            receiverUsername: currentUsername,
-                            senderUsername: req.Username,
-                            accept: true);
+                        var result = client.UpdateFriendRequestStatus(
+                            currentUsername,
+                            req.Username,
+                            true);
 
-                        if (success)
+                        if (!result.Success)
                         {
-                            Requests.Remove(req);
-
-                            MessageHelper.ShowPopup(
-                                MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted),
-                                PopupType.Success);
+                            string msg = MessageTranslator.GetLocalizedMessage(result.Code);
+                            MessageHelper.ShowPopup(msg, PopupType.Warning);
+                            return;
                         }
+
+                        Requests.Remove(req);
+
+                        MessageHelper.ShowPopup(
+                            MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted),
+                            PopupType.Success);
                     }
                 }
-                catch (FaultException fault)
+                catch (Exception ex)
                 {
-                    MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
-                }
-                catch (Exception)
-                {
+                    Debug.WriteLine($"[PendingFriendRequests.Accept] {ex.Message}");
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                         PopupType.Error);
@@ -137,27 +125,28 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     using (var client = new FriendServiceClient())
                     {
-                        bool success = client.UpdateFriendRequestStatus(
-                            receiverUsername: currentUsername,
-                            senderUsername: req.Username,
-                            accept: false);
+                        var result = client.UpdateFriendRequestStatus(
+                            currentUsername,
+                            req.Username,
+                            false);
 
-                        if (success)
+                        if (!result.Success)
                         {
-                            Requests.Remove(req);
-
-                            MessageHelper.ShowPopup(
-                                MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestRejected),
-                                PopupType.Info);
+                            string msg = MessageTranslator.GetLocalizedMessage(result.Code);
+                            MessageHelper.ShowPopup(msg, PopupType.Warning);
+                            return;
                         }
+
+                        Requests.Remove(req);
+
+                        MessageHelper.ShowPopup(
+                            MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestRejected),
+                            PopupType.Info);
                     }
                 }
-                catch (FaultException fault)
+                catch (Exception ex)
                 {
-                    MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
-                }
-                catch (Exception)
-                {
+                    Debug.WriteLine($"[PendingFriendRequests.Reject] {ex.Message}");
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                         PopupType.Error);
