@@ -10,18 +10,25 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class ProfilePlayer : Page
     {
-        private PublicProfile _profile;
+        // Eliminado: private PublicProfile _profile;
 
         public ProfilePlayer()
         {
             InitializeComponent();
-        }
 
-        public ProfilePlayer(PublicProfile profile)
-        {
-            InitializeComponent();
-            _profile = profile ?? throw new ArgumentNullException(nameof(profile));
-            UpdateProfileDisplay();
+            try
+            {
+                if (ClientSession.safeUsername == null)
+                {
+                    throw new InvalidOperationException("No hay usuario logueado para abrir el perfil.");
+                }
+
+                UpdateProfileDisplay();
+            }
+            catch (InvalidOperationException)
+            {
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
@@ -37,15 +44,9 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
                 }
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ProfilePlayer.OnBackClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.OnBackClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -67,15 +68,9 @@ namespace DamasChinas_Client.UI.Pages
 
                 NavigationService.Navigate(new MainWindow());
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ProfilePlayer.OnLogoutClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.OnLogoutClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -83,17 +78,11 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.Navigate(new ChangeData(_profile));
+                NavigationService?.Navigate(new ChangeData());
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.ProfileChangeError, PopupType.Error);
             }
         }
 
@@ -103,15 +92,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ProfilePlayer.OnSoundClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.OnSoundClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -121,15 +104,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ProfilePlayer.OnLanguageClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.OnLanguageClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -137,19 +114,22 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                if (_profile == null)
+                if (!ClientSession.IsLoggedIn || ClientSession.CurrentProfile == null)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.UserProfileNotFound, PopupType.Warning);
                     return;
+                }
 
-                UsernameTextBlock.Text = _profile.Username;
-                FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
-                EmailTextBlock.Text = _profile.Email;
+                var profile = ClientSession.CurrentProfile;
+
+                UsernameTextBlock.Text = profile.Username;
+                FullNameTextBlock.Text = $"{profile.Name} {profile.LastName}";
+                EmailTextBlock.Text = profile.Email;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.WriteLine($"[ProfilePlayer.UpdateProfileDisplay] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
     }
 }
-

@@ -4,20 +4,12 @@ using DamasChinas_Client.UI.LogInServiceProxy;
 
 namespace DamasChinas_Client.UI.Utilities
 {
-    /// <summary>
-    /// Maneja la sesión del cliente, incluyendo:
-    ///  - Perfil del jugador
-    ///  - Cliente WCF (LoginServiceClient)
-    ///  - Callback
-    ///  - Canal duplex para recibir mensajes
-    /// </summary>
     public static class ClientSession
     {
         private static PublicProfile _currentProfile;
 
         public static LoginServiceClient LoginClient { get; private set; }
 
-   
         public static ILoginServiceCallback CallbackHandler { get; private set; }
 
         public static PublicProfile CurrentProfile
@@ -34,6 +26,19 @@ namespace DamasChinas_Client.UI.Utilities
         public static bool IsLoggedIn => _currentProfile != null;
 
 
+
+        public static string safeUsername =>
+          _currentProfile == null
+              ? null
+              : _currentProfile.Username;
+
+        public static string SafeUsernameNormalized =>
+     _currentProfile == null
+         ? null
+         : _currentProfile.Username?.Trim()?.ToLower();
+
+
+
         public static void Initialize(
             PublicProfile profile,
             LoginServiceClient client,
@@ -45,10 +50,9 @@ namespace DamasChinas_Client.UI.Utilities
         }
 
 
+
         public static void Clear()
         {
-            _currentProfile = null;
-
             try
             {
                 if (LoginClient != null)
@@ -67,5 +71,6 @@ namespace DamasChinas_Client.UI.Utilities
             LoginClient = null;
             CallbackHandler = null;
         }
+
     }
 }

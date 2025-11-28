@@ -44,14 +44,11 @@ namespace DamasChinas_Client.UI.Pages
 
                 return;
             }
-
-            string senderUsername = ClientSession.CurrentProfile.Username;
-
             try
             {
                 using (var client = new FriendServiceClient())
                 {
-                    bool success = client.SendFriendRequest(senderUsername, username);
+                    bool success = client.SendFriendRequest(ClientSession.safeUsername, username);
 
                     if (success)
                     {
@@ -65,31 +62,23 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (FaultException fault)
             {
-                Debug.WriteLine($"[AddFriend.Send - Fault] {fault.Message}");
-
            
                 MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
             }
-            catch (EndpointNotFoundException ex)
+            catch (EndpointNotFoundException)
             {
-                Debug.WriteLine($"[AddFriend.Send - Endpoint] {ex.Message}");
-
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.ServerUnavailable),
                     PopupType.Error);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException)
             {
-                Debug.WriteLine($"[AddFriend.Send - Timeout] {ex.Message}");
-
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.NetworkLatency),
                     PopupType.Error);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.WriteLine($"[AddFriend.Send - General] {ex.Message}");
-
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);

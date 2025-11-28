@@ -27,12 +27,11 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                var profilePage = new ProfilePlayer(_profile);
+                var profilePage = new ProfilePlayer();
                 NavigationService?.Navigate(profilePage);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException )
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnAvatarClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -47,21 +46,15 @@ namespace DamasChinas_Client.UI.Pages
                 var preLobbyPage = new PreLobby(lobby, _userId, _profile.Username);
                 NavigationService?.Navigate(preLobbyPage);
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException )
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnCreateGameClick - Communication] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException )
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnCreateGameClick - Timeout] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnCreateGameClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.CreateLobbyError, PopupType.Error);
-            }
+      
         }
 
         private void OnJoinPartyClick(object sender, RoutedEventArgs e)
@@ -73,12 +66,10 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnJoinPartyClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnJoinPartyClick - General] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
             }
         }
@@ -97,7 +88,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.Navigate(new Friends(_profile.Username));
+                NavigationService?.Navigate(new Friends());
             }
             catch (InvalidOperationException ex)
             {

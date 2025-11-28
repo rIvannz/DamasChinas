@@ -1,28 +1,27 @@
+using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.LogInServiceProxy;
+using DamasChinas_Client.UI.MensajeriaService;
+using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
-using DamasChinas_Client.UI.Callbacks;
-using DamasChinas_Client.UI.LogInServiceProxy;
-using DamasChinas_Client.UI.MensajeriaService;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class ChatWindow : Window
     {
         private readonly string _friendUsername;
-        private readonly string _myUsername;
         private readonly IChatService _client;
 
         public ObservableCollection<Message> Messages { get; } = new ObservableCollection<Message>();
 
-        public ChatWindow(PublicProfile currentUser, string friendUsername)
+        public ChatWindow(string friendUsername)
         {
             InitializeComponent();
 
             _friendUsername = friendUsername ?? throw new ArgumentNullException(nameof(friendUsername));
-            _myUsername = currentUser?.Username ?? throw new ArgumentNullException(nameof(currentUser));
 
             DataContext = this;
 
@@ -34,16 +33,7 @@ namespace DamasChinas_Client.UI.Pages
                 var factory = new DuplexChannelFactory<IChatService>(context, "NetTcpBinding_IChatService");
                 _client = factory.CreateChannel();
 
-                string normalizedUsername = _myUsername.Trim().ToLower();
-
-                
-                MessageBox.Show("previo: " + _myUsername);
-
-              
-                _client.RegistrateClient(normalizedUsername);
-
-              
-                MessageBox.Show("registrado como: " + normalizedUsername);
+                _client.RegistrateClient(ClientSession.SafeUsernameNormalized);
                 _ = LoadHistoryAsync();
             }
             catch (EndpointNotFoundException ex)
@@ -73,7 +63,7 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 Messages.Clear();
-                var history = await Task.Run(() => _client.GetHistoricalMessages(_myUsername, _friendUsername));
+                var history = await Task.Run(() => _client.GetHistoricalMessages(ClientSession.safeUsername, _friendUsername));
 
                 foreach (var message in history)
                 {
@@ -113,7 +103,7 @@ namespace DamasChinas_Client.UI.Pages
 
             var message = new Message
             {
-                UsarnameSender = _myUsername,
+                UsarnameSender = ClientSession.safeUsername,
                 DestinationUsername = _friendUsername,
                 Text = text,
                 SendDate = DateTime.Now

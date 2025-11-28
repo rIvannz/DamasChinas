@@ -76,7 +76,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.Navigate(new Friends(ClientSession.CurrentProfile.Username));
+                NavigationService?.Navigate(new Friends());
             }
             catch (InvalidOperationException)
             {
@@ -96,7 +96,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 using (var client = new FriendServiceClient())
                 {
-                    client.DeleteFriendAndBlock(
+                    client.DeleteFriend(
                         ClientSession.CurrentProfile.Username,
                         _username
                     );

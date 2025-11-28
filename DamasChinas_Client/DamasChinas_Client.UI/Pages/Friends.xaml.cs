@@ -15,7 +15,7 @@ namespace DamasChinas_Client.UI.Pages
     {
         public ObservableCollection<FriendList> FriendsList { get; } = new ObservableCollection<FriendList>();
 
-        public Friends(string username)
+        public Friends()
         {
             InitializeComponent();
             DataContext = this;
@@ -26,16 +26,16 @@ namespace DamasChinas_Client.UI.Pages
         private void Friends_Loaded(object sender, RoutedEventArgs e)
         {
             Loaded -= Friends_Loaded;
-            LoadFriends(ClientSession.CurrentProfile.Username);
+            LoadFriends();
         }
 
-        private void LoadFriends(string username)
+        private void LoadFriends()
         {
             try
             {
                 using (var client = new FriendServiceClient())
                 {
-                    var friends = client.GetFriends(username);
+                    var friends = client.GetFriends(ClientSession.safeUsername);
 
                     FriendsList.Clear();
 
@@ -50,29 +50,24 @@ namespace DamasChinas_Client.UI.Pages
                     }
                 }
             }
-            catch (EndpointNotFoundException ex)
+            catch (EndpointNotFoundException )
             {
-                Debug.WriteLine($"[Friends.LoadFriends - EndpointNotFound] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException )
             {
-                Debug.WriteLine($"[Friends.LoadFriends - Timeout] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
             }
-            catch (FaultException ex)
+            catch (FaultException )
             {
-                Debug.WriteLine($"[Friends.LoadFriends - FaultException] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
-            catch (System.Net.WebException ex)
+            catch (System.Net.WebException )
             {
-                Debug.WriteLine($"[Friends.LoadFriends - WebException] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                Debug.WriteLine($"[Friends.LoadFriends - General] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.FriendsLoadError, PopupType.Error);
             }
         }
@@ -85,12 +80,10 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[Friends.OnBackClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                Debug.WriteLine($"[Friends.OnBackClick - General] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
@@ -107,9 +100,8 @@ namespace DamasChinas_Client.UI.Pages
             NavigationService?.Navigate(profilePage);
         }
     }
-    catch (Exception ex)
+    catch (Exception )
     {
-        Debug.WriteLine($"[Friends.OnViewProfileClick - General] {ex.Message}");
         MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
     }
 }
@@ -123,13 +115,12 @@ namespace DamasChinas_Client.UI.Pages
                 if (sender is FrameworkElement element &&
                     element.DataContext is FriendList friend)
                 {
-                    var chatWindow = new ChatWindow(ClientSession.CurrentProfile, friend.Username);
+                    var chatWindow = new ChatWindow(friend.Username);
                     chatWindow.Show();
                 }
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException )
             {
-                Debug.WriteLine($"[Friends.OnChatClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ChatOpenError, PopupType.Error);
             }
 
@@ -141,14 +132,12 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException )
             {
-                Debug.WriteLine($"[Friends.OnSoundClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                Debug.WriteLine($"[Friends.OnSoundClick - General] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
@@ -159,9 +148,8 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new AddFriend());
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                Debug.WriteLine($"[Friends.OnAddFriendClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -172,9 +160,8 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new PendingFriendRequests());
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                Debug.WriteLine($"[Friends.OnViewPendingRequestsClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -185,15 +172,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException )
             {
-                Debug.WriteLine($"[Friends.OnLanguageClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Friends.OnLanguageClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
     }

@@ -11,19 +11,13 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class ChangeData : Page
     {
-        private PublicProfile _profile;
-
         public ChangeData()
         {
             InitializeComponent();
+            LoadProfileData(); 
         }
 
-        public ChangeData(PublicProfile profile)
-            : this()
-        {
-            _profile = profile;
-            LoadProfileData();
-        }
+ 
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
@@ -31,7 +25,6 @@ namespace DamasChinas_Client.UI.Pages
             {
                 if (NavigationService == null)
                 {
-                    Debug.WriteLine("[ChangeData.OnBackClick] NavigationService is null.");
                     MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
                     return;
                 }
@@ -40,7 +33,6 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[ChangeData.OnBackClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -99,7 +91,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 using (var client = new AccountManagerClient())
                 {
-                    var result = client.ChangeUsername(_profile.Username, newUsername);
+                    var result = client.ChangeUsername(ClientSession.safeUsername, newUsername);
 
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
 
@@ -108,7 +100,8 @@ namespace DamasChinas_Client.UI.Pages
                         UpdateUsernameState(newUsername);
 
                         MessageHelper.ShowPopup(message, PopupType.Success);
-                        NavigationService?.GoBack();
+                        var profilePage = new ProfilePlayer();
+                        NavigationService?.Navigate(profilePage);
                     }
                     else
                     {
@@ -116,32 +109,30 @@ namespace DamasChinas_Client.UI.Pages
                     }
                 }
             }
-            catch (CommunicationException ex)
+
+
+            catch (CommunicationException)
             {
-                Debug.WriteLine($"[ChangeData.ChangeUsername - Communication] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException)
             {
-                Debug.WriteLine($"[ChangeData.ChangeUsername - Timeout] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[ChangeData.ChangeUsername - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
         private void UpdateUsernameState(string newUsername)
         {
-            _profile.Username = newUsername;
-            txtCurrentUsername.Text = newUsername;
-
             if (ClientSession.IsLoggedIn)
             {
                 ClientSession.CurrentProfile.Username = newUsername;
             }
+
+            txtCurrentUsername.Text = newUsername;
         }
 
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
@@ -164,7 +155,9 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
-                ChangePassword(_profile.Username, hashedPassword);
+
+                ChangePassword(hashedPassword);
+
             }, MessageKeys.UnknownError);
         }
 
@@ -215,13 +208,13 @@ namespace DamasChinas_Client.UI.Pages
             return false;
         }
 
-        private void ChangePassword(string username, string hashedPassword)
+        private void ChangePassword(string hashedPassword)
         {
             try
             {
                 using (var client = new AccountManagerClient())
                 {
-                    var result = client.ChangePassword(username, hashedPassword);
+                    var result = client.ChangePassword(ClientSession.safeUsername, hashedPassword);
 
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
 
@@ -263,26 +256,18 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                if (_profile == null)
+                if (!ClientSession.IsLoggedIn || ClientSession.CurrentProfile == null)
                 {
                     MessageHelper.ShowPopup(MessageKeys.UserProfileNotFound, PopupType.Warning);
                     return;
                 }
 
-                if (txtFirstName == null ||
-                    txtLastName == null ||
-                    txtEmail == null ||
-                    txtCurrentUsername == null)
-                {
-                    Debug.WriteLine("[ChangeData.LoadProfileData] One or more UI controls are null.");
-                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-                    return;
-                }
+                var profile = ClientSession.CurrentProfile;
 
-                txtFirstName.Text = _profile.Name;
-                txtLastName.Text = _profile.LastName;
-                txtEmail.Text = _profile.Email;
-                txtCurrentUsername.Text = _profile.Username;
+                txtFirstName.Text = profile.Name;
+                txtLastName.Text = profile.LastName;
+                txtEmail.Text = profile.Email;
+                txtCurrentUsername.Text = profile.Username;
             }
             catch (InvalidOperationException ex)
             {
