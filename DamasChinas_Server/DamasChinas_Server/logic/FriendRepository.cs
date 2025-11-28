@@ -23,7 +23,7 @@ namespace DamasChinas_Server
         {
             if (idUser1 == idUser2)
             {
-                // Antes: FaultException("Un usuario no puede interactuar consigo mismo.")
+                
                 throw new RepositoryValidationException(MessageCode.UserValidationError);
             }
         }
@@ -35,7 +35,7 @@ namespace DamasChinas_Server
 
             if (!exist1 || !exist2)
             {
-                // Antes: FaultException("Uno o ambos usuarios no existen.")
+         
                 throw new RepositoryValidationException(MessageCode.UserNotFound);
             }
         }
@@ -44,7 +44,7 @@ namespace DamasChinas_Server
         {
             if (FriendshipExists(db, idUserSender, idUserReciever))
             {
-                // Antes: FaultException("Los usuarios ya son amigos.")
+                
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -53,7 +53,7 @@ namespace DamasChinas_Server
         {
             if (!FriendshipExists(db, idUserSender, idUserReciever))
             {
-                // Antes: FaultException("Los usuarios no son amigos.")
+                
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -62,7 +62,7 @@ namespace DamasChinas_Server
         {
             if (IsBlocked(db, idUserSender, idUserReciever))
             {
-                // Antes: FaultException("La relación está bloqueada entre los usuarios.")
+               
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -71,7 +71,7 @@ namespace DamasChinas_Server
         {
             if (idUserSender == idUserReciever)
             {
-                // Antes: InvalidOperationException("Un usuario no puede bloquearse a sí mismo.")
+                
                 throw new RepositoryValidationException(MessageCode.UserValidationError);
             }
         }
@@ -80,7 +80,7 @@ namespace DamasChinas_Server
         {
             if (PendingRequestExists(db, idUserSender, idUserReciever))
             {
-                // Antes: FaultException("Ya existe una solicitud pendiente entre los usuarios.")
+                
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -89,14 +89,14 @@ namespace DamasChinas_Server
         {
             if (!PendingRequestExists(db, idUserReciever, idUserSender))
             {
-                // Antes: FaultException("No existe una solicitud pendiente entre los usuarios.")
+              
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
 
         private static bool FriendshipExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            // Lógica original intacta (aunque tenga duplicado, no la toco)
+         
             return db.amistades.Any(a =>
                 (a.id_usuario1 == idUserSender && a.id_usuario2 == idUserReciever) ||
                 (a.id_usuario1 == idUserSender && a.id_usuario2 == idUserReciever));
@@ -104,7 +104,7 @@ namespace DamasChinas_Server
 
         private static bool IsBlocked(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            // Lógica original intacta
+           
             return db.bloqueos.Any(b =>
                 (b.id_bloqueador == idUserSender && b.id_bloqueado == idUserReciever) ||
                 (b.id_bloqueador == idUserSender && b.id_bloqueado == idUserReciever));
@@ -112,7 +112,7 @@ namespace DamasChinas_Server
 
         private static bool PendingRequestExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            // Lógica original intacta
+            
             return db.solicitudes_amistad.Any(s =>
                 ((s.id_emisor == idUserSender && s.id_receptor == idUserReciever) ||
                  (s.id_emisor == idUserSender && s.id_receptor == idUserReciever)) &&
@@ -149,7 +149,7 @@ namespace DamasChinas_Server
         {
             if (IsBlocked(db, blockerId, blockedId))
             {
-                // Antes: InvalidOperationException("El usuario ya está bloqueado.")
+               
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
 
@@ -172,7 +172,7 @@ namespace DamasChinas_Server
 
             if (blockEntry == null)
             {
-                // Antes: InvalidOperationException("No existe un bloqueo entre los usuarios.")
+              
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
 
@@ -282,7 +282,7 @@ namespace DamasChinas_Server
 
                 if (request == null)
                 {
-                    // Antes: FaultException("No existe la solicitud pendiente.")
+                    
                     throw new RepositoryValidationException(MessageCode.FriendsLoadError);
                 }
 

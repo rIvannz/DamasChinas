@@ -13,12 +13,9 @@ namespace DamasChinas_Server
     {
         private readonly Func<damas_chinasEntities> _contextFactory;
 
-        // Avatar por defecto al crear usuario
-        private const string DefaultAvatarFile = "avatar1.png";
+        private const string DefaultAvatarFile = "avatarIcon.png";
 
-        // =========================================================
-        // CONSTRUCTORES
-        // =========================================================
+
 
         public RepositoryUsers()
             : this(DbContextFactory.Create)
@@ -30,9 +27,7 @@ namespace DamasChinas_Server
             _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         }
 
-        // =========================================================
-        // VALIDACIONES - CREACIÓN DE USUARIO
-        // =========================================================
+
 
         public void ValidateCreateUser(UserDto userDto)
         {
@@ -55,9 +50,7 @@ namespace DamasChinas_Server
             });
         }
 
-        // =========================================================
-        // CREACIÓN DE USUARIO
-        // =========================================================
+ 
 
         public usuarios CreateUser(UserDto userDto)
         {
@@ -70,9 +63,6 @@ namespace DamasChinas_Server
             });
         }
 
-        // =========================================================
-        // LOGIN
-        // =========================================================
 
         public PublicProfile Login(LoginRequest loginRequest)
         {
@@ -90,10 +80,6 @@ namespace DamasChinas_Server
                 return BuildPublicProfile(user);
             });
         }
-
-        // =========================================================
-        // PERFILES
-        // =========================================================
 
         public PublicProfile GetPublicProfile(int idUsuario)
         {
@@ -133,9 +119,7 @@ namespace DamasChinas_Server
             });
         }
 
-        // =========================================================
-        // ACTUALIZAR USERNAME
-        // =========================================================
+
 
         public bool ChangeUsername(string username, string newUsername)
         {
@@ -165,9 +149,7 @@ namespace DamasChinas_Server
             });
         }
 
-        // =========================================================
-        // CAMBIO DE CONTRASEÑA
-        // =========================================================
+
 
         public bool ChangePassword(string username, string newPassword)
         {
@@ -191,9 +173,7 @@ namespace DamasChinas_Server
             });
         }
 
-        // =========================================================
-        // OBTENER ID POR USERNAME (REQUERIDO POR FRIENDREPOSITORY)
-        // =========================================================
+
 
         public int GetUserIdByUsername(string username)
         {
@@ -240,9 +220,7 @@ namespace DamasChinas_Server
         }
 
 
-        // =========================================================
-        // UTILIDADES INTERNAS
-        // =========================================================
+
 
         private static usuarios CreateUsuario(damas_chinasEntities db, UserDto userDto)
         {

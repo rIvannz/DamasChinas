@@ -18,20 +18,20 @@ namespace DamasChinas_Client.UI.Utilities
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                // msg_InvalidNameEmpty
+             
                 throw new ClientValidationException(MessageKeys.InvalidNameEmpty);
             }
 
             if (name.Length < UserValidationRules.NameMinLength ||
                 name.Length > UserValidationRules.NameMaxLength)
             {
-                // msg_InvalidNameLength
+            
                 throw new ClientValidationException(MessageKeys.InvalidNameLength);
             }
 
             if (!UserValidationRules.NameRegex.IsMatch(name))
             {
-                // msg_InvalidNameCharacters
+               
                 throw new ClientValidationException(MessageKeys.InvalidNameCharacters);
             }
         }
@@ -43,20 +43,20 @@ namespace DamasChinas_Client.UI.Utilities
 
             if (string.IsNullOrWhiteSpace(username))
             {
-                // msg_InvalidUsernameEmpty
+              
                 throw new ClientValidationException(MessageKeys.InvalidUsernameEmpty);
             }
 
             if (username.Length < UserValidationRules.UsernameMinLength ||
                 username.Length > UserValidationRules.UsernameMaxLength)
             {
-                // msg_InvalidUsernameLength
+               
                 throw new ClientValidationException(MessageKeys.InvalidUsernameLength);
             }
 
             if (!UserValidationRules.UsernameRegex.IsMatch(username))
             {
-                // msg_InvalidUsernameCharacters
+             
                 throw new ClientValidationException(MessageKeys.InvalidUsernameCharacters);
             }
         }
@@ -104,19 +104,19 @@ namespace DamasChinas_Client.UI.Utilities
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                // msg_InvalidEmailEmpty
+               
                 throw new ClientValidationException(MessageKeys.InvalidEmailEmpty);
             }
 
             if (email.Length > UserValidationRules.EmailMaxLength)
             {
-                // msg_InvalidEmailTooLong
+               
                 throw new ClientValidationException(MessageKeys.InvalidEmailTooLong);
             }
 
             if (!UserValidationRules.EmailRegex.IsMatch(email))
             {
-                // msg_InvalidEmailFormat
+                
                 throw new ClientValidationException(MessageKeys.InvalidEmailFormat);
             }
         }
@@ -135,7 +135,7 @@ namespace DamasChinas_Client.UI.Utilities
             if (string.IsNullOrWhiteSpace(loginRequest.Username) ||
                 string.IsNullOrWhiteSpace(loginRequest.Password))
             {
-                // msg_EmptyCredentials (validación universal)
+               
                 throw new ClientValidationException(MessageKeys.EmptyCredentials);
             }
 

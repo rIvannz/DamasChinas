@@ -52,13 +52,13 @@ namespace DamasChinas_Client.UI.Pages
 
                     if (!result.Success)
                     {
-                        // Traduce el código recibido desde el server
+                       
                         string message = MessageTranslator.GetLocalizedMessage(result.Code);
                         MessageHelper.ShowPopup(message, PopupType.Warning);
                         return;
                     }
 
-                    // Envío exitoso
+                 
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestSentOk),
                         PopupType.Success);

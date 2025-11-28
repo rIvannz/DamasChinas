@@ -12,9 +12,7 @@ namespace DamasChinas_Server
     {
         private readonly FriendRepository _repo = new FriendRepository();
 
-        // =========================================================
-        // FRIEND LIST
-        // =========================================================
+
         public List<FriendDto> GetFriends(string username)
         {
             try
@@ -31,9 +29,7 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // FRIEND REQUESTS LIST
-        // =========================================================
+
         public List<FriendDto> GetFriendRequests(string username)
         {
             try
@@ -50,9 +46,7 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // SEND FRIEND REQUEST
-        // =========================================================
+
         public OperationResult SendFriendRequest(string senderUsername, string receiverUsername)
         {
             try
@@ -81,9 +75,6 @@ namespace DamasChinas_Server
 
 
 
-        // =========================================================
-        // DELETE FRIEND
-        // =========================================================
         public bool DeleteFriend(string username, string friendUsername)
         {
             try
@@ -100,9 +91,7 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // BLOCK / UNBLOCK
-        // =========================================================
+
         public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
         {
             try
@@ -119,9 +108,6 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // ACCEPT / REJECT REQUEST
-        // =========================================================
         public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept)
         {
             try
@@ -138,9 +124,6 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        // DELETE + BLOCK COMBINED
-        // =========================================================
         public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername)
         {
             try

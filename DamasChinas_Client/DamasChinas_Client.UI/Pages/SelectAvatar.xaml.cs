@@ -100,7 +100,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 client = new AccountManagerClient();
 
-                // ⭐ AHORA USAMOS EL ID DEL USUARIO
+             
                 int idUser = ClientSession.CurrentProfile.IdUser;
 
                 await client.ChangeAvatarAsync(idUser, avatarFile);
