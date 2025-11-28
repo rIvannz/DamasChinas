@@ -318,6 +318,9 @@
     <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.FriendDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.OperationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\FriendServiceProxy\FriendService1.wsdl" />
     <None Include="Connected Services\FriendServiceProxy\item.xsd">
       <SubType>Designer</SubType>
@@ -329,6 +332,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\FriendServiceProxy\item33.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendServiceProxy\item34.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\Arrays.xsd">

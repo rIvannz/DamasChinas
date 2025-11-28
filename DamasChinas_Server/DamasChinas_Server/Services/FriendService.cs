@@ -1,51 +1,160 @@
+using DamasChinas_Server.Common;
+using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 
 namespace DamasChinas_Server
 {
-        public class FriendService : IFriendService
+    public class FriendService : IFriendService
+    {
+        private readonly FriendRepository _repo = new FriendRepository();
+
+        // =========================================================
+        // FRIEND LIST
+        // =========================================================
+        public List<FriendDto> GetFriends(string username)
         {
-                private readonly FriendRepository repo = new FriendRepository();
-
-                public List<FriendDto> GetFriends(string username)
-                {
-                        return repo.GetFriends(username);
-                }
-
-                public List<FriendDto> GetFriendRequests(string username)
-                {
-                        return repo.GetFriendRequests(username);
-                }
-
-                public bool SendFriendRequest(string senderUsername, string receiverUsername)
-                {
-                        return repo.SendFriendRequest(senderUsername, receiverUsername);
-                }
-
-                public bool DeleteFriend(string username, string friendUsername)
-                {
-                        return repo.DeleteFriend(username, friendUsername);
-                }
-
-                public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
-                {
-                        return repo.UpdateBlockStatus(blockerUsername, blockedUsername, block);
-                }
-
-                public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept)
-                {
-                        return repo.UpdateFriendRequestStatus(receiverUsername, senderUsername, accept);
-                }
-
-                public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername)
-                { 
-                       return repo.DeleteFriendAndBlock(blockerUsername, blockedUsername);
-                }
+            try
+            {
+                return _repo.GetFriends(username);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
+            }
+            catch (Exception)
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError, "UnknownError");
+            }
         }
+
+        // =========================================================
+        // FRIEND REQUESTS LIST
+        // =========================================================
+        public List<FriendDto> GetFriendRequests(string username)
+        {
+            try
+            {
+                return _repo.GetFriendRequests(username);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
+            }
+            catch (Exception)
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError, "UnknownError");
+            }
+        }
+
+        // =========================================================
+        // SEND FRIEND REQUEST
+        // =========================================================
+        public OperationResult SendFriendRequest(string senderUsername, string receiverUsername)
+        {
+            try
+            {
+                bool success = _repo.SendFriendRequest(senderUsername, receiverUsername);
+
+                return success
+                    ? OperationResult.Ok()
+                    : OperationResult.Fail("Unknown fail.", MessageCode.UnknownError);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                return OperationResult.Fail(
+                    ex.Code.ToString(),
+                    ex.Code
+                );
+            }
+            catch (Exception ex)
+            {
+                return OperationResult.Fail(
+                    ex.Message,
+                    MessageCode.UnknownError
+                );
+            }
+        }
+
+
+
+        // =========================================================
+        // DELETE FRIEND
+        // =========================================================
+        public bool DeleteFriend(string username, string friendUsername)
+        {
+            try
+            {
+                return _repo.DeleteFriend(username, friendUsername);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
+            }
+            catch (Exception)
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError, "UnknownError");
+            }
+        }
+
+        // =========================================================
+        // BLOCK / UNBLOCK
+        // =========================================================
+        public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
+        {
+            try
+            {
+                return _repo.UpdateBlockStatus(blockerUsername, blockedUsername, block);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
+            }
+            catch (Exception)
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError, "UnknownError");
+            }
+        }
+
+        // =========================================================
+        // ACCEPT / REJECT REQUEST
+        // =========================================================
+        public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept)
+        {
+            try
+            {
+                return _repo.UpdateFriendRequestStatus(receiverUsername, senderUsername, accept);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
+            }
+            catch (Exception)
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError, "UnknownError");
+            }
+        }
+
+        // =========================================================
+        // DELETE + BLOCK COMBINED
+        // =========================================================
+        public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername)
+        {
+            try
+            {
+                return _repo.DeleteFriendAndBlock(blockerUsername, blockedUsername);
+            }
+            catch (RepositoryValidationException ex)
+            {
+                throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
+            }
+            catch (Exception)
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError, "UnknownError");
+            }
+        }
+    }
 }

@@ -233,6 +233,83 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         AvatarUpdateFailed = 5001,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts")]
+    [System.SerializableAttribute()]
+    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DamasChinas_Client.UI.FriendServiceProxy.MessageCode CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool SuccessField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TechnicalDetailField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.FriendServiceProxy.MessageCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Success {
+            get {
+                return this.SuccessField;
+            }
+            set {
+                if ((this.SuccessField.Equals(value) != true)) {
+                    this.SuccessField = value;
+                    this.RaisePropertyChanged("Success");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TechnicalDetail {
+            get {
+                return this.TechnicalDetailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TechnicalDetailField, value) != true)) {
+                    this.TechnicalDetailField = value;
+                    this.RaisePropertyChanged("TechnicalDetail");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="FriendServiceProxy.IFriendService")]
     public interface IFriendService {
@@ -252,11 +329,10 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendRequestsAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendService/SendFriendRequestResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/SendFriendRequestMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        bool SendFriendRequest(string senderUsername, string receiverUsername);
+        DamasChinas_Client.UI.FriendServiceProxy.OperationResult SendFriendRequest(string senderUsername, string receiverUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendService/SendFriendRequestResponse")]
-        System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string senderUsername, string receiverUsername);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> SendFriendRequestAsync(string senderUsername, string receiverUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/DeleteFriend", ReplyAction="http://tempuri.org/IFriendService/DeleteFriendResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/DeleteFriendMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
@@ -330,11 +406,11 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
             return base.Channel.GetFriendRequestsAsync(username);
         }
         
-        public bool SendFriendRequest(string senderUsername, string receiverUsername) {
+        public DamasChinas_Client.UI.FriendServiceProxy.OperationResult SendFriendRequest(string senderUsername, string receiverUsername) {
             return base.Channel.SendFriendRequest(senderUsername, receiverUsername);
         }
         
-        public System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string senderUsername, string receiverUsername) {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.OperationResult> SendFriendRequestAsync(string senderUsername, string receiverUsername) {
             return base.Channel.SendFriendRequestAsync(senderUsername, receiverUsername);
         }
         

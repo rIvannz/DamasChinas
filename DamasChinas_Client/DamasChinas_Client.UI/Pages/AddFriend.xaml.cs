@@ -2,10 +2,10 @@
 using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Utilities;
 using System;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -41,29 +41,30 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.EmptyCredentials),
                     PopupType.Warning);
-
                 return;
             }
+
             try
             {
                 using (var client = new FriendServiceClient())
                 {
-                    bool success = client.SendFriendRequest(ClientSession.safeUsername, username);
+                    var result = client.SendFriendRequest(ClientSession.safeUsername, username);
 
-                    if (success)
+                    if (!result.Success)
                     {
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestSentOk),
-                            PopupType.Success);
-
-                        NavigationService?.GoBack();
+                        // Traduce el código recibido desde el server
+                        string message = MessageTranslator.GetLocalizedMessage(result.Code);
+                        MessageHelper.ShowPopup(message, PopupType.Warning);
+                        return;
                     }
+
+                    // Envío exitoso
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestSentOk),
+                        PopupType.Success);
+
+                    NavigationService?.GoBack();
                 }
-            }
-            catch (FaultException fault)
-            {
-           
-                MessageHelper.ShowPopup(fault.Message, PopupType.Warning);
             }
             catch (EndpointNotFoundException)
             {
@@ -77,12 +78,15 @@ namespace DamasChinas_Client.UI.Pages
                     MessageTranslator.GetLocalizedMessage(MessageKeys.NetworkLatency),
                     PopupType.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[AddFriend.OnSendClick] {ex.Message}");
+
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);
             }
         }
+
     }
 }
