@@ -242,6 +242,8 @@
 
     <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">Esta función aún no está disponible.</sys:String>
+    <sys:String x:Key="msg_LanguageChangeError">
+        Ocurrió un error al cambiar el idioma. Inténtalo nuevamente.</sys:String>
 
 
     <!-- Navegación / módulos -->
@@ -250,6 +252,10 @@
     <sys:String x:Key="msg_FriendRemoved">Amigo eliminado correctamente.</sys:String>
     <sys:String x:Key="msg_ChatComingSoon">La función de chat estará disponible pronto.</sys:String>
     <sys:String x:Key="msg_SelectLanguageFirst">Selecciona un idioma antes de aplicar.</sys:String>
+    <sys:String x:Key="msg_LanguageChangeSuccess">
+        El idioma se ha cambiado correctamente.
+    </sys:String>
+
 
     <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Por favor ingresa el código de verificación.</sys:String>
@@ -276,6 +282,8 @@
     <!-- Módulo sonido -->
     <sys:String x:Key="msg_SoundSettingsUpdated">Configuración de sonido actualizada correctamente.</sys:String>
     <sys:String x:Key="msg_SoundSettingsError">No se pudieron actualizar las configuraciones de sonido.</sys:String>
+    
+
 
     <!-- ========================================================= -->
     <!--  Validaciones universales (GENÉRICAS)                     -->

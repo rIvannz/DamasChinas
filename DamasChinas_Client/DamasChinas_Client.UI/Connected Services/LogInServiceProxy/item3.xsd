@@ -9,6 +9,7 @@
   <xs:element name="LoginRequest" nillable="true" type="tns:LoginRequest" />
   <xs:complexType name="PublicProfile">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AvatarFile" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />

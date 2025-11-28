@@ -33,7 +33,7 @@ namespace DamasChinas_Server
 
             string destinationKey = message.DestinationUsername?.Trim().ToLower();
 
-            // Guarda en la BD
+           
             string senderUsername = message.UsarnameSender;
             int idRecipient = _repo.GetIdByUsername(message.DestinationUsername.Trim().ToLower());
             _repo.SaveMessage(senderUsername, idRecipient, message.Text);

@@ -1,16 +1,16 @@
-﻿using System;
-
-namespace DamasChinas_Server.Common
+﻿namespace DamasChinas_Server.Common
 {
     public enum MessageCode
     {
         // ========================
-        // Éxitos
+        // Éxito
         // ========================
         Success = 0,
+        AvatarUpdateSuccess = 5002,
+        CodeSentSuccessfully = 3014,
 
         // ========================
-        // Autenticación / Usuarios
+        // Autenticación
         // ========================
         LoginInvalidCredentials = 1001,
         UserDuplicateEmail = 1002,
@@ -23,7 +23,7 @@ namespace DamasChinas_Server.Common
         VerificationCodeSendError = 1205,
 
         // ========================
-        // Partidas / Lobby
+        // Lobby
         // ========================
         MatchCreationFailed = 1100,
         LobbyNotFound = 1101,
@@ -32,14 +32,14 @@ namespace DamasChinas_Server.Common
         LobbyClosed = 1104,
 
         // ========================
-        // Backend / Servidor
+        // Servidor
         // ========================
         ServerUnavailable = 2001,
         NetworkLatency = 2100,
         UnknownError = 9999,
 
         // ========================
-        // Validaciones universales 
+        // Validaciones generales
         // ========================
         EmptyCredentials = 3001,
         PasswordsDontMatch = 3002,
@@ -51,18 +51,12 @@ namespace DamasChinas_Server.Common
         FieldLengthExceeded = 3008,
         ChatOpenError = 3009,
         NavigationError = 3010,
-        SoundVolumeInvalid = 3011,
-        OperationInterrupted = 3012,
-        CodeSendingError = 3013,
-        CodeSentSuccessfully = 3014,
-        ChatUnavailable = 3015,
-        UsernameExists = 3016,
 
         // ========================
         // Validaciones específicas
         // ========================
 
-        // Name
+        // Nombre
         InvalidNameEmpty = 3100,
         InvalidNameLength = 3101,
         InvalidNameCharacters = 3102,
@@ -71,6 +65,7 @@ namespace DamasChinas_Server.Common
         InvalidUsernameEmpty = 3110,
         InvalidUsernameLength = 3111,
         InvalidUsernameCharacters = 3112,
+        UsernameExists = 3113,
 
         // Password
         InvalidPasswordEmpty = 3120,
@@ -86,12 +81,8 @@ namespace DamasChinas_Server.Common
         InvalidEmailFormat = 3132,
 
         // ========================
-        // Sonido
+        // Avatar
         // ========================
-        SoundSettingsUpdated = 4001,
-        SoundSettingsError = 4002,
+        AvatarUpdateFailed = 5001
     }
 }
-
-
-

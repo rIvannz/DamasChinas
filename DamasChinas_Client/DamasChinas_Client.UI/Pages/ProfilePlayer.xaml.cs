@@ -1,34 +1,31 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using DamasChinas_Client.UI.AccountManagerServiceProxy;
-using System.Diagnostics;
 using DamasChinas_Client.UI.Utilities;
+using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class ProfilePlayer : Page
     {
-        // Eliminado: private PublicProfile _profile;
+        private PublicProfile _profile;
+        private const string DefaultAvatarFile = "avatar1.png";
 
         public ProfilePlayer()
         {
             InitializeComponent();
+        }
 
-            try
-            {
-                if (ClientSession.safeUsername == null)
-                {
-                    throw new InvalidOperationException("No hay usuario logueado para abrir el perfil.");
-                }
-
-                UpdateProfileDisplay();
-            }
-            catch (InvalidOperationException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
+        public ProfilePlayer(PublicProfile profile)
+        {
+            InitializeComponent();
+            _profile = profile ?? throw new ArgumentNullException(nameof(profile));
+            UpdateProfileDisplay();
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
@@ -41,12 +38,18 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
+                    MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                Debug.WriteLine($"[ProfilePlayer.OnBackClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnBackClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
@@ -62,15 +65,21 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (NavigationService == null)
                 {
-                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                    MessageHelper.ShowPopup(NavigationError, PopupType.Error);
                     return;
                 }
 
                 NavigationService.Navigate(new MainWindow());
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                Debug.WriteLine($"[ProfilePlayer.OnLogoutClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnLogoutClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
@@ -78,11 +87,35 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.Navigate(new ChangeData());
+                NavigationService?.Navigate(new ChangeData(_profile));
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(ProfileChangeError, PopupType.Error);
+            }
+        }
+
+        private void OnChangeAvatarClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                NavigationService?.Navigate(new SelectAvatar());
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnChangeAvatarClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnChangeAvatarClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
@@ -92,9 +125,15 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                Debug.WriteLine($"[ProfilePlayer.OnSoundClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnSoundClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
@@ -104,31 +143,55 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                Debug.WriteLine($"[ProfilePlayer.OnLanguageClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.OnLanguageClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
+        // ============================================================
+        // ACTUALIZAR UI DEL PERFIL
+        // ============================================================
         private void UpdateProfileDisplay()
         {
             try
             {
-                if (!ClientSession.IsLoggedIn || ClientSession.CurrentProfile == null)
-                {
-                    MessageHelper.ShowPopup(MessageKeys.UserProfileNotFound, PopupType.Warning);
+                if (_profile == null)
                     return;
-                }
 
-                var profile = ClientSession.CurrentProfile;
+                UsernameTextBlock.Text = _profile.Username;
+                FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
+                EmailTextBlock.Text = _profile.Email;
 
-                UsernameTextBlock.Text = profile.Username;
-                FullNameTextBlock.Text = $"{profile.Name} {profile.LastName}";
-                EmailTextBlock.Text = profile.Email;
+                LoadAvatar(_profile);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                Debug.WriteLine($"[ProfilePlayer.UpdateProfileDisplay] {ex.Message}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+            }
+        }
+
+        private void LoadAvatar(PublicProfile profile)
+        {
+            try
+            {
+                // TODO: cuando agregues imagen_perfil en el DTO, reemplaza esto:
+                string avatarFile = DefaultAvatarFile;
+
+                var imgSrc = PathProvider.LoadAvatar(avatarFile);
+                AvatarImage.Source = imgSrc;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePlayer.LoadAvatar] {ex.Message}");
+                // No se muestra popup al usuario aquí
             }
         }
     }

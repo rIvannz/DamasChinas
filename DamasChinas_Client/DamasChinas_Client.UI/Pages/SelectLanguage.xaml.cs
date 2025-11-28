@@ -1,9 +1,9 @@
+using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using DamasChinas_Client.UI.Utilities;
-using System;
-using System.Diagnostics;
-
+using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -20,34 +20,30 @@ namespace DamasChinas_Client.UI.Pages
             {
                 if (LanguageComboBox.SelectedItem is ComboBoxItem selectedItem)
                 {
-                    string languageCode = selectedItem.Tag.ToString();
+                    string languageCode = selectedItem.Tag?.ToString();
+
+                    if (string.IsNullOrWhiteSpace(languageCode))
+                    {
+                        MessageHelper.ShowPopup(SelectLanguageFirst, PopupType.Warning);
+                        return;
+                    }
+
                     LanguageManager.ChangeLanguage(languageCode);
 
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("applyLanguage"),
-                        PopupType.Success
-                    );
+               
+                    MessageHelper.ShowPopup(LanguageChangeSuccess, PopupType.Success);
                 }
                 else
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_SelectLanguageFirst"),
-                        PopupType.Warning
-                    );
+                    MessageHelper.ShowPopup(SelectLanguageFirst, PopupType.Warning);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[SelectLanguage.OnApplyClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
-
-    
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
@@ -59,28 +55,18 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                        PopupType.Warning                    );
+                    MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
                 }
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[SelectLanguage.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[SelectLanguage.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
     }

@@ -41,6 +41,12 @@
   <wsdl:message name="IAccountManager_ChangePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="IAccountManager_ChangeAvatar_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeAvatar" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_ChangeAvatar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeAvatarResponse" />
+  </wsdl:message>
   <wsdl:portType name="IAccountManager">
     <wsdl:operation name="GetPublicProfile">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/GetPublicProfile" message="tns:IAccountManager_GetPublicProfile_InputMessage" />
@@ -57,6 +63,10 @@
     <wsdl:operation name="ChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/ChangePassword" message="tns:IAccountManager_ChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/ChangePasswordResponse" message="tns:IAccountManager_ChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeAvatar">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/ChangeAvatar" message="tns:IAccountManager_ChangeAvatar_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/ChangeAvatarResponse" message="tns:IAccountManager_ChangeAvatar_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IAccountManager" type="tns:IAccountManager">
@@ -91,6 +101,15 @@
     </wsdl:operation>
     <wsdl:operation name="ChangePassword">
       <soap12:operation soapAction="http://tempuri.org/IAccountManager/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeAvatar">
+      <soap12:operation soapAction="http://tempuri.org/IAccountManager/ChangeAvatar" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

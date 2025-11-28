@@ -126,10 +126,19 @@ namespace DamasChinas_Client.UI.Utilities
         public const string InvalidEmailTooLong = "msg_InvalidEmailTooLong";
         public const string InvalidEmailFormat = "msg_InvalidEmailFormat";
 
+
+        // ========================
+        // Lenguaje
+        // ========================
+        public const string LanguageChangeSuccess = "msg_LanguageChangeSuccess";
+        public const string SelectLanguageFirst = "msg_SelectLanguageFirst";
+
+
         // ========================
         // Sonido
         // ========================
         public const string SoundSettingsUpdated = "msg_SoundSettingsUpdated";
+        public const string LanguageChangeError = "msg_LanguageChangeError";
         public const string SoundSettingsError = "msg_SoundSettingsError";
     }
 }

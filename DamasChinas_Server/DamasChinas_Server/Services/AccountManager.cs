@@ -8,15 +8,20 @@ using System.ServiceModel;
 
 namespace DamasChinas_Server.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession,
-                     ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(
+        InstanceContextMode = InstanceContextMode.PerSession,
+        ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class AccountManager : IAccountManager
     {
         private readonly RepositoryUsers _repository;
 
-        public AccountManager(): this(new RepositoryUsers())
-        {
+        private const string OperationChangeUsername = nameof(ChangeUsername);
+        private const string OperationChangePassword = nameof(ChangePassword);
+        private const string OperationChangeAvatar = nameof(ChangeAvatar);
 
+        public AccountManager()
+            : this(new RepositoryUsers())
+        {
         }
 
         internal AccountManager(RepositoryUsers repository)
@@ -29,31 +34,29 @@ namespace DamasChinas_Server.Services
             return _repository.GetPublicProfile(idUser);
         }
 
-
         public PublicFriendProfile GetFriendPublicProfile(string username)
         {
             return _repository.GetFriendPublicProfile(username);
         }
-
 
         public OperationResult ChangeUsername(string username, string newUsername)
         {
             return ExecuteAccountOperation(
                 () =>
                 {
-                    bool success = _repository.ChangeUsername(username, newUsername);
+                    bool ok = _repository.ChangeUsername(username, newUsername);
 
-                    if (success)
+                    if (ok)
                     {
                         SessionManager.UpdateSessionUsername(username, newUsername);
                     }
 
-                    return success;
+                    return ok;
                 },
                 MessageCode.Success,
                 MessageCode.UnknownError,
                 MessageCode.ServerUnavailable,
-                "ChangeUsername"
+                OperationChangeUsername
             );
         }
 
@@ -64,7 +67,19 @@ namespace DamasChinas_Server.Services
                 MessageCode.Success,
                 MessageCode.UnknownError,
                 MessageCode.ServerUnavailable,
-                "ChangePassword"
+                OperationChangePassword
+            );
+        }
+
+        // AHORA recibe username
+        public OperationResult ChangeAvatar(string username, string avatarFile)
+        {
+            return ExecuteAccountOperation(
+                () => _repository.ChangeAvatar(username, avatarFile),
+                MessageCode.AvatarUpdateSuccess,
+                MessageCode.AvatarUpdateFailed,
+                MessageCode.ServerUnavailable,
+                OperationChangeAvatar
             );
         }
 
@@ -79,20 +94,13 @@ namespace DamasChinas_Server.Services
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"[TRACE] Starting operation: {context}");
-
                 bool success = operation();
 
                 result.Success = success;
                 result.Code = success ? successCode : failureCode;
-
                 result.TechnicalDetail = success
                     ? $"Operation '{context}' executed successfully."
-                    : $"Operation '{context}' failed during business logic.";
-
-                System.Diagnostics.Debug.WriteLine(success
-                    ? $"[TRACE] {context} completed successfully."
-                    : $"[ERROR] {context} did not complete successfully.");
+                    : $"Operation '{context}' failed.";
 
                 return result;
             }
@@ -100,31 +108,22 @@ namespace DamasChinas_Server.Services
             {
                 result.Success = false;
                 result.Code = fatalCode;
-
-                result.TechnicalDetail = $"SQL Exception in {context}: {ex.Number} - {ex.Message}";
-
-                System.Diagnostics.Debug.WriteLine($"[FATAL] SQL error in {context}: {ex.Message}");
+                result.TechnicalDetail = $"SQL error ({ex.Number})";
                 return result;
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 result.Success = false;
                 result.Code = failureCode;
-                result.TechnicalDetail = $"Argument exception in {context}.";
-                System.Diagnostics.Debug.WriteLine($"[ERROR] Invalid argument in {context}: {ex.Message}");
+                result.TechnicalDetail = "Argument error.";
                 return result;
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 result.Success = false;
                 result.Code = failureCode;
-                result.TechnicalDetail = $"Invalid operation in {context}.";
-                System.Diagnostics.Debug.WriteLine($"[ERROR] Invalid operation in {context}: {ex.Message}");
+                result.TechnicalDetail = "Invalid operation.";
                 return result;
-            }
-            finally
-            {
-                System.Diagnostics.Debug.WriteLine($"[TRACE] Finishing operation: {context}");
             }
         }
     }

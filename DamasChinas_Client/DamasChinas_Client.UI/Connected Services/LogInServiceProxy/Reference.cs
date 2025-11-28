@@ -84,6 +84,9 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AvatarFileField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -105,6 +108,19 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AvatarFile {
+            get {
+                return this.AvatarFileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AvatarFileField, value) != true)) {
+                    this.AvatarFileField = value;
+                    this.RaisePropertyChanged("AvatarFile");
+                }
             }
         }
         
@@ -191,6 +207,12 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         Success = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        AvatarUpdateSuccess = 5002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSentSuccessfully = 3014,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         LoginInvalidCredentials = 1001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -269,24 +291,6 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         NavigationError = 3010,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        SoundVolumeInvalid = 3011,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OperationInterrupted = 3012,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSendingError = 3013,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSentSuccessfully = 3014,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ChatUnavailable = 3015,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UsernameExists = 3016,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidNameEmpty = 3100,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -303,6 +307,9 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidUsernameCharacters = 3112,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameExists = 3113,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidPasswordEmpty = 3120,
@@ -332,10 +339,7 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         InvalidEmailFormat = 3132,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        SoundSettingsUpdated = 4001,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SoundSettingsError = 4002,
+        AvatarUpdateFailed = 5001,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

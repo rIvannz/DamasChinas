@@ -17,25 +17,16 @@ namespace DamasChinas_Client.UI.Utilities
                 EnsureThemeResources();
                 UpdateCulture(cultureCode);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                MessageBox.Show(
-                    $"Error while changing language: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
-                MessageBox.Show(
-                    $"Invalid parameter while changing language: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
             }
         }
 
-     
         private static ResourceDictionary CreateLanguageDictionary(string cultureCode)
         {
             string relativePath = cultureCode == "es-MX"
@@ -48,7 +39,6 @@ namespace DamasChinas_Client.UI.Utilities
             };
         }
 
-    
         private static ResourceDictionary FindExistingLanguageDictionary()
         {
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
@@ -56,7 +46,6 @@ namespace DamasChinas_Client.UI.Utilities
                 if (dictionary.Source != null)
                 {
                     string src = dictionary.Source.OriginalString;
-
                     if (src.Contains("Lang.en.xaml") || src.Contains("Lang.es.xaml"))
                     {
                         return dictionary;
@@ -64,14 +53,11 @@ namespace DamasChinas_Client.UI.Utilities
                 }
             }
 
-         
             return new ResourceDictionary();
         }
 
-      
         private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)
         {
-           
             if (existingDictionary.Source == null)
             {
                 Application.Current.Resources.MergedDictionaries.Add(newDictionary);
@@ -85,12 +71,10 @@ namespace DamasChinas_Client.UI.Utilities
             }
             else
             {
-             
                 Application.Current.Resources.MergedDictionaries.Add(newDictionary);
             }
         }
 
- 
         private static void EnsureThemeResources()
         {
             ResourceDictionary themeDictionary = new ResourceDictionary

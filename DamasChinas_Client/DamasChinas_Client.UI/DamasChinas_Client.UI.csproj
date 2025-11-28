@@ -122,6 +122,9 @@
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SelectAvatar.xaml.cs">
+      <DependentUpon>SelectAvatar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PopUps\ConfirmPopupWindow.xaml.cs">
       <DependentUpon>ConfirmPopupWindow.xaml</DependentUpon>
     </Compile>
@@ -196,7 +199,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Login.xaml" />
+    <Page Include="Pages\Login.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="Pages\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -232,6 +237,10 @@
     <Compile Include="Pages\ProfileUser.xaml.cs">
       <DependentUpon>ProfileUser.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\SelectAvatar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SelectLanguage.xaml" />
     <Compile Include="Pages\SelectLanguage.xaml.cs">
       <DependentUpon>SelectLanguage.xaml</DependentUpon>
@@ -432,6 +441,11 @@
     <Resource Include="Assets\Icons\soundIcon.png" />
     <Resource Include="Assets\Icons\stadisticsIcon.png" />
     <Resource Include="Assets\Icons\greenCheck.png" />
+    <Resource Include="Assets\Avatars\avatar1.png" />
+    <Resource Include="Assets\Avatars\avatar2.png" />
+    <Resource Include="Assets\Avatars\avatar3.png" />
+    <Resource Include="Assets\Avatars\avatar4.png" />
+    <Resource Include="Assets\Avatars\avatar5.png" />
     <Content Include="Assets\Sounds\background_music.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
