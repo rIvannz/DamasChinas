@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-namespace DamasChinas_Server
+namespace DamasChinas_Server.Interfaces
 {
     [ServiceContract]
     public interface IFriendService

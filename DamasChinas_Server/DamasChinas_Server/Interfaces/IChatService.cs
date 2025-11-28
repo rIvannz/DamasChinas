@@ -1,7 +1,7 @@
 using DamasChinas_Server.Dtos;
 using System.ServiceModel;
 
-namespace DamasChinas_Server
+namespace DamasChinas_Server.Interfaces
 {
     [ServiceContract(CallbackContract = typeof(IChatCallback))]
     public interface IChatService

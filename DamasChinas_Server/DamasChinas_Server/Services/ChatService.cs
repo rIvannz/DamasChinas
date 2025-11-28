@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using DamasChinas_Server.Dtos;
+using DamasChinas_Server.Interfaces;
 
 namespace DamasChinas_Server
 {

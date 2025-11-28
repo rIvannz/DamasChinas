@@ -3,7 +3,7 @@ using System.ServiceModel;
 using DamasChinas_Server.Contracts;
 
 
-namespace DamasChinas_Server
+namespace DamasChinas_Server.Interfaces
 {
     [ServiceContract]
     public interface ISingInService

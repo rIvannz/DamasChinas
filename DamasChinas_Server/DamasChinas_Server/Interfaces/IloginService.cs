@@ -3,7 +3,7 @@ using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
 using System.ServiceModel;
 
-namespace DamasChinas_Server
+namespace DamasChinas_Server.Interfaces
 {
 	[ServiceContract(CallbackContract = typeof(ILoginCallback), SessionMode = SessionMode.Required)]
 	public interface ILoginService

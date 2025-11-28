@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace DamasChinas_Server
+namespace DamasChinas_Server.Dtos
 {
 	[DataContract]
 	public class UserInfo

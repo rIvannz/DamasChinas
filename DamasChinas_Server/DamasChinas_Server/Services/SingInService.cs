@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using DamasChinas_Server.Interfaces;
+
 
 namespace DamasChinas_Server
 {
