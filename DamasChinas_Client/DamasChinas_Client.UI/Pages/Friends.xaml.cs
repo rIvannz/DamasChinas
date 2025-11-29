@@ -1,32 +1,57 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using DamasChinas_Client.UI.FriendServiceProxy;
-using DamasChinas_Client.UI.Utilities;
-using System.Windows.Navigation;
 using DamasChinas_Client.UI.Models;
-using System;
-using System.Diagnostics;
-using System.ServiceModel;
+using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI;  
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class Friends : Page
     {
-        public ObservableCollection<FriendList> FriendsList { get; } = new ObservableCollection<FriendList>();
+        private const string AvatarBasePath = "Assets/Icons/";
+        private const string DefaultAvatarFile = "avatarIcon.png";
+
+        public ObservableCollection<FriendList> FriendsList { get; } =
+            new ObservableCollection<FriendList>();
 
         public Friends()
         {
             InitializeComponent();
             DataContext = this;
 
-            Loaded += Friends_Loaded;
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+
+          
+            LoginCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
+            LoginCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
         }
 
-        private void Friends_Loaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Loaded -= Friends_Loaded;
             LoadFriends();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            
+            LoginCallbackHandler.PlayerDisconnectedEvent -= OnPlayerDisconnected;
+            LoginCallbackHandler.PlayerConnectedEvent -= OnPlayerConnected;
+        }
+
+        private static string BuildAvatarUri(string avatarFile)
+        {
+            string file = string.IsNullOrWhiteSpace(avatarFile)
+                ? DefaultAvatarFile
+                : avatarFile;
+
+            return PathProvider
+                .GetPackUri($"{AvatarBasePath}{file}")
+                .ToString();
         }
 
         private void LoadFriends()
@@ -35,7 +60,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 using (var client = new FriendServiceClient())
                 {
-                    var friends = client.GetFriends(ClientSession.safeUsername);
+                    var friends = client.GetFriends(ClientSession.SafeUsernameNormalized);
 
                     FriendsList.Clear();
 
@@ -45,137 +70,81 @@ namespace DamasChinas_Client.UI.Pages
                         {
                             Username = friend.Username,
                             EnLinea = friend.ConnectionState,
-                            Avatar = PathProvider.GetPackUri("Assets/Icons/avatarIcon.png").ToString()
+                            Avatar = BuildAvatarUri(friend.Avatar)
                         });
                     }
                 }
             }
-            catch (EndpointNotFoundException )
+            catch (Exception ex)
             {
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (TimeoutException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
-            }
-            catch (FaultException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
-            catch (System.Net.WebException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (Exception )
-            {
-                MessageHelper.ShowPopup(MessageKeys.FriendsLoadError, PopupType.Error);
+                Debug.WriteLine($"[Friends.LoadFriends] {ex.Message}");
             }
         }
+
+        // ============================================================
+        // HANDLERS DE EVENTOS DE SESIÓN
+        // ============================================================
+
+        private void OnPlayerDisconnected(string nickname)
+        {
+         
+            Dispatcher.Invoke(LoadFriends);
+        }
+
+        private void OnPlayerConnected(string nickname)
+        {
+            Dispatcher.Invoke(LoadFriends);
+        }
+
+        // ============================================================
+        // HANDLERS DE UI
+        // ============================================================
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.GoBack();
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception )
-            {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
+            NavigationService?.GoBack();
         }
 
         private void OnViewProfileClick(object sender, RoutedEventArgs e)
-{
-    try
-    {
-        if (sender is FrameworkElement element &&
-            element.DataContext is FriendList friend)
         {
-            var profilePage = new ProfileUser(friend.Username);
-
-            NavigationService?.Navigate(profilePage);
+            if (sender is Button btn && btn.DataContext is FriendList friend)
+            {
+                using (var client = new FriendServiceClient())
+                {
+                    var profile = client.GetFriendPublicProfile(friend.Username);
+                    NavigationService?.Navigate(new ProfileFriend(profile));
+                }
+            }
         }
-    }
-    catch (Exception )
-    {
-        MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-    }
-}
-
-
 
         private void OnChatClick(object sender, RoutedEventArgs e)
         {
-            try
+            if (sender is FrameworkElement element &&
+                element.DataContext is FriendList friend)
             {
-                if (sender is FrameworkElement element &&
-                    element.DataContext is FriendList friend)
-                {
-                    var chatWindow = new ChatWindow(friend.Username);
-                    chatWindow.Show();
-                }
+                var chatWindow = new ChatWindow(friend.Username);
+                chatWindow.Show();
             }
-            catch (InvalidOperationException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.ChatOpenError, PopupType.Error);
-            }
-
         }
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new ConfiSound());
-            }
-            catch (InvalidOperationException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception )
-            {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
+            NavigationService?.Navigate(new ConfiSound());
         }
 
         private void OnAddFriendClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new AddFriend());
-            }
-            catch (Exception )
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
+            NavigationService?.Navigate(new AddFriend());
         }
 
         private void OnViewPendingRequestsClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new PendingFriendRequests());
-            }
-            catch (Exception )
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
+            NavigationService?.Navigate(new PendingFriendRequests());
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.Navigate(new SelectLanguage());
-            }
-            catch (InvalidOperationException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
+            NavigationService?.Navigate(new SelectLanguage());
         }
     }
 }

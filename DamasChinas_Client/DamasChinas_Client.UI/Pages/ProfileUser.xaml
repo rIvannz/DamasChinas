@@ -15,7 +15,7 @@
         </Grid.Background>
         <Rectangle Fill="#66000000"/>
 
-        <!-- ===== ESTRUCTURA PRINCIPAL ===== -->
+        <!-- ===== CONTENEDOR PRINCIPAL ===== -->
         <Grid Margin="40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -44,7 +44,6 @@
                            RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
 
-                <!-- Título -->
                 <TextBlock Grid.Column="1"
                            Text="{DynamicResource profile}"
                            FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
@@ -54,131 +53,73 @@
                            Margin="15,0,0,0"/>
             </Grid>
 
-            <!-- ===== CONTENIDO ===== -->
+            <!-- ===== CUERPO ===== -->
             <Border Grid.Row="1"
                     Background="#80222222"
                     BorderBrush="#444"
                     BorderThickness="1"
                     CornerRadius="10"
                     Padding="25"
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Stretch"
                     Margin="0,0,0,10">
+
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="1.3*"/>
-                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1.6*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- ===== PERFIL ===== -->
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="1.6*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Información del perfil -->
-                        <Grid Grid.Column="0" Margin="10,10,20,10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
-                                       Text="{DynamicResource yourProfile}"
-                                       FontSize="32"
-                                       FontWeight="Bold"
-                                       Foreground="White"
-                                       Margin="0,0,0,12"/>
-
-                            <!-- Username -->
-                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,36,20,0">
-                                <TextBlock Text="{DynamicResource username}" FontSize="24" Foreground="White"/>
-                                <TextBlock x:Name="UsernameTextBlock" Text="UserExample" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                            </StackPanel>
-
-                            <!-- Full Name -->
-                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,20,0">
-                                <TextBlock Text="{DynamicResource fullName}" FontSize="25" Foreground="White"/>
-                                <TextBlock x:Name="FullNameTextBlock" Text="Nombre Apellido" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                            </StackPanel>
-                        </Grid>
-
-                        <!-- Avatar + Botones -->
-                        <StackPanel Grid.Column="1"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,10,0"
-                                    Width="220">
-                            <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/avatarIcon.png"
-                                   Width="120" Height="120"
-                                   Margin="0,0,0,16"
-                                   Stretch="Uniform"
-                                   RenderOptions.BitmapScalingMode="HighQuality"/>
-
-                            <Button Style="{DynamicResource BaseGameButton}"
-                                    Content="{DynamicResource deleteFriend}"
-                                    Width="180" Height="44"
-                                    Margin="0,0,0,10"
-                                    Click="OnDeleteFriendClick"/>
-
-                            <Button Style="{DynamicResource BaseGameButton}"
-                                    Content="{DynamicResource blockUser}"
-                                    Width="180" Height="44"
-                                    Background="#444" BorderBrush="#333"
-                                    Click="OnBlockUserClick"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- ===== ESTADÍSTICAS ===== -->
-                    <Grid Grid.Row="1" Margin="0,20,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Text="{DynamicResource statistics}"
+                    <!-- ===== INFORMACIÓN DEL INVITADO ===== -->
+                    <StackPanel Grid.Column="0" Margin="20">
+                        <TextBlock Text="{DynamicResource guestProfileTitle}"
                                    FontSize="32"
                                    FontWeight="Bold"
                                    Foreground="White"
-                                   Margin="6,0,0,8"/>
+                                   Margin="0,0,0,12"/>
 
-                        <Grid Grid.Row="1" Margin="10,0,10,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource username}"
+                                   FontSize="24"
+                                   Foreground="White"/>
+                        <TextBlock x:Name="UsernameTextBlock"
+                                   FontSize="22"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,4,0,20"/>
 
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource matchesPlayed}" FontSize="23" Foreground="White"/>
-                                <TextBlock x:Name="MatchesPlayedTextBlock" Text="0" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                            </StackPanel>
+                        <TextBlock Text="{DynamicResource guestProfileUnavailable}"
+                                   FontSize="20"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   TextWrapping="Wrap"
+                                   Width="360"/>
+                    </StackPanel>
 
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource wins}" FontSize="23" Foreground="White"/>
-                                <TextBlock x:Name="WinsTextBlock" Text="0" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                            </StackPanel>
+                    <!-- ===== AVATAR ===== -->
+                    <StackPanel Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0,0,10,0"
+                                Width="220">
 
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource loses}" FontSize="23" Foreground="White"/>
-                                <TextBlock x:Name="LosesTextBlock" Text="0" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
+                        <Border Width="140" Height="140"
+                                BorderBrush="White"
+                                BorderThickness="3"
+                                CornerRadius="8"
+                                Margin="0,20">
+                            <Image x:Name="AvatarImage"
+                                   Stretch="UniformToFill"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   ClipToBounds="True"/>
+                        </Border>
+                    </StackPanel>
+
                 </Grid>
             </Border>
 
-            <!-- ===== ICONOS ABAJO DERECHA ===== -->
+            <!-- ===== ICONOS DERECHA INFERIOR ===== -->
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         Margin="0,10,10,0">
+
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
@@ -187,6 +128,7 @@
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                            Width="26" Height="26"/>
                 </Button>
+
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
@@ -196,6 +138,7 @@
                            Width="26" Height="26"/>
                 </Button>
             </StackPanel>
+
         </Grid>
     </Grid>
 </Page>

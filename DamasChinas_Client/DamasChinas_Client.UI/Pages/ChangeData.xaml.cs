@@ -136,9 +136,7 @@ namespace DamasChinas_Client.UI.Pages
             txtCurrentUsername.Text = newUsername;
         }
 
-        // ============================================================
-        // CAMBIO DE CONTRASEÑA
-        // ============================================================
+
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
         {
             TryExecuteAction(() =>
@@ -257,9 +255,7 @@ namespace DamasChinas_Client.UI.Pages
             txtConfirmPassword.Password = string.Empty;
         }
 
-        // ============================================================
-        // CARGA DE PERFIL — NO SE BORRA NADA
-        // ============================================================
+
         private void LoadProfileData()
         {
             try
@@ -284,9 +280,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // MÉTODO CENTRALIZADO DE ACCIONES
-        // ============================================================
+
         private static void TryExecuteAction(Action action, string errorKey)
         {
             try

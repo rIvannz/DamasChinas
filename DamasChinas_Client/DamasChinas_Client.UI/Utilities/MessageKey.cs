@@ -126,6 +126,17 @@ namespace DamasChinas_Client.UI.Utilities
         public const string InvalidEmailTooLong = "msg_InvalidEmailTooLong";
         public const string InvalidEmailFormat = "msg_InvalidEmailFormat";
 
+        // ========================
+        // Guest / Invitados
+        // ========================
+        public const string GuestProfile = "msg_GuestProfile";
+        public const string GuestNoEmail = "msg_GuestNoEmail";
+        public const string GuestProfileUnavailable = "msg_GuestProfileUnavailable";
+        public const string GuestAccountWarning = "msg_GuestAccountWarning";
+        public const string GuestProfileTitle = "guestProfileTitle";
+
+
+
 
         // ========================
         // Lenguaje
