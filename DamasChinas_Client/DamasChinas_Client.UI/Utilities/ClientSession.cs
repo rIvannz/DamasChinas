@@ -1,6 +1,7 @@
 using System;
 using System.ServiceModel;
 using DamasChinas_Client.UI.LogInServiceProxy;
+using DamasChinas_Client.UI.SessionServiceProxy;
 
 namespace DamasChinas_Client.UI.Utilities
 {
@@ -12,12 +13,18 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static ILoginServiceCallback CallbackHandler { get; private set; }
 
+     
+        public static SessionServiceClient SessionClient { get; set; }
+
         public static PublicProfile CurrentProfile
         {
             get
             {
                 if (_currentProfile == null)
-                    throw new InvalidOperationException("No hay una sesión activa. Inicia sesión primero.");
+                {
+                    throw new InvalidOperationException(
+                        "No hay una sesión activa. Inicia sesión primero.");
+                }
 
                 return _currentProfile;
             }
@@ -25,19 +32,16 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static bool IsLoggedIn => _currentProfile != null;
 
-
-
+    
         public static string safeUsername =>
-          _currentProfile == null
-              ? null
-              : _currentProfile.Username;
+            _currentProfile == null
+                ? null
+                : _currentProfile.Username;
 
         public static string SafeUsernameNormalized =>
-     _currentProfile == null
-         ? null
-         : _currentProfile.Username?.Trim()?.ToLower();
-
-
+            _currentProfile == null
+                ? null
+                : _currentProfile.Username?.Trim()?.ToLower();
 
         public static void Initialize(
             PublicProfile profile,
@@ -49,10 +53,9 @@ namespace DamasChinas_Client.UI.Utilities
             CallbackHandler = callback ?? throw new ArgumentNullException(nameof(callback));
         }
 
-
-
         public static void Clear()
         {
+          
             try
             {
                 if (LoginClient != null)
@@ -72,11 +75,30 @@ namespace DamasChinas_Client.UI.Utilities
                 LoginClient?.Abort();
             }
 
+     
+            try
+            {
+                if (SessionClient != null)
+                {
+                    if (SessionClient.State != CommunicationState.Faulted)
+                    {
+                        SessionClient.Close();
+                    }
+                    else
+                    {
+                        SessionClient.Abort();
+                    }
+                }
+            }
+            catch
+            {
+                SessionClient?.Abort();
+            }
+
             LoginClient = null;
+            SessionClient = null;
             CallbackHandler = null;
             _currentProfile = null;
         }
-
-
     }
 }

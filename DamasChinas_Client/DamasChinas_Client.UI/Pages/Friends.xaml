@@ -8,7 +8,7 @@
       d:DesignHeight="720" d:DesignWidth="1280">
 
     <Grid>
-        <!-- Fondo de madera -->
+        <!-- Fondo -->
         <Grid.Background>
             <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
                         Stretch="UniformToFill"/>
@@ -31,7 +31,6 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Botón Back -->
                 <Button Width="60" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
@@ -43,7 +42,6 @@
                            Stretch="Uniform"/>
                 </Button>
 
-                <!-- Título -->
                 <TextBlock Grid.Column="1"
                            Text="{DynamicResource friendsList}"
                            Foreground="White"
@@ -53,7 +51,6 @@
                            TextAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                <!-- Botones a la derecha -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
@@ -73,7 +70,7 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Contenido -->
+            <!-- Lista -->
             <Border Grid.Row="1"
                     Background="#80222222"
                     BorderBrush="#444"
@@ -84,7 +81,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
 
-                    <ItemsControl x:Name="FriendsListControl" ItemsSource="{Binding FriendsList}" Margin="10">
+                    <ItemsControl ItemsSource="{Binding FriendsList}" Margin="10">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
 
@@ -107,18 +104,10 @@
                                         <!-- Estado -->
                                         <Ellipse Width="16" Height="16"
                                                  VerticalAlignment="Center"
-                                                 Margin="5,0,10,0">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="Gray"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding EnLinea}" Value="True">
-                                                            <Setter Property="Fill" Value="#4CAF50"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
+                                                 Margin="5,0,10,0"
+                                                 Fill="{Binding Status, Converter={StaticResource StatusToColor}}"
+                                                 Stroke="Black"
+                                                 StrokeThickness="1"/>
 
                                         <!-- Avatar -->
                                         <Image Grid.Column="1"
@@ -128,14 +117,12 @@
                                                Margin="0,0,15,0"
                                                ClipToBounds="True"/>
 
-                                        <!-- Username -->
                                         <TextBlock Grid.Column="2"
                                                    Text="{Binding Username}"
                                                    Foreground="White"
                                                    FontSize="18"
                                                    VerticalAlignment="Center"/>
 
-                                        <!-- Ver perfil -->
                                         <Button Grid.Column="3"
                                                 Width="130"
                                                 Height="40"
@@ -144,7 +131,6 @@
                                                 Margin="10,0,10,0"
                                                 Click="OnViewProfileClick"/>
 
-                                        <!-- Chat -->
                                         <Button Grid.Column="4"
                                                 Background="Transparent"
                                                 BorderThickness="0"
@@ -153,8 +139,8 @@
                                                 Click="OnChatClick">
 
                                             <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/chatIcon.png"
-                                                   Width="30" Height="30"
-                                                   Stretch="Uniform"/>
+                                                   Width="30"
+                                                   Height="30"/>
                                         </Button>
 
                                     </Grid>
@@ -168,16 +154,13 @@
                 </ScrollViewer>
             </Border>
 
-            <!-- Iconos inferiores -->
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom">
-
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
-                        ToolTip="{DynamicResource sound}"
                         Click="OnSoundClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                            Width="26" Height="26"/>
@@ -186,12 +169,10 @@
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
-                        ToolTip="{DynamicResource language}"
                         Click="OnLanguageClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
                            Width="26" Height="26"/>
                 </Button>
-
             </StackPanel>
 
         </Grid>

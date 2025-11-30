@@ -14,8 +14,7 @@
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
-      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/" />
-      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IFriendService_GetFriends_InputMessage">

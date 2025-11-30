@@ -235,7 +235,7 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PublicFriendProfile", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicFriendProfile", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
     public partial class PublicFriendProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -246,10 +246,16 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         private string AvatarFileField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LastNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LosesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int MatchesPlayedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SocialUrlField;
@@ -284,6 +290,19 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastName {
+            get {
+                return this.LastNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public int Loses {
             get {
                 return this.LosesField;
@@ -305,6 +324,19 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
                 if ((this.MatchesPlayedField.Equals(value) != true)) {
                     this.MatchesPlayedField = value;
                     this.RaisePropertyChanged("MatchesPlayed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }

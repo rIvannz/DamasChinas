@@ -125,6 +125,17 @@ namespace DamasChinas_Server
             );
         }
 
+        public PublicFriendProfile GetFriendPublicProfile(string friendUsername)
+        {
+            return ExecuteOperation(
+                () => _repo.GetFriendPublicProfile(friendUsername),
+                "GetFriendPublicProfile",
+                faultOnValidation: true
+            );
+        }
+
+
+
 
         private T ExecuteOperation<T>(
             Func<T> func,

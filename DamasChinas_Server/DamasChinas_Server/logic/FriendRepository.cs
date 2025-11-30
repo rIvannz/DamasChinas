@@ -351,6 +351,53 @@ namespace DamasChinas_Server
             }
         }
 
+        public PublicFriendProfile GetFriendPublicProfile(string username)
+        {
+            int id = _userRepo.GetUserIdByUsername(username);
+
+            using (var db = CréateDbContext())
+            {
+                var user = db.usuarios
+                    .Include(u => u.perfiles)
+                    .FirstOrDefault(u => u.id_usuario == id);
+
+                if (user == null)
+                {
+                    throw new RepositoryValidationException(MessageCode.UserNotFound);
+                }
+
+                var profile = user.perfiles.FirstOrDefault();
+
+
+
+                var statsQuery = db.participantes_partida
+                    .Where(p => p.id_jugador == id);
+
+                int matchesPlayed = statsQuery.Count();
+                int wins = statsQuery.Count(p => p.posicion_final == 1);
+                int loses = matchesPlayed - wins;
+
+
+
+                return new PublicFriendProfile
+                {
+                    Username = profile?.username ?? "",
+                    Name = profile?.nombre ?? "",
+                    LastName = profile?.apellido_materno ?? "",
+                    SocialUrl = profile?.url ?? "",
+                    AvatarFile = profile?.imagen_perfil ?? "avatarIcon.png",
+
+                    MatchesPlayed = matchesPlayed,
+                    Wins = wins,
+                    Loses = loses
+                };
+            }
+        }
+
+
+
+
+
         public bool DeleteFriendAndBlock(string blockerUsername, string blockedUsername)
         {
             var ids = GetUserIds(blockerUsername, blockedUsername);

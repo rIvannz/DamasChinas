@@ -3,19 +3,10 @@
 namespace DamasChinas_Server.Dtos
 {
     [DataContract]
-    public class PublicFriendProfile
+    public class RankingEntry
     {
         [DataMember]
         public string Username { get; set; }
-
-        [DataMember]
-        public string Name { get; set; }
-
-        [DataMember]
-        public string LastName { get; set; }
-
-        [DataMember]
-        public string SocialUrl { get; set; }
 
         [DataMember]
         public string AvatarFile { get; set; }
@@ -28,5 +19,8 @@ namespace DamasChinas_Server.Dtos
 
         [DataMember]
         public int Loses { get; set; }
+
+        [DataMember]
+        public double WinRate { get; set; }
     }
 }

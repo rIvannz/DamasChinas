@@ -1,5 +1,7 @@
-﻿using DamasChinas_Client.UI.LogInServiceProxy;
+﻿using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.PopUps;
+using DamasChinas_Client.UI.SessionServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Diagnostics;
@@ -17,7 +19,6 @@ namespace DamasChinas_Client.UI.Pages
         {
             InitializeComponent();
         }
-
 
         private async void OnLoginClick(object sender, RoutedEventArgs e)
         {
@@ -47,12 +48,11 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - Network] {ex}");
-
                 await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (loading != null && loading.IsVisible)
+                    if (loading?.IsVisible == true)
                     {
                         loading.Close();
                     }
@@ -63,12 +63,11 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - General] {ex}");
-
                 await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (loading != null && loading.IsVisible)
+                    if (loading?.IsVisible == true)
                     {
                         loading.Close();
                     }
@@ -105,35 +104,71 @@ namespace DamasChinas_Client.UI.Pages
             return window;
         }
 
-
         private static LoginServiceClient CreateLoginClient(out LoginCallbackHandler callback)
         {
             callback = new LoginCallbackHandler();
-            return new LoginServiceClient(new InstanceContext(callback));
-        }
+            var context = new InstanceContext(callback);
 
+            var client = new LoginServiceClient(context);
+
+           
+            callback.AttachClient(client);
+
+            return client;
+        }
 
         private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loading, LoginServiceClient client)
         {
             var channel = client.InnerChannel;
 
+            // =============================
+            // MANEJO DE PÉRDIDA DE CONEXIÓN
+            // =============================
             channel.Faulted += (_, __) => HandleConnectionLoss(loading);
             channel.Closed += (_, __) => HandleConnectionLoss(loading);
 
-
+            // =============================
+            // LOGIN OK
+            // =============================
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-             
+                    // Cerrar el loading si sigue abierto
+                    if (loading?.IsVisible == true)
+                    {
+                        loading.Close();
+                    }
+
+                    // 1) GUARDAR SESIÓN (tu forma original)
                     ClientSession.Initialize(profile, client, callback);
-                    TryNavigateToMenu(profile, loading);
+
+                    // 2) SUSCRIBIR AL SERVICIO DE SESIÓN (nuevamente agregado aquí)
+                    try
+                    {
+                        var sessionCallback = new SessionCallbackHandler();
+                        var ctx = new InstanceContext(sessionCallback);
+                        var sessionClient = new SessionServiceClient(ctx);
+
+                        sessionClient.Subscribe(profile.Username);
+
+                        ClientSession.SessionClient = sessionClient;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[Login.ConfigureCallback] Error al suscribir SessionService: {ex.Message}");
+                    }
+
+                    // 3) NAVEGAR AL MENÚ (manteniendo tu conversión actual)
+                    TryNavigateToMenu(profile);
                 });
             };
 
-
+            // =============================
+            // LOGIN ERROR
+            // =============================
             callback.LoginError += async code =>
             {
                 string msg = MessageTranslator.GetLocalizedMessage(code);
@@ -142,7 +177,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (loading.IsVisible)
+                    if (loading?.IsVisible == true)
                     {
                         loading.Close();
                     }
@@ -153,13 +188,14 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
+
         private static async void HandleConnectionLoss(LoadingWindow loading)
         {
             await SafeWait(loading);
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (loading != null && loading.IsVisible)
+                if (loading?.IsVisible == true)
                 {
                     loading.Close();
                 }
@@ -185,16 +221,11 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
-        private void TryNavigateToMenu(PublicProfile profile, LoadingWindow loading)
+        private void TryNavigateToMenu(PublicProfile profile)
         {
             try
             {
-                if (loading != null && loading.IsVisible)
-                {
-                    loading.Close();
-                }
-
+                // Convertimos al tipo del AccountManager
                 var converted = new AccountManagerServiceProxy.PublicProfile
                 {
                     Name = profile.Name,
@@ -217,7 +248,6 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
-
 
         private void ExecuteLogin(LoginServiceClient client, string username, string hashedPassword)
         {

@@ -1,10 +1,10 @@
-using System;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-
 using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.Utilities;
+using System;
+using System.Diagnostics;
+using System.ServiceModel;
+using System.Windows;
+using System.Windows.Controls;
 using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
 namespace DamasChinas_Client.UI.Pages
@@ -100,15 +100,27 @@ namespace DamasChinas_Client.UI.Pages
                 if (!confirm)
                     return;
 
-                ClientSession.Clear();
+                var username = ClientSession.CurrentProfile?.Username;
+                var sessionClient = ClientSession.SessionClient;
 
-                if (NavigationService == null)
+                if (!string.IsNullOrWhiteSpace(username) &&
+                    sessionClient != null &&
+                    sessionClient.State == CommunicationState.Opened)
                 {
-                    MessageHelper.ShowPopup(NavigationError, PopupType.Error);
-                    return;
+                    try
+                    {
+                        sessionClient.Unsubscribe(username);
+                        sessionClient.Close();
+                    }
+                    catch
+                    {
+                        sessionClient.Abort();
+                    }
                 }
 
-                NavigationService.Navigate(new MainWindow());
+                ClientSession.Clear();
+
+                NavigationService?.Navigate(new MainWindow());
             }
             catch (Exception ex)
             {
@@ -116,6 +128,7 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
+
 
         private void OnChangeDataClick(object sender, RoutedEventArgs e)
         {

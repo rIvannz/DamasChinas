@@ -4,13 +4,11 @@ using DamasChinas_Server.Dtos;
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace DamasChinas_Server.Interfaces
+namespace DamasChinas_Server.Interfaces   
 {
     [ServiceContract]
     public interface IFriendService
     {
-
-
         [OperationContract]
         [FaultContract(typeof(MessageCode))]
         List<FriendDto> GetFriends(string username);
@@ -19,6 +17,9 @@ namespace DamasChinas_Server.Interfaces
         [FaultContract(typeof(MessageCode))]
         List<FriendDto> GetFriendRequests(string username);
 
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        PublicFriendProfile GetFriendPublicProfile(string friendUsername);
 
         [OperationContract]
         OperationResult SendFriendRequest(string senderUsername, string receiverUsername);

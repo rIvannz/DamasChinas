@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
-  <xs:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/" />
-  <xs:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+  <xs:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
   <xs:element name="GetFriends">
     <xs:complexType>
       <xs:sequence>
@@ -41,7 +40,7 @@
   <xs:element name="GetFriendPublicProfileResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="GetFriendPublicProfileResult" nillable="true" type="q3:PublicFriendProfile" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="GetFriendPublicProfileResult" nillable="true" type="q3:PublicFriendProfile" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

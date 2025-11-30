@@ -30,7 +30,7 @@ namespace DamasChinas_Server
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-  
+
         public void Login(LoginRequest loginRequest)
         {
             ExecuteOperation(
@@ -42,7 +42,6 @@ namespace DamasChinas_Server
 
                     var profile = _repository.Login(loginRequest);
 
-                    SessionManager.AddSession(profile.Username, callback);
 
                     _log.Info($"[{OperationLogin}] Login exitoso: {profile.Username}");
 
@@ -59,6 +58,7 @@ namespace DamasChinas_Server
                 }
             );
         }
+
 
         private void ExecuteOperation(Action action, string context, Action<Exception> onError = null)
         {

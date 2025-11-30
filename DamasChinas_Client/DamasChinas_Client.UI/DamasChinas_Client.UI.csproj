@@ -68,8 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ChatCallback.cs" />
-    <Compile Include="LoginCallbackHandler.cs" />
+    <Compile Include="Callbacks\SessionCallbackHandler.cs" />
+    <Compile Include="Callbacks\ChatCallback.cs" />
+    <Compile Include="Callbacks\LoginCallbackHandler.cs" />
     <Compile Include="Connected Services\AccountManagerServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -95,11 +96,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\SessionServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\SingInServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Converters\FriendStatusToColorConverter.cs" />
     <Compile Include="Models\LobbySummary.cs" />
     <Compile Include="Pages\AddFriend.xaml.cs">
       <DependentUpon>AddFriend.xaml</DependentUpon>
@@ -147,6 +154,7 @@
     <Compile Include="Utilities\ClientValidationException.cs" />
     <Compile Include="Utilities\FriendList.cs" />
     <Compile Include="Utilities\ClientSession.cs" />
+    <Compile Include="Utilities\FriendStatus.cs" />
     <Compile Include="Utilities\Hasher.cs" />
     <Compile Include="Utilities\HostVisibilityConverter.cs" />
     <Compile Include="Utilities\LoaderBar.xaml.cs">
@@ -319,6 +327,9 @@
     <None Include="Connected Services\AccountManagerServiceProxy\item5.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item6.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.FriendDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -342,9 +353,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\FriendServiceProxy\item34.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\FriendServiceProxy\item35.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\Arrays.xsd">
@@ -392,6 +400,13 @@
     <None Include="Connected Services\MensajeriaService\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\SessionServiceProxy\service.wsdl" />
+    <None Include="Connected Services\SessionServiceProxy\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SessionServiceProxy\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\SingInServiceProxy\DamasChinas_Client.UI.SingInServiceProxy.OperationResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -416,6 +431,12 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\SessionServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\SessionServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\SessionServiceProxy\configuration91.svcinfo" />
     <None Include="Connected Services\FriendServiceProxy\item.disco" />
     <None Include="Connected Services\LogInServiceProxy\item1.disco" />
     <None Include="Connected Services\AccountManagerServiceProxy\item1.disco" />
@@ -517,6 +538,7 @@
     <WCFMetadataStorage Include="Connected Services\LobbyServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\MensajeriaService\" />
+    <WCFMetadataStorage Include="Connected Services\SessionServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

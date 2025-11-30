@@ -12,16 +12,16 @@ namespace DamasChinas_Server.Services
 
         private static readonly ILogService _log = LogFactory.Create(typeof(SessionManager));
 
-    
-
         private const string OperationAddSession = nameof(AddSession);
         private const string OperationRemoveSession = nameof(RemoveSession);
         private const string OperationGetSession = nameof(GetSession);
         private const string OperationIsOnline = nameof(IsOnline);
         private const string OperationUpdateSessionUsername = nameof(UpdateSessionUsername);
+        private const string OperationForEachSession = nameof(ForEachSession);
 
-      
-
+        // ============================================================
+        // AGREGAR SESIÓN
+        // ============================================================
         public static void AddSession(string username, ISessionCallback callback)
         {
             ExecuteOperation(() =>
@@ -31,6 +31,9 @@ namespace DamasChinas_Server.Services
             }, OperationAddSession);
         }
 
+        // ============================================================
+        // REMOVER SESIÓN
+        // ============================================================
         public static void RemoveSession(string nickname)
         {
             ExecuteOperation(() =>
@@ -40,6 +43,9 @@ namespace DamasChinas_Server.Services
             }, OperationRemoveSession);
         }
 
+        // ============================================================
+        // OBTENER SESIÓN
+        // ============================================================
         public static ISessionCallback GetSession(string nickname)
         {
             return ExecuteOperation(
@@ -54,13 +60,15 @@ namespace DamasChinas_Server.Services
             );
         }
 
+        // ============================================================
+        // DETERMINAR SI UN USUARIO ESTÁ ONLINE
+        // ============================================================
         public static bool IsOnline(string nickname)
         {
             return ExecuteOperation(
                 () =>
                 {
                     bool online = ActiveSessions.ContainsKey(nickname);
-         
                     return online;
                 },
                 OperationIsOnline,
@@ -68,6 +76,28 @@ namespace DamasChinas_Server.Services
             );
         }
 
+        public static void ForEachSession(Action<ISessionCallback> action)
+        {
+            ExecuteOperation(() =>
+            {
+                foreach (var entry in ActiveSessions.ToArray())
+                {
+                    try
+                    {
+                        action(entry.Value);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        ActiveSessions.TryRemove(entry.Key, out _); // 🔥 Limpieza automática
+                    }
+                }
+            }, OperationForEachSession);
+        }
+
+        // ============================================================
+        // ACTUALIZAR USERNAME DE SESIÓN
+        // ============================================================
         public static void UpdateSessionUsername(string currentUsername, string newUsername)
         {
             ExecuteOperation(() =>
@@ -87,7 +117,28 @@ namespace DamasChinas_Server.Services
             }, OperationUpdateSessionUsername);
         }
 
-     
+        // ============================================================
+        // ITERAR SOBRE TODAS LAS SESIONES (CON USERNAME)
+        // ============================================================
+        public static void ForEachSession(Action<string, ISessionCallback> action)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            ExecuteOperation(() =>
+            {
+                foreach (var kvp in ActiveSessions)
+                {
+                    action(kvp.Key, kvp.Value);
+                }
+            }, OperationForEachSession);
+        }
+
+        // ============================================================
+        // WRAPPERS ESTÁNDAR
+        // ============================================================
         private static void ExecuteOperation(Action action, string context)
         {
             try

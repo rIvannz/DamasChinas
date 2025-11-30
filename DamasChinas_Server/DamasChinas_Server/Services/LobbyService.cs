@@ -15,11 +15,9 @@ namespace DamasChinas_Server.Services
         ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class LobbyService : ILobbyService
     {
-
         protected LobbyService()
         {
         }
-
 
         private readonly ConcurrentDictionary<string, Lobby> _lobbies =
             new ConcurrentDictionary<string, Lobby>();
@@ -27,14 +25,15 @@ namespace DamasChinas_Server.Services
         private readonly ConcurrentDictionary<int, ILobbyCallback> _connections =
             new ConcurrentDictionary<int, ILobbyCallback>();
 
-
         private static ILobbyCallback CurrentCallback =>
             OperationContext.Current.GetCallbackChannel<ILobbyCallback>();
-
 
         private static string NewCode() =>
             Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
 
+        // ============================================
+        // CREATE LOBBY
+        // ============================================
 
         public Lobby CreateLobby(int hostUserId, string hostUsername, bool isPrivate)
         {
@@ -60,6 +59,9 @@ namespace DamasChinas_Server.Services
             return lobby;
         }
 
+        // ============================================
+        // JOIN LOBBY
+        // ============================================
 
         public Lobby JoinLobby(string code, int userId, string username)
         {
@@ -67,9 +69,6 @@ namespace DamasChinas_Server.Services
                 throw new FaultException(MessageCode.LobbyNotFound.ToString());
 
             ValidateLobbyStatus(lobby);
-
-            if (lobby.BannedUsers.Contains(userId))
-                throw new FaultException(MessageCode.LobbyUserBanned.ToString());
 
             AddMemberIfNotExists(lobby, userId, username);
 
@@ -104,14 +103,9 @@ namespace DamasChinas_Server.Services
 
         private void NotifyJoin(Lobby lobby, int newUserId, string username)
         {
-            var recipients = lobby.Members
-                .Where(m => _connections.ContainsKey(m.UserId))
-                .Select(m => m.UserId)
-                .ToList();
-
-            foreach (var memberId in recipients)
+            foreach (var member in lobby.Members)
             {
-                if (_connections.TryGetValue(memberId, out var cb))
+                if (_connections.TryGetValue(member.UserId, out var cb))
                 {
                     Task.Run(() =>
                     {
@@ -126,13 +120,16 @@ namespace DamasChinas_Server.Services
                         }
                         catch
                         {
-                            _connections.TryRemove(memberId, out _);
+                            _connections.TryRemove(member.UserId, out _);
                         }
                     });
                 }
             }
         }
 
+        // ============================================
+        // PUBLIC LOBBIES
+        // ============================================
 
         public List<Lobby> GetPublicLobbies()
         {
@@ -143,6 +140,9 @@ namespace DamasChinas_Server.Services
                 .ToList();
         }
 
+        // ============================================
+        // LEAVE LOBBY
+        // ============================================
 
         public bool LeaveLobby(string code, int userId)
         {
@@ -158,7 +158,6 @@ namespace DamasChinas_Server.Services
                 CloseLobby(lobby);
 
             CleanupInactiveLobbies();
-
             return true;
         }
 
@@ -175,14 +174,9 @@ namespace DamasChinas_Server.Services
 
         private void NotifyMembersLeft(Lobby lobby, int userId)
         {
-            var recipients = lobby.Members
-                .Where(m => _connections.ContainsKey(m.UserId))
-                .Select(m => m.UserId)
-                .ToList();
-
-            foreach (var id in recipients)
+            foreach (var m in lobby.Members)
             {
-                if (_connections.TryGetValue(id, out var cb))
+                if (_connections.TryGetValue(m.UserId, out var cb))
                 {
                     try
                     {
@@ -190,22 +184,21 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        _connections.TryRemove(id, out _);
+                        _connections.TryRemove(m.UserId, out _);
                     }
                 }
             }
         }
 
+        // ============================================
+        // CLOSE LOBBY
+        // ============================================
+
         private void CloseLobby(Lobby lobby)
         {
-            var recipients = lobby.Members
-                .Where(m => _connections.ContainsKey(m.UserId))
-                .Select(m => m.UserId)
-                .ToList();
-
-            foreach (var id in recipients)
+            foreach (var m in lobby.Members)
             {
-                if (_connections.TryGetValue(id, out var cb))
+                if (_connections.TryGetValue(m.UserId, out var cb))
                 {
                     try
                     {
@@ -213,7 +206,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        _connections.TryRemove(id, out _);
+                        _connections.TryRemove(m.UserId, out _);
                     }
                 }
             }
@@ -232,7 +225,10 @@ namespace DamasChinas_Server.Services
                 _lobbies.TryRemove(code, out _);
         }
 
- 
+        // ============================================
+        // CHAT
+        // ============================================
+
         public void SendLobbyMessage(string code, int userId, string username, string message)
         {
             if (!_lobbies.TryGetValue(code, out var lobby))
@@ -240,9 +236,9 @@ namespace DamasChinas_Server.Services
 
             var utc = DateTime.UtcNow.ToString("o");
 
-            foreach (var id in lobby.Members.Select(m => m.UserId))
+            foreach (var m in lobby.Members)
             {
-                if (_connections.TryGetValue(id, out var cb))
+                if (_connections.TryGetValue(m.UserId, out var cb))
                 {
                     cb.OnMessageReceived(userId, username, message, utc);
                 }
@@ -251,6 +247,10 @@ namespace DamasChinas_Server.Services
 
         public Lobby GetLobby(string code) =>
             _lobbies.TryGetValue(code, out var lobby) ? lobby : null;
+
+        // ============================================
+        // BAN / KICK
+        // ============================================
 
         public bool KickMember(string code, int targetUserId)
         {
@@ -263,9 +263,6 @@ namespace DamasChinas_Server.Services
         public bool BanMember(string code, int targetUserId)
         {
             if (!_lobbies.TryGetValue(code, out var lobby))
-                return false;
-
-            if (lobby.BannedUsers.Contains(targetUserId))
                 return false;
 
             if (!RemoveMember(lobby, targetUserId))
@@ -291,14 +288,32 @@ namespace DamasChinas_Server.Services
             return true;
         }
 
+        // ============================================
+        // GAME STARTED ? USUARIOS EN PARTIDA
+        // ============================================
+
         public bool StartGame(string code)
         {
             if (!_lobbies.TryGetValue(code, out var lobby))
                 return false;
 
             foreach (var m in lobby.Members)
-                if (_connections.TryGetValue(m.UserId, out var cb))
-                    cb.OnGameStarted(code);
+            {
+           
+                SessionManager.ForEachSession(cb =>
+                {
+                    try
+                    {
+                        cb.PlayerInGame(m.Username);
+                    }
+                    catch { }
+                });
+
+                if (_connections.TryGetValue(m.UserId, out var cbLobby))
+                {
+                    cbLobby.OnGameStarted(code);
+                }
+            }
 
             return true;
         }

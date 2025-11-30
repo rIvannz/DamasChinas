@@ -1,12 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using DamasChinas_Client.UI.FriendServiceProxy;
-using DamasChinas_Client.UI.Models;
 using DamasChinas_Client.UI.Utilities;
-using DamasChinas_Client.UI;  
+using DamasChinas_Client.UI.Callbacks;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -15,9 +15,12 @@ namespace DamasChinas_Client.UI.Pages
         private const string AvatarBasePath = "Assets/Icons/";
         private const string DefaultAvatarFile = "avatarIcon.png";
 
-        public ObservableCollection<FriendList> FriendsList { get; } =
-            new ObservableCollection<FriendList>();
+        public ObservableCollection<FriendList> FriendsList { get; }
+            = new ObservableCollection<FriendList>();
 
+        // ============================================================
+        // CONSTRUCTOR
+        // ============================================================
         public Friends()
         {
             InitializeComponent();
@@ -26,11 +29,22 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-          
-            LoginCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
-            LoginCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
+            // ONLINE
+            SessionCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
+
+            // OFFLINE
+            SessionCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
+
+            // IN GAME
+            SessionCallbackHandler.PlayerInGameEvent += OnPlayerInGame;
+
+            // LEAVES GAME (back to Online)
+            SessionCallbackHandler.PlayerLeftGameEvent += OnPlayerLeftGame;
         }
 
+        // ============================================================
+        // LOAD / UNLOAD
+        // ============================================================
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             LoadFriends();
@@ -38,20 +52,19 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            
-            LoginCallbackHandler.PlayerDisconnectedEvent -= OnPlayerDisconnected;
-            LoginCallbackHandler.PlayerConnectedEvent -= OnPlayerConnected;
+            SessionCallbackHandler.PlayerConnectedEvent -= OnPlayerConnected;
+            SessionCallbackHandler.PlayerDisconnectedEvent -= OnPlayerDisconnected;
+            SessionCallbackHandler.PlayerInGameEvent -= OnPlayerInGame;
+            SessionCallbackHandler.PlayerLeftGameEvent -= OnPlayerLeftGame;
         }
 
+        // ============================================================
+        // CARGA INICIAL
+        // ============================================================
         private static string BuildAvatarUri(string avatarFile)
         {
-            string file = string.IsNullOrWhiteSpace(avatarFile)
-                ? DefaultAvatarFile
-                : avatarFile;
-
-            return PathProvider
-                .GetPackUri($"{AvatarBasePath}{file}")
-                .ToString();
+            string f = string.IsNullOrWhiteSpace(avatarFile) ? DefaultAvatarFile : avatarFile;
+            return PathProvider.GetPackUri($"{AvatarBasePath}{f}").ToString();
         }
 
         private void LoadFriends()
@@ -69,8 +82,10 @@ namespace DamasChinas_Client.UI.Pages
                         FriendsList.Add(new FriendList
                         {
                             Username = friend.Username,
-                            EnLinea = friend.ConnectionState,
-                            Avatar = BuildAvatarUri(friend.Avatar)
+                            Avatar = BuildAvatarUri(friend.Avatar),
+                            Status = friend.ConnectionState
+                                ? FriendStatus.Online
+                                : FriendStatus.Offline
                         });
                     }
                 }
@@ -82,18 +97,39 @@ namespace DamasChinas_Client.UI.Pages
         }
 
         // ============================================================
-        // HANDLERS DE EVENTOS DE SESIÓN
+        // EVENTOS DEL CALLBACK — ACTUALIZAN SOLO EL AMIGO NECESARIO
         // ============================================================
 
-        private void OnPlayerDisconnected(string nickname)
+        private void OnPlayerConnected(string username)
         {
-         
-            Dispatcher.Invoke(LoadFriends);
+            var f = FriendsList.FirstOrDefault(x => x.Username == username);
+            if (f == null) return;
+
+            Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
         }
 
-        private void OnPlayerConnected(string nickname)
+        private void OnPlayerDisconnected(string username)
         {
-            Dispatcher.Invoke(LoadFriends);
+            var f = FriendsList.FirstOrDefault(x => x.Username == username);
+            if (f == null) return;
+
+            Dispatcher.Invoke(() => f.Status = FriendStatus.Offline);
+        }
+
+        private void OnPlayerInGame(string username)
+        {
+            var f = FriendsList.FirstOrDefault(x => x.Username == username);
+            if (f == null) return;
+
+            Dispatcher.Invoke(() => f.Status = FriendStatus.InGame);
+        }
+
+        private void OnPlayerLeftGame(string username)
+        {
+            var f = FriendsList.FirstOrDefault(x => x.Username == username);
+            if (f == null) return;
+
+            Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
         }
 
         // ============================================================
@@ -115,11 +151,8 @@ namespace DamasChinas_Client.UI.Pages
                     {
                         var profile = client.GetFriendPublicProfile(friend.Username);
 
-
                         if (string.IsNullOrWhiteSpace(profile.Username))
-                        {
                             profile.Username = friend.Username;
-                        }
 
                         NavigationService?.Navigate(new ProfileFriend(profile));
                     }
@@ -127,19 +160,17 @@ namespace DamasChinas_Client.UI.Pages
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[Friends.OnViewProfileClick] {ex.Message}");
-                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
                 }
             }
         }
-
 
         private void OnChatClick(object sender, RoutedEventArgs e)
         {
             if (sender is FrameworkElement element &&
                 element.DataContext is FriendList friend)
             {
-                var chatWindow = new ChatWindow(friend.Username);
-                chatWindow.Show();
+                var chat = new ChatWindow(friend.Username);
+                chat.Show();
             }
         }
 
