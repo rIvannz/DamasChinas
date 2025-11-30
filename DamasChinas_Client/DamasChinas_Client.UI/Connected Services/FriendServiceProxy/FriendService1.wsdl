@@ -14,7 +14,8 @@
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
-      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IFriendService_GetFriends_InputMessage">
@@ -34,6 +35,15 @@
   </wsdl:message>
   <wsdl:message name="IFriendService_GetFriendRequests_MessageCodeFault_FaultMessage">
     <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q2:MessageCode" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendPublicProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendPublicProfile" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendPublicProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendPublicProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendPublicProfile_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q3:MessageCode" />
   </wsdl:message>
   <wsdl:message name="IFriendService_SendFriendRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:SendFriendRequest" />
@@ -76,6 +86,11 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetFriendRequestsResponse" message="tns:IFriendService_GetFriendRequests_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetFriendRequestsMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_GetFriendRequests_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetFriendPublicProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriendPublicProfile" message="tns:IFriendService_GetFriendPublicProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetFriendPublicProfileResponse" message="tns:IFriendService_GetFriendPublicProfile_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetFriendPublicProfileMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_GetFriendPublicProfile_MessageCodeFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SendFriendRequest">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequest" message="tns:IFriendService_SendFriendRequest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequestResponse" message="tns:IFriendService_SendFriendRequest_OutputMessage" />
@@ -114,6 +129,18 @@
     </wsdl:operation>
     <wsdl:operation name="GetFriendRequests">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/GetFriendRequests" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendPublicProfile">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/GetFriendPublicProfile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

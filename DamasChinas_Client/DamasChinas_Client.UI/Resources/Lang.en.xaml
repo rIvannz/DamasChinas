@@ -37,6 +37,17 @@
         You have no pending friend requests.
     </sys:String>
 
+    <!-- ===== INVITED USERS ===== -->
+    <sys:String  x:Key="msg_GuestProfile">Guest profile (not registered)</sys:String>
+    <sys:String  x:Key="msg_GuestNoEmail">This user has no email (guest)</sys:String>
+    <sys:String  x:Key="msg_GuestProfileUnavailable">This user is not registered, profile limited</sys:String>
+    <sys:String  x:Key="msg_GuestAccountWarning">Register to unlock full profile features</sys:String>
+    <sys:String x:Key="guestProfileTitle">Guest Profile</sys:String>
+    <sys:String x:Key="guestProfileUnavailable">This user is an unregistered guest. Only their username is available. Register to enable full profile and statistics.</sys:String>
+    <sys:String x:Key="guestNoEmail">No email (guest)</sys:String>
+
+
+
 
     <!-- ========================================================= -->
     <!--  MAIN MENU / CONFIGURATION                                -->

@@ -235,6 +235,131 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicFriendProfile", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.SerializableAttribute()]
+    public partial class PublicFriendProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AvatarFileField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LosesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MatchesPlayedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SocialUrlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AvatarFile {
+            get {
+                return this.AvatarFileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AvatarFileField, value) != true)) {
+                    this.AvatarFileField = value;
+                    this.RaisePropertyChanged("AvatarFile");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Loses {
+            get {
+                return this.LosesField;
+            }
+            set {
+                if ((this.LosesField.Equals(value) != true)) {
+                    this.LosesField = value;
+                    this.RaisePropertyChanged("Loses");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MatchesPlayed {
+            get {
+                return this.MatchesPlayedField;
+            }
+            set {
+                if ((this.MatchesPlayedField.Equals(value) != true)) {
+                    this.MatchesPlayedField = value;
+                    this.RaisePropertyChanged("MatchesPlayed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SocialUrl {
+            get {
+                return this.SocialUrlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SocialUrlField, value) != true)) {
+                    this.SocialUrlField = value;
+                    this.RaisePropertyChanged("SocialUrl");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Wins {
+            get {
+                return this.WinsField;
+            }
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts")]
     [System.SerializableAttribute()]
     public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -328,6 +453,13 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriendRequests", ReplyAction="http://tempuri.org/IFriendService/GetFriendRequestsResponse")]
         System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendRequestsAsync(string username);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriendPublicProfile", ReplyAction="http://tempuri.org/IFriendService/GetFriendPublicProfileResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/GetFriendPublicProfileMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.FriendServiceProxy.PublicFriendProfile GetFriendPublicProfile(string friendUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriendPublicProfile", ReplyAction="http://tempuri.org/IFriendService/GetFriendPublicProfileResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.PublicFriendProfile> GetFriendPublicProfileAsync(string friendUsername);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendService/SendFriendRequestResponse")]
         DamasChinas_Client.UI.FriendServiceProxy.OperationResult SendFriendRequest(string senderUsername, string receiverUsername);
         
@@ -400,6 +532,14 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         
         public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.FriendDto[]> GetFriendRequestsAsync(string username) {
             return base.Channel.GetFriendRequestsAsync(username);
+        }
+        
+        public DamasChinas_Client.UI.FriendServiceProxy.PublicFriendProfile GetFriendPublicProfile(string friendUsername) {
+            return base.Channel.GetFriendPublicProfile(friendUsername);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.FriendServiceProxy.PublicFriendProfile> GetFriendPublicProfileAsync(string friendUsername) {
+            return base.Channel.GetFriendPublicProfileAsync(friendUsername);
         }
         
         public DamasChinas_Client.UI.FriendServiceProxy.OperationResult SendFriendRequest(string senderUsername, string receiverUsername) {

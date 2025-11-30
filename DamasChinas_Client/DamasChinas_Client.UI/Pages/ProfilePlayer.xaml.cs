@@ -12,13 +12,13 @@ namespace DamasChinas_Client.UI.Pages
     public partial class ProfilePlayer : Page
     {
         private PublicProfile _profile;
-        private const string DefaultAvatarFile = "avatar1.png";
+        private const string DefaultAvatarFile = "avatarIcon.png";
 
         public ProfilePlayer()
         {
             InitializeComponent();
 
-           
+
             Loaded += OnPageLoaded;
 
             try
@@ -44,14 +44,14 @@ namespace DamasChinas_Client.UI.Pages
         {
             InitializeComponent();
 
-            Loaded += OnPageLoaded;   
+            Loaded += OnPageLoaded;
 
             _profile = profile ?? throw new ArgumentNullException(nameof(profile));
             UpdateProfileDisplay();
         }
 
         // ============================================================
-        
+
         // ============================================================
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {

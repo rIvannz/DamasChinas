@@ -58,9 +58,13 @@ namespace DamasChinas_Client.UI.Utilities
                 if (LoginClient != null)
                 {
                     if (LoginClient.State != CommunicationState.Faulted)
+                    {
                         LoginClient.Close();
+                    }
                     else
+                    {
                         LoginClient.Abort();
+                    }
                 }
             }
             catch
@@ -70,7 +74,9 @@ namespace DamasChinas_Client.UI.Utilities
 
             LoginClient = null;
             CallbackHandler = null;
+            _currentProfile = null;
         }
+
 
     }
 }

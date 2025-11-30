@@ -66,13 +66,14 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.Navigate(new Friends());
+                NavigationService?.GoBack();
             }
             catch
             {
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
+
 
         private void OnAcceptClick(object sender, RoutedEventArgs e)
         {

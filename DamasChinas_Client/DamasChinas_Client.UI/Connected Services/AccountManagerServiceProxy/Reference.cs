@@ -35,6 +35,12 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         private string LastNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LosesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MatchesPlayedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -42,6 +48,9 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -106,6 +115,32 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Loses {
+            get {
+                return this.LosesField;
+            }
+            set {
+                if ((this.LosesField.Equals(value) != true)) {
+                    this.LosesField = value;
+                    this.RaisePropertyChanged("Loses");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MatchesPlayed {
+            get {
+                return this.MatchesPlayedField;
+            }
+            set {
+                if ((this.MatchesPlayedField.Equals(value) != true)) {
+                    this.MatchesPlayedField = value;
+                    this.RaisePropertyChanged("MatchesPlayed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Name {
             get {
                 return this.NameField;
@@ -140,6 +175,19 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
                 if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
                     this.UsernameField = value;
                     this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Wins {
+            get {
+                return this.WinsField;
+            }
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
                 }
             }
         }
@@ -156,7 +204,7 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PublicFriendProfile", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PublicFriendProfile", Namespace="http://schemas.datacontract.org/2004/07/")]
     [System.SerializableAttribute()]
     public partial class PublicFriendProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -164,16 +212,22 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LastNameField;
+        private string AvatarFileField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NameField;
+        private int LosesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MatchesPlayedField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SocialUrlField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -186,27 +240,40 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LastName {
+        public string AvatarFile {
             get {
-                return this.LastNameField;
+                return this.AvatarFileField;
             }
             set {
-                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
-                    this.LastNameField = value;
-                    this.RaisePropertyChanged("LastName");
+                if ((object.ReferenceEquals(this.AvatarFileField, value) != true)) {
+                    this.AvatarFileField = value;
+                    this.RaisePropertyChanged("AvatarFile");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Name {
+        public int Loses {
             get {
-                return this.NameField;
+                return this.LosesField;
             }
             set {
-                if ((object.ReferenceEquals(this.NameField, value) != true)) {
-                    this.NameField = value;
-                    this.RaisePropertyChanged("Name");
+                if ((this.LosesField.Equals(value) != true)) {
+                    this.LosesField = value;
+                    this.RaisePropertyChanged("Loses");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MatchesPlayed {
+            get {
+                return this.MatchesPlayedField;
+            }
+            set {
+                if ((this.MatchesPlayedField.Equals(value) != true)) {
+                    this.MatchesPlayedField = value;
+                    this.RaisePropertyChanged("MatchesPlayed");
                 }
             }
         }
@@ -233,6 +300,19 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
                 if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
                     this.UsernameField = value;
                     this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Wins {
+            get {
+                return this.WinsField;
+            }
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
                 }
             }
         }

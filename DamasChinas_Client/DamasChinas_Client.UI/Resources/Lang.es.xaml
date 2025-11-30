@@ -38,6 +38,18 @@
         No tienes solicitudes pendientes.
     </sys:String>
 
+    <!-- ===== USUARIOS INVITADOS ===== -->
+    <sys:String  x:Key="msg_GuestProfile">Perfil de invitado (no registrado)</sys:String>
+    <sys:String  x:Key="msg_GuestNoEmail">Este usuario no tiene correo (invitado)</sys:String>
+    <sys:String  x:Key="msg_GuestProfileUnavailable">Este usuario no está registrado, perfil limitado</sys:String>
+    <sys:String  x:Key="msg_GuestAccountWarning">Regístrate para desbloquear todas las funciones del perfil</sys:String>
+    <sys:String x:Key="guestProfileTitle">Perfil de invitado</sys:String>
+    <sys:String x:Key="guestProfileUnavailable">Este usuario es un invitado no registrado. Solo su nombre de usuario está disponible. Regístrate para habilitar estadísticas y un perfil completo.</sys:String>
+    <sys:String x:Key="guestNoEmail">Sin correo (invitado)</sys:String>
+
+
+
+
 
     <!-- ========================================================= -->
     <!--  MENÚ PRINCIPAL / CONFIGURACIÓN                           -->

@@ -122,6 +122,9 @@
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ProfileFriend.xaml.cs">
+      <DependentUpon>ProfileFriend.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SelectAvatar.xaml.cs">
       <DependentUpon>SelectAvatar.xaml</DependentUpon>
     </Compile>
@@ -229,6 +232,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ProfileFriend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProfilePlayer.xaml" />
     <Compile Include="Pages\ProfilePlayer.xaml.cs">
       <DependentUpon>ProfilePlayer.xaml</DependentUpon>
@@ -312,13 +319,13 @@
     <None Include="Connected Services\AccountManagerServiceProxy\item5.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AccountManagerServiceProxy\item6.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.FriendDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.OperationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\FriendServiceProxy\DamasChinas_Client.UI.FriendServiceProxy.PublicFriendProfile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\FriendServiceProxy\FriendService1.wsdl" />
@@ -335,6 +342,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\FriendServiceProxy\item34.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendServiceProxy\item35.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\Arrays.xsd">
@@ -448,7 +458,6 @@
     <None Include="Connected Services\LogInServiceProxy\configuration91.svcinfo" />
     <Resource Include="Assets\Backgrounds\board-background.png" />
     <Resource Include="Assets\Backgrounds\wood-texture.png" />
-    <Resource Include="Assets\Icons\avatarIcon.png" />
     <Resource Include="Assets\Icons\backIcon.png" />
     <Resource Include="Assets\Icons\chatIcon.png" />
     <Resource Include="Assets\Icons\friendsIcon.png" />
