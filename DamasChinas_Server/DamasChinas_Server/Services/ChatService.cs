@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
+using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
 
@@ -14,69 +14,168 @@ namespace DamasChinas_Server
         private static readonly ConcurrentDictionary<string, IChatCallback> Clients =
             new ConcurrentDictionary<string, IChatCallback>();
 
-        private readonly ChatRepository _repo = new ChatRepository();
+        private readonly ChatRepository _repo;
+        private readonly ILogService _log;
+
+ 
+        private const string OperationRegistrateClient = nameof(RegistrateClient);
+        private const string OperationSendMessage = nameof(SendMessage);
+        private const string OperationSendMessage_SaveMessage = OperationSendMessage + ".SaveMessage";
+        private const string OperationSendMessage_DeliverToClient = OperationSendMessage + ".DeliverToClient";
+
+        private const string OperationGetHistoricalMessages = nameof(GetHistoricalMessages);
+
+
+        public ChatService()
+            : this(new ChatRepository(), LogFactory.Create<ChatService>())
+        {
+        }
+
+        internal ChatService(ChatRepository repo, ILogService log)
+        {
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+        }
 
         public void RegistrateClient(string username)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
+            ExecuteOperation(() =>
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    _log.Warn($"[{OperationRegistrateClient}] Username vacío o nulo.");
+                    return;
+                }
 
-            string key = username.Trim().ToLower();
+                var callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
+                string key = username.Trim().ToLower();
 
-            Clients[key] = callback;
+                Clients[key] = callback;
 
-            Debug.WriteLine($"[RegistrateClient] Registrado: {key}");
+                _log.Info($"[{OperationRegistrateClient}] Registrado: {key}");
+            }, OperationRegistrateClient);
         }
 
         public void SendMessage(Message message)
         {
-            if (message == null) return;
-
-            string destinationKey = message.DestinationUsername?.Trim().ToLower();
-
-           
-            string senderUsername = message.UsarnameSender;
-            int idRecipient = _repo.GetIdByUsername(message.DestinationUsername.Trim().ToLower());
-            _repo.SaveMessage(senderUsername, idRecipient, message.Text);
-
-            if
-                (destinationKey != null && Clients.TryGetValue(destinationKey, out var callback))
+            ExecuteOperation(() =>
             {
-                try
+                if (message == null)
                 {
-                    Debug.WriteLine($"[ChatService] Enviando mensaje a {destinationKey}");
-                    callback.ReceiveMessage(message);
+                    _log.Warn($"[{OperationSendMessage}] Se intentó enviar un mensaje nulo.");
+                    return;
                 }
-                catch (CommunicationException ex)
+
+                string destinationKey = message.DestinationUsername?.Trim().ToLower();
+                string senderUsername = message.UsarnameSender;
+                string text = message.Text;
+
+                if (string.IsNullOrWhiteSpace(destinationKey))
                 {
-                    Debug.WriteLine($"[SendMessage] Error comunicando con '{destinationKey}': {ex.Message}");
+                    _log.Warn($"[{OperationSendMessage}] DestinationUsername vacío o nulo.");
+                    return;
                 }
-                catch (ObjectDisposedException ex)
+
+                _log.Info($"[{OperationSendMessage}] {senderUsername} → {destinationKey}");
+
+                ExecuteOperation(
+                    () =>
+                    {
+                        int idRecipient = _repo.GetIdByUsername(destinationKey);
+                        _repo.SaveMessage(senderUsername, idRecipient, text);
+                    },
+                    OperationSendMessage_SaveMessage
+                );
+
+                if (Clients.TryGetValue(destinationKey, out var callback))
                 {
-                    Debug.WriteLine($"[SendMessage] Canal cerrado para '{destinationKey}': {ex.Message}");
+                    ExecuteOperation(
+                        () =>
+                        {
+                            _log.Info($"[{OperationSendMessage_DeliverToClient}] Enviando mensaje a {destinationKey}");
+                            callback.ReceiveMessage(message);
+                        },
+                        OperationSendMessage_DeliverToClient
+                    );
                 }
-            }
-            else
-            {
-                Debug.WriteLine($"[ChatService] Cliente '{destinationKey}' no conectado.");
-            }
+                else
+                {
+                    _log.Warn($"[{OperationSendMessage}] Cliente '{destinationKey}' no conectado.");
+                }
+
+            }, OperationSendMessage);
         }
+
         public Message[] GetHistoricalMessages(string usernameSender, string usernameRecipient)
+        {
+            return ExecuteOperation(
+                () =>
+                {
+                    _log.Info($"[{OperationGetHistoricalMessages}] {usernameSender} ↔ {usernameRecipient}");
+                    return _repo.GetChatByUsername(usernameSender, usernameRecipient).ToArray();
+                },
+                OperationGetHistoricalMessages,
+                Array.Empty<Message>()
+            );
+        }
+
+        // ============================
+        //   HELPERS
+        // ============================
+
+        private void ExecuteOperation(Action action, string context)
         {
             try
             {
-                return _repo.GetChatByUsername(usernameSender, usernameRecipient).ToArray();
+                _log.Info($"[{context}] START");
+                action();
+                _log.Info($"[{context}] SUCCESS");
+            }
+            catch (ArgumentException ex)
+            {
+                _log.Warn($"[{context}] ArgumentException: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _log.Warn($"[{context}] InvalidOperationException: {ex.Message}");
+            }
+            catch (CommunicationException ex)
+            {
+                _log.Warn($"[{context}] CommunicationException: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+            }
+        }
 
-            }
-            catch (ArgumentException aex)
+        private T ExecuteOperation<T>(Func<T> func, string context, T defaultValue)
+        {
+            try
             {
-                Debug.WriteLine($"[ChatService.GetHistoricalMessages] Argument error: {aex.Message}");
-                return Array.Empty<Message>();
+                _log.Info($"[{context}] START");
+                var result = func();
+                _log.Info($"[{context}] SUCCESS");
+                return result;
             }
-            catch (InvalidOperationException ioex)
+            catch (ArgumentException ex)
             {
-                Debug.WriteLine($"[ChatService.GetHistoricalMessages] Invalid operation: {ioex.Message}");
-                return Array.Empty<Message>();
+                _log.Warn($"[{context}] ArgumentException: {ex.Message}");
             }
+            catch (InvalidOperationException ex)
+            {
+                _log.Warn($"[{context}] InvalidOperationException: {ex.Message}");
+            }
+            catch (CommunicationException ex)
+            {
+                _log.Warn($"[{context}] CommunicationException: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+            }
+
+            return defaultValue;
         }
     }
 }

@@ -4,198 +4,152 @@ using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilidades;
 using DamasChinas_Server.Utilities;
+using DamasChinas_Server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using DamasChinas_Server.Interfaces;
-
 
 namespace DamasChinas_Server
 {
     public class SingInService : ISingInService
     {
-
-
-        private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)>
-            _codes = new Dictionary<string, (string Code, DateTime CreatedUtc)>();
+        private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)> _codes =
+            new Dictionary<string, (string Code, DateTime CreatedUtc)>();
 
         private readonly RepositoryUsers _repository;
+        private readonly ILogService _log;
+
+      
+
+        private const string OperationValidateUserData = nameof(ValidateUserData);
+        private const string OperationRequestVerificationCode = nameof(RequestVerificationCode);
+        private const string OperationCreateUser = nameof(CreateUser);
+        private const string OperationGenerateCode = nameof(GenerateCode);
+        private const string OperationSendWelcomeEmail = nameof(SendWelcomeEmail);
+        private const string OperationRemoveStoredCode = nameof(RemoveStoredCode);
+
 
         public SingInService()
+            : this(new RepositoryUsers(), LogFactory.Create<SingInService>())
         {
-            _repository = new RepositoryUsers();
+        }
+
+        internal SingInService(RepositoryUsers repository, ILogService log)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
 
         public OperationResult ValidateUserData(UserDto userDto)
         {
-            try
-            {
-                _repository.ValidateCreateUser(userDto);
+            return ExecuteOperation(
+                () =>
+                {
+                    _repository.ValidateCreateUser(userDto);
+                    return OperationResult.Ok();
+                },
+                OperationValidateUserData,
+                ex =>
+                {
+                    if (ex is RepositoryValidationException rve)
+                        return OperationResult.Fail($"Repository validation error: {rve.Code}", rve.Code);
 
-                System.Diagnostics.Debug.WriteLine("[TRACE] User validation successful.");
+                    if (ex is ArgumentException)
+                        return OperationResult.Fail("Argument validation failure.", MessageCode.UserValidationError);
 
-                return OperationResult.Ok();
-            }
-            catch (RepositoryValidationException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[ERROR] Repo validation failed: {ex.Code}");
+                    if (ex is SqlException sql)
+                        return OperationResult.Fail($"SQL error: {sql.Number}", MessageCode.ServerUnavailable);
 
-                return OperationResult.Fail(
-                    $"Repository validation error: {ex.Code}",
-                    ex.Code
-                );
-            }
-            catch (ArgumentException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[ERROR] Argument validation error: {ex.Message}");
-
-                return OperationResult.Fail(
-                    "Argument validation failure.",
-                    MessageCode.UserValidationError
-                );
-            }
-            catch (SqlException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[FATAL] SQL error in ValidateUserData: {ex.Message}");
-
-                return OperationResult.Fail(
-                    $"SQL error: {ex.Number}",
-                    MessageCode.ServerUnavailable
-                );
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[FATAL] Unexpected error in ValidateUserData: {ex.Message}");
-
-                return OperationResult.Fail(
-                    "Unexpected exception.",
-                    MessageCode.UnknownError
-                );
-            }
+                    return OperationResult.Fail("Unexpected exception.", MessageCode.UnknownError);
+                }
+            );
         }
-
 
         public OperationResult RequestVerificationCode(string email)
         {
-            try
-            {
-                var code = GenerateCode();
-
-                lock (_codes)
+            return ExecuteOperation(
+                () =>
                 {
-                    _codes[email] = (code, DateTime.UtcNow);
-                }
+                    var code = GenerateCode();
 
-                EmailSender.SendVerificationEmail(email, code);
+                    lock (_codes)
+                        _codes[email] = (code, DateTime.UtcNow);
 
-                return new OperationResult
-                {
-                    Success = true,
-                    Code = MessageCode.CodeSentSuccessfully,
-                    TechnicalDetail = "Verification code generated."
-                };
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[ERROR] Failed to send verification code: {ex.Message}");
+                    EmailSender.SendVerificationEmail(email, code);
 
-                return OperationResult.Fail(
-                    "Email sending failure.",
-                    MessageCode.VerificationCodeSendError
-                );
-            }
+                    return new OperationResult
+                    {
+                        Success = true,
+                        Code = MessageCode.CodeSentSuccessfully,
+                        TechnicalDetail = "Verification code generated."
+                    };
+                },
+                OperationRequestVerificationCode,
+                ex => OperationResult.Fail("Email sending failure.", MessageCode.VerificationCodeSendError)
+            );
         }
-
-
 
         public OperationResult CreateUser(UserDto userDto, string code)
         {
-            try
-            {
-                string storedCode;
-                DateTime createdAtUtc;
-
-                lock (_codes)
+            return ExecuteOperation(
+                () =>
                 {
-                    if (!_codes.TryGetValue(userDto.Email, out var data))
+                    string storedCode;
+                    DateTime createdUtc;
+
+                    lock (_codes)
                     {
-                        return OperationResult.Fail(
-                            "Code not found.",
-                            MessageCode.VerificationCodeNotFound
-                        );
+                        if (!_codes.TryGetValue(userDto.Email, out var data))
+                            return OperationResult.Fail("Code not found.", MessageCode.VerificationCodeNotFound);
+
+                        storedCode = data.Code;
+                        createdUtc = data.CreatedUtc;
                     }
 
-                    storedCode = data.Code;
-                    createdAtUtc = data.CreatedUtc;
-                }
+                    if (DateTime.UtcNow - createdUtc > TimeSpan.FromMinutes(5))
+                    {
+                        RemoveStoredCode(userDto.Email);
+                        return OperationResult.Fail("Code expired.", MessageCode.VerificationCodeExpired);
+                    }
 
-                if (DateTime.UtcNow - createdAtUtc > TimeSpan.FromMinutes(5))
-                {
+                    if (!string.Equals(storedCode, code, StringComparison.Ordinal))
+                        return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
+
                     RemoveStoredCode(userDto.Email);
 
-                    return OperationResult.Fail(
-                        "Code expired.",
-                        MessageCode.VerificationCodeExpired
-                    );
-                }
+                    var user = _repository.CreateUser(userDto);
 
-                if (!string.Equals(storedCode, code, StringComparison.Ordinal))
+                    SendWelcomeEmail(MapToUserInfo(user, userDto));
+
+                    return OperationResult.Ok();
+                },
+                OperationCreateUser,
+                ex =>
                 {
-                    return OperationResult.Fail(
-                        "Invalid code.",
-                        MessageCode.VerificationCodeInvalid
-                    );
+                    if (ex is SqlException sql)
+                        return OperationResult.Fail($"SQL error: {sql.Number}", MessageCode.ServerUnavailable);
+
+                    return OperationResult.Fail("Unexpected exception.", MessageCode.UnknownError);
                 }
-
-                RemoveStoredCode(userDto.Email);
-
-                var user = _repository.CreateUser(userDto);
-
-       
-                SingInService.SendWelcomeEmail(MapToUserInfo(user, userDto));
-
-                return OperationResult.Ok();
-            }
-            catch (SqlException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[FATAL] SQL exception in CreateUser: {ex.Message}");
-
-                return OperationResult.Fail(
-                    $"SQL error: {ex.Number}",
-                    MessageCode.ServerUnavailable
-                );
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[FATAL] Unexpected exception in CreateUser: {ex.Message}");
-
-                return OperationResult.Fail(
-                    "Unexpected exception.",
-                    MessageCode.UnknownError
-                );
-            }
+            );
         }
 
- 
-
+  
         private static void RemoveStoredCode(string email)
         {
             lock (_codes)
-            {
                 if (_codes.ContainsKey(email))
-                {
                     _codes.Remove(email);
-                }
-            }
         }
 
         private static string GenerateCode()
         {
-            var random = new Random();
-            return random.Next(1000, 10000).ToString();
+            return new Random()
+                .Next(1000, 10000)
+                .ToString();
         }
 
         private static void SendWelcomeEmail(UserInfo user)
@@ -205,12 +159,8 @@ namespace DamasChinas_Server
                 try
                 {
                     await Email.SendWelcomeAsync(user).ConfigureAwait(false);
-                    System.Diagnostics.Debug.WriteLine("[TRACE] Welcome email sent successfully.");
                 }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[ERROR] Failed to send welcome email: {ex.Message}");
-                }
+                catch { }
             });
         }
 
@@ -227,6 +177,26 @@ namespace DamasChinas_Server
                     ? $"{profile.nombre} {profile.apellido_materno}"
                     : $"{userDto.Name} {userDto.LastName}"
             };
+        }
+
+   
+        private OperationResult ExecuteOperation(
+            Func<OperationResult> action,
+            string context,
+            Func<Exception, OperationResult> onError)
+        {
+            try
+            {
+                _log.Info($"[{context}] START");
+                var result = action();
+                _log.Info($"[{context}] SUCCESS");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+                return onError(ex);
+            }
         }
     }
 }

@@ -80,11 +80,6 @@
     <Compile Include="Game\PlayerMove.cs" />
     <Compile Include="Interfaces\ILobbyService.cs" />
     <Compile Include="Interfaces\ISessionCallback.cs" />
-    <Compile Include="log4net.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>log4net.config</DependentUpon>
-    </Compile>
     <Compile Include="logic\ChatRepository.cs" />
     <Compile Include="mensajes.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
@@ -181,10 +176,9 @@
     <None Include="Damas_Chinas.edmx.diagram">
       <DependentUpon>Damas_Chinas.edmx</DependentUpon>
     </None>
-    <None Include="log4net.config">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>log4net.Designer.cs</LastGenOutput>
-    </None>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
