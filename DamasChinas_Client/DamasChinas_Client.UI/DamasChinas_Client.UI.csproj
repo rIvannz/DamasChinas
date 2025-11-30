@@ -465,11 +465,24 @@
     <Resource Include="Assets\Icons\soundIcon.png" />
     <Resource Include="Assets\Icons\stadisticsIcon.png" />
     <Resource Include="Assets\Icons\greenCheck.png" />
-    <Resource Include="Assets\Avatars\avatar1.png" />
-    <Resource Include="Assets\Avatars\avatar2.png" />
-    <Resource Include="Assets\Avatars\avatar3.png" />
-    <Resource Include="Assets\Avatars\avatar4.png" />
-    <Resource Include="Assets\Avatars\avatar5.png" />
+    <Content Include="Assets\Avatars\avatar1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatarIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Sounds\background_music.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

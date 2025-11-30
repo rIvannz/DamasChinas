@@ -109,13 +109,29 @@ namespace DamasChinas_Client.UI.Pages
         {
             if (sender is Button btn && btn.DataContext is FriendList friend)
             {
-                using (var client = new FriendServiceClient())
+                try
                 {
-                    var profile = client.GetFriendPublicProfile(friend.Username);
-                    NavigationService?.Navigate(new ProfileFriend(profile));
+                    using (var client = new FriendServiceClient())
+                    {
+                        var profile = client.GetFriendPublicProfile(friend.Username);
+
+
+                        if (string.IsNullOrWhiteSpace(profile.Username))
+                        {
+                            profile.Username = friend.Username;
+                        }
+
+                        NavigationService?.Navigate(new ProfileFriend(profile));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[Friends.OnViewProfileClick] {ex.Message}");
+                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
                 }
             }
         }
+
 
         private void OnChatClick(object sender, RoutedEventArgs e)
         {
