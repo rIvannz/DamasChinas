@@ -85,6 +85,9 @@
     <Compile Include="Interfaces\ISessionCallback.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="logic\ChatRepository.cs" />
+    <Compile Include="logic\damas_chinasEntities.cs" />
+    <Compile Include="logic\IApplicationDbContext.cs" />
+    <Compile Include="logic\IRepositoryUsers.cs" />
     <Compile Include="logic\RankingRepository.cs" />
     <Compile Include="mensajes.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
@@ -166,6 +169,7 @@
     <Compile Include="Utilities\Email.cs" />
     <Compile Include="Utilities\EmailSender.cs" />
     <Compile Include="Utilities\DbContextFactory.cs" />
+    <Compile Include="Utilities\Email\IEmailSender.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>

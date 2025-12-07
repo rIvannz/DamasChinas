@@ -152,13 +152,15 @@ namespace DamasChinas_Server
                 .ToString();
         }
 
+        private static Email _emailService; 
+
         private static void SendWelcomeEmail(UserInfo user)
         {
             Task.Run(async () =>
             {
                 try
                 {
-                    await Email.SendWelcomeAsync(user).ConfigureAwait(false);
+                    await _emailService.SendWelcomeAsync(user).ConfigureAwait(false);
                 }
                 catch { }
             });

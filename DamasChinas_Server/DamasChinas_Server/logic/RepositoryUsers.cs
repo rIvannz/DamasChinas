@@ -1,33 +1,30 @@
+using DamasChinas_Server.Common;
+using DamasChinas_Server.Dtos;
+using DamasChinas_Server.logic;
+using DamasChinas_Server.Utilidades;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
-using DamasChinas_Server.Common;
-using DamasChinas_Server.Dtos;
-using DamasChinas_Server.Utilidades;
 
 namespace DamasChinas_Server
 {
-    public class RepositoryUsers
+    public class RepositoryUsers: IRepositoryUsers
     {
-        private readonly Func<damas_chinasEntities> _contextFactory;
+        private readonly Func<IApplicationDbContext> _contextFactory;
 
         private const string DefaultAvatarFile = "avatarIcon.png";
 
-
-
         public RepositoryUsers()
-            : this(DbContextFactory.Create)
+            : this(() => new damas_chinasEntities())
         {
         }
 
-        public RepositoryUsers(Func<damas_chinasEntities> contextFactory)
+        public RepositoryUsers(Func<IApplicationDbContext> contextFactory)
         {
             _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         }
-
-
 
         public void ValidateCreateUser(UserDto userDto)
         {
@@ -41,7 +38,7 @@ namespace DamasChinas_Server
                 }
 
                 if (EntityExists<perfiles>(db,
-                    p => p.username.Equals(userDto.Username, StringComparison.OrdinalIgnoreCase)))
+                        p => p.username.Equals(userDto.Username, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new RepositoryValidationException(MessageCode.UsernameExists);
                 }
@@ -50,19 +47,16 @@ namespace DamasChinas_Server
             });
         }
 
- 
-
         public usuarios CreateUser(UserDto userDto)
         {
             return ExecuteInContext(db =>
             {
-                var nuevoUsuario = CreateUsuario(db, userDto);
-                CreatePerfil(db, nuevoUsuario, userDto);
+                var nuevo = CreateUsuario(db, userDto);
+                CreatePerfil(db, nuevo, userDto);
 
-                return GetUserWithProfile(db, nuevoUsuario.id_usuario);
+                return GetUserWithProfile(db, nuevo.id_usuario);
             });
         }
-
 
         public PublicProfile Login(LoginRequest loginRequest)
         {
@@ -119,14 +113,12 @@ namespace DamasChinas_Server
             });
         }
 
-
-
         public bool ChangeUsername(string username, string newUsername)
         {
             Validator.ValidateUsername(newUsername);
 
-            var currentUsername = username?.Trim();
-            if (string.IsNullOrWhiteSpace(currentUsername))
+            var current = username?.Trim();
+            if (string.IsNullOrWhiteSpace(current))
             {
                 throw new RepositoryValidationException(MessageCode.UsernameEmpty);
             }
@@ -134,22 +126,18 @@ namespace DamasChinas_Server
             return ExecuteInContext(db =>
             {
                 if (EntityExists<perfiles>(db,
-                    p => p.username.Equals(newUsername, StringComparison.OrdinalIgnoreCase)))
+                        p => p.username.Equals(newUsername, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new RepositoryValidationException(MessageCode.UsernameExists);
                 }
 
-                var perfil = GetPerfilByUsername(db, currentUsername);
+                var perfil = GetPerfilByUsername(db, current);
 
                 perfil.username = newUsername;
-                db.Entry(perfil).Property(p => p.username).IsModified = true;
-
                 SaveChangesSafely(db);
                 return true;
             });
         }
-
-
 
         public bool ChangePassword(string username, string newPassword)
         {
@@ -173,8 +161,6 @@ namespace DamasChinas_Server
             });
         }
 
-
-
         public int GetUserIdByUsername(string username)
         {
             Validator.ValidateUsername(username);
@@ -186,11 +172,8 @@ namespace DamasChinas_Server
             });
         }
 
-
         public bool ChangeAvatar(int idUser, string avatarFile)
         {
-            
-
             if (idUser <= 0)
             {
                 throw new RepositoryValidationException(MessageCode.UserNotFound);
@@ -203,7 +186,6 @@ namespace DamasChinas_Server
 
             return ExecuteInContext(db =>
             {
-          
                 var perfil = db.perfiles.SingleOrDefault(p => p.id_usuario == idUser);
 
                 if (perfil == null)
@@ -212,17 +194,12 @@ namespace DamasChinas_Server
                 }
 
                 perfil.imagen_perfil = avatarFile;
-                db.Entry(perfil).Property(p => p.imagen_perfil).IsModified = true;
-
                 SaveChangesSafely(db);
                 return true;
             });
         }
 
-
-
-
-        private static usuarios CreateUsuario(damas_chinasEntities db, UserDto userDto)
+        private static usuarios CreateUsuario(IApplicationDbContext db, UserDto userDto)
         {
             var usuario = new usuarios
             {
@@ -237,7 +214,7 @@ namespace DamasChinas_Server
             return usuario;
         }
 
-        private static void CreatePerfil(damas_chinasEntities db, usuarios usuario, UserDto userDto)
+        private static void CreatePerfil(IApplicationDbContext db, usuarios usuario, UserDto userDto)
         {
             var perfil = new perfiles
             {
@@ -254,7 +231,7 @@ namespace DamasChinas_Server
             SaveChangesSafely(db);
         }
 
-        private static usuarios GetUserWithProfile(damas_chinasEntities db, int idUsuario)
+        private static usuarios GetUserWithProfile(IApplicationDbContext db, int idUsuario)
         {
             var user = db.usuarios
                 .Include(u => u.perfiles)
@@ -268,7 +245,7 @@ namespace DamasChinas_Server
             return user;
         }
 
-        private static perfiles GetPerfilByUsername(damas_chinasEntities db, string username)
+        private static perfiles GetPerfilByUsername(IApplicationDbContext db, string username)
         {
             var perfil = db.perfiles.SingleOrDefault(
                 p => p.username.Equals(username, StringComparison.OrdinalIgnoreCase));
@@ -281,7 +258,7 @@ namespace DamasChinas_Server
             return perfil;
         }
 
-        private static usuarios FindUserForLogin(damas_chinasEntities db, string credential)
+        private static usuarios FindUserForLogin(IApplicationDbContext db, string credential)
         {
             return db.usuarios
                 .Include(u => u.perfiles)
@@ -296,7 +273,7 @@ namespace DamasChinas_Server
 
             return new PublicProfile
             {
-                IdUser = user.id_usuario,                          
+                IdUser = user.id_usuario,
                 Username = perfil?.username ?? "N/A",
                 Name = perfil?.nombre ?? "N/A",
                 LastName = perfil?.apellido_materno ?? "N/A",
@@ -306,14 +283,13 @@ namespace DamasChinas_Server
             };
         }
 
-
-        private static bool EntityExists<T>(damas_chinasEntities db, Expression<Func<T, bool>> predicate)
+        private static bool EntityExists<T>(IApplicationDbContext db, Expression<Func<T, bool>> predicate)
             where T : class
         {
             return db.Set<T>().Any(predicate);
         }
 
-        private static void SaveChangesSafely(damas_chinasEntities db)
+        private static void SaveChangesSafely(IApplicationDbContext db)
         {
             try
             {
@@ -325,7 +301,7 @@ namespace DamasChinas_Server
             }
         }
 
-        private T ExecuteInContext<T>(Func<damas_chinasEntities, T> operation)
+        private T ExecuteInContext<T>(Func<IApplicationDbContext, T> operation)
         {
             using (var db = _contextFactory())
             {

@@ -26,7 +26,6 @@ namespace DamasChinas_Server
                          Matches = g.Count(),
                          Wins = g.Count(x => x.posicion_final == 1)
                      }
-                     // solo jugadores que tengan al menos 1 partida
                      where stats.Matches > 0
                      orderby stats.Wins descending, stats.Matches descending
                      select new
