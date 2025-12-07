@@ -1,4 +1,5 @@
 ﻿using DamasChinas_Server.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -8,10 +9,21 @@ namespace DamasChinas_Server
     public class RankingRepository
     {
         private readonly RepositoryUsers _userRepo = new RepositoryUsers();
+        private readonly Func<damas_chinasEntities> _dbFactory;
 
-        protected virtual damas_chinasEntities CreateDbContext()
+        public RankingRepository()
         {
-            return new damas_chinasEntities();
+            _dbFactory = () => new damas_chinasEntities();
+        }
+
+        public RankingRepository(Func<damas_chinasEntities> dbFactory)
+        {
+            _dbFactory = dbFactory;
+        }
+
+        public virtual damas_chinasEntities CreateDbContext()
+        {
+            return _dbFactory();
         }
 
         public List<RankingEntry> GetTop10Players()
