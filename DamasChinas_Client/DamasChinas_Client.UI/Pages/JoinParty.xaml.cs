@@ -81,7 +81,6 @@ namespace DamasChinas_Client.UI.Pages
                 txtCodePlaceholder.Visibility = Visibility.Visible;
         }
 
-
         private void OnJoinByCodeClick(object sender, RoutedEventArgs e)
         {
             if (!int.TryParse(txtLobbyCode.Text.Trim(), out int code))
@@ -97,18 +96,29 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                _lobbyManager.JoinLobby(lobbyCode, _username);
-                var snapshot = _lobbyManager.GetCurrentLobby();
+                // 1. Usamos OperationResult
+                var result = _lobbyManager.JoinLobby(lobbyCode, _username);
 
-                if (snapshot == null)
+                if (result.Success)
                 {
-                    MessageHelper.ShowPopup(MessageKeys.JoiningLobbyError, PopupType.Error);
-                    return;
-                }
+                    // 2. Pasamos el username al obtener snapshot
+                    var snapshot = _lobbyManager.GetCurrentLobby(_username);
 
-                NavigationService?.Navigate(
-                    new PreLobby(snapshot, _username, _userId)
-                );
+                    if (snapshot == null)
+                    {
+                        MessageHelper.ShowPopup(MessageKeys.JoiningLobbyError, PopupType.Error);
+                        return;
+                    }
+
+                    NavigationService?.Navigate(
+                        new PreLobby(snapshot, _username, _userId)
+                    );
+                }
+                else
+                {
+                    // 3. Mostramos error del resultado
+                    MessageHelper.ShowFromResult(result);
+                }
             }
             catch (Exception ex)
             {

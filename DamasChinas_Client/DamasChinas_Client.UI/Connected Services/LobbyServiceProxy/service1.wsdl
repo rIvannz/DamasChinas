@@ -108,6 +108,9 @@
   <wsdl:message name="ILobbyService_InviteFriend_MessageCodeFault_FaultMessage">
     <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q10:MessageCode" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_SendLobbyMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendLobbyMessage" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_OnLobbySnapshot_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnLobbySnapshot" />
   </wsdl:message>
@@ -125,6 +128,9 @@
   </wsdl:message>
   <wsdl:message name="ILobbyService_OnBanStatusUpdated_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnBanStatusUpdated" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_OnChatMessageReceived_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnChatMessageReceived" />
   </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ILobbyService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetPublicLobbies">
@@ -177,6 +183,9 @@
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/InviteFriendResponse" message="tns:ILobbyService_InviteFriend_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/InviteFriendMessageCodeFault" name="MessageCodeFault" message="tns:ILobbyService_InviteFriend_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SendLobbyMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessage" message="tns:ILobbyService_SendLobbyMessage_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnLobbySnapshot">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/OnLobbySnapshot" message="tns:ILobbyService_OnLobbySnapshot_OutputCallbackMessage" />
     </wsdl:operation>
@@ -194,6 +203,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnBanStatusUpdated">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/OnBanStatusUpdated" message="tns:ILobbyService_OnBanStatusUpdated_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnChatMessageReceived">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/OnChatMessageReceived" message="tns:ILobbyService_OnChatMessageReceived_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILobbyService" type="tns:ILobbyService">
@@ -319,6 +331,12 @@
         <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="SendLobbyMessage">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/SendLobbyMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="OnLobbySnapshot">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/OnLobbySnapshot" style="document" />
       <wsdl:output>
@@ -351,6 +369,12 @@
     </wsdl:operation>
     <wsdl:operation name="OnBanStatusUpdated">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/OnBanStatusUpdated" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnChatMessageReceived">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/OnChatMessageReceived" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

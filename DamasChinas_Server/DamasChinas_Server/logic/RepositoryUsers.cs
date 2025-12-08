@@ -87,31 +87,37 @@ namespace DamasChinas_Server
         public PublicFriendProfile GetFriendPublicProfile(string friendUsername)
         {
             if (string.IsNullOrWhiteSpace(friendUsername))
-            {
                 throw new RepositoryValidationException(MessageCode.UsernameEmpty);
-            }
 
             return ExecuteInContext(db =>
             {
                 var perfil = db.perfiles
-                    .Include(p => p.usuarios)
                     .SingleOrDefault(p =>
                         p.username.Equals(friendUsername, StringComparison.OrdinalIgnoreCase));
 
                 if (perfil == null)
-                {
                     throw new RepositoryValidationException(MessageCode.UserProfileNotFound);
-                }
+
+                int idUser = perfil.id_usuario;
+
+                int matchesPlayed = db.participantes_partida.Count(p => p.id_jugador == idUser);
+                int wins = db.participantes_partida.Count(p => p.id_jugador == idUser && p.posicion_final == 1);
+                int loses = db.participantes_partida.Count(p => p.id_jugador == idUser && p.posicion_final > 1);
 
                 return new PublicFriendProfile
                 {
                     Username = perfil.username,
                     Name = perfil.nombre,
                     LastName = perfil.apellido_materno,
-                    SocialUrl = perfil.url
+                    SocialUrl = perfil.url,
+                    AvatarFile = perfil.imagen_perfil,
+                    MatchesPlayed = matchesPlayed,
+                    Wins = wins,
+                    Loses = loses
                 };
             });
         }
+
 
         public bool ChangeUsername(string username, string newUsername)
         {
@@ -271,17 +277,36 @@ namespace DamasChinas_Server
         {
             var perfil = user.perfiles.FirstOrDefault();
 
-            return new PublicProfile
+            using (var db = new damas_chinasEntities())
             {
-                IdUser = user.id_usuario,
-                Username = perfil?.username ?? "N/A",
-                Name = perfil?.nombre ?? "N/A",
-                LastName = perfil?.apellido_materno ?? "N/A",
-                SocialUrl = perfil?.url ?? "N/A",
-                Email = user.correo,
-                AvatarFile = perfil?.imagen_perfil ?? DefaultAvatarFile
-            };
+                int idUser = user.id_usuario;
+
+                int matchesPlayed = db.participantes_partida
+                    .Count(p => p.id_jugador == idUser);
+
+                int wins = db.participantes_partida
+                    .Count(p => p.id_jugador == idUser && p.posicion_final == 1);
+
+                int loses = db.participantes_partida
+                    .Count(p => p.id_jugador == idUser && p.posicion_final > 1);
+
+                return new PublicProfile
+                {
+                    IdUser = idUser,
+                    Username = perfil?.username ?? "N/A",
+                    Name = perfil?.nombre ?? "N/A",
+                    LastName = perfil?.apellido_materno ?? "N/A",
+                    SocialUrl = perfil?.url ?? "N/A",
+                    Email = user.correo,
+                    AvatarFile = perfil?.imagen_perfil ?? "avatarIcon.png",
+
+                    MatchesPlayed = matchesPlayed,
+                    Wins = wins,
+                    Loses = loses
+                };
+            }
         }
+
 
         private static bool EntityExists<T>(IApplicationDbContext db, Expression<Func<T, bool>> predicate)
             where T : class

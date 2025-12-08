@@ -101,6 +101,10 @@ namespace DamasChinas_Server.Game
             return MoveResult.Success();
         }
 
+        
+
+
+
         public IReadOnlyDictionary<HexCoordinate, PlayerColor?> GetBoardState()
         {
             var snapshot = Board.Cells.ToDictionary(

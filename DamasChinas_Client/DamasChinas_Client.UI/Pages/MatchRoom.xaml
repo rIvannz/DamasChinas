@@ -3,12 +3,157 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DamasChinas_Client.UI.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="MatchRoom">
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="MatchRoom"
+      Background="#121212">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Background="#1E1E1E">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Margin="20,15,0,0">
+                <TextBlock Text="{DynamicResource lobbyCode}" Foreground="#888" FontSize="16" FontWeight="SemiBold"/>
+                <TextBlock Text=": " Foreground="#888" FontSize="16"/>
+                <TextBlock x:Name="txtLobbyCode" Text="000000" Foreground="#FFD700" FontSize="18" FontWeight="Bold" Margin="5,0,0,0"/>
+            </StackPanel>
+
+            <Viewbox Grid.Row="1" Stretch="Uniform" Margin="20">
+                <Grid Width="1200" Height="1200">
+                    <Ellipse Width="1100" Height="1100" Fill="#252526" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Canvas x:Name="BoardCanvas" Width="1200" Height="1200" Background="Transparent"/>
+                </Grid>
+            </Viewbox>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20">
+                <Button Width="50" Height="50" Style="{DynamicResource BaseGameButton}" Background="Transparent" BorderThickness="0" Click="OnSoundClick" ToolTip="{DynamicResource sound}">
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png" Width="28"/>
+                </Button>
+                <Button Width="50" Height="50" Style="{DynamicResource BaseGameButton}" Background="Transparent" BorderThickness="0" Click="OnLanguageClick" ToolTip="{DynamicResource language}" Margin="10,0,0,0">
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png" Width="28"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Column="1" Background="#252526" BorderBrush="#333" BorderThickness="2,0,0,0">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{DynamicResource players}" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <ScrollViewer Grid.Row="1" MaxHeight="250" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="icPlayers">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#333333" CornerRadius="8" Margin="0,0,0,8" Padding="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Ellipse Width="36" Height="36" Stroke="{Binding ColorBrush}" StrokeThickness="3">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding AvatarPath}" Stretch="UniformToFill"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+
+                                        <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DisplayName}" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
+                                            <TextBlock Text="{Binding StatusText}" Foreground="#AAAAAA" FontSize="11"/>
+                                        </StackPanel>
+
+                                        <Ellipse Grid.Column="2" Width="10" Height="10" Fill="#00FF00" Visibility="{Binding IsTurnVisible}" VerticalAlignment="Center">
+                                            <Ellipse.Effect>
+                                                <DropShadowEffect Color="#00FF00" BlurRadius="6" ShadowDepth="0"/>
+                                            </Ellipse.Effect>
+                                        </Ellipse>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <TextBlock Grid.Row="3" Text="{DynamicResource chat}" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <Border Grid.Row="4" Background="#151515" CornerRadius="6" Padding="8" Margin="0,0,0,10" BorderBrush="#333" BorderThickness="1">
+                    <ScrollViewer x:Name="ChatScroll" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="ChatContainer"/>
+                    </ScrollViewer>
+                </Border>
+
+                <Grid Grid.Row="5" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="txtChatInput" Height="40" FontSize="14" Padding="5" VerticalContentAlignment="Center" BorderBrush="#444" Background="#EEE"/>
+                    <Button Grid.Column="1" Content="{DynamicResource send}" Style="{DynamicResource BaseGameButton}" Width="70" Height="40" FontSize="12" Margin="10,0,0,0" Padding="0" Click="OnSendMessageClick"/>
+                </Grid>
+
+                <Button Grid.Row="6" 
+                        Content="{DynamicResource exit}" 
+                        Style="{DynamicResource BaseGameButton}" 
+                        Background="#B71C1C" 
+                        BorderBrush="#D32F2F" 
+                        Height="50" 
+                        FontSize="16"
+                        Click="OnLeaveMatchClick"/>
+            </Grid>
+        </Border>
+
+        <Grid x:Name="VictoryOverlay" Grid.ColumnSpan="2" Background="#CC000000" Visibility="Collapsed">
+            <Border Background="#1E1E1E" Width="500" Height="300" CornerRadius="15"
+            BorderBrush="#FFD700" BorderThickness="3">
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                    <!-- TÍTULO TRADUCIDO -->
+                    <TextBlock x:Name="txtFinalTitle"
+                       Text="{DynamicResource gameFinishedTitle}"
+                       Foreground="#FFD700"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+
+                    <!-- GANADOR TRADUCIDO -->
+                    <TextBlock x:Name="txtWinnerName"
+                       Foreground="White"
+                       FontSize="22"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,40"/>
+
+                    <!-- BOTÓN EXIT TRADUCIDO -->
+                    <Button Content="{DynamicResource exit}"
+                    Style="{DynamicResource BaseGameButton}"
+                    Width="200"
+                    Height="50"
+                    FontSize="16"
+                    Click="OnBackToMenuClick"/>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+
     </Grid>
 </Page>

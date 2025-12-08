@@ -1,182 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using DamasChinas_Server.Common;
 using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
-using DamasChinas_Server.GameRepositories;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Logic;
 
 namespace DamasChinas_Server.Services
 {
-    [ServiceBehavior(
-        InstanceContextMode = InstanceContextMode.PerSession,
-        ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public sealed class MatchService : IMatchService
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public class MatchService : IMatchService
     {
-        private readonly RepositoryMatches _matchRepo;
-        private readonly RepositoryReports _reportRepo;
-        private readonly RepositorySanctions _sanctionRepo;
-        private readonly RepositoryUsers _userRepo;
+        private readonly MatchManager _manager;
+        private readonly ILogService _log;
 
-        // Umbrales de reportes para sanciones en BD
-        private const int ReportsFirstBan = 3;
-        private const int ReportsSecondBan = 6;
-        private const int ReportsPermanentBan = 10;
+        public MatchService() : this(MatchManager.Instance, LogFactory.Create<MatchService>()) { }
 
-        public MatchService()
-            : this(
-                  new RepositoryMatches(),
-                  new RepositoryReports(),
-                  new RepositorySanctions(),
-                  new RepositoryUsers())
+        internal MatchService(MatchManager manager, ILogService log)
         {
+            _manager = manager;
+            _log = log;
         }
 
-        internal MatchService(
-            RepositoryMatches matchRepo,
-            RepositoryReports reportRepo,
-            RepositorySanctions sanctionRepo,
-            RepositoryUsers userRepo)
-        {
-            _matchRepo = matchRepo ?? throw new ArgumentNullException(nameof(matchRepo));
-            _reportRepo = reportRepo ?? throw new ArgumentNullException(nameof(reportRepo));
-            _sanctionRepo = sanctionRepo ?? throw new ArgumentNullException(nameof(sanctionRepo));
-            _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
-        }
-
-        public OperationResult FinishMatch(FinishMatchRequest request)
+        public OperationResult ConnectToMatch(int lobbyCode, string username)
         {
             try
             {
-                if (request == null ||
-                    request.FinalPositions == null ||
-                    request.FinalPositions.Count == 0)
-                {
-                    return OperationResult.Fail("Invalid match data.", MessageCode.UnknownError);
-                }
-
-                // ============================================
-                // 1) Crear partida
-                // ============================================
-                int matchId = _matchRepo.CreateMatch();
-
-                // ============================================
-                // 2) Guardar posiciones finales
-                // (aunque ranking use solo ganadas/perdidas,
-                //  nos quedamos con las posiciones para estadísticas)
-                // ============================================
-                foreach (KeyValuePair<string, int> pair in request.FinalPositions)
-                {
-                    string username = pair.Key;
-                    int finalPos = pair.Value;
-
-                    int userId = _userRepo.GetUserIdByUsername(username);
-                    _matchRepo.AddPlayerResult(matchId, userId, finalPos);
-                }
-
-                // ============================================
-                // 3) Registrar reportes y generar sanciones
-                // ============================================
-                HashSet<string> reportedUsernames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-                if (request.Reports != null && request.Reports.Count > 0)
-                {
-                    foreach (ReportPlayerRequest report in request.Reports)
-                    {
-                        if (string.IsNullOrWhiteSpace(report.ReporterUsername) ||
-                            string.IsNullOrWhiteSpace(report.ReportedUsername))
-                        {
-                            continue;
-                        }
-
-                        int reporterId = _userRepo.GetUserIdByUsername(report.ReporterUsername);
-                        int reportedId = _userRepo.GetUserIdByUsername(report.ReportedUsername);
-
-                        // 3.1 Guardar reporte en tabla Reportes
-                        _reportRepo.AddReport(
-                            reporterId,
-                            reportedId,
-                            matchId,
-                            report.Reason ?? string.Empty);
-
-                        reportedUsernames.Add(report.ReportedUsername);
-
-                        // 3.2 Ver cuántos reportes acumula el usuario
-                        int totalReports = _reportRepo.CountReportsForUser(reportedId);
-
-                        // 3.3 Si ya tiene una sanción activa, no creamos otra
-                        if (_sanctionRepo.HasActiveBan(reportedId))
-                        {
-                            continue;
-                        }
-
-                        if (totalReports >= ReportsPermanentBan)
-                        {
-                            _sanctionRepo.ApplyBan(
-                                reportedId,
-                                permanent: true,
-                                untilUtc: null,
-                                reason: "ban_permanent");
-                        }
-                        else if (totalReports >= ReportsSecondBan)
-                        {
-                            _sanctionRepo.ApplyBan(
-                                reportedId,
-                                permanent: false,
-                                untilUtc: DateTime.UtcNow.AddHours(1),
-                                reason: "ban_temp_1h");
-                        }
-                        else if (totalReports >= ReportsFirstBan)
-                        {
-                            _sanctionRepo.ApplyBan(
-                                reportedId,
-                                permanent: false,
-                                untilUtc: DateTime.UtcNow.AddMinutes(10),
-                                reason: "ban_temp_10m");
-                        }
-
-                    }
-
-                    // 3.5 Sincronizar con LobbyManager (bans en memoria)
-                    if (reportedUsernames.Count > 0 && request.LobbyCode > 0)
-                    {
-                        LobbyManager.Instance.ApplyReportsOnMatchEnd(
-                            request.LobbyCode,
-                            reportedUsernames);
-                    }
-                }
-
-                // ============================================
-                // 4) Notificar fin de partida al cliente (callback)
-                // ============================================
-                MatchResultDto resultDto = new MatchResultDto
-                {
-                    MatchId = matchId,
-                    FinalPositions = new Dictionary<string, int>(request.FinalPositions),
-                    BansApplied = new System.Collections.Generic.List<BanInfoDto>()
-                    // Más adelante podemos rellenar BansApplied
-                    // con info de sanciones si quieres.
-                };
-
-                try
-                {
-                    IMatchCallback callback =
-                        OperationContext.Current.GetCallbackChannel<IMatchCallback>();
-
-                    if (callback != null)
-                    {
-                        callback.OnMatchFinished(resultDto);
-                    }
-                }
-                catch
-                {
-                    // Cliente desconectado → ignoramos el error del callback
-                }
-
-                // Por ahora el OperationResult solo indica que el flujo
-                // terminó bien; el detalle viene por el callback.
+                var callback = OperationContext.Current.GetCallbackChannel<IMatchCallback>();
+                _manager.RegisterPlayerSession(lobbyCode, username, callback);
                 return OperationResult.Ok();
             }
             catch (RepositoryValidationException ex)
@@ -185,7 +36,46 @@ namespace DamasChinas_Server.Services
             }
             catch (Exception ex)
             {
-                return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
+                _log.Error($"Error connecting to match {lobbyCode}: {ex.Message}", ex);
+                return OperationResult.Fail("Connection error.", MessageCode.UnknownError);
+            }
+        }
+
+        public MatchStateDto GetMatchState(int lobbyCode)
+        {
+            try
+            {
+                return _manager.GetMatchState(lobbyCode);
+            }
+            catch
+            {
+                throw new FaultException<MessageCode>(MessageCode.UnknownError);
+            }
+        }
+
+        public OperationResult MovePiece(MoveRequestDto move)
+        {
+            try
+            {
+                _manager.ApplyMove(move);
+                return OperationResult.Ok();
+            }
+            catch (Exception ex)
+            {
+                _log.Warn($"Invalid move by {move.Username}: {ex.Message}");
+                return OperationResult.Fail(ex.Message, MessageCode.InvalidMove);
+            }
+        }
+
+        public void LeaveMatch(int lobbyCode, string username)
+        {
+            try
+            {
+                _manager.RemovePlayer(lobbyCode, username);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"LeaveMatch error: {ex.Message}", ex);
             }
         }
     }

@@ -112,7 +112,7 @@ namespace DamasChinas_Client.UI.Pages
 
 
         // =========================================================
-        //  CREATE GAME (USANDO LobbySession.Manager)
+        //  CREATE GAME CORREGIDO
         // =========================================================
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
         {
@@ -126,17 +126,30 @@ namespace DamasChinas_Client.UI.Pages
                     Visibility = LobbyVisibility.Public
                 };
 
-                var snapshot = lobbyManager.CreateLobbyAndGetSnapshot(_profile.Username, request);
+                // 1. Crear (Retorna OperationResult)
+                var result = lobbyManager.CreateLobby(_profile.Username, request);
 
-                if (snapshot == null)
+                if (result.Success)
                 {
-                    MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);
-                    return;
-                }
+                    // 2. Obtener Snapshot pasando el username
+                    var snapshot = lobbyManager.GetCurrentLobby(_profile.Username);
 
-                NavigationService?.Navigate(
-                    new PreLobby(snapshot, _profile.Username, _userId)
-                );
+                    if (snapshot == null)
+                    {
+                        MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);
+                        return;
+                    }
+
+                    // 3. Navegar
+                    NavigationService?.Navigate(
+                        new PreLobby(snapshot, _profile.Username, _userId)
+                    );
+                }
+                else
+                {
+                    // 4. Mostrar error del server
+                    MessageHelper.ShowFromResult(result);
+                }
             }
             catch (Exception ex)
             {
@@ -156,7 +169,5 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
             }
         }
-
-        // Otros botones igual…
     }
 }

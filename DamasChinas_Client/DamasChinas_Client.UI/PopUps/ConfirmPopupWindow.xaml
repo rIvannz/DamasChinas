@@ -10,7 +10,6 @@
         Height="250">
 
     <Grid>
-
         <Rectangle Fill="#66000000"/>
 
         <Border Background="{DynamicResource SurfaceBrush}"
@@ -24,7 +23,6 @@
 
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                <!-- Title -->
                 <TextBlock x:Name="TitleText"
                            Text="{DynamicResource title_Confirm}"
                            FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
@@ -33,7 +31,6 @@
                            TextAlignment="Center"
                            Margin="0 0 0 10"/>
 
-                <!-- Message -->
                 <TextBlock x:Name="MessageText"
                            Text="{DynamicResource msg_LogoutConfirm}"
                            Foreground="White"
@@ -42,13 +39,14 @@
                            TextWrapping="Wrap"
                            Margin="0 0 0 20"/>
 
-                <!-- Buttons -->
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center" Cursor="">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
                     <Button x:Name="BtnYes"
                             Content="{DynamicResource yesWord}"
                             Style="{DynamicResource BaseGameButton}"
+                            Background="{DynamicResource MarbleYellowBrush}"
+                            BorderBrush="{DynamicResource MarbleYellowBrush}"
+                            Foreground="{DynamicResource SurfaceBrush}"
                             Width="120"
                             Margin="0 0 15 0"
                             Click="OnYesClick"/>
@@ -56,15 +54,12 @@
                     <Button x:Name="BtnNo"
                             Content="{DynamicResource noWord}"
                             Style="{DynamicResource BaseGameButton}"
-                            Width="120"
                             Background="#444"
+                            Width="120"
                             Click="OnNoClick"/>
-
                 </StackPanel>
 
             </StackPanel>
         </Border>
-
     </Grid>
-
 </Window>

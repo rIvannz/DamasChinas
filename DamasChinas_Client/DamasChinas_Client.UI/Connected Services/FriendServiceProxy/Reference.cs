@@ -173,7 +173,13 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         LobbyInvitationTargetNotOnline = 1114,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyKicked = 1115,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidMove = 2002,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,

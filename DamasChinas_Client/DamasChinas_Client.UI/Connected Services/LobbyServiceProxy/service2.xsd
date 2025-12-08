@@ -147,6 +147,15 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SendLobbyMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sender" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="lobbyCode" type="xs:int" />
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="OnLobbySnapshot">
     <xs:complexType>
       <xs:sequence>
@@ -184,6 +193,15 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="banInfo" nillable="true" type="q18:BanInfoDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnChatMessageReceived">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sender" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="timestamp" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -87,6 +87,21 @@ namespace DamasChinas_Client.UI.Utilities
         // ========================
         // Lobby / Join Party
         // ========================
+
+        public const string PlayerLeftMatch = "playerLeftMatch";
+        public const string StatusTurn = "status_Turn";
+        public const string StatusWaiting = "status_Waiting";
+        public const string StatusDisconnected = "status_Disconnected";
+
+
+        public const string InvalidMove = "msg_InvalidMove";
+        public const string NotYourTurn = "msg_NotYourTurn";
+        public const string CellOccupied = "msg_CellOccupied";
+        public const string MoveNotAllowed = "msg_MoveNotAllowed";
+
+        public const string GameFinishedTitle = "gameFinishedTitle";
+        public const string GameWinnerLabel = "gameWinnerLabel";
+
         public const string PrivateLobby = "private";
         public const string PublicLobby = "public";
 

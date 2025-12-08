@@ -18,7 +18,6 @@ namespace DamasChinas_Client.UI.Pages
         {
             InitializeComponent();
 
-
             Loaded += OnPageLoaded;
 
             try
@@ -50,16 +49,11 @@ namespace DamasChinas_Client.UI.Pages
             UpdateProfileDisplay();
         }
 
-        // ============================================================
-
-        // ============================================================
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                // Tomar SIEMPRE el perfil actualizado desde ClientSession
                 _profile = ClientSession.CurrentProfile;
-
                 UpdateProfileDisplay();
             }
             catch (Exception ex)
@@ -68,9 +62,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // NAVEGACIÓN
-        // ============================================================
+        // ================= NAVEGACIÓN =================
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
@@ -129,7 +121,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
         private void OnChangeDataClick(object sender, RoutedEventArgs e)
         {
             try
@@ -182,8 +173,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
-        // ============================================================
+        // ================= PERFIL / STATS =================
 
         private void UpdateProfileDisplay()
         {
@@ -195,6 +185,11 @@ namespace DamasChinas_Client.UI.Pages
                 UsernameTextBlock.Text = _profile.Username;
                 FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
                 EmailTextBlock.Text = _profile.Email;
+
+                // Estadísticas
+                MatchesPlayedTextBlock.Text = _profile.MatchesPlayed.ToString();
+                WinsTextBlock.Text = _profile.Wins.ToString();
+                LosesTextBlock.Text = _profile.Loses.ToString();
 
                 LoadAvatar(_profile);
             }

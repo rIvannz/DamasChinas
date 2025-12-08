@@ -224,12 +224,31 @@
     <sys:String x:Key="host">Anfitrión</sys:String>
     <sys:String x:Key="private">Privado</sys:String>
     <sys:String x:Key="public">Pública</sys:String>
-    <sys:String x:Key="confirmExitLobby">¿Estás seguro de que deseas salir del lobby?</sys:String>
     <sys:String x:Key="lobbyLeft">Has salido del lobby.</sys:String>
     <!-- Baneos -->
     <sys:String x:Key="ban_temp_10m">Has sido baneado temporalmente por 10 minutos debido a reportes acumulados.</sys:String>
     <sys:String x:Key="ban_temp_1h">Has sido baneado temporalmente por 1 hora debido a reportes acumulados.</sys:String>
     <sys:String x:Key="ban_permanent">Has sido baneado permanentemente debido a un alto número de reportes.</sys:String>
+
+    <sys:String x:Key="status_Connected">Conectado</sys:String>
+    <sys:String x:Key="status_Turn">SU TURNO</sys:String>
+    <sys:String x:Key="status_Waiting">Esperando...</sys:String>
+    <sys:String x:Key="status_Disconnected">DESCONECTADO</sys:String>
+    <sys:String x:Key="winner">GANADOR</sys:String>
+    <sys:String x:Key="playerLeftMatch">ha abandonado la partida.</sys:String>
+    <sys:String x:Key="confirmSurrender">¿Seguro que quieres rendirte?</sys:String>
+    <sys:String x:Key="confirmExitLobby">¿Seguro que quieres salir de la partida? Contará como derrota.</sys:String>
+
+    <sys:String x:Key="msg_InvalidMove">Movimiento inválido. No puedes realizar ese salto.</sys:String>
+
+    <sys:String x:Key="gameFinishedTitle">¡PARTIDA FINALIZADA!</sys:String>
+    <sys:String x:Key="gameWinnerLabel">GANADOR</sys:String>
+
+    <sys:String x:Key="msg_NotYourTurn">No es tu turno.</sys:String>
+    <sys:String x:Key="msg_CellOccupied">La casilla destino está ocupada.</sys:String>
+    <sys:String x:Key="msg_MoveNotAllowed">Movimiento no permitido.</sys:String>
+
+
 
 
     <!-- ========================================================= -->

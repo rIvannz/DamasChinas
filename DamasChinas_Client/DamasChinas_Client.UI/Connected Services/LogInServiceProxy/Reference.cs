@@ -96,6 +96,12 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         private string LastNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LosesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MatchesPlayedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -103,6 +109,9 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -167,6 +176,32 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Loses {
+            get {
+                return this.LosesField;
+            }
+            set {
+                if ((this.LosesField.Equals(value) != true)) {
+                    this.LosesField = value;
+                    this.RaisePropertyChanged("Loses");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MatchesPlayed {
+            get {
+                return this.MatchesPlayedField;
+            }
+            set {
+                if ((this.MatchesPlayedField.Equals(value) != true)) {
+                    this.MatchesPlayedField = value;
+                    this.RaisePropertyChanged("MatchesPlayed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Name {
             get {
                 return this.NameField;
@@ -201,6 +236,19 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
                 if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
                     this.UsernameField = value;
                     this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Wins {
+            get {
+                return this.WinsField;
+            }
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
                 }
             }
         }
@@ -298,7 +346,13 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         LobbyInvitationTargetNotOnline = 1114,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyKicked = 1115,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidMove = 2002,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,

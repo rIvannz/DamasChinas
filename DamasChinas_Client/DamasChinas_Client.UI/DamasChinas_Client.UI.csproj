@@ -69,6 +69,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Callbacks\LobbyCallbackHandler.cs" />
+    <Compile Include="Callbacks\MatchCallbackHandler.cs" />
     <Compile Include="Callbacks\SessionCallbackHandler.cs" />
     <Compile Include="Callbacks\ChatCallback.cs" />
     <Compile Include="Callbacks\LoginCallbackHandler.cs" />
@@ -88,6 +89,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Connected Services\LogInServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\MatchServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -379,10 +385,10 @@
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Server.Dtos.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\LobbyServiceProxy\service.xsd">
+    <None Include="Connected Services\LobbyServiceProxy\service1.wsdl" />
+    <None Include="Connected Services\LobbyServiceProxy\service11.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\LobbyServiceProxy\service1.wsdl" />
     <None Include="Connected Services\LobbyServiceProxy\service2.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -405,6 +411,31 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\LoginService1.wsdl" />
+    <None Include="Connected Services\MatchServiceProxy\DamasChinas_Client.UI.MatchServiceProxy.MatchStateDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\DamasChinas_Client.UI.MatchServiceProxy.OperationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\MatchService.wsdl" />
     <None Include="Connected Services\MensajeriaService\DamasChinas_Client.UI.MensajeriaService.Message.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -449,6 +480,13 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\MatchServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\MatchServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\MatchServiceProxy\item.disco" />
     <None Include="Connected Services\SessionServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -555,6 +593,7 @@
     <WCFMetadataStorage Include="Connected Services\FriendServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LobbyServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
+    <WCFMetadataStorage Include="Connected Services\MatchServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\MensajeriaService\" />
     <WCFMetadataStorage Include="Connected Services\SessionServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />

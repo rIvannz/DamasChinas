@@ -24,5 +24,8 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract(IsOneWay = true)]
         void OnBanStatusUpdated(BanInfoDto banInfo);
+
+        [OperationContract(IsOneWay = true)]
+        void OnChatMessageReceived(string sender, string message, string timestamp);
     }
 }

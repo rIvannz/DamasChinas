@@ -6,284 +6,118 @@ using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Logic;
-using DamasChinas_Server.Services;   // SessionManager y LobbySessionManager
 
 namespace DamasChinas_Server.Services
 {
-    [ServiceBehavior(
-        InstanceContextMode = InstanceContextMode.PerSession,
-        ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class LobbyService : ILobbyService
     {
         private readonly RepositoryUsers _userRepository;
         private readonly LobbyManager _lobbyManager;
         private readonly ILogService _log;
 
-        private const string ContextCreateLobby = nameof(CreateLobby);
-        private const string ContextJoinLobby = nameof(JoinLobby);
-        private const string ContextLeaveLobby = nameof(LeaveLobby);
-        private const string ContextStartGame = nameof(StartGame);
-        private const string ContextKickPlayer = nameof(KickPlayer);
-        private const string ContextReportPlayer = nameof(ReportPlayer);
-        private const string ContextInviteFriend = nameof(InviteFriend);
-        private const string ContextGetPublicLobbies = nameof(GetPublicLobbies);
-        private const string ContextGetCurrentLobby = nameof(GetCurrentLobby);
-        private const string ContextGetBanInfo = nameof(GetBanInfo);
+        public LobbyService() : this(new RepositoryUsers(), LobbyManager.Instance, LogFactory.Create<LobbyService>()) { }
 
-        public LobbyService()
-            : this(new RepositoryUsers(), LobbyManager.Instance, LogFactory.Create<LobbyService>())
-        {
-        }
-
-        internal LobbyService(
-            RepositoryUsers userRepository,
-            LobbyManager lobbyManager,
-            ILogService log)
+        internal LobbyService(RepositoryUsers userRepository, LobbyManager lobbyManager, ILogService log)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _lobbyManager = lobbyManager ?? throw new ArgumentNullException(nameof(lobbyManager));
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        // =========================================================
-        //  CONSULTAS
-        // =========================================================
-
         public List<LobbySummaryDto> GetPublicLobbies()
         {
-            try
-            {
-                _log.Info($"[{ContextGetPublicLobbies}] Request");
-                return _lobbyManager.GetPublicLobbies();
-            }
-            catch (RepositoryValidationException ex)
-            {
-                _log.Warn($"[{ContextGetPublicLobbies}] Validation error: {ex.Code}");
-                throw new FaultException<MessageCode>(ex.Code);
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[{ContextGetPublicLobbies}] Unexpected exception", ex);
-                throw new FaultException<MessageCode>(MessageCode.UnknownError);
-            }
+            return ExecuteRequest(() => _lobbyManager.GetPublicLobbies(), "GetPublicLobbies");
         }
 
         public LobbySnapshotDto GetCurrentLobby(string username)
         {
-            try
-            {
-                _log.Info($"[{ContextGetCurrentLobby}] username={username}");
-                return _lobbyManager.GetLobbyForUser(username);
-            }
-            catch (RepositoryValidationException ex)
-            {
-                _log.Warn($"[{ContextGetCurrentLobby}] Validation error: {ex.Code}");
-                throw new FaultException<MessageCode>(ex.Code);
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[{ContextGetCurrentLobby}] Unexpected exception", ex);
-                throw new FaultException<MessageCode>(MessageCode.UnknownError);
-            }
+            return ExecuteRequest(() => _lobbyManager.GetLobbyForUser(username), "GetCurrentLobby");
         }
-
-
-
-        // =========================================================
-        //  OPERACIONES
-        // =========================================================
 
         public OperationResult CreateLobby(string hostUsername, CreateLobbyRequest request)
         {
             try
             {
-                _log.Info($"[{ContextCreateLobby}] host={hostUsername}, maxPlayers={request?.MaxPlayers}, visibility={request?.Visibility}");
+                var profile = GetProfile(hostUsername);
+                var callback = GetLobbyCallback();
 
-                PublicProfile profile = GetProfile(hostUsername);
-                ILobbyCallback callback = GetLobbyCallback();
-
-                // ★★ FIX CRÍTICO: REGISTRO DEL CALLBACK ★★
+                // IMPORTANT: Register callback BEFORE logic
                 LobbySessionManager.Add(hostUsername, callback);
 
                 _lobbyManager.CreateLobby(hostUsername, profile, request, callback);
-
                 return OperationResult.Ok();
             }
-            catch (RepositoryValidationException ex)
-            {
-                _log.Warn($"[{ContextCreateLobby}] Validation error: {ex.Code}");
-                return OperationResult.Fail(ex.Message, ex.Code);
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[{ContextCreateLobby}] Unexpected exception", ex);
-                return OperationResult.Fail(ex.Message, MessageCode.MatchCreationFailed);
-            }
+            catch (Exception ex) { return HandleException(ex, "CreateLobby"); }
         }
-
 
         public OperationResult JoinLobby(JoinLobbyRequest request)
         {
             try
             {
-                _log.Info($"[{ContextJoinLobby}] username={request?.Username}, lobby={request?.LobbyCode}");
+                var profile = GetProfile(request.Username);
+                var callback = GetLobbyCallback();
 
-                PublicProfile profile = GetProfile(request.Username);
-                ILobbyCallback callback = GetLobbyCallback();
-
-                // ★★ FIX CRÍTICO: REGISTRO DEL CALLBACK ★★
+                // IMPORTANT: Register callback BEFORE logic to enable updates
                 LobbySessionManager.Add(request.Username, callback);
 
                 _lobbyManager.JoinLobby(request, profile, callback);
-
                 return OperationResult.Ok();
             }
-            catch (RepositoryValidationException ex)
-            {
-                _log.Warn($"[{ContextJoinLobby}] Validation error: {ex.Code}");
-                return OperationResult.Fail(ex.Message, ex.Code);
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[{ContextJoinLobby}] Unexpected exception", ex);
-                return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
-            }
+            catch (Exception ex) { return HandleException(ex, "JoinLobby"); }
         }
-
 
         public OperationResult LeaveLobby(string username)
         {
             try
             {
-                _log.Info($"[{ContextLeaveLobby}] username={username}");
-
-                if (string.IsNullOrWhiteSpace(username))
-                    return OperationResult.Fail("Username empty", MessageCode.UserNotFound);
-
                 _lobbyManager.LeaveLobby(username);
-
-               
                 LobbySessionManager.Remove(username);
-
                 return OperationResult.Ok();
             }
-            catch (RepositoryValidationException ex)
-            {
-                _log.Warn($"[{ContextLeaveLobby}] Validation error: {ex.Code}");
-                return OperationResult.Fail(ex.Message, ex.Code);
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[{ContextLeaveLobby}] Unexpected exception", ex);
-                return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
-            }
+            catch (Exception ex) { return HandleException(ex, "LeaveLobby"); }
         }
-
-
 
         public OperationResult StartGame(string hostUsername)
         {
-            try
-            {
-                _log.Info($"[{ContextStartGame}] host={hostUsername}");
-
-                _lobbyManager.StartGame(hostUsername);
-                return OperationResult.Ok();
-            }
-            catch (RepositoryValidationException ex)
-            {
-                return OperationResult.Fail(ex.Message, ex.Code);
-            }
-            catch (Exception ex)
-            {
-                return OperationResult.Fail(ex.Message, MessageCode.LobbyStartFailed);
-            }
+            return ExecuteOperation(() => _lobbyManager.StartGame(hostUsername), "StartGame");
         }
 
         public OperationResult KickPlayer(string hostUsername, int lobbyCode, string targetUsername)
         {
-            try
-            {
-                _lobbyManager.KickPlayer(hostUsername, lobbyCode, targetUsername);
-                return OperationResult.Ok();
-            }
-            catch (RepositoryValidationException ex)
-            {
-                return OperationResult.Fail(ex.Message, ex.Code);
-            }
-            catch (Exception ex)
-            {
-                return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
-            }
+            return ExecuteOperation(() => _lobbyManager.KickPlayer(hostUsername, lobbyCode, targetUsername), "KickPlayer");
         }
 
         public OperationResult ReportPlayer(ReportPlayerRequest request)
         {
-            try
-            {
-                _log.Info($"[ReportPlayer] reporter={request?.ReporterUsername}, reported={request?.ReportedUsername}, lobby={request?.LobbyCode}");
-
-                _lobbyManager.ReportPlayer(request);
-                return OperationResult.Ok();
-            }
-            catch (RepositoryValidationException ex)
-            {
-                return OperationResult.Fail(ex.Message, ex.Code);
-            }
-            catch (Exception ex)
-            {
-                return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
-            }
+            return ExecuteOperation(() => _lobbyManager.ReportPlayer(request), "ReportPlayer");
         }
-
 
         public BanInfoDto GetBanInfo(string username)
         {
-            try
-            {
-                return _lobbyManager.GetBanInfo(username);
-            }
-            catch (RepositoryValidationException ex)
-            {
-                throw new FaultException<MessageCode>(ex.Code);
-            }
-            catch (Exception)
-            {
-                throw new FaultException<MessageCode>(MessageCode.UnknownError);
-            }
+            return ExecuteRequest(() => _lobbyManager.GetBanInfo(username), "GetBanInfo");
         }
 
+        public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode)
+        {
+            return ExecuteOperation(() =>
+                _lobbyManager.InviteFriend(hostUsername, friendUsername, lobbyCode, ResolveCallbackForUser),
+                "InviteFriend");
+        }
 
-        public OperationResult InviteFriend(
-            string hostUsername,
-            string friendUsername,
-            int lobbyCode)
+        public void SendLobbyMessage(string sender, int lobbyCode, string message)
         {
             try
             {
-                _lobbyManager.InviteFriend(
-                    hostUsername,
-                    friendUsername,
-                    lobbyCode,
-                    ResolveCallbackForUser);
-
-                return OperationResult.Ok();
-            }
-            catch (RepositoryValidationException ex)
-            {
-                return OperationResult.Fail(ex.Message, ex.Code);
+                _lobbyManager.BroadcastMessage(lobbyCode, sender, message);
             }
             catch (Exception ex)
             {
-                return OperationResult.Fail(ex.Message, MessageCode.LobbyInvitationFailed);
+                _log.Error($"Error sending message: {ex.Message}", ex);
             }
         }
 
-
-
-        // =========================================================
-        //  HELPERS
-        // =========================================================
+        // --- Helpers ---
 
         private PublicProfile GetProfile(string username)
         {
@@ -293,13 +127,57 @@ namespace DamasChinas_Server.Services
 
         private static ILobbyCallback GetLobbyCallback()
         {
-            var context = OperationContext.Current;
-            return context.GetCallbackChannel<ILobbyCallback>();
+            return OperationContext.Current.GetCallbackChannel<ILobbyCallback>();
         }
 
         private ILobbyCallback ResolveCallbackForUser(string username)
         {
             return LobbySessionManager.Get(username);
+        }
+
+        private T ExecuteRequest<T>(Func<T> action, string context)
+        {
+            try
+            {
+                return action();
+            }
+            catch (RepositoryValidationException ex)
+            {
+                _log.Warn($"[{context}] Validation Error: {ex.Code}");
+                throw new FaultException<MessageCode>(ex.Code);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Error: {ex.Message}", ex);
+                throw new FaultException<MessageCode>(MessageCode.UnknownError);
+            }
+        }
+
+        private OperationResult ExecuteOperation(Action action, string context)
+        {
+            try
+            {
+                action();
+                return OperationResult.Ok();
+            }
+            catch (RepositoryValidationException ex)
+            {
+                return OperationResult.Fail(ex.Message, ex.Code);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Error: {ex.Message}", ex);
+                return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
+            }
+        }
+
+        private OperationResult HandleException(Exception ex, string context)
+        {
+            if (ex is RepositoryValidationException valEx)
+                return OperationResult.Fail(valEx.Message, valEx.Code);
+
+            _log.Error($"[{context}] Critical Error: {ex.Message}", ex);
+            return OperationResult.Fail(ex.Message, MessageCode.UnknownError);
         }
     }
 }

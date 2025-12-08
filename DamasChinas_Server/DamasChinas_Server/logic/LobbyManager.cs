@@ -14,7 +14,6 @@ namespace DamasChinas_Server.Logic
     {
         private const int MinPlayersToStart = 2;
         private const int MaxPlayersPerLobby = 6;
-
         private const int ReportsFirstBan = 3;
         private const int ReportsSecondBan = 6;
         private const int ReportsPermanentBan = 10;
@@ -46,64 +45,93 @@ namespace DamasChinas_Server.Logic
             Action<ILobbyCallback> action)
         {
             ILobbyCallback callback = LobbySessionManager.Get(username);
+
             if (callback == null)
+            {
                 return;
+            }
 
             try
             {
                 action(callback);
             }
-            catch (CommunicationObjectAbortedException ex)
-            {
-                _log.Warn($"[{context}] Callback abortado (user={username})", ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                _log.Warn($"[{context}] Callback disposed (user={username})", ex);
-            }
             catch (Exception ex)
             {
-                _log.Error($"[{context}] Error inesperado (user={username})", ex);
+                _log.Warn($"[{context}] Callback failed for user={username}. Error: {ex.Message}");
             }
         }
 
         // =========================================================
-        //  CREAR LOBBY
+        //  CONSULTAS
         // =========================================================
-        public LobbySnapshotDto CreateLobby(
-            string hostUsername,
-            PublicProfile hostProfile,
-            CreateLobbyRequest request,
-            ILobbyCallback callback)
+
+        public List<LobbySummaryDto> GetPublicLobbies()
         {
-            ValidateCreateRequest(request);
+            return _lobbies.Values
+                .Where(l => l.Visibility == LobbyVisibility.Public && !l.IsGameStarted)
+                .Select(l => new LobbySummaryDto
+                {
+                    LobbyCode = l.LobbyCode,
+                    HostUsername = l.HostUsername,
+                    CurrentPlayers = l.GetMemberCount(),
+                    MaxPlayers = l.MaxPlayers,
+                    Visibility = l.Visibility,
+                    IsActive = !l.IsGameStarted
+                })
+                .ToList();
+        }
 
-            int lobbyCode = GenerateUniqueCode();
+        public LobbySnapshotDto GetLobbyForUser(string username)
+        {
+            var lobby = FindLobbyByUser(username);
 
-            var lobby = new LobbyState(
-                lobbyCode,
-                request.Visibility,
-                request.MaxPlayers,
-                hostUsername);
-
-            LobbySessionManager.Add(hostUsername, callback);
-
-            lobby.AddOrUpdateMember(
-                LobbyMemberDtoFromProfile(hostProfile, isHost: true));
-
-            if (!_lobbies.TryAdd(lobbyCode, lobby))
-                throw new RepositoryValidationException(MessageCode.MatchCreationFailed);
+            if (lobby == null)
+            {
+                return null;
+            }
 
             return lobby.ToSnapshot();
         }
 
+        public BanInfoDto GetBanInfo(string username)
+        {
+            if (_bans.TryGetValue(username, out var ban))
+            {
+                if (ban.IsBanned && !ban.IsPermanent && ban.BanUntilUtc.HasValue && ban.BanUntilUtc.Value <= DateTime.UtcNow)
+                {
+                    ban.IsBanned = false;
+                }
+                return ban.ToDto();
+            }
+            return new BanInfoDto { IsBanned = false, TotalReports = 0 };
+        }
+
         // =========================================================
-        //  JOIN LOBBY
+        //  ACCIONES LOBBY
         // =========================================================
-        public LobbySnapshotDto JoinLobby(
-            JoinLobbyRequest request,
-            PublicProfile profile,
-            ILobbyCallback callback)
+
+        public LobbySnapshotDto CreateLobby(string hostUsername, PublicProfile hostProfile, CreateLobbyRequest request, ILobbyCallback callback)
+        {
+            ValidateCreateRequest(request);
+            EnsureNotBanned(hostUsername);
+
+            int lobbyCode = GenerateUniqueCode();
+
+            var lobby = new LobbyState(lobbyCode, request.Visibility, request.MaxPlayers, hostUsername);
+
+            LobbySessionManager.Add(hostUsername, callback);
+
+            lobby.AddOrUpdateMember(LobbyMemberDtoFromProfile(hostProfile, isHost: true));
+
+            if (!_lobbies.TryAdd(lobbyCode, lobby))
+            {
+                throw new RepositoryValidationException(MessageCode.MatchCreationFailed);
+            }
+
+            return lobby.ToSnapshot();
+        }
+
+        public LobbySnapshotDto JoinLobby(JoinLobbyRequest request, PublicProfile profile, ILobbyCallback callback)
         {
             ValidateJoinRequest(request);
             EnsureNotBanned(profile.Username);
@@ -114,63 +142,58 @@ namespace DamasChinas_Server.Logic
 
             LobbySessionManager.Add(profile.Username, callback);
 
-            lobby.AddOrUpdateMember(
-                LobbyMemberDtoFromProfile(profile, isHost: lobby.IsHost(profile.Username)));
+            lobby.AddOrUpdateMember(LobbyMemberDtoFromProfile(profile, isHost: lobby.IsHost(profile.Username)));
 
             BroadcastSnapshot(lobby);
-
             return lobby.ToSnapshot();
         }
 
-        // =========================================================
-        //  LEAVE LOBBY
-        // =========================================================
         public void LeaveLobby(string username)
         {
             var lobby = FindLobbyByUser(username);
             if (lobby == null)
+            {
                 return;
+            }
 
             bool wasHost = lobby.IsHost(username);
 
             lobby.RemoveMember(username);
             LobbySessionManager.Remove(username);
 
-            if (lobby.IsEmpty)
+            if (lobby.IsEmpty || wasHost)
             {
                 CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
                 return;
             }
 
+            // Si quedan jugadores, asignar nuevo host y notificar
             if (wasHost)
+            {
                 lobby.AssignNewHostIfNeeded();
+            }
 
             BroadcastSnapshot(lobby);
         }
 
-        // =========================================================
-        //  KICK PLAYER
-        // =========================================================
         public void KickPlayer(string hostUsername, int lobbyCode, string targetUsername)
         {
             var lobby = GetLobbyByCode(lobbyCode);
-
             lobby.EnsureHost(hostUsername);
+
+            if (hostUsername == targetUsername)
+            {
+                return;
+            }
+
             lobby.RemoveMember(targetUsername);
 
-            SafeInvokeCallback(
-                "KickPlayer.OnKickedFromLobby",
-                targetUsername,
-                cb => cb.OnKickedFromLobby(MessageCode.LobbyKicked)); 
-
+            SafeInvokeCallback("KickPlayer", targetUsername, cb => cb.OnKickedFromLobby(MessageCode.LobbyKicked));
             LobbySessionManager.Remove(targetUsername);
 
             BroadcastSnapshot(lobby);
         }
 
-        // =========================================================
-        //  START GAME
-        // =========================================================
         public void StartGame(string hostUsername)
         {
             var lobby = FindLobbyByUser(hostUsername);
@@ -181,32 +204,58 @@ namespace DamasChinas_Server.Logic
             lobby.EnsureCanStartGame(MinPlayersToStart);
             lobby.MarkGameStarted();
 
-            foreach (LobbyMember member in lobby.GetMembers())
+            // ==== LOG VITAL PARA DEPURAR ====
+            var members = lobby.GetMembers().ToList();
+            _log.Info($"[StartGame] Miembros detectados: {string.Join(", ", members.Select(m => m.Username))}");
+
+            if (members.Count < 2)
             {
-                SafeInvokeCallback(
-                    "StartGame.OnGameStarting",
-                    member.Username,
-                    cb => cb.OnGameStarting());
+                _log.Error("[StartGame] ERROR: La partida NO puede iniciarse, miembros insuficientes.");
+                throw new RepositoryValidationException(MessageCode.LobbyMinPlayersNotReached);
+            }
+
+            // ==== CREAR PARTIDA ====
+            var playerUsernames = members.Select(m => m.Username).ToList();
+            MatchManager.Instance.CreateMatchFromLobby(lobby.LobbyCode, playerUsernames);
+            _log.Info($"[StartGame] Partida creada correctamente con jugadores: {string.Join(", ", playerUsernames)}");
+
+            // ==== NOTIFICAR CLIENTES ====
+            foreach (var member in members)
+            {
+                SafeInvokeCallback("StartGame", member.Username, cb => cb.OnGameStarting());
             }
         }
 
+
         // =========================================================
-        //  INVITE FRIEND
+        //  CHAT & SOCIAL
         // =========================================================
-        public void InviteFriend(
-            string hostUsername,
-            string friendUsername,
-            int lobbyCode,
-            Func<string, ILobbyCallback> callbackResolver)
+
+        public void BroadcastMessage(int lobbyCode, string sender, string message)
+        {
+            if (_lobbies.TryGetValue(lobbyCode, out var lobby))
+            {
+                if (!lobby.ContainsPlayer(sender))
+                {
+                    return;
+                }
+
+                lobby.BroadcastMessage(sender, message);
+            }
+        }
+
+        public void InviteFriend(string hostUsername, string friendUsername, int lobbyCode, Func<string, ILobbyCallback> callbackResolver)
         {
             var lobby = GetLobbyByCode(lobbyCode);
-
             lobby.EnsureHost(hostUsername);
             EnsureNotBanned(friendUsername);
 
-            ILobbyCallback callback = callbackResolver(friendUsername);
+            var callback = callbackResolver(friendUsername);
+
             if (callback == null)
+            {
                 throw new RepositoryValidationException(MessageCode.LobbyInvitationTargetNotOnline);
+            }
 
             callback.OnInvitationReceived(new LobbyInvitationDto
             {
@@ -217,44 +266,141 @@ namespace DamasChinas_Server.Logic
         }
 
         // =========================================================
-        //  BROADCAST SNAPSHOT
+        //  REPORTES & BANEOS
         // =========================================================
-        private void BroadcastSnapshot(LobbyState lobby)
-        {
-            LobbySnapshotDto snapshot = lobby.ToSnapshot();
 
-            foreach (LobbyMember member in lobby.GetMembers())
+        public void ReportPlayer(ReportPlayerRequest request)
+        {
+            if (request == null)
             {
-                SafeInvokeCallback(
-                    "BroadcastSnapshot.OnLobbySnapshot",
-                    member.Username,
-                    cb => cb.OnLobbySnapshot(snapshot));
+                return;
+            }
+
+            var banState = _bans.GetOrAdd(request.ReportedUsername, new BanState { TotalReports = 0, IsBanned = false });
+
+            lock (banState)
+            {
+                banState.TotalReports++;
+                ApplyBanLogic(banState);
+            }
+        }
+
+        public void ApplyReportsOnMatchEnd(string username)
+        {
+            var banState = _bans.GetOrAdd(username, new BanState());
+        }
+
+        private void ApplyBanLogic(BanState state)
+        {
+            if (state.TotalReports >= ReportsPermanentBan)
+            {
+                state.IsBanned = true;
+                state.IsPermanent = true;
+            }
+            else if (state.TotalReports >= ReportsSecondBan)
+            {
+                state.IsBanned = true;
+                state.BanUntilUtc = DateTime.UtcNow.AddDays(7);
+            }
+            else if (state.TotalReports >= ReportsFirstBan)
+            {
+                state.IsBanned = true;
+                state.BanUntilUtc = DateTime.UtcNow.AddHours(24);
             }
         }
 
         // =========================================================
-        //  CLOSE LOBBY
+        //  HELPERS PRIVADOS
         // =========================================================
+
+        private void BroadcastSnapshot(LobbyState lobby)
+        {
+            var snapshot = lobby.ToSnapshot();
+
+            foreach (var member in lobby.GetMembers())
+            {
+                SafeInvokeCallback("Snapshot", member.Username, cb => cb.OnLobbySnapshot(snapshot));
+            }
+        }
+
         private void CloseLobbyInternal(LobbyState lobby, MessageCode reason)
         {
             _lobbies.TryRemove(lobby.LobbyCode, out _);
 
-            foreach (LobbyMember member in lobby.GetMembers())
+            foreach (var member in lobby.GetMembers())
             {
-                SafeInvokeCallback(
-                    "CloseLobbyInternal.OnLobbyClosed",
-                    member.Username,
-                    cb => cb.OnLobbyClosed(reason));
-
+                SafeInvokeCallback("CloseLobby", member.Username, cb => cb.OnLobbyClosed(reason));
                 LobbySessionManager.Remove(member.Username);
             }
         }
 
-        // =========================================================
-        //  VALIDATION + HELPERS
-        // =========================================================
-        private static LobbyMemberDto LobbyMemberDtoFromProfile(
-            PublicProfile p, bool isHost)
+        private LobbyState GetLobbyByCode(int lobbyCode)
+        {
+            if (!_lobbies.TryGetValue(lobbyCode, out var lobby))
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
+            return lobby;
+        }
+
+        private LobbyState FindLobbyByUser(string username)
+        {
+            return _lobbies.Values.FirstOrDefault(l => l.ContainsPlayer(username));
+        }
+
+        private void EnsureNotBanned(string username)
+        {
+            if (_bans.TryGetValue(username, out var ban))
+            {
+                if (ban.IsBanned && (!ban.BanUntilUtc.HasValue || ban.BanUntilUtc > DateTime.UtcNow))
+                {
+                    throw new RepositoryValidationException(MessageCode.LobbyUserBanned);
+                }
+            }
+        }
+
+        private int GenerateUniqueCode()
+        {
+            lock (_codeLock)
+            {
+                int code;
+                do
+                {
+                    code = _random.Next(100000, 999999);
+                }
+                while (_lobbies.ContainsKey(code));
+
+                return code;
+            }
+        }
+
+        private void ValidateCreateRequest(CreateLobbyRequest req)
+        {
+            if (req == null)
+            {
+                throw new RepositoryValidationException(MessageCode.MatchCreationFailed);
+            }
+
+            if (req.MaxPlayers != 2 && req.MaxPlayers != 4 && req.MaxPlayers != 6)
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyInvalidMaxPlayers);
+            }
+        }
+
+        private void ValidateJoinRequest(JoinLobbyRequest req)
+        {
+            if (req == null || req.LobbyCode <= 0)
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
+
+            if (string.IsNullOrWhiteSpace(req.Username))
+            {
+                throw new RepositoryValidationException(MessageCode.UsernameEmpty);
+            }
+        }
+
+        private static LobbyMemberDto LobbyMemberDtoFromProfile(PublicProfile p, bool isHost)
         {
             return new LobbyMemberDto
             {
@@ -265,87 +411,12 @@ namespace DamasChinas_Server.Logic
             };
         }
 
-        private LobbyState GetLobbyByCode(int lobbyCode)
-        {
-            if (!_lobbies.TryGetValue(lobbyCode, out var lobby))
-                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
-
-            return lobby;
-        }
-
-        private LobbyState FindLobbyByUser(string username)
-        {
-            return _lobbies.Values.FirstOrDefault(l => l.ContainsPlayer(username));
-        }
-
-        private int GenerateUniqueCode()
-        {
-            lock (_codeLock)
-            {
-                int code;
-                do { code = _random.Next(100000, 999999); }
-                while (_lobbies.ContainsKey(code));
-                return code;
-            }
-        }
-
-        private void ValidateCreateRequest(CreateLobbyRequest request)
-        {
-            if (request == null)
-                throw new RepositoryValidationException(MessageCode.MatchCreationFailed);
-
-            if (request.MaxPlayers != 2 &&
-                request.MaxPlayers != 4 &&
-                request.MaxPlayers != 6)
-                throw new RepositoryValidationException(MessageCode.LobbyInvalidMaxPlayers);
-        }
-
-        private void ValidateJoinRequest(JoinLobbyRequest request)
-        {
-            if (request == null || request.LobbyCode <= 0)
-                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
-
-            if (string.IsNullOrWhiteSpace(request.Username))
-                throw new RepositoryValidationException(MessageCode.UsernameEmpty);
-        }
-
-        private void EnsureNotBanned(string username)
-        {
-            if (!_bans.TryGetValue(username, out var ban))
-                return;
-
-            if (!ban.IsBanned)
-                return;
-
-            if (!ban.IsPermanent && ban.BanUntilUtc <= DateTime.UtcNow)
-            {
-                ban.IsBanned = false;
-                _bans[username] = ban;
-                return;
-            }
-
-            throw new RepositoryValidationException(MessageCode.LobbyUserBanned);
-        }
-
         // =========================================================
-        //  INTERNAL CLASSES
+        //  CLASES INTERNAS (STATE)
         // =========================================================
         private sealed class LobbyState
         {
-            private readonly ConcurrentDictionary<string, LobbyMember> _members;
-
-            public LobbyState(int lobbyCode,
-                LobbyVisibility visibility,
-                int maxPlayers,
-                string hostUsername)
-            {
-                LobbyCode = lobbyCode;
-                Visibility = visibility;
-                MaxPlayers = maxPlayers;
-                HostUsername = hostUsername;
-
-                _members = new ConcurrentDictionary<string, LobbyMember>();
-            }
+            private readonly ConcurrentDictionary<string, LobbyMember> _members = new ConcurrentDictionary<string, LobbyMember>();
 
             public int LobbyCode { get; }
             public LobbyVisibility Visibility { get; }
@@ -353,6 +424,14 @@ namespace DamasChinas_Server.Logic
             public string HostUsername { get; private set; }
             public bool IsGameStarted { get; private set; }
             public bool IsEmpty => _members.IsEmpty;
+
+            public LobbyState(int code, LobbyVisibility vis, int max, string host)
+            {
+                LobbyCode = code;
+                Visibility = vis;
+                MaxPlayers = max;
+                HostUsername = host;
+            }
 
             public void AddOrUpdateMember(LobbyMemberDto dto)
             {
@@ -369,12 +448,14 @@ namespace DamasChinas_Server.Logic
                 return _members.ContainsKey(username);
             }
 
+            public int GetMemberCount()
+            {
+                return _members.Count;
+            }
+
             public bool IsHost(string username)
             {
-                return string.Equals(
-                    HostUsername,
-                    username,
-                    StringComparison.OrdinalIgnoreCase);
+                return string.Equals(HostUsername, username, StringComparison.OrdinalIgnoreCase);
             }
 
             public void AssignNewHostIfNeeded()
@@ -385,43 +466,66 @@ namespace DamasChinas_Server.Logic
                     return;
                 }
 
-                HostUsername = _members.Values
-                    .OrderBy(m => m.JoinedAtUtc)
-                    .First().Username;
+                HostUsername = _members.Values.OrderBy(m => m.JoinedAtUtc).First().Username;
             }
 
             public void ThrowIfFull()
             {
                 if (_members.Count >= MaxPlayers)
+                {
                     throw new RepositoryValidationException(MessageCode.LobbyFull);
+                }
             }
 
             public void ThrowIfGameStarted()
             {
                 if (IsGameStarted)
+                {
                     throw new RepositoryValidationException(MessageCode.LobbyGameAlreadyStarted);
+                }
             }
 
-            public void EnsureCanStartGame(int minPlayers)
+            public void EnsureCanStartGame(int min)
             {
                 int count = _members.Count;
 
-                if (count < minPlayers)
+                if (count < min)
+                {
                     throw new RepositoryValidationException(MessageCode.LobbyMinPlayersNotReached);
+                }
 
                 if (count != 2 && count != 4 && count != 6)
+                {
                     throw new RepositoryValidationException(MessageCode.LobbyInvalidMaxPlayers);
+                }
             }
 
-            public void EnsureHost(string username)
+            public void EnsureHost(string u)
             {
-                if (!IsHost(username))
+                if (!IsHost(u))
+                {
                     throw new RepositoryValidationException(MessageCode.LobbyNotHost);
+                }
             }
 
             public void MarkGameStarted()
             {
                 IsGameStarted = true;
+            }
+
+            public IEnumerable<LobbyMember> GetMembers()
+            {
+                return _members.Values;
+            }
+
+            public void BroadcastMessage(string sender, string msg)
+            {
+                string time = DateTime.UtcNow.ToString("O"); // Formato ISO 8601 estándar
+
+                foreach (var m in _members.Values)
+                {
+                    SafeInvokeCallback("Chat", m.Username, cb => cb.OnChatMessageReceived(sender, msg, time));
+                }
             }
 
             public LobbySnapshotDto ToSnapshot()
@@ -431,23 +535,20 @@ namespace DamasChinas_Server.Logic
                     LobbyCode = LobbyCode,
                     Visibility = Visibility,
                     MaxPlayers = MaxPlayers,
-                    Members = _members.Values
-                        .Select(m => m.ToDto(IsHost(m.Username)))
-                        .OrderByDescending(m => m.IsHost)
-                        .ThenBy(m => m.Username)
-                        .ToArray(),
-                    IsGameStarted = IsGameStarted
+                    IsGameStarted = IsGameStarted,
+                    Members = _members.Values.Select(m => m.ToDto(IsHost(m.Username)))
+                                           .OrderByDescending(m => m.IsHost).ToArray()
                 };
-            }
-
-            public IEnumerable<LobbyMember> GetMembers()
-            {
-                return _members.Values;
             }
         }
 
         private sealed class LobbyMember
         {
+            public string Username { get; }
+            public string AvatarFile { get; }
+            public int UserId { get; }
+            public DateTime JoinedAtUtc { get; }
+
             public LobbyMember(LobbyMemberDto dto)
             {
                 Username = dto.Username;
@@ -455,11 +556,6 @@ namespace DamasChinas_Server.Logic
                 UserId = dto.UserId;
                 JoinedAtUtc = DateTime.UtcNow;
             }
-
-            public string Username { get; }
-            public string AvatarFile { get; }
-            public int UserId { get; }
-            public DateTime JoinedAtUtc { get; }
 
             public LobbyMemberDto ToDto(bool isHost)
             {

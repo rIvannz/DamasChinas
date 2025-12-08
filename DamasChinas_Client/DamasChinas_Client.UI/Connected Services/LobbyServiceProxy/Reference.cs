@@ -232,7 +232,13 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         LobbyInvitationTargetNotOnline = 1114,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyKicked = 1115,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidMove = 2002,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
@@ -1059,6 +1065,12 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
         System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/SendLobbyMessage")]
+        void SendLobbyMessage(string sender, int lobbyCode, string message);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/SendLobbyMessage")]
+        System.Threading.Tasks.Task SendLobbyMessageAsync(string sender, int lobbyCode, string message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1081,6 +1093,9 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnBanStatusUpdated")]
         void OnBanStatusUpdated(DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto banInfo);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnChatMessageReceived")]
+        void OnChatMessageReceived(string sender, string message, string timestamp);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1189,6 +1204,14 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode) {
             return base.Channel.InviteFriendAsync(hostUsername, friendUsername, lobbyCode);
+        }
+        
+        public void SendLobbyMessage(string sender, int lobbyCode, string message) {
+            base.Channel.SendLobbyMessage(sender, lobbyCode, message);
+        }
+        
+        public System.Threading.Tasks.Task SendLobbyMessageAsync(string sender, int lobbyCode, string message) {
+            return base.Channel.SendLobbyMessageAsync(sender, lobbyCode, message);
         }
     }
 }

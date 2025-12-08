@@ -168,26 +168,85 @@ namespace DamasChinas_Server.Game
 
         private static IEnumerable<HexCell> GenerateCompleteBoard(int radius)
         {
+            // radius = radio del hexágono central (4)
+            int centerRadius = radius;
+            int maxCoord = centerRadius * 2; // 8
+
             var cells = new List<HexCell>();
 
-            for (int x = -radius; x <= radius; x++)
+            for (int x = -maxCoord; x <= maxCoord; x++)
             {
-                for (int y = -radius; y <= radius; y++)
+                for (int y = -maxCoord; y <= maxCoord; y++)
                 {
                     int z = -x - y;
-                    if (Math.Abs(z) <= radius)
-                    {
-                        cells.Add(new HexCell(new HexCoordinate(x, y, z), CenterZoneName));
-                    }
-                }
-            }
 
-            foreach (var (direction, zone) in ZoneDefinitions)
-            {
-                AddZoneTip(cells, radius, direction, zone);
+                    // Debe cumplir coordenadas cúbicas válidas
+                    if (x + y + z != 0)
+                    {
+                        continue;
+                    }
+
+                    int ax = Math.Abs(x);
+                    int ay = Math.Abs(y);
+                    int az = Math.Abs(z);
+                    int max = Math.Max(ax, Math.Max(ay, az));
+
+                    string zone;
+
+                    // ===============================
+                    // 1) HEXÁGONO CENTRAL (61 celdas)
+                    // ===============================
+                    if (max <= centerRadius)
+                    {
+                        zone = CenterZoneName; // "Center"
+                    }
+                    else
+                    {
+                        // ===============================
+                        // 2) PUNTAS DE LA ESTRELLA (6x10)
+                        //    - Sólo aceptamos celdas que forman
+                        //      triángulos de altura = centerRadius
+                        // ===============================
+                        int[] sorted = { ax, ay, az };
+                        Array.Sort(sorted);
+
+                        bool isArmCell =
+                            max > centerRadius &&
+                            max <= centerRadius * 2 &&
+                            sorted[1] <= centerRadius; // los otros dos <= 4
+
+                        if (!isArmCell)
+                        {
+                            continue;
+                        }
+
+                        // Dominante único => define la dirección
+                        if (az == max)
+                        {
+                            zone = (z > 0)
+                                ? PlayerColor.Red.ToString()
+                                : PlayerColor.Green.ToString();
+                        }
+                        else if (ay == max)
+                        {
+                            zone = (y > 0)
+                                ? PlayerColor.Blue.ToString()
+                                : PlayerColor.Yellow.ToString();
+                        }
+                        else // ax == max
+                        {
+                            zone = (x > 0)
+                                ? PlayerColor.Orange.ToString()
+                                : PlayerColor.Purple.ToString();
+                        }
+                    }
+
+                    cells.Add(new HexCell(new HexCoordinate(x, y, z), zone));
+                }
             }
 
             return cells;
         }
+
     }
 }

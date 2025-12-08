@@ -67,7 +67,6 @@
     <Compile Include="Contracts\OperationResult.cs" />
     <Compile Include="Dtos\BanInfoDto.cs" />
     <Compile Include="Dtos\CreateLobbyRequest.cs" />
-    <Compile Include="Dtos\FinishMatchRequest.cs" />
     <Compile Include="Dtos\JoinLobbyRequest.cs" />
     <Compile Include="Dtos\Lobby.cs" />
     <Compile Include="Dtos\LobbyInvitationDto.cs" />
@@ -76,12 +75,11 @@
     <Compile Include="Dtos\LobbySummaryDto.cs" />
     <Compile Include="Dtos\LobbyVisibility.cs" />
     <Compile Include="Dtos\LoginRequest.cs" />
-    <Compile Include="Dtos\MatchResultDto.cs" />
+    <Compile Include="Dtos\MatchDtos.cs" />
     <Compile Include="Dtos\PublicFriendProfile.cs" />
     <Compile Include="Dtos\RankingEntry.cs" />
     <Compile Include="Dtos\ReportPlayerRequest.cs" />
     <Compile Include="Dtos\UserDto.cs" />
-    <Compile Include="GameRepositories\RepositoryMatches.cs" />
     <Compile Include="GameRepositories\RepositoryReports.cs" />
     <Compile Include="GameRepositories\RepositorySanctions.cs" />
     <Compile Include="Game\ChineseCheckersBoard.cs" />
@@ -99,17 +97,17 @@
     <Compile Include="Interfaces\IMatchCallback.cs" />
     <Compile Include="Interfaces\IMatchService.cs" />
     <Compile Include="Interfaces\IRankingService.cs" />
+    <Compile Include="Interfaces\IRepositoryMatches.cs" />
     <Compile Include="Interfaces\ISessionCallback.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="logic\ChatRepository.cs" />
-<<<<<<< HEAD
     <Compile Include="logic\LobbyManager.cs" />
-=======
     <Compile Include="logic\damas_chinasEntities.cs" />
     <Compile Include="logic\IApplicationDbContext.cs" />
     <Compile Include="logic\IRepositoryUsers.cs" />
->>>>>>> 60e83019092ccdfb55a8bf68b40237c04722631a
+    <Compile Include="logic\MatchManager.cs" />
     <Compile Include="logic\RankingRepository.cs" />
+    <Compile Include="logic\RepositoryMatches.cs" />
     <Compile Include="logic\RepositoryReports.cs" />
     <Compile Include="mensajes.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>

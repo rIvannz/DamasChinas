@@ -6,47 +6,53 @@ using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities
 {
+    // =========================================================================
+    // CONFIGURACIÓN WCF PARA EVITAR CONGELAMIENTO (DEADLOCK)
+    // =========================================================================
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public sealed class LobbyManager : ILobbyServiceCallback
     {
-        private readonly LobbyServiceClient _client;
+        private LobbyServiceClient _client;
+        private InstanceContext _context;
 
         public int CurrentLobbyCode { get; private set; }
         public string CurrentUsername { get; private set; }
         public string HostUsername { get; private set; }
 
+        // Eventos para la UI
         public event Action<LobbySnapshotDto> SnapshotReceived;
         public event Action<string> Kicked;
         public event Action<string> Closed;
         public event Action<LobbyInvitationDto> InvitationReceived;
         public event Action GameStarting;
         public event Action<BanInfoDto> BanUpdated;
+        public event Action<string, string, string> ChatMessageReceived;
 
         public LobbyManager()
         {
-            var ctx = new InstanceContext(this);
-            _client = new LobbyServiceClient(ctx, "NetTcpBinding_ILobbyService");
+            InitializeClient();
         }
 
-        // =========================================================
-        //  DISPATCH SEGURO
-        // =========================================================
-        private static void Dispatch(Action action)
+        private void InitializeClient()
         {
-            var app = Application.Current;
+            if (_client != null && _client.State == CommunicationState.Opened)
+            {
+                return;
+            }
 
-            if (app?.Dispatcher == null || app.Dispatcher.CheckAccess())
-            {
-                action();
-            }
-            else
-            {
-                app.Dispatcher.BeginInvoke(action);
-            }
+            _context = new InstanceContext(this);
+            _client = new LobbyServiceClient(_context, "NetTcpBinding_ILobbyService");
+        }
+
+        private void DispatchToUi(Action action)
+        {
+            Application.Current?.Dispatcher?.Invoke(action);
         }
 
         public void RegisterUser(string username)
         {
             CurrentUsername = username;
+            InitializeClient();
         }
 
         public void RegisterLobby(int code)
@@ -55,129 +61,170 @@ namespace DamasChinas_Client.UI.Utilities
         }
 
         // =========================================================
-        //  OPERACIONES BÁSICAS
+        //  OPERACIONES (Retornan OperationResult)
         // =========================================================
 
-        public void CreateLobby(string username, CreateLobbyRequest request)
+        public OperationResult CreateLobby(string username, CreateLobbyRequest request)
         {
-            RegisterUser(username);
-            var res = _client.CreateLobby(username, request);
-
-            if (!res.Success)
+            if (string.IsNullOrWhiteSpace(username))
             {
-                throw new Exception(res.Code.ToString());
+                return new OperationResult { Success = false, Code = MessageCode.UsernameEmpty };
+            }
+
+            RegisterUser(username);
+
+            if (_client.State == CommunicationState.Faulted)
+            {
+                InitializeClient();
+            }
+
+            try
+            {
+                return _client.CreateLobby(username, request);
+            }
+            catch (Exception)
+            {
+                return new OperationResult { Success = false, Code = MessageCode.ServerUnavailable };
             }
         }
 
-        public void JoinLobby(int lobbyCode, string username)
+        public OperationResult JoinLobby(int lobbyCode, string username)
         {
+            if (lobbyCode <= 0)
+            {
+                return new OperationResult { Success = false, Code = MessageCode.LobbyNotFound };
+            }
+
             RegisterUser(username);
 
-            var req = new JoinLobbyRequest
+            if (_client.State == CommunicationState.Faulted)
+            {
+                InitializeClient();
+            }
+
+            var request = new JoinLobbyRequest
             {
                 LobbyCode = lobbyCode,
                 Username = username
             };
 
-            var res = _client.JoinLobby(req);
-
-            if (!res.Success)
+            try
             {
-                throw new Exception(res.Code.ToString());
+                var result = _client.JoinLobby(request);
+
+                if (result.Success)
+                {
+                    CurrentLobbyCode = lobbyCode;
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                return new OperationResult { Success = false, Code = MessageCode.ServerUnavailable };
             }
         }
 
-        public LobbySummaryDto[] GetPublicLobbies()
+        public LobbySnapshotDto GetCurrentLobby(string username)
         {
-            return _client.GetPublicLobbies();
-        }
-
-        public LobbySnapshotDto GetCurrentLobby()
-        {
-            if (string.IsNullOrWhiteSpace(CurrentUsername))
+            if (string.IsNullOrWhiteSpace(username))
             {
                 return null;
             }
 
-            return _client.GetCurrentLobby(CurrentUsername);
+            if (_client.State == CommunicationState.Faulted)
+            {
+                InitializeClient();
+            }
+
+            try
+            {
+                return _client.GetCurrentLobby(username);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public void LeaveLobby()
+        public OperationResult LeaveLobby()
         {
-            if (!string.IsNullOrWhiteSpace(CurrentUsername))
+            if (string.IsNullOrWhiteSpace(CurrentUsername))
             {
-                _client.LeaveLobby(CurrentUsername);
+                return new OperationResult { Success = false };
+            }
+
+            try
+            {
+                if (_client.State == CommunicationState.Opened)
+                {
+                    var result = _client.LeaveLobby(CurrentUsername);
+                    CurrentLobbyCode = 0;
+                    return result;
+                }
+            }
+            catch
+            {
+                _client?.Abort();
+            }
+
+            return new OperationResult { Success = true };
+        }
+
+        public void StartGame()
+        {
+            if (_client.State == CommunicationState.Opened)
+            {
+                _client.StartGame(CurrentUsername);
             }
         }
 
         public void KickPlayer(string targetUsername)
         {
-            _client.KickPlayer(CurrentUsername, CurrentLobbyCode, targetUsername);
-        }
-
-        public void StartGame()
-        {
-            _client.StartGame(CurrentUsername);
-        }
-
-        public void InviteFriend(string friendUsername)
-        {
-            _client.InviteFriend(CurrentUsername, friendUsername, CurrentLobbyCode);
-        }
-
-        public void ReportPlayer(ReportPlayerRequest req)
-        {
-            _client.ReportPlayer(req);
-        }
-
-        // =========================================================
-        //  HELPERS DE ALTO NIVEL (OPCIÓN A)
-        // =========================================================
-
-        public LobbySnapshotDto CreateLobbyAndGetSnapshot(string username, CreateLobbyRequest request)
-        {
-            RegisterUser(username);
-
-            var res = _client.CreateLobby(username, request);
-            if (!res.Success)
+            if (_client.State == CommunicationState.Opened)
             {
-                throw new Exception(res.Code.ToString());
+                _client.KickPlayer(CurrentUsername, CurrentLobbyCode, targetUsername);
             }
-
-            var snapshot = _client.GetCurrentLobby(username);
-            if (snapshot != null)
-            {
-                CurrentLobbyCode = snapshot.LobbyCode;
-                HostUsername = snapshot.Members?.FirstOrDefault(m => m.IsHost)?.Username;
-            }
-
-            return snapshot;
         }
 
-        public LobbySnapshotDto JoinLobbyAndGetSnapshot(int lobbyCode, string username)
+        public void SendChatMessage(string message)
         {
-            RegisterUser(username);
-
-            var req = new JoinLobbyRequest
+            try
             {
-                LobbyCode = lobbyCode,
-                Username = username
-            };
-
-            var res = _client.JoinLobby(req);
-            if (!res.Success)
-            {
-                throw new Exception(res.Code.ToString());
+                if (_client.State == CommunicationState.Opened)
+                {
+                    _client.SendLobbyMessage(CurrentUsername, CurrentLobbyCode, message);
+                }
             }
-
-            var snapshot = _client.GetCurrentLobby(username);
-            if (snapshot != null)
+            catch
             {
-                CurrentLobbyCode = snapshot.LobbyCode;
-                HostUsername = snapshot.Members?.FirstOrDefault(m => m.IsHost)?.Username;
+                // Log silencioso
             }
+        }
 
-            return snapshot;
+        public void ReportPlayer(ReportPlayerRequest request)
+        {
+            if (_client.State == CommunicationState.Opened)
+            {
+                _client.ReportPlayer(request);
+            }
+        }
+
+        public LobbySummaryDto[] GetPublicLobbies()
+        {
+            try
+            {
+                if (_client.State == CommunicationState.Faulted)
+                {
+                    InitializeClient();
+                }
+
+                return _client.GetPublicLobbies();
+            }
+            catch
+            {
+                return Array.Empty<LobbySummaryDto>();
+            }
         }
 
         // =========================================================
@@ -186,42 +233,48 @@ namespace DamasChinas_Client.UI.Utilities
 
         public void OnLobbySnapshot(LobbySnapshotDto snapshot)
         {
-            Dispatch(() =>
+            if (snapshot != null)
             {
-                if (snapshot != null)
-                {
-                    CurrentLobbyCode = snapshot.LobbyCode;
-                    HostUsername = snapshot.Members?
-                        .FirstOrDefault(m => m.IsHost)?.Username;
-                }
+                CurrentLobbyCode = snapshot.LobbyCode;
 
-                SnapshotReceived?.Invoke(snapshot);
-            });
+                var host = snapshot.Members.FirstOrDefault(m => m.IsHost);
+                if (host != null)
+                {
+                    HostUsername = host.Username;
+                }
+            }
+
+            DispatchToUi(() => SnapshotReceived?.Invoke(snapshot));
         }
 
         public void OnKickedFromLobby(MessageCode reason)
         {
-            Dispatch(() => Kicked?.Invoke(reason.ToString()));
+            DispatchToUi(() => Kicked?.Invoke(reason.ToString()));
         }
 
         public void OnLobbyClosed(MessageCode reason)
         {
-            Dispatch(() => Closed?.Invoke(reason.ToString()));
+            DispatchToUi(() => Closed?.Invoke(reason.ToString()));
         }
 
-        public void OnInvitationReceived(LobbyInvitationDto inv)
+        public void OnInvitationReceived(LobbyInvitationDto invitation)
         {
-            Dispatch(() => InvitationReceived?.Invoke(inv));
+            DispatchToUi(() => InvitationReceived?.Invoke(invitation));
         }
 
         public void OnGameStarting()
         {
-            Dispatch(() => GameStarting?.Invoke());
+            DispatchToUi(() => GameStarting?.Invoke());
         }
 
         public void OnBanStatusUpdated(BanInfoDto ban)
         {
-            Dispatch(() => BanUpdated?.Invoke(ban));
+            DispatchToUi(() => BanUpdated?.Invoke(ban));
+        }
+
+        public void OnChatMessageReceived(string sender, string message, string timestamp)
+        {
+            DispatchToUi(() => ChatMessageReceived?.Invoke(sender, message, timestamp));
         }
     }
 }

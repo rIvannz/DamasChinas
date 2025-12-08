@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="MatchService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IMatchService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMatchService_ConnectToMatch_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectToMatch" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_ConnectToMatch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectToMatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_ConnectToMatch_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q1:MessageCode" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_MovePiece_InputMessage">
+    <wsdl:part name="parameters" element="tns:MovePiece" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_MovePiece_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MovePieceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_MovePiece_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q2:MessageCode" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_LeaveMatch_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveMatch" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_LeaveMatch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveMatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_LeaveMatch_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q3:MessageCode" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_GetMatchState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMatchState" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_GetMatchState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMatchStateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_GetMatchState_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q4:MessageCode" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_OnPlayerMoved_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPlayerMoved" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_OnMatchEnded_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnMatchEnded" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_OnPlayerLeftMatch_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPlayerLeftMatch" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_OnErrorOccurred_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnErrorOccurred" />
+  </wsdl:message>
+  <wsdl:portType msc:usingSession="true" name="IMatchService">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ConnectToMatch">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/ConnectToMatch" message="tns:IMatchService_ConnectToMatch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/ConnectToMatchResponse" message="tns:IMatchService_ConnectToMatch_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/ConnectToMatchMessageCodeFault" name="MessageCodeFault" message="tns:IMatchService_ConnectToMatch_MessageCodeFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="MovePiece">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/MovePiece" message="tns:IMatchService_MovePiece_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/MovePieceResponse" message="tns:IMatchService_MovePiece_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/MovePieceMessageCodeFault" name="MessageCodeFault" message="tns:IMatchService_MovePiece_MessageCodeFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="LeaveMatch">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/LeaveMatch" message="tns:IMatchService_LeaveMatch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/LeaveMatchResponse" message="tns:IMatchService_LeaveMatch_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/LeaveMatchMessageCodeFault" name="MessageCodeFault" message="tns:IMatchService_LeaveMatch_MessageCodeFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetMatchState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/GetMatchState" message="tns:IMatchService_GetMatchState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/GetMatchStateResponse" message="tns:IMatchService_GetMatchState_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/GetMatchStateMessageCodeFault" name="MessageCodeFault" message="tns:IMatchService_GetMatchState_MessageCodeFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnPlayerMoved">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/OnPlayerMoved" message="tns:IMatchService_OnPlayerMoved_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnMatchEnded">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/OnMatchEnded" message="tns:IMatchService_OnMatchEnded_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnPlayerLeftMatch">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/OnPlayerLeftMatch" message="tns:IMatchService_OnPlayerLeftMatch_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnErrorOccurred">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/OnErrorOccurred" message="tns:IMatchService_OnErrorOccurred_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IMatchService" type="tns:IMatchService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IMatchService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ConnectToMatch">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/ConnectToMatch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="MovePiece">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/MovePiece" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LeaveMatch">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/LeaveMatch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMatchState">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/GetMatchState" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="OnPlayerMoved">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/OnPlayerMoved" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnMatchEnded">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/OnMatchEnded" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnPlayerLeftMatch">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/OnPlayerLeftMatch" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnErrorOccurred">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/OnErrorOccurred" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MatchService">
+    <wsdl:port name="NetTcpBinding_IMatchService" binding="tns:NetTcpBinding_IMatchService">
+      <soap12:address location="net.tcp://localhost:8758/MatchService/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8758/MatchService/</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
