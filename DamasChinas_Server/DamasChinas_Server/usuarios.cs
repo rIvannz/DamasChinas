@@ -27,6 +27,9 @@ namespace DamasChinas_Server
             this.solicitudes_amistad1 = new HashSet<solicitudes_amistad>();
             this.mensajes = new HashSet<mensajes>();
             this.mensajes1 = new HashSet<mensajes>();
+            this.Reportes = new HashSet<Reportes>();
+            this.Reportes1 = new HashSet<Reportes>();
+            this.Sanciones = new HashSet<Sanciones>();
         }
     
         public int id_usuario { get; set; }
@@ -34,6 +37,10 @@ namespace DamasChinas_Server
         public string password_hash { get; set; }
         public string rol { get; set; }
         public System.DateTime fecha_creacion { get; set; }
+        public int numero_reportes { get; set; }
+        public Nullable<System.DateTime> fecha_desbaneo { get; set; }
+        public bool baneado_permanentemente { get; set; }
+        public Nullable<bool> esta_sancionado { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<amistades> amistades { get; set; }
@@ -55,5 +62,11 @@ namespace DamasChinas_Server
         public virtual ICollection<mensajes> mensajes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<mensajes> mensajes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reportes> Reportes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reportes> Reportes1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sanciones> Sanciones { get; set; }
     }
 }

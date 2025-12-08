@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Callbacks\LobbyCallbackHandler.cs" />
     <Compile Include="Callbacks\SessionCallbackHandler.cs" />
     <Compile Include="Callbacks\ChatCallback.cs" />
     <Compile Include="Callbacks\LoginCallbackHandler.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Pages\PreLobby.xaml.cs">
       <DependentUpon>PreLobby.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PreLobbyPageManager.cs" />
     <Compile Include="Pages\ProfileFriend.xaml.cs">
       <DependentUpon>ProfileFriend.xaml</DependentUpon>
     </Compile>
@@ -160,6 +162,7 @@
     <Compile Include="Utilities\LoaderBar.xaml.cs">
       <DependentUpon>LoaderBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\LobbySession.cs" />
     <Compile Include="Utilities\MessageHerlper.cs" />
     <Compile Include="Utilities\MessageKey.cs" />
     <Compile Include="Utilities\MessageTranslator.cs" />
@@ -355,13 +358,28 @@
     <None Include="Connected Services\FriendServiceProxy\item34.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\LobbyServiceProxy\Arrays.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.Lobby.datasource">
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.LobbySummaryDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.OperationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Server.Common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Server.Contracts.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Server.Dtos.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\service.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\service1.wsdl" />

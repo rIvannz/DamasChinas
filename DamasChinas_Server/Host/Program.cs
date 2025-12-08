@@ -19,6 +19,7 @@ namespace DamasChinasHost
                 new ServiceHost(typeof(LobbyService)),
                 new ServiceHost(typeof(SessionService)),
                 new ServiceHost(typeof(RankingService)),
+                new ServiceHost(typeof(MatchService)),
             };
 
             foreach (var host in hosts)

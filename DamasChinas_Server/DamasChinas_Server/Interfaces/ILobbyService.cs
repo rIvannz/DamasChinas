@@ -1,64 +1,59 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ServiceModel;
+using DamasChinas_Server.Common;
+using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 
 namespace DamasChinas_Server.Interfaces
 {
-    [ServiceContract]
-    public interface ILobbyCallback
-    {
-        [OperationContract(IsOneWay = true)]
-        void OnMemberJoined(LobbyMember member);
-
-        [OperationContract(IsOneWay = true)]
-        void OnMemberLeft(int userId);
-
-        [OperationContract(IsOneWay = true)]
-        void OnMessageReceived(int userId, string username, string message, string utcIso);
-
-        [OperationContract(IsOneWay = true)]
-        void OnLobbyClosed(string reason);
-
-        [OperationContract(IsOneWay = true)]
-        void OnGameStarted(string code);
-    }
-
     [ServiceContract(
-        SessionMode = SessionMode.Required,
-        CallbackContract = typeof(ILobbyCallback))]
+        CallbackContract = typeof(ILobbyCallback),
+        SessionMode = SessionMode.Required)]
     public interface ILobbyService
     {
+        // ===== CONSULTAS =====
         [OperationContract]
-        Lobby CreateLobby(int hostUserId, string hostUsername, bool isPrivate);
-
-        [OperationContract]
-        Lobby JoinLobby(string code, int userId, string username);
-
-        [OperationContract]
-        bool LeaveLobby(string code, int userId);
-
-        [OperationContract(IsOneWay = true)]
-        void SendLobbyMessage(string code, int userId, string username, string message);
+        [FaultContract(typeof(MessageCode))]
+        List<LobbySummaryDto> GetPublicLobbies();
 
         [OperationContract]
-        Lobby GetLobby(string code);
+        [FaultContract(typeof(MessageCode))]
+        LobbySnapshotDto GetCurrentLobby(string username);
+
+        // ===== OPERACIONES BÁSICAS =====
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        OperationResult CreateLobby(string hostUsername, CreateLobbyRequest request);
 
         [OperationContract]
-        bool KickMember(string code, int targetUserId);
+        [FaultContract(typeof(MessageCode))]
+        OperationResult JoinLobby(JoinLobbyRequest request);
 
         [OperationContract]
-        bool BanMember(string code, int targetUserId);
+        [FaultContract(typeof(MessageCode))]
+        OperationResult LeaveLobby(string username);
+
+        // ===== HOST ONLY =====
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        OperationResult StartGame(string hostUsername);
+
+        //  FALTABA ESTE OperationContract (causaba errores en el cliente)
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        OperationResult KickPlayer(string hostUsername, int lobbyCode, string targetUsername);
 
         [OperationContract]
-        List<Lobby> GetPublicLobbies();
-
+        [FaultContract(typeof(MessageCode))]
+        OperationResult ReportPlayer(ReportPlayerRequest request);
 
         [OperationContract]
-        bool StartGame(string code); 
+        [FaultContract(typeof(MessageCode))]
+        BanInfoDto GetBanInfo(string username);
+
+        // ===== INVITACIONES =====
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode);
     }
 }
-

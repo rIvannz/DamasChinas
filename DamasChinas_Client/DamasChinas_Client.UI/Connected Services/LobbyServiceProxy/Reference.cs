@@ -15,30 +15,30 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Lobby", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbySummaryDto", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
-    public partial class Lobby : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class LobbySummaryDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int[] BannedUsersField;
+        private int CurrentPlayersField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CodeField;
+        private string HostUsernameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime CreatedAtField;
+        private bool IsActiveField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int HostUserIdField;
+        private int LobbyCodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsPrivateField;
+        private int MaxPlayersField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private DamasChinas_Client.UI.LobbyServiceProxy.LobbyMember[] MembersField;
+        private DamasChinas_Client.UI.LobbyServiceProxy.LobbyVisibility VisibilityField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -51,72 +51,352 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int[] BannedUsers {
+        public int CurrentPlayers {
             get {
-                return this.BannedUsersField;
+                return this.CurrentPlayersField;
             }
             set {
-                if ((object.ReferenceEquals(this.BannedUsersField, value) != true)) {
-                    this.BannedUsersField = value;
-                    this.RaisePropertyChanged("BannedUsers");
+                if ((this.CurrentPlayersField.Equals(value) != true)) {
+                    this.CurrentPlayersField = value;
+                    this.RaisePropertyChanged("CurrentPlayers");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Code {
+        public string HostUsername {
             get {
-                return this.CodeField;
+                return this.HostUsernameField;
             }
             set {
-                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
-                    this.CodeField = value;
-                    this.RaisePropertyChanged("Code");
+                if ((object.ReferenceEquals(this.HostUsernameField, value) != true)) {
+                    this.HostUsernameField = value;
+                    this.RaisePropertyChanged("HostUsername");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime CreatedAt {
+        public bool IsActive {
             get {
-                return this.CreatedAtField;
+                return this.IsActiveField;
             }
             set {
-                if ((this.CreatedAtField.Equals(value) != true)) {
-                    this.CreatedAtField = value;
-                    this.RaisePropertyChanged("CreatedAt");
+                if ((this.IsActiveField.Equals(value) != true)) {
+                    this.IsActiveField = value;
+                    this.RaisePropertyChanged("IsActive");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int HostUserId {
+        public int LobbyCode {
             get {
-                return this.HostUserIdField;
+                return this.LobbyCodeField;
             }
             set {
-                if ((this.HostUserIdField.Equals(value) != true)) {
-                    this.HostUserIdField = value;
-                    this.RaisePropertyChanged("HostUserId");
+                if ((this.LobbyCodeField.Equals(value) != true)) {
+                    this.LobbyCodeField = value;
+                    this.RaisePropertyChanged("LobbyCode");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsPrivate {
+        public int MaxPlayers {
             get {
-                return this.IsPrivateField;
+                return this.MaxPlayersField;
             }
             set {
-                if ((this.IsPrivateField.Equals(value) != true)) {
-                    this.IsPrivateField = value;
-                    this.RaisePropertyChanged("IsPrivate");
+                if ((this.MaxPlayersField.Equals(value) != true)) {
+                    this.MaxPlayersField = value;
+                    this.RaisePropertyChanged("MaxPlayers");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public DamasChinas_Client.UI.LobbyServiceProxy.LobbyMember[] Members {
+        public DamasChinas_Client.UI.LobbyServiceProxy.LobbyVisibility Visibility {
+            get {
+                return this.VisibilityField;
+            }
+            set {
+                if ((this.VisibilityField.Equals(value) != true)) {
+                    this.VisibilityField = value;
+                    this.RaisePropertyChanged("Visibility");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbyVisibility", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    public enum LobbyVisibility : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Public = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Private = 1,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+    public enum MessageCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AvatarUpdateSuccess = 5002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSentSuccessfully = 3014,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoginInvalidCredentials = 1001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserDuplicateEmail = 1002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserNotFound = 1003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserValidationError = 1201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeNotFound = 1202,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeExpired = 1203,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeInvalid = 1204,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeSendError = 1205,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MatchCreationFailed = 1100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyNotFound = 1101,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInactive = 1102,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyUserBanned = 1103,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyClosed = 1104,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyFull = 1105,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyAlreadyInLobby = 1106,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInvalidMaxPlayers = 1107,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyNotHost = 1108,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyGameAlreadyStarted = 1109,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyMinPlayersNotReached = 1110,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyPlayerAlreadyReported = 1111,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyStartFailed = 1112,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInvitationFailed = 1113,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInvitationTargetNotOnline = 1114,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ServerUnavailable = 2001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NetworkLatency = 2100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UnknownError = 9999,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EmptyCredentials = 3001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordsDontMatch = 3002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 3003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameEmpty = 3004,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserProfileNotFound = 3005,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendsLoadError = 3006,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmail = 3007,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FieldLengthExceeded = 3008,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatOpenError = 3009,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NavigationError = 3010,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNameEmpty = 3100,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNameLength = 3101,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNameCharacters = 3102,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsernameEmpty = 3110,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsernameLength = 3111,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsernameCharacters = 3112,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameExists = 3113,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordEmpty = 3120,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordLength = 3121,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordUppercase = 3122,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordLowercase = 3123,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordDigit = 3124,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasswordSpecial = 3125,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmailEmpty = 3130,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmailTooLong = 3131,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmailFormat = 3132,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AvatarUpdateFailed = 5001,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbySnapshotDto", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.SerializableAttribute()]
+    public partial class LobbySnapshotDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsGameStartedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LobbyCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MaxPlayersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DamasChinas_Client.UI.LobbyServiceProxy.LobbyMemberDto[] MembersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DamasChinas_Client.UI.LobbyServiceProxy.LobbyVisibility VisibilityField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsGameStarted {
+            get {
+                return this.IsGameStartedField;
+            }
+            set {
+                if ((this.IsGameStartedField.Equals(value) != true)) {
+                    this.IsGameStartedField = value;
+                    this.RaisePropertyChanged("IsGameStarted");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LobbyCode {
+            get {
+                return this.LobbyCodeField;
+            }
+            set {
+                if ((this.LobbyCodeField.Equals(value) != true)) {
+                    this.LobbyCodeField = value;
+                    this.RaisePropertyChanged("LobbyCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MaxPlayers {
+            get {
+                return this.MaxPlayersField;
+            }
+            set {
+                if ((this.MaxPlayersField.Equals(value) != true)) {
+                    this.MaxPlayersField = value;
+                    this.RaisePropertyChanged("MaxPlayers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.LobbyServiceProxy.LobbyMemberDto[] Members {
             get {
                 return this.MembersField;
             }
@@ -124,6 +404,19 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
                 if ((object.ReferenceEquals(this.MembersField, value) != true)) {
                     this.MembersField = value;
                     this.RaisePropertyChanged("Members");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.LobbyServiceProxy.LobbyVisibility Visibility {
+            get {
+                return this.VisibilityField;
+            }
+            set {
+                if ((this.VisibilityField.Equals(value) != true)) {
+                    this.VisibilityField = value;
+                    this.RaisePropertyChanged("Visibility");
                 }
             }
         }
@@ -140,12 +433,15 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LobbyMember", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbyMemberDto", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
     [System.SerializableAttribute()]
-    public partial class LobbyMember : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class LobbyMemberDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AvatarFileField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsHostField;
@@ -163,6 +459,19 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AvatarFile {
+            get {
+                return this.AvatarFileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AvatarFileField, value) != true)) {
+                    this.AvatarFileField = value;
+                    this.RaisePropertyChanged("AvatarFile");
+                }
             }
         }
         
@@ -215,82 +524,563 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CreateLobbyRequest", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.SerializableAttribute()]
+    public partial class CreateLobbyRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MaxPlayersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DamasChinas_Client.UI.LobbyServiceProxy.LobbyVisibility VisibilityField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MaxPlayers {
+            get {
+                return this.MaxPlayersField;
+            }
+            set {
+                if ((this.MaxPlayersField.Equals(value) != true)) {
+                    this.MaxPlayersField = value;
+                    this.RaisePropertyChanged("MaxPlayers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.LobbyServiceProxy.LobbyVisibility Visibility {
+            get {
+                return this.VisibilityField;
+            }
+            set {
+                if ((this.VisibilityField.Equals(value) != true)) {
+                    this.VisibilityField = value;
+                    this.RaisePropertyChanged("Visibility");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts")]
+    [System.SerializableAttribute()]
+    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DamasChinas_Client.UI.LobbyServiceProxy.MessageCode CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool SuccessField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TechnicalDetailField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.LobbyServiceProxy.MessageCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Success {
+            get {
+                return this.SuccessField;
+            }
+            set {
+                if ((this.SuccessField.Equals(value) != true)) {
+                    this.SuccessField = value;
+                    this.RaisePropertyChanged("Success");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TechnicalDetail {
+            get {
+                return this.TechnicalDetailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TechnicalDetailField, value) != true)) {
+                    this.TechnicalDetailField = value;
+                    this.RaisePropertyChanged("TechnicalDetail");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="JoinLobbyRequest", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.SerializableAttribute()]
+    public partial class JoinLobbyRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LobbyCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LobbyCode {
+            get {
+                return this.LobbyCodeField;
+            }
+            set {
+                if ((this.LobbyCodeField.Equals(value) != true)) {
+                    this.LobbyCodeField = value;
+                    this.RaisePropertyChanged("LobbyCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReportPlayerRequest", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.SerializableAttribute()]
+    public partial class ReportPlayerRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LobbyCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ReasonField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ReportedUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ReporterUsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LobbyCode {
+            get {
+                return this.LobbyCodeField;
+            }
+            set {
+                if ((this.LobbyCodeField.Equals(value) != true)) {
+                    this.LobbyCodeField = value;
+                    this.RaisePropertyChanged("LobbyCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Reason {
+            get {
+                return this.ReasonField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ReasonField, value) != true)) {
+                    this.ReasonField = value;
+                    this.RaisePropertyChanged("Reason");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ReportedUsername {
+            get {
+                return this.ReportedUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ReportedUsernameField, value) != true)) {
+                    this.ReportedUsernameField = value;
+                    this.RaisePropertyChanged("ReportedUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ReporterUsername {
+            get {
+                return this.ReporterUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ReporterUsernameField, value) != true)) {
+                    this.ReporterUsernameField = value;
+                    this.RaisePropertyChanged("ReporterUsername");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BanInfoDto", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
+    [System.SerializableAttribute()]
+    public partial class BanInfoDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> BanUntilUtcField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsBannedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsPermanentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TotalReportsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> BanUntilUtc {
+            get {
+                return this.BanUntilUtcField;
+            }
+            set {
+                if ((this.BanUntilUtcField.Equals(value) != true)) {
+                    this.BanUntilUtcField = value;
+                    this.RaisePropertyChanged("BanUntilUtc");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsBanned {
+            get {
+                return this.IsBannedField;
+            }
+            set {
+                if ((this.IsBannedField.Equals(value) != true)) {
+                    this.IsBannedField = value;
+                    this.RaisePropertyChanged("IsBanned");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsPermanent {
+            get {
+                return this.IsPermanentField;
+            }
+            set {
+                if ((this.IsPermanentField.Equals(value) != true)) {
+                    this.IsPermanentField = value;
+                    this.RaisePropertyChanged("IsPermanent");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TotalReports {
+            get {
+                return this.TotalReportsField;
+            }
+            set {
+                if ((this.TotalReportsField.Equals(value) != true)) {
+                    this.TotalReportsField = value;
+                    this.RaisePropertyChanged("TotalReports");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbyInvitationDto", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.SerializableAttribute()]
+    public partial class LobbyInvitationDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HostUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LobbyCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MaxPlayersField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string HostUsername {
+            get {
+                return this.HostUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HostUsernameField, value) != true)) {
+                    this.HostUsernameField = value;
+                    this.RaisePropertyChanged("HostUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LobbyCode {
+            get {
+                return this.LobbyCodeField;
+            }
+            set {
+                if ((this.LobbyCodeField.Equals(value) != true)) {
+                    this.LobbyCodeField = value;
+                    this.RaisePropertyChanged("LobbyCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MaxPlayers {
+            get {
+                return this.MaxPlayersField;
+            }
+            set {
+                if ((this.MaxPlayersField.Equals(value) != true)) {
+                    this.MaxPlayersField = value;
+                    this.RaisePropertyChanged("MaxPlayers");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LobbyServiceProxy.ILobbyService", CallbackContract=typeof(DamasChinas_Client.UI.LobbyServiceProxy.ILobbyServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface ILobbyService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/CreateLobby", ReplyAction="http://tempuri.org/ILobbyService/CreateLobbyResponse")]
-        DamasChinas_Client.UI.LobbyServiceProxy.Lobby CreateLobby(int hostUserId, string hostUsername, bool isPrivate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/CreateLobby", ReplyAction="http://tempuri.org/ILobbyService/CreateLobbyResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby> CreateLobbyAsync(int hostUserId, string hostUsername, bool isPrivate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobby", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyResponse")]
-        DamasChinas_Client.UI.LobbyServiceProxy.Lobby JoinLobby(string code, int userId, string username);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobby", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby> JoinLobbyAsync(string code, int userId, string username);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/LeaveLobby", ReplyAction="http://tempuri.org/ILobbyService/LeaveLobbyResponse")]
-        bool LeaveLobby(string code, int userId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/LeaveLobby", ReplyAction="http://tempuri.org/ILobbyService/LeaveLobbyResponse")]
-        System.Threading.Tasks.Task<bool> LeaveLobbyAsync(string code, int userId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/SendLobbyMessage")]
-        void SendLobbyMessage(string code, int userId, string username, string message);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/SendLobbyMessage")]
-        System.Threading.Tasks.Task SendLobbyMessageAsync(string code, int userId, string username, string message);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetLobby", ReplyAction="http://tempuri.org/ILobbyService/GetLobbyResponse")]
-        DamasChinas_Client.UI.LobbyServiceProxy.Lobby GetLobby(string code);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetLobby", ReplyAction="http://tempuri.org/ILobbyService/GetLobbyResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby> GetLobbyAsync(string code);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/KickMember", ReplyAction="http://tempuri.org/ILobbyService/KickMemberResponse")]
-        bool KickMember(string code, int targetUserId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/KickMember", ReplyAction="http://tempuri.org/ILobbyService/KickMemberResponse")]
-        System.Threading.Tasks.Task<bool> KickMemberAsync(string code, int targetUserId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/BanMember", ReplyAction="http://tempuri.org/ILobbyService/BanMemberResponse")]
-        bool BanMember(string code, int targetUserId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/BanMember", ReplyAction="http://tempuri.org/ILobbyService/BanMemberResponse")]
-        System.Threading.Tasks.Task<bool> BanMemberAsync(string code, int targetUserId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/ILobbyService/GetPublicLobbiesResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/GetPublicLobbiesMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.LobbySummaryDto[] GetPublicLobbies();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/ILobbyService/GetPublicLobbiesResponse")]
-        DamasChinas_Client.UI.LobbyServiceProxy.Lobby[] GetPublicLobbies();
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.LobbySummaryDto[]> GetPublicLobbiesAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/ILobbyService/GetPublicLobbiesResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby[]> GetPublicLobbiesAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetCurrentLobby", ReplyAction="http://tempuri.org/ILobbyService/GetCurrentLobbyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/GetCurrentLobbyMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto GetCurrentLobby(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetCurrentLobby", ReplyAction="http://tempuri.org/ILobbyService/GetCurrentLobbyResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto> GetCurrentLobbyAsync(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/CreateLobby", ReplyAction="http://tempuri.org/ILobbyService/CreateLobbyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/CreateLobbyMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult CreateLobby(string hostUsername, DamasChinas_Client.UI.LobbyServiceProxy.CreateLobbyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/CreateLobby", ReplyAction="http://tempuri.org/ILobbyService/CreateLobbyResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> CreateLobbyAsync(string hostUsername, DamasChinas_Client.UI.LobbyServiceProxy.CreateLobbyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobby", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/JoinLobbyMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult JoinLobby(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobby", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> JoinLobbyAsync(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/LeaveLobby", ReplyAction="http://tempuri.org/ILobbyService/LeaveLobbyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/LeaveLobbyMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult LeaveLobby(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/LeaveLobby", ReplyAction="http://tempuri.org/ILobbyService/LeaveLobbyResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> LeaveLobbyAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/StartGame", ReplyAction="http://tempuri.org/ILobbyService/StartGameResponse")]
-        bool StartGame(string code);
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/StartGameMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult StartGame(string hostUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/StartGame", ReplyAction="http://tempuri.org/ILobbyService/StartGameResponse")]
-        System.Threading.Tasks.Task<bool> StartGameAsync(string code);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> StartGameAsync(string hostUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/KickPlayer", ReplyAction="http://tempuri.org/ILobbyService/KickPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/KickPlayerMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult KickPlayer(string hostUsername, int lobbyCode, string targetUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/KickPlayer", ReplyAction="http://tempuri.org/ILobbyService/KickPlayerResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> KickPlayerAsync(string hostUsername, int lobbyCode, string targetUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/ReportPlayer", ReplyAction="http://tempuri.org/ILobbyService/ReportPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/ReportPlayerMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReportPlayer(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/ReportPlayer", ReplyAction="http://tempuri.org/ILobbyService/ReportPlayerResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReportPlayerAsync(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetBanInfo", ReplyAction="http://tempuri.org/ILobbyService/GetBanInfoResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/GetBanInfoMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto GetBanInfo(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetBanInfo", ReplyAction="http://tempuri.org/ILobbyService/GetBanInfoResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto> GetBanInfoAsync(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/InviteFriendMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface ILobbyServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnMemberJoined")]
-        void OnMemberJoined(DamasChinas_Client.UI.LobbyServiceProxy.LobbyMember member);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnMemberLeft")]
-        void OnMemberLeft(int userId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnMessageReceived")]
-        void OnMessageReceived(int userId, string username, string message, string utcIso);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnLobbySnapshot")]
+        void OnLobbySnapshot(DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto snapshot);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnLobbyClosed")]
-        void OnLobbyClosed(string reason);
+        void OnLobbyClosed(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode reason);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnGameStarted")]
-        void OnGameStarted(string code);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnGameStarting")]
+        void OnGameStarting();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnInvitationReceived")]
+        void OnInvitationReceived(DamasChinas_Client.UI.LobbyServiceProxy.LobbyInvitationDto invitation);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnKickedFromLobby")]
+        void OnKickedFromLobby(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode reason);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnBanStatusUpdated")]
+        void OnBanStatusUpdated(DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto banInfo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -321,76 +1111,84 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public DamasChinas_Client.UI.LobbyServiceProxy.Lobby CreateLobby(int hostUserId, string hostUsername, bool isPrivate) {
-            return base.Channel.CreateLobby(hostUserId, hostUsername, isPrivate);
-        }
-        
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby> CreateLobbyAsync(int hostUserId, string hostUsername, bool isPrivate) {
-            return base.Channel.CreateLobbyAsync(hostUserId, hostUsername, isPrivate);
-        }
-        
-        public DamasChinas_Client.UI.LobbyServiceProxy.Lobby JoinLobby(string code, int userId, string username) {
-            return base.Channel.JoinLobby(code, userId, username);
-        }
-        
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby> JoinLobbyAsync(string code, int userId, string username) {
-            return base.Channel.JoinLobbyAsync(code, userId, username);
-        }
-        
-        public bool LeaveLobby(string code, int userId) {
-            return base.Channel.LeaveLobby(code, userId);
-        }
-        
-        public System.Threading.Tasks.Task<bool> LeaveLobbyAsync(string code, int userId) {
-            return base.Channel.LeaveLobbyAsync(code, userId);
-        }
-        
-        public void SendLobbyMessage(string code, int userId, string username, string message) {
-            base.Channel.SendLobbyMessage(code, userId, username, message);
-        }
-        
-        public System.Threading.Tasks.Task SendLobbyMessageAsync(string code, int userId, string username, string message) {
-            return base.Channel.SendLobbyMessageAsync(code, userId, username, message);
-        }
-        
-        public DamasChinas_Client.UI.LobbyServiceProxy.Lobby GetLobby(string code) {
-            return base.Channel.GetLobby(code);
-        }
-        
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby> GetLobbyAsync(string code) {
-            return base.Channel.GetLobbyAsync(code);
-        }
-        
-        public bool KickMember(string code, int targetUserId) {
-            return base.Channel.KickMember(code, targetUserId);
-        }
-        
-        public System.Threading.Tasks.Task<bool> KickMemberAsync(string code, int targetUserId) {
-            return base.Channel.KickMemberAsync(code, targetUserId);
-        }
-        
-        public bool BanMember(string code, int targetUserId) {
-            return base.Channel.BanMember(code, targetUserId);
-        }
-        
-        public System.Threading.Tasks.Task<bool> BanMemberAsync(string code, int targetUserId) {
-            return base.Channel.BanMemberAsync(code, targetUserId);
-        }
-        
-        public DamasChinas_Client.UI.LobbyServiceProxy.Lobby[] GetPublicLobbies() {
+        public DamasChinas_Client.UI.LobbyServiceProxy.LobbySummaryDto[] GetPublicLobbies() {
             return base.Channel.GetPublicLobbies();
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.Lobby[]> GetPublicLobbiesAsync() {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.LobbySummaryDto[]> GetPublicLobbiesAsync() {
             return base.Channel.GetPublicLobbiesAsync();
         }
         
-        public bool StartGame(string code) {
-            return base.Channel.StartGame(code);
+        public DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto GetCurrentLobby(string username) {
+            return base.Channel.GetCurrentLobby(username);
         }
         
-        public System.Threading.Tasks.Task<bool> StartGameAsync(string code) {
-            return base.Channel.StartGameAsync(code);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto> GetCurrentLobbyAsync(string username) {
+            return base.Channel.GetCurrentLobbyAsync(username);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult CreateLobby(string hostUsername, DamasChinas_Client.UI.LobbyServiceProxy.CreateLobbyRequest request) {
+            return base.Channel.CreateLobby(hostUsername, request);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> CreateLobbyAsync(string hostUsername, DamasChinas_Client.UI.LobbyServiceProxy.CreateLobbyRequest request) {
+            return base.Channel.CreateLobbyAsync(hostUsername, request);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult JoinLobby(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request) {
+            return base.Channel.JoinLobby(request);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> JoinLobbyAsync(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request) {
+            return base.Channel.JoinLobbyAsync(request);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult LeaveLobby(string username) {
+            return base.Channel.LeaveLobby(username);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> LeaveLobbyAsync(string username) {
+            return base.Channel.LeaveLobbyAsync(username);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult StartGame(string hostUsername) {
+            return base.Channel.StartGame(hostUsername);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> StartGameAsync(string hostUsername) {
+            return base.Channel.StartGameAsync(hostUsername);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult KickPlayer(string hostUsername, int lobbyCode, string targetUsername) {
+            return base.Channel.KickPlayer(hostUsername, lobbyCode, targetUsername);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> KickPlayerAsync(string hostUsername, int lobbyCode, string targetUsername) {
+            return base.Channel.KickPlayerAsync(hostUsername, lobbyCode, targetUsername);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReportPlayer(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request) {
+            return base.Channel.ReportPlayer(request);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReportPlayerAsync(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request) {
+            return base.Channel.ReportPlayerAsync(request);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto GetBanInfo(string username) {
+            return base.Channel.GetBanInfo(username);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto> GetBanInfoAsync(string username) {
+            return base.Channel.GetBanInfoAsync(username);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode) {
+            return base.Channel.InviteFriend(hostUsername, friendUsername, lobbyCode);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode) {
+            return base.Channel.InviteFriendAsync(hostUsername, friendUsername, lobbyCode);
         }
     }
 }

@@ -1,321 +1,173 @@
 using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
-
-using System.Diagnostics;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class PreLobby : Page
     {
         private readonly LobbyManager _lobbyManager;
-        private readonly Lobby _lobby;
+        private LobbySnapshotDto _snapshot;
         private readonly string _username;
-        private readonly int _currentUserId;
+        private readonly int _userId;
 
-     
-
-        public PreLobby()
-        {
-            InitializeComponent();
-            _lobbyManager = new LobbyManager();
-            HookEvents();
-
-            lblLobbyCode.Text = "CODE-TEST123";
-            txtLobbyPlayers.Text = "0/6";
-        }
-
-        public PreLobby(Lobby lobby, int userId, string username)
+        public PreLobby(LobbySnapshotDto snapshot, string username, int userId)
         {
             InitializeComponent();
 
-            _lobby = lobby;
+            if (snapshot == null)
+                throw new ArgumentNullException(nameof(snapshot));
+
+            PreLobbyPageManager.Register(this);
+
+            _lobbyManager = LobbySession.Manager;
             _username = username;
-            _currentUserId = userId;
+            _userId = userId;
 
-            _lobbyManager = new LobbyManager();
-            HookEvents();
+            _lobbyManager.RegisterUser(username);
+            _lobbyManager.RegisterLobby(snapshot.LobbyCode);
 
-            lblLobbyCode.Text = lobby.Code;
+            _lobbyManager.SnapshotReceived += ApplySnapshot;
+            _lobbyManager.BanUpdated += ApplyBanInfo;
 
-            var count = lobby.Members?.Length ?? 0;
-            txtLobbyPlayers.Text = $"{count}/6";
-
-            membersList.Items.Clear();
-
-            if (lobby.Members != null)
-            {
-                foreach (var m in lobby.Members)
-                {
-                    membersList.Items.Add(m);
-                }
-            }
+            ApplySnapshot(snapshot);
         }
 
-
-        private void HookEvents()
+        private bool IsCurrentUserHost()
         {
-            _lobbyManager.MessageReceived += OnMessageReceived;
-            _lobbyManager.MemberJoined += OnMemberJoined;
-            _lobbyManager.MemberLeft += OnMemberLeft;
-            _lobbyManager.LobbyClosed += OnLobbyClosed;
-            _lobbyManager.GameStarted += OnGameStarted;
+            var me = _snapshot?.Members?.FirstOrDefault(m => m.UserId == _userId);
+            return me?.IsHost ?? false;
         }
 
-       
-
-        private void OnMessageReceived(int userId, string username, string message, string utc)
+        private void UpdateStartButtonState()
         {
-            Dispatcher.Invoke(() =>
+            if (!IsCurrentUserHost())
             {
-                var tb = new TextBlock
-                {
-                    Text = $"[{utc}] {username}: {message}",
-                    Foreground = Brushes.White,
-                    TextWrapping = TextWrapping.Wrap
-                };
-
-                chatContainer.Children.Add(tb);
-            });
-        }
-
-       
-
-        private void OnInviteFriendClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.DataContext is string friendName)
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_InviteSent")
-                        .Replace("{friend}", friendName),
-                    PopupType.Info
-                );
-            }
-        }
-
-    
-
-        private void OnMemberJoined(LobbyMember member)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (!membersList.Items.OfType<LobbyMember>().Any(m => m.UserId == member.UserId))
-                {
-                    membersList.Items.Add(member);
-                }
-
-                txtLobbyPlayers.Text = $"{membersList.Items.Count}/6";
-            });
-        }
-
-
-        private void OnMemberLeft(int userId)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                var target = membersList.Items.OfType<LobbyMember>().FirstOrDefault(m => m.UserId == userId);
-
-                if (target != null)
-                {
-                    membersList.Items.Remove(target);
-                }
-
-                txtLobbyPlayers.Text = $"{membersList.Items.Count}/6";
-            });
-        }
-
-
-        private void OnLobbyClosed(string reason)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("lobbyClosed") +
-                    $" ({reason})",
-                    PopupType.Info
-                );
-
-                NavigationService?.GoBack();
-            });
-        }
-
-     
-
-        private void OnGameStarted(string code)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("gameStarting") + $" {code}",
-                    PopupType.Success
-                );
-            });
-        }
-
-     
-
-        private void OnSendMessageClick(object sender, RoutedEventArgs e)
-        {
-            var text = txtChatMessage.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(text))
-            {
+                btnStartGame.Visibility = Visibility.Collapsed;
                 return;
             }
 
-            var tb = new TextBlock
+            int count = _snapshot.Members.Length;
+            btnStartGame.Visibility = Visibility.Visible;
+            btnStartGame.IsEnabled = (count == 2 || count == 4 || count == 6);
+        }
+
+        private void OnInviteFriendClick(object sender, RoutedEventArgs e)
+        {
+            MessageHelper.ShowPopup(MessageKeys.ChatComingSoon, PopupType.Info);
+        }
+
+        private void OnReportMemberClick(object sender, RoutedEventArgs e)
+        {
+            var member = (sender as Button)?.Tag as LobbyMemberDto;
+            if (member == null || member.UserId == _userId)
+                return;
+
+            var req = new ReportPlayerRequest
             {
-                Text = $"[{DateTime.Now:HH:mm:ss}] {_username}: {text}",
-                Foreground = Brushes.White,
-                TextWrapping = TextWrapping.Wrap
+                LobbyCode = _snapshot.LobbyCode,
+                ReporterUsername = _username,
+                ReportedUsername = member.Username,
+                Reason = "Reported from lobby"
             };
 
-            chatContainer.Children.Add(tb);
-            txtChatMessage.Clear();
+            _lobbyManager.ReportPlayer(req);
+        }
+
+        private void OnKickMemberClick(object sender, RoutedEventArgs e)
+        {
+            if (!IsCurrentUserHost())
+                return;
+
+            var member = (sender as Button)?.Tag as LobbyMemberDto;
+            if (member == null || member.UserId == _userId)
+                return;
+
+            _lobbyManager.KickPlayer(member.Username);
         }
 
         private void OnChatTextChanged(object sender, TextChangedEventArgs e)
         {
             txtChatPlaceholder.Visibility =
-                string.IsNullOrWhiteSpace(txtChatMessage.Text) ? Visibility.Visible : Visibility.Collapsed;
+                string.IsNullOrWhiteSpace(txtChatMessage.Text)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+        private void OnSendMessageClick(object sender, RoutedEventArgs e)
+        {
+            string text = txtChatMessage.Text.Trim();
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
+            AddChatMessage(_username, text, DateTime.UtcNow.ToString("HH:mm:ss"));
+            txtChatMessage.Clear();
         }
 
-       
+        public void AddChatMessage(string user, string message, string utc)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                chatContainer.Children.Add(new TextBlock
+                {
+                    Text = $"[{utc}] {user}: {message}",
+                    Foreground = Brushes.White,
+                    TextWrapping = TextWrapping.Wrap
+                });
+            });
+        }
+
+
+
+        public void ApplySnapshot(LobbySnapshotDto snapshot)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _snapshot = snapshot;
+
+                lblLobbyCode.Text =
+                    $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyCode)}: {snapshot.LobbyCode}";
+
+                membersList.Items.Clear();
+                foreach (var m in snapshot.Members)
+                    membersList.Items.Add(m);
+
+                UpdateStartButtonState();
+            });
+        }
+
+        public void ApplyBanInfo(BanInfoDto ban)
+        {
+            if (ban?.IsBanned == true)
+                MessageHelper.ShowPopup(MessageKeys.LobbyUserBanned, PopupType.Error);
+        }
 
         private void OnStartGameClick(object sender, RoutedEventArgs e)
         {
-            try
+            if (!IsCurrentUserHost())
             {
-                var me = _lobby?.Members?.FirstOrDefault(m => m.UserId == _currentUserId);
-
-                if (me == null || !me.IsHost)
-                {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage("onlyHostCanStart"),
-                        PopupType.Warning
-                    );
-
-                    return;
-                }
-
-                NavigationService?.Navigate(new MatchRoom());
+                MessageHelper.ShowPopup(MessageKeys.OnlyHostCanStart, PopupType.Warning);
+                return;
             }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[PreLobby.OnStartGameClick - InvalidOperation] {ex.Message}");
 
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[PreLobby.OnStartGameClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("errorStartingGame"),
-                    PopupType.Error
-                );
-            }
+            _lobbyManager.StartGame();
         }
-
 
         private void OnExitClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("confirmExitLobby"),
-                    PopupType.Warning
-                );
-
-                _lobbyManager.LeaveLobby();
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("lobbyLeft"),
-                    PopupType.Success
-                );
-
-                NavigationService?.GoBack();
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[PreLobby.OnExitClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[PreLobby.OnExitClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
-            }
+            _lobbyManager.LeaveLobby();
+            PreLobbyPageManager.Unregister(this);
+            NavigationService?.GoBack();
         }
-
-
-
-        private void OnInviteClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button b && b.DataContext is string friend)
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_InviteSent")
-                        .Replace("{friend}", friend),
-                    PopupType.Info
-                );
-            }
-        }
-
-        private void OnBanMemberClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.Tag is LobbyMember m)
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_PlayerBanned")
-                        .Replace("{username}", m.Username),
-                    PopupType.Info
-                );
-            }
-        }
-
-   
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.GoBack();
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[PreLobby.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_NavigationError"),
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[PreLobby.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_UnknownError"),
-                    PopupType.Error
-                );
-            }
+            PreLobbyPageManager.Unregister(this);
+            NavigationService?.GoBack();
         }
     }
 }

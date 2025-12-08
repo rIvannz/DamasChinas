@@ -38,6 +38,8 @@ namespace DamasChinas_Server
         public virtual DbSet<usuarios> usuarios { get; set; }
         public virtual DbSet<historial_partidas> historial_partidas { get; set; }
         public virtual DbSet<mensajes> mensajes { get; set; }
+        public virtual DbSet<Reportes> Reportes { get; set; }
+        public virtual DbSet<Sanciones> Sanciones { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

@@ -18,6 +18,7 @@ namespace DamasChinas_Server
         public partidas()
         {
             this.participantes_partida = new HashSet<participantes_partida>();
+            this.Reportes = new HashSet<Reportes>();
         }
     
         public int id_partida { get; set; }
@@ -25,5 +26,7 @@ namespace DamasChinas_Server
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<participantes_partida> participantes_partida { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reportes> Reportes { get; set; }
     }
 }

@@ -3,9 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:conv="clr-namespace:DamasChinas_Client.UI.Converters"
       mc:Ignorable="d"
       Background="{DynamicResource SurfaceBrush}"
       d:DesignHeight="720" d:DesignWidth="1280">
+    <Page.Resources>
+        <conv:FriendStatusToColorConverter x:Key="FriendStatusToColorConverter" />
+    </Page.Resources>
+
 
     <Grid>
         <!-- Fondo -->
@@ -59,52 +64,44 @@
                                    FontWeight="Bold"
                                    Margin="0,0,0,5"/>
                         <ListBox x:Name="friendsList"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Foreground="White"
-                                 FontSize="14"
-                                 Height="150"
-                                 SelectionMode="Single"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-
-                            <!-- Amigo de ejemplo fijo -->
-                            <ListBox.Items>
-                                <ListBoxItem>
-                                    <DockPanel LastChildFill="False" Margin="0,2">
-                                        <TextBlock Text="Pruebas"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="White"
-                                                   DockPanel.Dock="Left"/>
-                                        <Button Content="{DynamicResource invite}"
-                                                Style="{DynamicResource BaseGameButton}"
-                                                Width="70"
-                                                Height="24"
-                                                DockPanel.Dock="Right"
-                                                Margin="10,0,0,0"
-                                                Click="OnInviteFriendClick"/>
-                                    </DockPanel>
-                                </ListBoxItem>
-                            </ListBox.Items>
-
-                            <!-- Plantilla para amigos reales -->
+         Background="Transparent"
+         BorderThickness="0"
+         Foreground="White"
+         FontSize="14"
+         Height="150"
+         SelectionMode="Single"
+         ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel LastChildFill="False" Margin="0,2">
-                                        <TextBlock Text="{Binding Username}" 
-                                                   VerticalAlignment="Center" 
-                                                   Foreground="White" 
-                                                   DockPanel.Dock="Left"/>
+
+                                        <!-- Indicador de estado (usa tu converter existente) -->
+                                        <Ellipse Width="10"
+                         Height="10"
+                         VerticalAlignment="Center"
+                         Margin="0,0,6,0"
+                         Fill="{Binding Status, Converter={StaticResource FriendStatusToColorConverter}}" />
+
+                                        <!-- Nombre de amigo -->
+                                        <TextBlock Text="{Binding Username}"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           DockPanel.Dock="Left" />
+
+                                        <!-- Botón Invitar -->
                                         <Button Content="{DynamicResource invite}"
-                                                Style="{DynamicResource BaseGameButton}"
-                                                Width="70"
-                                                Height="24"
-                                                DockPanel.Dock="Right"
-                                                Margin="10,0,0,0"
-                                                Click="OnInviteFriendClick"/>
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="70"
+                        Height="24"
+                        DockPanel.Dock="Right"
+                        Margin="10,0,0,0"
+                        Tag="{Binding}"
+                        Click="OnInviteFriendClick" />
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+
                     </StackPanel>
                 </Border>
 
@@ -117,23 +114,46 @@
                                    FontWeight="Bold"
                                    Margin="0,0,0,5"/>
                         <ListBox x:Name="membersList"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Foreground="White"
-                                 FontSize="14"
-                                 Height="200"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+         Background="Transparent"
+         BorderThickness="0"
+         Foreground="White"
+         FontSize="14"
+         Height="200"
+         ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel LastChildFill="False" Margin="0,2">
-                                        <TextBlock Text="{Binding Username}" 
-                                                   VerticalAlignment="Center" 
-                                                   Foreground="White" 
-                                                   DockPanel.Dock="Left"/>
+                                        <!-- Nombre del jugador -->
+                                        <TextBlock Text="{Binding Username}"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           DockPanel.Dock="Left" />
+
+                                        <!-- Botón Reportar (todos pueden reportar) -->
+                                        <Button Content="{DynamicResource report}"
+                                        Style="{DynamicResource BaseGameButton}"
+                                        Width="70"
+                        Height="24"
+                        Margin="10,0,0,0"
+                        DockPanel.Dock="Right"
+                        Tag="{Binding}"
+                        Click="OnReportMemberClick" />
+
+                                        <!-- Botón Expulsar (solo host, se valida en código) -->
+                                        <Button Content="{DynamicResource kick}"
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="70"
+                        Height="24"
+                        Margin="10,0,0,0"
+                        DockPanel.Dock="Right"
+                        Tag="{Binding}"
+                        Click="OnKickMemberClick" />
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+
+
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -184,17 +204,22 @@
             <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
                 <StackPanel Orientation="Vertical" Margin="0,0,60,0" VerticalAlignment="Center">
+                 
                     <TextBlock x:Name="lblLobbyCode"
-                               Text="CODE-XXXXXX"
-                               Foreground="White"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               TextAlignment="Center"/>
+           Text=""
+           Foreground="White"
+           FontSize="16"
+           FontWeight="Bold"
+           TextAlignment="Center"
+           Margin="0,0,0,4"/>
+
+
                     <TextBlock x:Name="txtLobbyPlayers"
-                               Text="0/6"
-                               Foreground="White"
-                               FontSize="14"
-                               TextAlignment="Center"/>
+           Text="0/6"
+           Foreground="White"
+           FontSize="14"
+           TextAlignment="Center"/>
+
                 </StackPanel>
 
                 <Button Content="{DynamicResource exit}"
@@ -203,10 +228,13 @@
                         Margin="0,0,15,0"
                         Click="OnExitClick"/>
 
-                <Button Content="{DynamicResource startGame}"
-                        Style="{DynamicResource BaseGameButton}"
-                        Width="150" Height="48"
-                        Click="OnStartGameClick"/>
+                <Button x:Name="btnStartGame"
+        Content="{DynamicResource startGame}"
+        Style="{DynamicResource BaseGameButton}"
+        Width="150"
+        Height="48"
+        Click="OnStartGameClick"/>
+
             </StackPanel>
         </Grid>
     </Grid>

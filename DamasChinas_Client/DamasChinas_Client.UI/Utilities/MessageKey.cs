@@ -95,6 +95,25 @@ namespace DamasChinas_Client.UI.Utilities
 
         public const string JoiningLobbyError = "joiningLobbyError";
 
+        // Lobby interno
+        public const string LobbyCodeUnknown = "msg_LobbyCodeUnknown";
+
+        // Reportes
+        public const string ReportReasonLobby = "msg_ReportReasonLobby";
+
+        // PreLobby
+        public const string YouWereKicked = "msg_YouWereKicked";
+        public const string PlayerKicked = "msg_PlayerKicked";
+        public const string PlayerReported = "msg_PlayerReported";
+        public const string OnlyHostCanKick = "msg_OnlyHostCanKick";
+        public const string OnlyHostCanStart = "msg_OnlyHostCanStart";
+        public const string LobbyCode = "lobbyCode";
+        public const string PlayersCount = "PlayersCount";
+
+        // Create/Start game
+        public const string ErrorStartingGame = "msg_ErrorStartingGame";
+
+
         // ========================
         // Validaciones específicas – Nombre
         // ========================
@@ -135,6 +154,12 @@ namespace DamasChinas_Client.UI.Utilities
         public const string GuestAccountWarning = "msg_GuestAccountWarning";
         public const string GuestProfileTitle = "guestProfileTitle";
 
+        // ========================
+        // Sanciones / Baneos
+        // ========================
+        public const string BanTemp10m = "ban_temp_10m";
+        public const string BanTemp1h = "ban_temp_1h";
+        public const string BanPermanent = "ban_permanent";
 
 
 

@@ -2,13 +2,10 @@
 using DamasChinas_Client.UI.Models;
 using DamasChinas_Client.UI.Utilities;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -21,9 +18,12 @@ namespace DamasChinas_Client.UI.Pages
         public JoinParty(int userId, string username)
         {
             InitializeComponent();
-            _lobbyManager = new LobbyManager();
+
             _userId = userId;
             _username = username;
+
+            _lobbyManager = LobbySession.Manager;
+            _lobbyManager.RegisterUser(username);
 
             LoadPublicLobbies();
         }
@@ -32,67 +32,23 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                var publicLobbies = _lobbyManager.GetPublicLobbies() ?? new List<Lobby>();
+                var lobbies = _lobbyManager.GetPublicLobbies() ?? Array.Empty<LobbySummaryDto>();
 
-                var activeLobbies = publicLobbies
-                    .Where(l => l.Members != null && l.Members.Length > 0)
-                    .ToList();
-
-                var list = new List<LobbySummary>();
-
-                foreach (var lobby in activeLobbies)
+                lstPublicLobbies.ItemsSource = lobbies.Select(l => new LobbySummary
                 {
-                    int playerCount = lobby.Members?.Length ?? 0;
-
-                    string hostUsername = $"User {lobby.HostUserId}";
-                    var host = lobby.Members?.FirstOrDefault(m => m.IsHost);
-
-                    if (host != null && !string.IsNullOrWhiteSpace(host.Username))
-                    {
-                        hostUsername = host.Username;
-                    }
-
-                    list.Add(new LobbySummary
-                    {
-                        Code = lobby.Code,
-                        HostUsername = hostUsername,
-                        PlayerCount = $"{playerCount}/6",
-                        IsPrivate = lobby.IsPrivate
-                            ? MessageTranslator.GetLocalizedMessage(MessageKeys.PrivateLobby)
-                            : MessageTranslator.GetLocalizedMessage(MessageKeys.PublicLobby)
-                    });
-                }
-
-                lstPublicLobbies.ItemsSource = null;
-                lstPublicLobbies.ItemsSource = list;
-                lstPublicLobbies.Items.Refresh();
-            }
-            catch (CommunicationException ex)
-            {
-                Debug.WriteLine($"[JoinParty.LoadPublicLobbies - Communication] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.ServerUnavailable,
-                    PopupType.Error
-                );
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[JoinParty.LoadPublicLobbies - Timeout] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NetworkLatency,
-                    PopupType.Error
-                );
+                    LobbyCode = l.LobbyCode,
+                    Code = l.LobbyCode.ToString(),
+                    HostUsername = l.HostUsername,
+                    PlayerCount = $"{l.CurrentPlayers}/{l.MaxPlayers}",
+                    IsPrivate = l.Visibility == LobbyVisibility.Private
+                        ? MessageTranslator.GetLocalizedMessage(MessageKeys.PrivateLobby)
+                        : MessageTranslator.GetLocalizedMessage(MessageKeys.PublicLobby)
+                }).ToList();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[JoinParty.LoadPublicLobbies - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                Debug.WriteLine($"[JoinParty.LoadPublicLobbies] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -103,125 +59,15 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnJoinSelectedClick(object sender, RoutedEventArgs e)
         {
-            try
+            var selected = lstPublicLobbies.SelectedItem as LobbySummary;
+
+            if (selected == null)
             {
-                if (lstPublicLobbies.SelectedItem is LobbySummary selected)
-                {
-                    TryJoinLobby(selected.Code);
-                }
-                else
-                {
-                    MessageHelper.ShowPopup(
-                        MessageKeys.NoLobbySelected,
-                        PopupType.Warning
-                    );
-                }
+                MessageHelper.ShowPopup(MessageKeys.NoLobbySelected, PopupType.Warning);
+                return;
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[JoinParty.OnJoinSelectedClick] {ex.Message}");
 
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
-            }
-        }
-
-        private void OnJoinByCodeClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string code = txtLobbyCode.Text.Trim();
-
-                if (string.IsNullOrWhiteSpace(code))
-                {
-                    MessageHelper.ShowPopup(
-                        MessageKeys.InvalidCodeWarning,
-                        PopupType.Warning
-                    );
-                    return;
-                }
-
-                TryJoinLobby(code);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[JoinParty.OnJoinByCodeClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Warning
-                );
-            }
-        }
-
-        private void TryJoinLobby(string code)
-        {
-            try
-            {
-                var lobby = _lobbyManager.JoinLobby(code, _userId, _username);
-
-                if (lobby == null)
-                {
-                    MessageHelper.ShowPopup(
-                        MessageKeys.JoiningLobbyError,
-                        PopupType.Warning
-                    );
-                    return;
-                }
-
-                NavigationService?.Navigate(new PreLobby(lobby, _userId, _username));
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[JoinParty.TryJoinLobby - Timeout] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NetworkLatency,
-                    PopupType.Warning
-                );
-
-                LoadPublicLobbies();
-            }
-            catch (FaultException ex)
-            {
-                Debug.WriteLine($"[JoinParty.TryJoinLobby - Fault] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.JoiningLobbyError,
-                    PopupType.Error
-                );
-
-                LoadPublicLobbies();
-            }
-            catch (CommunicationException ex)
-            {
-                Debug.WriteLine($"[JoinParty.TryJoinLobby - Communication] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.ServerUnavailable,
-                    PopupType.Error
-                );
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[JoinParty.TryJoinLobby - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NavigationError,
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[JoinParty.TryJoinLobby - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.JoiningLobbyError,
-                    PopupType.Error
-                );
-            }
+            TryJoinLobby(selected.LobbyCode);
         }
 
         private void OnCodeBoxGotFocus(object sender, RoutedEventArgs e)
@@ -232,35 +78,48 @@ namespace DamasChinas_Client.UI.Pages
         private void OnCodeBoxLostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtLobbyCode.Text))
-            {
                 txtCodePlaceholder.Visibility = Visibility.Visible;
+        }
+
+
+        private void OnJoinByCodeClick(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(txtLobbyCode.Text.Trim(), out int code))
+            {
+                MessageHelper.ShowPopup(MessageKeys.InvalidCodeWarning, PopupType.Warning);
+                return;
+            }
+
+            TryJoinLobby(code);
+        }
+
+        private void TryJoinLobby(int lobbyCode)
+        {
+            try
+            {
+                _lobbyManager.JoinLobby(lobbyCode, _username);
+                var snapshot = _lobbyManager.GetCurrentLobby();
+
+                if (snapshot == null)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.JoiningLobbyError, PopupType.Error);
+                    return;
+                }
+
+                NavigationService?.Navigate(
+                    new PreLobby(snapshot, _username, _userId)
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[JoinParty.TryJoinLobby] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.JoiningLobbyError, PopupType.Error);
             }
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                NavigationService?.GoBack();
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[JoinParty.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NavigationError,
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[JoinParty.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
-            }
+            NavigationService?.GoBack();
         }
     }
 }

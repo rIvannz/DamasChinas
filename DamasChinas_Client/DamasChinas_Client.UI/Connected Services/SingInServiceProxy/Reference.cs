@@ -252,6 +252,36 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
         LobbyClosed = 1104,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyFull = 1105,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyAlreadyInLobby = 1106,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInvalidMaxPlayers = 1107,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyNotHost = 1108,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyGameAlreadyStarted = 1109,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyMinPlayersNotReached = 1110,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyPlayerAlreadyReported = 1111,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyStartFailed = 1112,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInvitationFailed = 1113,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LobbyInvitationTargetNotOnline = 1114,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]

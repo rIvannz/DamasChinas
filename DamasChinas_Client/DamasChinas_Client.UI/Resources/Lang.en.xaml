@@ -18,6 +18,8 @@
     <sys:String x:Key="effects">Sound Effects</sys:String>
     <sys:String x:Key="yesWord">Yes</sys:String>
     <sys:String x:Key="noWord">No</sys:String>
+    <sys:String x:Key="report">Report</sys:String>
+    <sys:String x:Key="kick">Kick</sys:String>
 
     <!-- ========================================================= -->
     <!-- ADD FRIENDS                           -->
@@ -190,6 +192,19 @@
     <sys:String x:Key="invalidCodeWarning">Please enter a valid code.</sys:String>
     <sys:String x:Key="errorLoadingLobbies">Error loading public games.</sys:String>
     <sys:String x:Key="joiningLobbyError">Unable to join the selected lobby.</sys:String>
+    <!-- ===== LOBBY / PRELOBBY ===== -->
+    <sys:String x:Key="msg_LobbyCodeUnknown">Unknown code</sys:String>
+    <sys:String x:Key="msg_ReportReasonLobby">Reported from lobby</sys:String>
+
+    <sys:String x:Key="msg_YouWereKicked">You were kicked from the lobby</sys:String>
+    <sys:String x:Key="msg_PlayerKicked">Player kicked</sys:String>
+    <sys:String x:Key="msg_PlayerReported">Player reported</sys:String>
+
+    <sys:String x:Key="msg_OnlyHostCanKick">Only the host can kick players</sys:String>
+    <sys:String x:Key="msg_OnlyHostCanStart">Only the host can start the match</sys:String>
+
+    <sys:String x:Key="msg_ErrorStartingGame">The match could not be started</sys:String>
+
 
     <!-- ========================================================= -->
     <!--  LOBBY / GAME                                              -->
@@ -219,6 +234,13 @@
     <sys:String x:Key="public">Public</sys:String>
     <sys:String x:Key="confirmExitLobby">Are you sure you want to leave the lobby?</sys:String>
     <sys:String x:Key="lobbyLeft">You have left the lobby.</sys:String>
+    <!-- Baneos -->
+    <sys:String x:Key="ban_temp_10m">Has sido baneado temporalmente por 10 minutos debido a reportes acumulados.</sys:String>
+    <sys:String x:Key="ban_temp_1h">Has sido baneado temporalmente por 1 hora debido a reportes acumulados.</sys:String>
+    <sys:String x:Key="ban_permanent">Has sido baneado permanentemente debido a un alto número de reportes.</sys:String>
+    
+
+
 
     <!-- ========================================================= -->
     <!-- POPUPS                                                     -->

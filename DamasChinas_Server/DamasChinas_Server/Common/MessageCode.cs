@@ -30,6 +30,16 @@
         LobbyInactive = 1102,
         LobbyUserBanned = 1103,
         LobbyClosed = 1104,
+        LobbyFull = 1105,
+        LobbyAlreadyInLobby = 1106,
+        LobbyInvalidMaxPlayers = 1107,
+        LobbyNotHost = 1108,
+        LobbyGameAlreadyStarted = 1109,
+        LobbyMinPlayersNotReached = 1110,
+        LobbyPlayerAlreadyReported = 1111,
+        LobbyStartFailed = 1112,
+        LobbyInvitationFailed = 1113,
+        LobbyInvitationTargetNotOnline = 1114,
 
         // ========================
         // Servidor

@@ -1,35 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:complexType name="Lobby">
+  <xs:complexType name="ArrayOfLobbySummaryDto">
     <xs:sequence>
-      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BannedUsers" nillable="true" type="q1:ArrayOfint" />
-      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CreatedAt" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="HostUserId" type="xs:int" />
-      <xs:element minOccurs="0" name="IsPrivate" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Members" nillable="true" type="tns:ArrayOfLobbyMember" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbySummaryDto" nillable="true" type="tns:LobbySummaryDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Lobby" nillable="true" type="tns:Lobby" />
-  <xs:complexType name="ArrayOfLobbyMember">
+  <xs:element name="ArrayOfLobbySummaryDto" nillable="true" type="tns:ArrayOfLobbySummaryDto" />
+  <xs:complexType name="LobbySummaryDto">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbyMember" nillable="true" type="tns:LobbyMember" />
+      <xs:element minOccurs="0" name="CurrentPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="HostUsername" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LobbyCode" type="xs:int" />
+      <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Visibility" type="tns:LobbyVisibility" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfLobbyMember" nillable="true" type="tns:ArrayOfLobbyMember" />
-  <xs:complexType name="LobbyMember">
+  <xs:element name="LobbySummaryDto" nillable="true" type="tns:LobbySummaryDto" />
+  <xs:simpleType name="LobbyVisibility">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Public" />
+      <xs:enumeration value="Private" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LobbyVisibility" nillable="true" type="tns:LobbyVisibility" />
+  <xs:complexType name="LobbySnapshotDto">
     <xs:sequence>
+      <xs:element minOccurs="0" name="IsGameStarted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LobbyCode" type="xs:int" />
+      <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Members" nillable="true" type="tns:ArrayOfLobbyMemberDto" />
+      <xs:element minOccurs="0" name="Visibility" type="tns:LobbyVisibility" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbySnapshotDto" nillable="true" type="tns:LobbySnapshotDto" />
+  <xs:complexType name="ArrayOfLobbyMemberDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbyMemberDto" nillable="true" type="tns:LobbyMemberDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLobbyMemberDto" nillable="true" type="tns:ArrayOfLobbyMemberDto" />
+  <xs:complexType name="LobbyMemberDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvatarFile" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsHost" type="xs:boolean" />
       <xs:element minOccurs="0" name="UserId" type="xs:int" />
       <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LobbyMember" nillable="true" type="tns:LobbyMember" />
-  <xs:complexType name="ArrayOfLobby">
+  <xs:element name="LobbyMemberDto" nillable="true" type="tns:LobbyMemberDto" />
+  <xs:complexType name="CreateLobbyRequest">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Lobby" nillable="true" type="tns:Lobby" />
+      <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Visibility" type="tns:LobbyVisibility" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfLobby" nillable="true" type="tns:ArrayOfLobby" />
+  <xs:element name="CreateLobbyRequest" nillable="true" type="tns:CreateLobbyRequest" />
+  <xs:complexType name="JoinLobbyRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LobbyCode" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JoinLobbyRequest" nillable="true" type="tns:JoinLobbyRequest" />
+  <xs:complexType name="ReportPlayerRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LobbyCode" type="xs:int" />
+      <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ReportedUsername" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ReporterUsername" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReportPlayerRequest" nillable="true" type="tns:ReportPlayerRequest" />
+  <xs:complexType name="BanInfoDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BanUntilUtc" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="IsBanned" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsPermanent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="TotalReports" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BanInfoDto" nillable="true" type="tns:BanInfoDto" />
 </xs:schema>

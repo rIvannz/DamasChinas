@@ -1,17 +1,16 @@
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
 using DamasChinas_Client.UI.AccountManagerServiceProxy;
+using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.Utilities;
+using System;
 using System.Diagnostics;
 using System.ServiceModel;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class MenuRegisteredPlayer : Page
     {
-
         public static bool ForceAvatarRefresh = false;
 
         private readonly PublicProfile _profile;
@@ -22,11 +21,10 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
 
             _profile = profile ?? throw new ArgumentNullException(nameof(profile));
-            _userId = 1;
+            _userId = profile.IdUser;
 
             txtUsername.Text = _profile.Username;
 
-          
             Loaded += OnPageLoaded;
             LoadAvatar();
         }
@@ -40,7 +38,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-    
         private void LoadAvatar()
         {
             try
@@ -48,9 +45,7 @@ namespace DamasChinas_Client.UI.Pages
                 string avatar = ClientSession.CurrentProfile.AvatarFile;
 
                 if (!string.IsNullOrWhiteSpace(avatar))
-                {
                     AvatarImage.Source = PathProvider.LoadAvatar(avatar);
-                }
             }
             catch (Exception ex)
             {
@@ -62,52 +57,13 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                var profilePage = new ProfilePlayer();
-                NavigationService?.Navigate(profilePage);
+                NavigationService?.Navigate(new ProfilePlayer());
             }
-            catch (InvalidOperationException)
+            catch
             {
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
-
-        private void OnCreateGameClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var lobbyManager = new LobbyManager();
-                var lobby = lobbyManager.CreateLobby(_userId, _profile.Username, false);
-
-                var preLobbyPage = new PreLobby(lobby, _userId, _profile.Username);
-                NavigationService?.Navigate(preLobbyPage);
-            }
-            catch (CommunicationException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (TimeoutException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
-            }
-        }
-
-        private void OnJoinPartyClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var joinPartyPage = new JoinParty(_userId, _profile.Username);
-                NavigationService?.Navigate(joinPartyPage);
-            }
-            catch (InvalidOperationException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception)
-            {
-                MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
-            }
-        }
-
         private void OnHowToPlayClick(object sender, RoutedEventArgs e)
         {
             MessageHelper.ShowPopup(MessageKeys.TutorialUnavailable, PopupType.Info);
@@ -124,15 +80,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new Friends());
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnFriendsClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnFriendsClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.FriendsOpenError, PopupType.Error);
             }
         }
 
@@ -142,15 +92,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnSoundClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnSoundClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -160,16 +104,59 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnLanguageClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
+        }
+
+
+        // =========================================================
+        //  CREATE GAME (USANDO LobbySession.Manager)
+        // =========================================================
+        private void OnCreateGameClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var lobbyManager = LobbySession.Manager;
+
+                var request = new CreateLobbyRequest
+                {
+                    MaxPlayers = 6,
+                    Visibility = LobbyVisibility.Public
+                };
+
+                var snapshot = lobbyManager.CreateLobbyAndGetSnapshot(_profile.Username, request);
+
+                if (snapshot == null)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);
+                    return;
+                }
+
+                NavigationService?.Navigate(
+                    new PreLobby(snapshot, _profile.Username, _userId)
+                );
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnLanguageClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                Debug.WriteLine($"[OnCreateGameClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);
             }
         }
+
+        private void OnJoinPartyClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                NavigationService?.Navigate(new JoinParty(_userId, _profile.Username));
+            }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
+            }
+        }
+
+        // Otros botones igual…
     }
 }

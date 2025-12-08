@@ -28,6 +28,12 @@
         <EntityTypeShape EntityType="damas_chinasModel.mensajes" Width="1.5" PointX="3.25" PointY="5.75" />
         <AssociationConnector Association="damas_chinasModel.fk_mensaje_destino" />
         <AssociationConnector Association="damas_chinasModel.fk_mensaje_remitente" />
+        <EntityTypeShape EntityType="damas_chinasModel.Reportes" Width="1.5" PointX="8" PointY="11" />
+        <EntityTypeShape EntityType="damas_chinasModel.Sanciones" Width="1.5" PointX="3" PointY="14.875" />
+        <AssociationConnector Association="damas_chinasModel.FK__Reportes__id_par__1BC821DD" />
+        <AssociationConnector Association="damas_chinasModel.FK__Reportes__id_usu__19DFD96B" />
+        <AssociationConnector Association="damas_chinasModel.FK__Reportes__id_usu__1AD3FDA4" />
+        <AssociationConnector Association="damas_chinasModel.FK__Sanciones__id_us__208CD6FA" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -65,11 +65,25 @@
     <Compile Include="Common\MessageCode.cs" />
     <Compile Include="Common\RepositoryValidationException.cs" />
     <Compile Include="Contracts\OperationResult.cs" />
+    <Compile Include="Dtos\BanInfoDto.cs" />
+    <Compile Include="Dtos\CreateLobbyRequest.cs" />
+    <Compile Include="Dtos\FinishMatchRequest.cs" />
+    <Compile Include="Dtos\JoinLobbyRequest.cs" />
     <Compile Include="Dtos\Lobby.cs" />
+    <Compile Include="Dtos\LobbyInvitationDto.cs" />
+    <Compile Include="Dtos\LobbyMemberDto.cs" />
+    <Compile Include="Dtos\LobbySnapshotDto.cs" />
+    <Compile Include="Dtos\LobbySummaryDto.cs" />
+    <Compile Include="Dtos\LobbyVisibility.cs" />
     <Compile Include="Dtos\LoginRequest.cs" />
+    <Compile Include="Dtos\MatchResultDto.cs" />
     <Compile Include="Dtos\PublicFriendProfile.cs" />
     <Compile Include="Dtos\RankingEntry.cs" />
+    <Compile Include="Dtos\ReportPlayerRequest.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="GameRepositories\RepositoryMatches.cs" />
+    <Compile Include="GameRepositories\RepositoryReports.cs" />
+    <Compile Include="GameRepositories\RepositorySanctions.cs" />
     <Compile Include="Game\ChineseCheckersBoard.cs" />
     <Compile Include="Game\ChineseCheckersGame.cs" />
     <Compile Include="Game\HexCell.cs" />
@@ -79,14 +93,25 @@
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\PlayerColor.cs" />
     <Compile Include="Game\PlayerMove.cs" />
+    <Compile Include="Interfaces\ILobbyCallback.cs" />
     <Compile Include="Interfaces\ILobbyService.cs" />
     <Compile Include="Interfaces\ILoginCallback.cs" />
+    <Compile Include="Interfaces\IMatchCallback.cs" />
+    <Compile Include="Interfaces\IMatchService.cs" />
     <Compile Include="Interfaces\IRankingService.cs" />
     <Compile Include="Interfaces\ISessionCallback.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="logic\ChatRepository.cs" />
+    <Compile Include="logic\LobbyManager.cs" />
     <Compile Include="logic\RankingRepository.cs" />
+    <Compile Include="logic\RepositoryReports.cs" />
     <Compile Include="mensajes.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sanciones.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\FriendService.cs" />
@@ -141,8 +166,10 @@
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\LobbySessionManager.cs" />
     <Compile Include="Services\Log4NetService.cs" />
     <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\MatchService.cs" />
     <Compile Include="Services\RankingService.cs" />
     <Compile Include="Services\SessionManager.cs" />
     <Compile Include="Services\SessionService.cs" />
@@ -177,9 +204,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Damas_Chinas.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="connectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="connectionStrings.config" />
     <None Include="Damas_Chinas.edmx.diagram">
       <DependentUpon>Damas_Chinas.edmx</DependentUpon>
     </None>
