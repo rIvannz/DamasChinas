@@ -162,7 +162,7 @@ namespace DamasChinas_Server.Services
 
                 _lobbyManager.LeaveLobby(username);
 
-                // ★★ ELIMINAMOS CALLBACK AL SALIR DEL LOBBY ★★
+               
                 LobbySessionManager.Remove(username);
 
                 return OperationResult.Ok();

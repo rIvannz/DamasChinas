@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="SessionService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_ISessionService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISessionService_Subscribe_InputMessage">
+    <wsdl:part name="parameters" element="tns:Subscribe" />
+  </wsdl:message>
+  <wsdl:message name="ISessionService_Unsubscribe_InputMessage">
+    <wsdl:part name="parameters" element="tns:Unsubscribe" />
+  </wsdl:message>
+  <wsdl:message name="ISessionService_SessionExpired_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:SessionExpired" />
+  </wsdl:message>
+  <wsdl:message name="ISessionService_PlayerDisconnected_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerDisconnected" />
+  </wsdl:message>
+  <wsdl:message name="ISessionService_PlayerConnected_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerConnected" />
+  </wsdl:message>
+  <wsdl:message name="ISessionService_PlayerInGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerInGame" />
+  </wsdl:message>
+  <wsdl:message name="ISessionService_PlayerLeftGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerLeftGame" />
+  </wsdl:message>
+  <wsdl:portType msc:usingSession="true" name="ISessionService">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Subscribe">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISessionService/Subscribe" message="tns:ISessionService_Subscribe_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Unsubscribe">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISessionService/Unsubscribe" message="tns:ISessionService_Unsubscribe_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SessionExpired">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/SessionExpired" message="tns:ISessionService_SessionExpired_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PlayerDisconnected">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/PlayerDisconnected" message="tns:ISessionService_PlayerDisconnected_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PlayerConnected">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/PlayerConnected" message="tns:ISessionService_PlayerConnected_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PlayerInGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/PlayerInGame" message="tns:ISessionService_PlayerInGame_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PlayerLeftGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/PlayerLeftGame" message="tns:ISessionService_PlayerLeftGame_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_ISessionService" type="tns:ISessionService">
+    <wsp:PolicyReference URI="#NetTcpBinding_ISessionService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Subscribe">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/Subscribe" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="Unsubscribe">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/Unsubscribe" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SessionExpired">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/SessionExpired" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerDisconnected">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/PlayerDisconnected" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerConnected">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/PlayerConnected" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerInGame">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/PlayerInGame" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerLeftGame">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/PlayerLeftGame" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SessionService">
+    <wsdl:port name="NetTcpBinding_ISessionService" binding="tns:NetTcpBinding_ISessionService">
+      <soap12:address location="net.tcp://192.168.100.231:8756/SessionService/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.231:8756/SessionService/</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

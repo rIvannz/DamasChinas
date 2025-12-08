@@ -40,6 +40,8 @@
         LobbyStartFailed = 1112,
         LobbyInvitationFailed = 1113,
         LobbyInvitationTargetNotOnline = 1114,
+        LobbyKicked = 1115,
+
 
         // ========================
         // Servidor

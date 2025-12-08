@@ -3,16 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using DamasChinas_Server.Dtos;
 
-
 namespace DamasChinas_Server
 {
     public class ChatRepository
     {
+        private readonly Func<damas_chinasEntities> _dbFactory;
+
+        public ChatRepository()
+            : this(() => new damas_chinasEntities())
+        {
+        }
+
+        public ChatRepository(Func<damas_chinasEntities> dbFactory)
+        {
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+        }
+
+        public virtual damas_chinasEntities CreateDb()
+        {
+            return _dbFactory();
+        }
+
         public void SaveMessage(string usernameSender, int recipientId, string texto)
         {
             var senderId = GetIdByUsername(usernameSender);
 
-            using (var context = new damas_chinasEntities())
+            using (var context = CreateDb())
             {
                 var messageEntity = new mensajes
                 {
@@ -27,13 +43,12 @@ namespace DamasChinas_Server
             }
         }
 
-
         public List<Message> GetChatByUsername(string usernameSender, string usernameRecipient)
         {
             int idSender = GetIdByUsername(usernameSender);
             int idRecipient = GetIdByUsername(usernameRecipient);
 
-            using (var context = new damas_chinasEntities())
+            using (var context = CreateDb())
             {
                 var mensajes = context.mensajes
                     .Where(m =>
@@ -51,11 +66,8 @@ namespace DamasChinas_Server
                     .ToList();
 
                 return mensajes;
-
             }
         }
-
-
 
         public int GetIdByUsername(string username)
         {
@@ -63,7 +75,8 @@ namespace DamasChinas_Server
             {
                 throw new ArgumentException("El nombre de usuario no puede estar vacío.");
             }
-            using (var context = new damas_chinasEntities())
+
+            using (var context = CreateDb())
             {
                 int userId = context.usuarios
                     .Where(u => u.perfiles.Any(p => p.username.ToLower() == username.ToLower()))
@@ -74,9 +87,11 @@ namespace DamasChinas_Server
                 {
                     throw new InvalidOperationException($"No se encontró el usuario con username '{username}'");
                 }
+
                 return userId;
             }
-
         }
+
     }
 }
+

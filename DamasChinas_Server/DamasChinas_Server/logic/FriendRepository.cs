@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using DamasChinas_Server.logic;
 
 namespace DamasChinas_Server
 {
@@ -12,18 +13,29 @@ namespace DamasChinas_Server
     {
         private const string PendingStatus = "pendiente";
 
-        private readonly RepositoryUsers _userRepo = new RepositoryUsers();
+        private readonly IRepositoryUsers _userRepo;
+        private readonly Func<damas_chinasEntities> _dbFactory;
+
+        public FriendRepository()
+            : this(new RepositoryUsers(), () => new damas_chinasEntities())
+        {
+        }
+
+        public FriendRepository(IRepositoryUsers userRepo, Func<damas_chinasEntities> dbFactory)
+        {
+            _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+        }
 
         protected virtual damas_chinasEntities CréateDbContext()
         {
-            return new damas_chinasEntities();
+            return _dbFactory();
         }
-
         private static void EnsureDifferentUsers(int idUser1, int idUser2)
         {
             if (idUser1 == idUser2)
             {
-                
+
                 throw new RepositoryValidationException(MessageCode.UserValidationError);
             }
         }
@@ -35,7 +47,7 @@ namespace DamasChinas_Server
 
             if (!exist1 || !exist2)
             {
-         
+
                 throw new RepositoryValidationException(MessageCode.UserNotFound);
             }
         }
@@ -44,7 +56,7 @@ namespace DamasChinas_Server
         {
             if (FriendshipExists(db, idUserSender, idUserReciever))
             {
-                
+
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -53,7 +65,7 @@ namespace DamasChinas_Server
         {
             if (!FriendshipExists(db, idUserSender, idUserReciever))
             {
-                
+
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -62,7 +74,7 @@ namespace DamasChinas_Server
         {
             if (IsBlocked(db, idUserSender, idUserReciever))
             {
-               
+
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -71,7 +83,7 @@ namespace DamasChinas_Server
         {
             if (idUserSender == idUserReciever)
             {
-                
+
                 throw new RepositoryValidationException(MessageCode.UserValidationError);
             }
         }
@@ -80,7 +92,7 @@ namespace DamasChinas_Server
         {
             if (PendingRequestExists(db, idUserSender, idUserReciever))
             {
-                
+
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
@@ -89,33 +101,33 @@ namespace DamasChinas_Server
         {
             if (!PendingRequestExists(db, idUserReciever, idUserSender))
             {
-              
+
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
 
         private static bool FriendshipExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-         
+
             return db.amistades.Any(a =>
                 (a.id_usuario1 == idUserSender && a.id_usuario2 == idUserReciever) ||
-                (a.id_usuario1 == idUserSender && a.id_usuario2 == idUserReciever));
+                (a.id_usuario2 == idUserSender && a.id_usuario1 == idUserReciever));
         }
 
         private static bool IsBlocked(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-           
+
             return db.bloqueos.Any(b =>
                 (b.id_bloqueador == idUserSender && b.id_bloqueado == idUserReciever) ||
-                (b.id_bloqueador == idUserSender && b.id_bloqueado == idUserReciever));
+                (b.id_bloqueado == idUserSender && b.id_bloqueador == idUserReciever));
         }
 
         private static bool PendingRequestExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            
+
             return db.solicitudes_amistad.Any(s =>
                 ((s.id_emisor == idUserSender && s.id_receptor == idUserReciever) ||
-                 (s.id_emisor == idUserSender && s.id_receptor == idUserReciever)) &&
+                 (s.id_receptor == idUserSender && s.id_emisor == idUserReciever)) &&
                 s.estado == PendingStatus);
         }
 
@@ -149,7 +161,7 @@ namespace DamasChinas_Server
         {
             if (IsBlocked(db, blockerId, blockedId))
             {
-               
+
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
 
@@ -167,17 +179,17 @@ namespace DamasChinas_Server
         private static void RemoveBlock(damas_chinasEntities db, int blockerId, int blockedId)
         {
             var blockEntry = db.bloqueos.FirstOrDefault(b =>
-                b.id_bloqueador == blockerId &&
-                b.id_bloqueado == blockedId);
+                (b.id_bloqueador == blockerId && b.id_bloqueado == blockedId) ||
+                (b.id_bloqueado == blockerId && b.id_bloqueador == blockedId));
 
             if (blockEntry == null)
             {
-              
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
 
             db.bloqueos.Remove(blockEntry);
         }
+
 
         private static void RemoveFriendshipIfExists(damas_chinasEntities db, int idUserBlocker, int idUserBlocked)
         {
@@ -227,7 +239,7 @@ namespace DamasChinas_Server
             }
         }
 
-        public List<FriendDto> GetFriendRequests(string username)
+        public virtual List<FriendDto> GetFriendRequests(string username)
         {
             int id = _userRepo.GetUserIdByUsername(username);
 
@@ -282,7 +294,7 @@ namespace DamasChinas_Server
 
                 if (request == null)
                 {
-                    
+
                     throw new RepositoryValidationException(MessageCode.FriendsLoadError);
                 }
 
@@ -416,5 +428,7 @@ namespace DamasChinas_Server
                 return true;
             }
         }
+    
+        }
     }
-}
+

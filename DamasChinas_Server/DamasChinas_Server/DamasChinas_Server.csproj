@@ -102,7 +102,13 @@
     <Compile Include="Interfaces\ISessionCallback.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="logic\ChatRepository.cs" />
+<<<<<<< HEAD
     <Compile Include="logic\LobbyManager.cs" />
+=======
+    <Compile Include="logic\damas_chinasEntities.cs" />
+    <Compile Include="logic\IApplicationDbContext.cs" />
+    <Compile Include="logic\IRepositoryUsers.cs" />
+>>>>>>> 60e83019092ccdfb55a8bf68b40237c04722631a
     <Compile Include="logic\RankingRepository.cs" />
     <Compile Include="logic\RepositoryReports.cs" />
     <Compile Include="mensajes.cs">
@@ -193,6 +199,7 @@
     <Compile Include="Utilities\Email.cs" />
     <Compile Include="Utilities\EmailSender.cs" />
     <Compile Include="Utilities\DbContextFactory.cs" />
+    <Compile Include="Utilities\Email\IEmailSender.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>
