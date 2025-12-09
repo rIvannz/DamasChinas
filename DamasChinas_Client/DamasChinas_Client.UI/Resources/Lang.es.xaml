@@ -17,6 +17,9 @@
     <sys:String x:Key="noWord">No</sys:String>
     <sys:String x:Key="report">Reportar</sys:String>
     <sys:String x:Key="kick">Expulsar</sys:String>
+    <sys:String x:Key="matchesPlayedShort">jugadas</sys:String>
+    <sys:String x:Key="globalRanking">RANKING GLOBAL</sys:String>
+
 
     <!-- ========================================================= -->
     <!--  Modulo de agregar amigos                     -->
@@ -296,6 +299,10 @@
     <sys:String x:Key="msg_FeatureUnavailable">Esta función aún no está disponible.</sys:String>
     <sys:String x:Key="msg_LanguageChangeError">
         Ocurrió un error al cambiar el idioma. Inténtalo nuevamente.</sys:String>
+    <sys:String x:Key="msg_RankingUnavailable">
+        En este momento no podemos mostrar el ranking de jugadores.
+    </sys:String>
+
 
 
     <!-- Navegación / módulos -->

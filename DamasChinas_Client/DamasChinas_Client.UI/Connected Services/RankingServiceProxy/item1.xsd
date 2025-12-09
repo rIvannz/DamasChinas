@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8007/RankingService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
+  <xs:element name="GetTop10Ranking">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTop10RankingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="GetTop10RankingResult" nillable="true" type="q1:ArrayOfRankingEntry" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

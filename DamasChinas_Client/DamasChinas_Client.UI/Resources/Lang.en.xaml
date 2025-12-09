@@ -20,6 +20,9 @@
     <sys:String x:Key="noWord">No</sys:String>
     <sys:String x:Key="report">Report</sys:String>
     <sys:String x:Key="kick">Kick</sys:String>
+    <sys:String x:Key="matchesPlayedShort">matches</sys:String>
+    <sys:String x:Key="globalRanking">GLOBAL RANKING</sys:String>
+  
 
     <!-- ========================================================= -->
     <!-- ADD FRIENDS                           -->
@@ -310,7 +313,11 @@
 
     <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">This feature is not available yet.</sys:String>
- 
+    <sys:String x:Key="msg_RankingUnavailable">
+        We are unable to display the player ranking right now.
+    </sys:String>
+
+
 
     <!-- Navegación / módulos -->
 

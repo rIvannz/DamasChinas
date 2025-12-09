@@ -96,12 +96,12 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                // 1. Usamos OperationResult
+               
                 var result = _lobbyManager.JoinLobby(lobbyCode, _username);
 
                 if (result.Success)
                 {
-                    // 2. Pasamos el username al obtener snapshot
+                   
                     var snapshot = _lobbyManager.GetCurrentLobby(_username);
 
                     if (snapshot == null)
@@ -116,7 +116,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    // 3. Mostramos error del resultado
+                   
                     MessageHelper.ShowFromResult(result);
                 }
             }

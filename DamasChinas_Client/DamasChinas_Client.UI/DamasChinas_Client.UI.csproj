@@ -103,6 +103,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\RankingServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\SessionServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -139,6 +144,12 @@
     <Compile Include="Pages\PreLobbyPageManager.cs" />
     <Compile Include="Pages\ProfileFriend.xaml.cs">
       <DependentUpon>ProfileFriend.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ProfilePublicPage.xaml.cs">
+      <DependentUpon>ProfilePublicPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RankingPage.xaml.cs">
+      <DependentUpon>RankingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SelectAvatar.xaml.cs">
       <DependentUpon>SelectAvatar.xaml</DependentUpon>
@@ -257,10 +268,18 @@
     <Compile Include="Pages\ProfilePlayer.xaml.cs">
       <DependentUpon>ProfilePlayer.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\ProfilePublicPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProfileUser.xaml" />
     <Compile Include="Pages\ProfileUser.xaml.cs">
       <DependentUpon>ProfileUser.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\RankingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SelectAvatar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -321,16 +340,16 @@
     <None Include="Connected Services\AccountManagerServiceProxy\DamasChinas_Client.UI.AccountManagerServiceProxy.PublicProfile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AccountManagerServiceProxy\item12.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\AccountManagerServiceProxy\item4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AccountManagerServiceProxy\item41.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AccountManagerServiceProxy\item42.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AccountManagerServiceProxy\item43.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\AccountManagerServiceProxy\item5.xsd">
@@ -358,10 +377,10 @@
     <None Include="Connected Services\FriendServiceProxy\item2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\FriendServiceProxy\item33.xsd">
+    <None Include="Connected Services\FriendServiceProxy\item4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\FriendServiceProxy\item34.xsd">
+    <None Include="Connected Services\FriendServiceProxy\item5.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto.datasource">
@@ -389,25 +408,25 @@
     <None Include="Connected Services\LobbyServiceProxy\service11.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\LobbyServiceProxy\service2.xsd">
+    <None Include="Connected Services\LobbyServiceProxy\service12.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\LobbyServiceProxy\service21.xsd">
+    <None Include="Connected Services\LobbyServiceProxy\service13.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\item3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\LogInServiceProxy\item31.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\LogInServiceProxy\item32.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\item4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\item5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInServiceProxy\item9.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInServiceProxy\LoginService1.wsdl" />
@@ -449,6 +468,22 @@
     <None Include="Connected Services\MensajeriaService\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\RankingServiceProxy\DamasChinas_Client.UI.RankingServiceProxy.RankingEntry.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\RankingServiceProxy\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\RankingServiceProxy\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\RankingServiceProxy\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\RankingServiceProxy\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\RankingServiceProxy\RankingService.wsdl" />
     <None Include="Connected Services\SessionServiceProxy\service.wsdl" />
     <None Include="Connected Services\SessionServiceProxy\service.xsd">
       <SubType>Designer</SubType>
@@ -462,16 +497,16 @@
     <None Include="Connected Services\SingInServiceProxy\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\SingInServiceProxy\item11.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Connected Services\SingInServiceProxy\item3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\SingInServiceProxy\item31.xsd">
+    <None Include="Connected Services\SingInServiceProxy\item4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\SingInServiceProxy\item32.xsd">
+    <None Include="Connected Services\SingInServiceProxy\item5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SingInServiceProxy\item6.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\SingInServiceProxy\SingInService1.wsdl" />
@@ -480,23 +515,30 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\RankingServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\RankingServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\RankingServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\RankingServiceProxy\item.disco" />
+    <None Include="Connected Services\SingInServiceProxy\item1.disco" />
+    <None Include="Connected Services\MatchServiceProxy\item.disco" />
+    <None Include="Connected Services\LogInServiceProxy\item1.disco" />
+    <None Include="Connected Services\FriendServiceProxy\item.disco" />
+    <None Include="Connected Services\AccountManagerServiceProxy\item1.disco" />
     <None Include="Connected Services\MatchServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Connected Services\MatchServiceProxy\configuration.svcinfo" />
     <None Include="Connected Services\MatchServiceProxy\configuration91.svcinfo" />
-    <None Include="Connected Services\MatchServiceProxy\item.disco" />
     <None Include="Connected Services\SessionServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Connected Services\SessionServiceProxy\configuration.svcinfo" />
     <None Include="Connected Services\SessionServiceProxy\configuration91.svcinfo" />
-    <None Include="Connected Services\FriendServiceProxy\item.disco" />
-    <None Include="Connected Services\LogInServiceProxy\item1.disco" />
-    <None Include="Connected Services\AccountManagerServiceProxy\item1.disco" />
-    <None Include="Connected Services\SingInServiceProxy\item1.disco" />
     <None Include="Connected Services\LobbyServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -595,6 +637,7 @@
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\MatchServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\MensajeriaService\" />
+    <WCFMetadataStorage Include="Connected Services\RankingServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\SessionServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\SingInServiceProxy\" />
   </ItemGroup>

@@ -22,14 +22,14 @@
     <MetadataSource Address="http://localhost:8008/MatchService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="050ae141-b076-42de-b07c-f84c7638386e" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd3" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="8a6bdea4-ee9c-4167-8854-dae8ee5bf230" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd1" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="e969eb41-0de0-48a6-981e-c79a8f412d16" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd0" />
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="09368e39-9337-4bdc-9598-aa5e25582307" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?disco" />
-    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="f4bb52e0-c193-457c-900b-0d411946fb22" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd5" />
-    <MetadataFile FileName="MatchService.wsdl" MetadataType="Wsdl" ID="4c6d7982-019f-4dfb-9ad6-73ae8efe5a5c" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?wsdl" />
-    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="c4261dac-ff14-46e2-9a4b-100f0f9f27ef" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd4" />
-    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="e27f0d2c-3054-42e3-9c72-8f1c4c41f07a" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd2" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="104aa946-c75e-48ac-845c-b4e0209c3072" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd3" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="97aad7ad-38ea-4aed-8d87-75e9e4792d13" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd1" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="a31b4552-5752-4072-aad3-64029d5b4769" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd0" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="260a57da-f4ae-44b5-9adf-52366a67eef3" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?disco" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="afa06fe9-1ce0-4d07-b184-06a3cf84ac81" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd5" />
+    <MetadataFile FileName="MatchService.wsdl" MetadataType="Wsdl" ID="516a94f2-6a6b-47b0-ba96-eadc7d702fc4" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?wsdl" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="dadbe4bf-13c4-420d-9f41-d94a77d0c936" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd4" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="56f7b02f-6fa4-4b09-a61b-b228265bbe61" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

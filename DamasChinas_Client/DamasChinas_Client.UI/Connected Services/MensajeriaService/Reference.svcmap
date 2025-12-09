@@ -22,10 +22,10 @@
     <MetadataSource Address="http://localhost:8003/ChatService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="61abe438-9dd1-4bcf-8229-c9146fe7fe80" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="6d0be7e5-1f4f-4335-bcf4-4ea8cfc7a2e5" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="abfb3393-7871-4494-b1ff-5c27514ba000" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
-    <MetadataFile FileName="DamasChinas_Server.Dtos.xsd" MetadataType="Schema" ID="b16a217e-f8f2-46c2-bad1-d2184025eaaa" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="e4e7b224-7da8-4562-9136-53828eb98210" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="1e33a673-1aeb-469a-a360-85c5981658ea" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="42e015e2-6bb4-4822-b591-4cf656b2eff6" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
+    <MetadataFile FileName="DamasChinas_Server.Dtos.xsd" MetadataType="Schema" ID="32fabd04-aa03-4c99-91a8-73fddbc724f7" SourceId="1" SourceUrl="http://localhost:8003/ChatService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

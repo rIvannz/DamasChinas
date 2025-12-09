@@ -68,6 +68,7 @@ namespace DamasChinas_Client.UI.Utilities
         public const string CodeSentSuccessfully = "msg_CodeSentSuccessfully";
         public const string ChatUnavailable = "msg_ChatUnavailable";
         public const string UsernameExists = "msg_UsernameExists";
+        public const string RankingUnavailable = "msg_RankingUnavailable";
 
         // ========================
         // UI / Menús (nuevos keys)

@@ -34,10 +34,10 @@ namespace DamasChinas_Client.UI.Callbacks
 
         public void OnInvitationReceived(LobbyInvitationDto invitation)
         {
-            // Lógica de invitación (Popup global)
+           
             Application.Current.Dispatcher.Invoke(() =>
             {
-                // Aquí podrías mostrar un popup global de invitación
+             
             });
         }
 
@@ -48,7 +48,7 @@ namespace DamasChinas_Client.UI.Callbacks
 
         public void OnBanStatusUpdated(BanInfoDto ban)
         {
-            // Implementación futura
+           
         }
 
         public void OnChatMessageReceived(string sender, string message, string timestamp)

@@ -5,9 +5,7 @@ namespace DamasChinas_Client.UI.Callbacks
 {
     public class SessionCallbackHandler : ISessionServiceCallback
     {
-        // ============================================================
-        // EVENTOS GLOBALES DEL SISTEMA
-        // ============================================================
+
 
         public static event Action<string> PlayerConnectedEvent;
         public static event Action<string> PlayerDisconnectedEvent;
@@ -16,9 +14,7 @@ namespace DamasChinas_Client.UI.Callbacks
         public static event Action<string> PlayerLeftGameEvent;
 
 
-        // ============================================================
-        // MÉTODOS DEL CALLBACK DEL SERVICIO
-        // ============================================================
+ 
 
         public void PlayerConnected(string username)
         {

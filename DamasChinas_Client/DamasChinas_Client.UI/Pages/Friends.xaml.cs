@@ -18,9 +18,7 @@ namespace DamasChinas_Client.UI.Pages
         public ObservableCollection<FriendList> FriendsList { get; }
             = new ObservableCollection<FriendList>();
 
-        // ============================================================
-        // CONSTRUCTOR
-        // ============================================================
+
         public Friends()
         {
             InitializeComponent();
@@ -29,22 +27,19 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-            // ONLINE
             SessionCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
 
-            // OFFLINE
+         
             SessionCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
 
-            // IN GAME
+         
             SessionCallbackHandler.PlayerInGameEvent += OnPlayerInGame;
 
-            // LEAVES GAME (back to Online)
+         
             SessionCallbackHandler.PlayerLeftGameEvent += OnPlayerLeftGame;
         }
 
-        // ============================================================
-        // LOAD / UNLOAD
-        // ============================================================
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             LoadFriends();
@@ -58,9 +53,7 @@ namespace DamasChinas_Client.UI.Pages
             SessionCallbackHandler.PlayerLeftGameEvent -= OnPlayerLeftGame;
         }
 
-        // ============================================================
-        // CARGA INICIAL
-        // ============================================================
+
         private static string BuildAvatarUri(string avatarFile)
         {
             string f = string.IsNullOrWhiteSpace(avatarFile) ? DefaultAvatarFile : avatarFile;
@@ -96,9 +89,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // EVENTOS DEL CALLBACK — ACTUALIZAN SOLO EL AMIGO NECESARIO
-        // ============================================================
+
 
         private void OnPlayerConnected(string username)
         {
@@ -132,9 +123,7 @@ namespace DamasChinas_Client.UI.Pages
             Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
         }
 
-        // ============================================================
-        // HANDLERS DE UI
-        // ============================================================
+
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {

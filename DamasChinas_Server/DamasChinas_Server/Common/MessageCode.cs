@@ -48,6 +48,7 @@
         // ========================
         ServerUnavailable = 2001,
         InvalidMove = 2002,
+        RankingUnavailable = 2003,
 
         NetworkLatency = 2100,
         UnknownError = 9999,

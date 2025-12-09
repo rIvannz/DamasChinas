@@ -71,8 +71,25 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {
-            MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Info);
+            try
+            {
+                // 1. Validar que NO sea invitado
+                if (!ClientSession.IsLoggedIn)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.GuestStatsUnavailable, PopupType.Info);
+                    return;
+                }
+
+                // 2. Navegar a la página de Ranking
+                NavigationService?.Navigate(new RankingPage());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer.OnStatisticsClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Error);
+            }
         }
+
 
         private void OnFriendsClick(object sender, RoutedEventArgs e)
         {

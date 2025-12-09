@@ -1,0 +1,210 @@
+﻿<Page x:Class="DamasChinas_Client.UI.Pages.RankingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Background="{DynamicResource SurfaceBrush}"
+      d:DesignHeight="720"
+      d:DesignWidth="1280">
+
+    <Grid>
+        <!-- Fondo -->
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/board-background.png"
+                        Stretch="UniformToFill"/>
+        </Grid.Background>
+
+        <!-- Capa oscura -->
+        <Rectangle Fill="#66000000"/>
+
+        <Grid Margin="40">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ENCABEZADO -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Retroceder -->
+                <Button Width="60"
+                        Height="60"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ToolTip="{DynamicResource back}"
+                        Cursor="Hand"
+                        Click="OnBackClick">
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
+                           Width="40"
+                           Height="40"/>
+                </Button>
+
+                <TextBlock Grid.Column="1"
+                           Text="{DynamicResource globalRanking}"
+                           Foreground="White"
+                           FontSize="58"
+                           FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
+                           FontWeight="Bold"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <Button Width="150"
+                            Height="40"
+                            Style="{DynamicResource BaseGameButton}"
+                            Content="{DynamicResource refresh}"
+                            Click="OnRefreshClick"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- LISTA -->
+            <Border Grid.Row="1"
+                    Background="#80222222"
+                    BorderBrush="#444"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="20">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+
+                    <ItemsControl x:Name="lvRanking"
+                                  Margin="10">
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Border Background="#44222222"
+                                        BorderBrush="#666"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="10"
+                                        Margin="0,0,0,10">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="130"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Posición -->
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding PositionText}"
+                                                   Foreground="White"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,15,0"
+                                                   VerticalAlignment="Center"/>
+
+                                        <!-- Avatar -->
+                                        <Image Grid.Column="1"
+                                               Source="{Binding AvatarFile}"
+                                               Width="45"
+                                               Height="45"
+                                               Stretch="UniformToFill"
+                                               Margin="0,0,15,0"/>
+
+                                        <!-- Usuario y partidas -->
+                                        <StackPanel Grid.Column="2"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Username}"
+                                                       Foreground="White"
+                                                       FontSize="18"
+                                                       FontWeight="Bold"/>
+                                            <TextBlock Foreground="White"
+                                                       FontSize="12">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding Path="MatchesPlayed"/>
+                                                        <Binding RelativeSource="{RelativeSource AncestorType=Page}"
+                                                                 Path="Resources[matchesPlayedShort]"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <!-- WINS -->
+                                        <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                            <TextBlock Text="{DynamicResource wins}"
+                                                       Foreground="White"
+                                                       FontSize="10"/>
+                                            <TextBlock Text="{Binding Wins}"
+                                                       Foreground="White"
+                                                       FontSize="16"
+                                                       FontWeight="Bold"/>
+                                        </StackPanel>
+
+                                        <!-- LOSSES -->
+                                        <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                                            <TextBlock Text="{DynamicResource loses}"
+                                                       Foreground="White"
+                                                       FontSize="10"/>
+                                            <TextBlock Text="{Binding Loses}"
+                                                       Foreground="White"
+                                                       FontSize="16"
+                                                       FontWeight="Bold"/>
+                                        </StackPanel>
+
+                                        <!-- Ver perfil -->
+                                        <Button Grid.Column="5"
+                                                Height="40"
+                                                Style="{DynamicResource BaseGameButton}"
+                                                Content="{DynamicResource profile}"
+                                                Click="OnViewProfileClick"/>
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+
+                </ScrollViewer>
+
+            </Border>
+
+            <!-- BOTONES IDIOMA / SONIDO -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Width="44"
+                        Height="44"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="OnSoundClick">
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
+                           Width="26"
+                           Height="26"/>
+                </Button>
+
+                <Button Width="44"
+                        Height="44"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="OnLanguageClick">
+                    <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
+                           Width="26"
+                           Height="26"/>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Page>

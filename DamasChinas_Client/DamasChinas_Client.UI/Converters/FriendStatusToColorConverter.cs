@@ -15,14 +15,14 @@ namespace DamasChinas_Client.UI.Converters
             switch (status)
             {
                 case FriendStatus.Online:
-                    return new SolidColorBrush(Color.FromRgb(0, 200, 0)); // Verde
+                    return new SolidColorBrush(Color.FromRgb(0, 200, 0)); 
 
                 case FriendStatus.InGame:
-                    return new SolidColorBrush(Color.FromRgb(200, 0, 0)); // Rojo
+                    return new SolidColorBrush(Color.FromRgb(200, 0, 0));
 
                 case FriendStatus.Offline:
                 default:
-                    return new SolidColorBrush(Color.FromRgb(40, 40, 40)); // Negro
+                    return new SolidColorBrush(Color.FromRgb(40, 40, 40)); 
             }
         }
 
