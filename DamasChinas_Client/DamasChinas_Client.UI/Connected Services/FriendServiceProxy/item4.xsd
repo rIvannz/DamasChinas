@@ -170,4 +170,9 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="FriendListUpdated">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

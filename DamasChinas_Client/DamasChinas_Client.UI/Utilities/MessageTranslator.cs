@@ -83,6 +83,10 @@ namespace DamasChinas_Client.UI.Utilities
 
                 { "SoundSettingsUpdated", MessageKeys.SoundSettingsUpdated },
                 { "SoundSettingsError",   MessageKeys.SoundSettingsError },
+                { "FriendRequestAlreadyPending", MessageKeys.FriendRequestAlreadyPending },
+                { "AlreadyFriends", MessageKeys.AlreadyFriends },
+                { "UserBlocked", MessageKeys.UserBlocked },
+
             };
 
      

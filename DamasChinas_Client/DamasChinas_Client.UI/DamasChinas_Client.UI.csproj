@@ -577,7 +577,9 @@
     </None>
     <None Include="Connected Services\LogInServiceProxy\configuration.svcinfo" />
     <None Include="Connected Services\LogInServiceProxy\configuration91.svcinfo" />
-    <Resource Include="Assets\Backgrounds\board-background.png" />
+    <Resource Include="Assets\Backgrounds\board-background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Backgrounds\wood-texture.png" />
     <Resource Include="Assets\Icons\backIcon.png" />
     <Resource Include="Assets\Icons\chatIcon.png" />

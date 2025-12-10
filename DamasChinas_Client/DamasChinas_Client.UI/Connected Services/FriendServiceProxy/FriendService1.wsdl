@@ -95,6 +95,9 @@
   <wsdl:message name="IFriendService_UserUnblockedYou_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:UserUnblockedYou" />
   </wsdl:message>
+  <wsdl:message name="IFriendService_FriendListUpdated_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendListUpdated" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="IFriendService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SubscribeFriendEvents">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/SubscribeFriendEvents" message="tns:IFriendService_SubscribeFriendEvents_InputMessage" />
@@ -151,6 +154,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UserUnblockedYou">
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UserUnblockedYou" message="tns:IFriendService_UserUnblockedYou_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="FriendListUpdated">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/FriendListUpdated" message="tns:IFriendService_FriendListUpdated_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IFriendService" type="tns:IFriendService">
@@ -275,6 +281,12 @@
     </wsdl:operation>
     <wsdl:operation name="UserUnblockedYou">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/UserUnblockedYou" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FriendListUpdated">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/FriendListUpdated" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

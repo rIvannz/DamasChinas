@@ -56,10 +56,11 @@ namespace DamasChinas_Server
         {
             if (FriendshipExists(db, idUserSender, idUserReciever))
             {
-
-                throw new RepositoryValidationException(MessageCode.FriendsLoadError);
+                // Ya son amigos
+                throw new RepositoryValidationException(MessageCode.AlreadyFriends);
             }
         }
+
 
         private static void EnsureFriends(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
@@ -92,10 +93,11 @@ namespace DamasChinas_Server
         {
             if (PendingRequestExists(db, idUserSender, idUserReciever))
             {
-
-                throw new RepositoryValidationException(MessageCode.FriendsLoadError);
+                // Ya hay una solicitud pendiente
+                throw new RepositoryValidationException(MessageCode.FriendRequestAlreadyPending);
             }
         }
+
 
         private static void EnsurePendingRequestExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {

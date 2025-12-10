@@ -47,9 +47,8 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                using (var client = new FriendServiceClient(
-                    new InstanceContext(new FriendCallbackHandler()),
-                    "NetTcpBinding_IFriendService"))
+                var client = FriendNotificationManager.GetClient();
+
                 {
                     var result = client.SendFriendRequest(
                         ClientSession.SafeUsernameNormalized,

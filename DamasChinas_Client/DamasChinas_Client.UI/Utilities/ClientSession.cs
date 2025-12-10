@@ -13,9 +13,11 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static ILoginServiceCallback CallbackHandler { get; private set; }
 
-     
         public static SessionServiceClient SessionClient { get; set; }
 
+        // ============================================================
+        // PERFIL / SESIÓN
+        // ============================================================
         public static PublicProfile CurrentProfile
         {
             get
@@ -32,7 +34,6 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static bool IsLoggedIn => _currentProfile != null;
 
-    
         public static string safeUsername =>
             _currentProfile == null
                 ? null
@@ -55,7 +56,7 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static void Clear()
         {
-          
+            // Cerrar LoginClient
             try
             {
                 if (LoginClient != null)
@@ -75,7 +76,7 @@ namespace DamasChinas_Client.UI.Utilities
                 LoginClient?.Abort();
             }
 
-     
+            // Cerrar SessionClient
             try
             {
                 if (SessionClient != null)

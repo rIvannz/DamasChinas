@@ -42,6 +42,13 @@
         LobbyInvitationTargetNotOnline = 1114,
         LobbyKicked = 1115,
 
+        // ========================
+        // Amigos (nuevos)
+        // ========================
+        FriendRequestAlreadyPending = 3200,
+        AlreadyFriends = 3201,
+
+
 
         // ========================
         // Servidor
@@ -94,6 +101,9 @@
         InvalidEmailEmpty = 3130,
         InvalidEmailTooLong = 3131,
         InvalidEmailFormat = 3132,
+
+        UserBlocked = 3202,
+
 
         // ========================
         // Avatar

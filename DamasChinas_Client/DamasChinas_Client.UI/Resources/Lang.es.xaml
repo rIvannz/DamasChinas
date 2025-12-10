@@ -61,6 +61,17 @@
     <sys:String x:Key="userBlockedSuccess">
         El usuario se bloqueó correctamente.
     </sys:String>
+    <sys:String x:Key="msg_FriendRequestAlreadyPending">
+        La solicitud aún está pendiente.
+    </sys:String>
+
+    <sys:String x:Key="msg_AlreadyFriends">
+        Este usuario ya pertenece a tu lista de amigos.
+    </sys:String>
+    <sys:String x:Key="msg_UserBlocked">
+        No se pudo completar tu solicitud.
+    </sys:String>
+
 
 
     <!-- PERFIL DE AMIGO -->

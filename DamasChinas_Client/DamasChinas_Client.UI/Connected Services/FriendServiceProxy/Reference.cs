@@ -176,6 +176,12 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         LobbyKicked = 1115,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAlreadyPending = 3200,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyFriends = 3201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -591,6 +597,9 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/UserUnblockedYou")]
         void UserUnblockedYou(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/FriendListUpdated")]
+        void FriendListUpdated();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

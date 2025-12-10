@@ -8,141 +8,177 @@ namespace DamasChinas_Server.Services
     public static class FriendCallbackManager
     {
         private static readonly ConcurrentDictionary<string, IFriendCallback> ActiveFriendCallbacks =
-            new ConcurrentDictionary<string, IFriendCallback>(StringComparer.OrdinalIgnoreCase);
+            new ConcurrentDictionary<string, IFriendCallback>();
 
         private static readonly ILogService _log = LogFactory.Create(typeof(FriendCallbackManager));
 
-        private const string OperationAdd = nameof(Add);
-        private const string OperationRemove = nameof(Remove);
-        private const string OperationGet = nameof(Get);
-        private const string OperationNotifyFriendRemoved = nameof(NotifyFriendRemoved);
-        private const string OperationNotifyUserBlocked = nameof(NotifyUserBlocked);
-        private const string OperationNotifyUserUnblocked = nameof(NotifyUserUnblocked);
+        private static string Normalize(string username)
+        {
+            return username?.Trim().ToLowerInvariant();
+        }
 
+        // ============================================================
+        // ADD CALLBACK
+        // ============================================================
         public static void Add(string username, IFriendCallback callback)
         {
-            if (string.IsNullOrWhiteSpace(username) || callback == null)
-            {
+            string key = Normalize(username);
+            if (string.IsNullOrWhiteSpace(key) || callback == null)
                 return;
-            }
 
             try
             {
-                ActiveFriendCallbacks[username] = callback;
-                _log.Info($"[{OperationAdd}] Callback de amigos agregado: {username}");
+                ActiveFriendCallbacks[key] = callback;
+                _log.Info($"[Add] Callback agregado: {key}");
             }
             catch (Exception ex)
             {
-                _log.Error($"[{OperationAdd}] Error al agregar callback: {username}", ex);
+                _log.Error($"[Add] Error al agregar callback: {key}", ex);
             }
         }
 
+        // ============================================================
+        // REMOVE
+        // ============================================================
         public static void Remove(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
-            {
+            string key = Normalize(username);
+            if (string.IsNullOrWhiteSpace(key))
                 return;
-            }
 
             try
             {
-                ActiveFriendCallbacks.TryRemove(username, out _);
-                _log.Info($"[{OperationRemove}] Callback de amigos removido: {username}");
+                ActiveFriendCallbacks.TryRemove(key, out _);
+                _log.Info($"[Remove] Callback removido: {key}");
             }
             catch (Exception ex)
             {
-                _log.Error($"[{OperationRemove}] Error al remover callback: {username}", ex);
+                _log.Error($"[Remove] Error al remover callback: {key}", ex);
             }
         }
 
+        // ============================================================
+        // GET
+        // ============================================================
         public static IFriendCallback Get(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
-            {
+            string key = Normalize(username);
+            if (string.IsNullOrWhiteSpace(key))
                 return null;
-            }
 
             try
             {
-                ActiveFriendCallbacks.TryGetValue(username, out var callback);
-                _log.Info($"[{OperationGet}] Obtener callback de: {username}");
+                ActiveFriendCallbacks.TryGetValue(key, out var callback);
                 return callback;
             }
             catch (Exception ex)
             {
-                _log.Error($"[{OperationGet}] Error al obtener callback: {username}", ex);
+                _log.Error($"[Get] Error obteniendo callback: {key}", ex);
                 return null;
             }
         }
 
-        // ========== NOTIFICACIONES ==========
-
+        // ============================================================
+        // NOTIFICATIONS
+        // ============================================================
         public static void NotifyFriendRemoved(string targetUsername, string removedFriendUsername)
         {
-            if (string.IsNullOrWhiteSpace(targetUsername) ||
-                string.IsNullOrWhiteSpace(removedFriendUsername))
-            {
-                return;
-            }
+            string key = Normalize(targetUsername);
+            if (string.IsNullOrWhiteSpace(key)) return;
 
             try
             {
-                if (ActiveFriendCallbacks.TryGetValue(targetUsername, out var callback))
-                {
+                if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.FriendRemoved(removedFriendUsername);
-                    _log.Info($"[{OperationNotifyFriendRemoved}] Notificado a {targetUsername} que se removió a {removedFriendUsername}");
-                }
             }
             catch (Exception ex)
             {
-                _log.Error($"[{OperationNotifyFriendRemoved}] Error notificando a {targetUsername}", ex);
-                ActiveFriendCallbacks.TryRemove(targetUsername, out _);
+                _log.Error($"[NotifyFriendRemoved] Error notificando a {key}", ex);
+                ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
 
         public static void NotifyUserBlocked(string blockedUsername, string blockerUsername)
         {
-            if (string.IsNullOrWhiteSpace(blockedUsername) ||
-                string.IsNullOrWhiteSpace(blockerUsername))
-            {
-                return;
-            }
+            string key = Normalize(blockedUsername);
+            if (string.IsNullOrWhiteSpace(key)) return;
 
             try
             {
-                if (ActiveFriendCallbacks.TryGetValue(blockedUsername, out var callback))
-                {
+                if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.UserBlockedYou(blockerUsername);
-                    _log.Info($"[{OperationNotifyUserBlocked}] Notificado a {blockedUsername} que fue bloqueado por {blockerUsername}");
-                }
             }
             catch (Exception ex)
             {
-                _log.Error($"[{OperationNotifyUserBlocked}] Error notificando bloqueo a {blockedUsername}", ex);
-                ActiveFriendCallbacks.TryRemove(blockedUsername, out _);
+                _log.Error($"[NotifyUserBlocked] Error notificando bloqueo a {key}", ex);
+                ActiveFriendCallbacks.TryRemove(key, out _);
+            }
+        }
+
+        public static void NotifyFriendRequestReceived(string targetUsername, string fromUsername)
+        {
+            string key = Normalize(targetUsername);
+            if (string.IsNullOrWhiteSpace(key)) return;
+
+            try
+            {
+                if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
+                    callback.FriendRequestReceived(fromUsername);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[NotifyFriendRequestReceived] Error notificando a {key}", ex);
+                ActiveFriendCallbacks.TryRemove(key, out _);
+            }
+        }
+
+        public static void NotifyFriendRequestAccepted(string username)
+        {
+            string key = Normalize(username);
+            if (string.IsNullOrWhiteSpace(key)) return;
+
+            if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
+                callback.FriendRequestAccepted(username);
+        }
+
+        // ========================== FIX DEFINITIVO ==========================
+        public static void NotifyFriendListUpdated(string username)
+        {
+            string key = Normalize(username);
+            if (string.IsNullOrWhiteSpace(key)) return;
+
+            try
+            {
+                if (!ActiveFriendCallbacks.TryGetValue(key, out var callback))
+                {
+                    _log.Warn($"[NotifyFriendListUpdated] No existe callback para {key}");
+                    return;
+                }
+
+                callback.FriendListUpdated();
+                _log.Info($"[NotifyFriendListUpdated] Enviado a: {key}");
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[NotifyFriendListUpdated] Error notificando a {key}", ex);
+                ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
 
         public static void NotifyUserUnblocked(string unblockedUsername, string byUsername)
         {
-            if (string.IsNullOrWhiteSpace(unblockedUsername) ||
-                string.IsNullOrWhiteSpace(byUsername))
-            {
-                return;
-            }
+            string key = Normalize(unblockedUsername);
+            if (string.IsNullOrWhiteSpace(key)) return;
 
             try
             {
-                if (ActiveFriendCallbacks.TryGetValue(unblockedUsername, out var callback))
-                {
+                if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.UserUnblockedYou(byUsername);
-                    _log.Info($"[{OperationNotifyUserUnblocked}] Notificado a {unblockedUsername} que fue desbloqueado por {byUsername}");
-                }
             }
             catch (Exception ex)
             {
-                _log.Error($"[{OperationNotifyUserUnblocked}] Error notificando desbloqueo a {unblockedUsername}", ex);
-                ActiveFriendCallbacks.TryRemove(unblockedUsername, out _);
+                _log.Error($"[NotifyUserUnblocked] Error notificando desbloqueo a {key}", ex);
+                ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
     }

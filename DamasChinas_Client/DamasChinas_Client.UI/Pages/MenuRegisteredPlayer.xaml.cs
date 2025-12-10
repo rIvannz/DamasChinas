@@ -25,9 +25,23 @@ namespace DamasChinas_Client.UI.Pages
 
             txtUsername.Text = _profile.Username;
 
+            try
+            {
+                if (!FriendNotificationManager.IsInitialized)
+                {
+                    FriendNotificationManager.Initialize(_profile.Username);
+                    Debug.WriteLine("[MenuRegisteredPlayer] FriendService inicializado OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer] Error al iniciar FriendService: {ex.Message}");
+            }
+
             Loaded += OnPageLoaded;
             LoadAvatar();
         }
+
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {

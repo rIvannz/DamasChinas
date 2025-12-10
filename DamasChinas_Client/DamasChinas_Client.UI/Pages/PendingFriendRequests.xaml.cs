@@ -1,58 +1,112 @@
-﻿using DamasChinas_Client.UI.FriendServiceProxy;
-using DamasChinas_Client.UI.Utilities;
-using DamasChinas_Client.UI.Callbacks;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
+
+using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.FriendServiceProxy;
+using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI.PopUps;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class PendingFriendRequests : Page
     {
-        public ObservableCollection<PendingRequest> Requests { get; } =
-            new ObservableCollection<PendingRequest>();
+        public ObservableCollection<PendingRequest> Requests { get; }
+            = new ObservableCollection<PendingRequest>();
 
         public PendingFriendRequests()
         {
             InitializeComponent();
             DataContext = this;
 
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+
+            FriendCallbackHandler.FriendRequestReceivedEvent += OnFriendRequestReceived;
+            FriendCallbackHandler.FriendRequestAcceptedEvent += OnFriendRequestAccepted;
+            FriendCallbackHandler.FriendRemovedEvent += OnFriendRemoved;
+
+            // Refresco automático cuando cambie la lista
+            FriendCallbackHandler.FriendListUpdatedEvent += OnFriendListUpdated;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
             LoadRequestsFromServer();
         }
 
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            FriendCallbackHandler.FriendRequestReceivedEvent -= OnFriendRequestReceived;
+            FriendCallbackHandler.FriendRequestAcceptedEvent -= OnFriendRequestAccepted;
+            FriendCallbackHandler.FriendRemovedEvent -= OnFriendRemoved;
+
+            FriendCallbackHandler.FriendListUpdatedEvent -= OnFriendListUpdated;
+        }
+
+        // ============================================================
+        // Cliente fallback
+        // ============================================================
+        private static FriendServiceClient CreateTemporaryClient()
+        {
+            var callback = new FriendCallbackHandler();
+            var context = new InstanceContext(callback);
+            return new FriendServiceClient(context, "NetTcpBinding_IFriendService");
+        }
+
+        private static void CloseClientSafely(FriendServiceClient client)
+        {
+            try
+            {
+                if (client.State != CommunicationState.Faulted)
+                {
+                    client.Close();
+                }
+                else
+                {
+                    client.Abort();
+                }
+            }
+            catch
+            {
+                client.Abort();
+            }
+        }
+
+        // ============================================================
+        // CARGAR SOLICITUDES DESDE SERVIDOR
+        // ============================================================
         private void LoadRequestsFromServer()
         {
             Requests.Clear();
 
             string currentUsername = ClientSession.CurrentProfile.Username;
 
+            FriendServiceClient client = FriendNotificationManager.GetClient();
+            bool temporaryClient = false;
+
+            if (client == null)
+            {
+                client = CreateTemporaryClient();
+                temporaryClient = true;
+            }
+
             try
             {
-                using (var client = new FriendServiceClient(
-                    new InstanceContext(new FriendCallbackHandler()),
-                    "NetTcpBinding_IFriendService"))
-                {
-                    var dtos = client.GetFriendRequests(currentUsername);
+                var dtos = client.GetFriendRequests(currentUsername);
 
-                    foreach (var dto in dtos)
+                foreach (var dto in dtos)
+                {
+                    Requests.Add(new PendingRequest
                     {
-                        Requests.Add(new PendingRequest
-                        {
-                            Username = dto.Username,
-                            Avatar = dto.Avatar,
-                            IsOnline = dto.ConnectionState
-                        });
-                    }
-                }
-
-                if (Requests.Count == 0)
-                {
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage(MessageKeys.NoPendingRequests),
-                        PopupType.Info);
+                        Username = dto.Username,
+                        Avatar = string.IsNullOrWhiteSpace(dto.Avatar) ? "avatarIcon.png" : dto.Avatar,
+                        IsOnline = dto.ConnectionState
+                    });
                 }
             }
             catch (Exception ex)
@@ -62,104 +116,171 @@ namespace DamasChinas_Client.UI.Pages
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);
             }
+            finally
+            {
+                if (temporaryClient)
+                {
+                    CloseClientSafely(client);
+                }
+            }
         }
 
-        private void OnBackClick(object sender, RoutedEventArgs e)
+        // ============================================================
+        // CALLBACKS
+        // ============================================================
+        private void OnFriendRequestReceived(string fromUsername)
         {
-            try
+            Dispatcher.Invoke(() =>
             {
-                NavigationService?.GoBack();
-            }
-            catch
-            {
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
-            }
+                if (!Requests.Any(r =>
+                    r.Username.Equals(fromUsername, StringComparison.OrdinalIgnoreCase)))
+                {
+                    Requests.Add(new PendingRequest
+                    {
+                        Username = fromUsername,
+                        Avatar = "avatarIcon.png",
+                        IsOnline = true
+                    });
+                }
+            });
         }
 
+        private void OnFriendRequestAccepted(string username)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var req = Requests.FirstOrDefault(r =>
+                    r.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
+                if (req != null)
+                {
+                    Requests.Remove(req);
+                }
+            });
+        }
+
+        private void OnFriendRemoved(string username)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var req = Requests.FirstOrDefault(r =>
+                    r.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
+                if (req != null)
+                {
+                    Requests.Remove(req);
+                }
+            });
+        }
+
+        private void OnFriendListUpdated()
+        {
+            Dispatcher.Invoke(() => LoadRequestsFromServer());
+        }
+
+        // ============================================================
+        // ACEPTAR / RECHAZAR SOLICITUD
+        // ============================================================
         private void OnAcceptClick(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement element &&
-                element.DataContext is PendingRequest req)
+            if (sender is FrameworkElement el && el.DataContext is PendingRequest req)
             {
-                string currentUsername = ClientSession.CurrentProfile.Username;
+                string current = ClientSession.CurrentProfile.Username;
+
+                FriendServiceClient client = FriendNotificationManager.GetClient();
+                bool temporaryClient = false;
+
+                if (client == null)
+                {
+                    client = CreateTemporaryClient();
+                    temporaryClient = true;
+                }
 
                 try
                 {
-                    using (var client = new FriendServiceClient(
-                        new InstanceContext(new FriendCallbackHandler()),
-                        "NetTcpBinding_IFriendService"))
+                    var result = client.UpdateFriendRequestStatus(current, req.Username, true);
+
+                    if (!result.Success)
                     {
-                        var result = client.UpdateFriendRequestStatus(
-                            currentUsername,
-                            req.Username,
-                            true);
-
-                        if (!result.Success)
-                        {
-                            string msg = MessageTranslator.GetLocalizedMessage(result.Code);
-                            MessageHelper.ShowPopup(msg, PopupType.Warning);
-                            return;
-                        }
-
-                        Requests.Remove(req);
-
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted),
-                            PopupType.Success);
+                        string msg = MessageTranslator.GetLocalizedMessage(result.Code);
+                        MessageHelper.ShowPopup(msg, PopupType.Warning);
+                        return;
                     }
+
+                    Requests.Remove(req);
+
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted),
+                        PopupType.Success);
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[PendingFriendRequests.Accept] {ex.Message}");
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
-                        PopupType.Error);
+                }
+                finally
+                {
+                    if (temporaryClient)
+                    {
+                        CloseClientSafely(client);
+                    }
                 }
             }
         }
 
         private void OnRejectClick(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement element &&
-                element.DataContext is PendingRequest req)
+            if (sender is FrameworkElement el && el.DataContext is PendingRequest req)
             {
-                string currentUsername = ClientSession.CurrentProfile.Username;
+                string current = ClientSession.CurrentProfile.Username;
+
+                FriendServiceClient client = FriendNotificationManager.GetClient();
+                bool temporaryClient = false;
+
+                if (client == null)
+                {
+                    client = CreateTemporaryClient();
+                    temporaryClient = true;
+                }
 
                 try
                 {
-                    using (var client = new FriendServiceClient(
-                        new InstanceContext(new FriendCallbackHandler()),
-                        "NetTcpBinding_IFriendService"))
+                    var result = client.UpdateFriendRequestStatus(current, req.Username, false);
+
+                    if (!result.Success)
                     {
-                        var result = client.UpdateFriendRequestStatus(
-                            currentUsername,
-                            req.Username,
-                            false);
-
-                        if (!result.Success)
-                        {
-                            string msg = MessageTranslator.GetLocalizedMessage(result.Code);
-                            MessageHelper.ShowPopup(msg, PopupType.Warning);
-                            return;
-                        }
-
-                        Requests.Remove(req);
-
-                        MessageHelper.ShowPopup(
-                            MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestRejected),
-                            PopupType.Info);
+                        string msg = MessageTranslator.GetLocalizedMessage(result.Code);
+                        MessageHelper.ShowPopup(msg, PopupType.Warning);
+                        return;
                     }
+
+                    Requests.Remove(req);
+
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestRejected),
+                        PopupType.Info);
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[PendingFriendRequests.Reject] {ex.Message}");
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
-                        PopupType.Error);
+                }
+                finally
+                {
+                    if (temporaryClient)
+                    {
+                        CloseClientSafely(client);
+                    }
                 }
             }
         }
 
+        private void OnBackClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.GoBack();
+        }
+
+        // ============================================================
+        // MODELO
+        // ============================================================
         public class PendingRequest
         {
             public string Username { get; set; }

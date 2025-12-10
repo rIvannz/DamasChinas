@@ -26,7 +26,7 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-            // ------- EVENTOS DE SESIÓN -------
+            // ------- EVENTOS DE PRESENCIA -------
             SessionCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
             SessionCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
             SessionCallbackHandler.PlayerInGameEvent += OnPlayerInGame;
@@ -37,6 +37,9 @@ namespace DamasChinas_Client.UI.Pages
             FriendCallbackHandler.UserBlockedYouEvent += OnUserBlocked;
             FriendCallbackHandler.UserUnblockedYouEvent += OnUserUnblocked;
             FriendCallbackHandler.FriendRequestAcceptedEvent += OnFriendAccepted;
+
+            // Refresco inmediato cuando el server dice "lista actualizada"
+            FriendCallbackHandler.FriendListUpdatedEvent += OnFriendListUpdated;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -46,6 +49,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            // ------- LIMPIEZA DE SUSCRIPCIONES -------
             SessionCallbackHandler.PlayerConnectedEvent -= OnPlayerConnected;
             SessionCallbackHandler.PlayerDisconnectedEvent -= OnPlayerDisconnected;
             SessionCallbackHandler.PlayerInGameEvent -= OnPlayerInGame;
@@ -55,45 +59,89 @@ namespace DamasChinas_Client.UI.Pages
             FriendCallbackHandler.UserBlockedYouEvent -= OnUserBlocked;
             FriendCallbackHandler.UserUnblockedYouEvent -= OnUserUnblocked;
             FriendCallbackHandler.FriendRequestAcceptedEvent -= OnFriendAccepted;
+
+            FriendCallbackHandler.FriendListUpdatedEvent -= OnFriendListUpdated;
         }
 
         // ============================================================
-        // Cargar lista inicial
+        // Cliente temporal (fallback)
         // ============================================================
-        private void LoadFriends()
+        private static FriendServiceClient CreateTemporaryClient()
+        {
+            var callback = new FriendCallbackHandler();
+            var context = new InstanceContext(callback);
+            return new FriendServiceClient(context, "NetTcpBinding_IFriendService");
+        }
+
+        private static void CloseClientSafely(FriendServiceClient client)
         {
             try
             {
-                var callback = new FriendCallbackHandler();
-                var context = new InstanceContext(callback);
-
-                using (var client = new FriendServiceClient(context))
+                if (client.State != CommunicationState.Faulted)
                 {
-                    var friends = client.GetFriends(ClientSession.SafeUsernameNormalized);
+                    client.Close();
+                }
+                else
+                {
+                    client.Abort();
+                }
+            }
+            catch
+            {
+                client.Abort();
+            }
+        }
 
-                    FriendsList.Clear();
+        // ============================================================
+        // CARGAR LISTA DE AMIGOS
+        // ============================================================
+        private void LoadFriends()
+        {
+            FriendServiceClient client = FriendNotificationManager.GetClient();
+            bool temporaryClient = false;
 
-                    if (friends == null) return;
+            if (client == null)
+            {
+                client = CreateTemporaryClient();
+                temporaryClient = true;
+            }
 
-                    foreach (var f in friends)
+            try
+            {
+                var friends = client.GetFriends(ClientSession.SafeUsernameNormalized);
+
+                FriendsList.Clear();
+                if (friends == null)
+                {
+                    return;
+                }
+
+                foreach (var f in friends)
+                {
+                    string avatarFile = string.IsNullOrWhiteSpace(f.Avatar)
+                        ? "avatarIcon.png"
+                        : f.Avatar;
+
+                    FriendsList.Add(new FriendList
                     {
-                        string avatar = string.IsNullOrWhiteSpace(f.Avatar)
-                            ? "avatarIcon.png"
-                            : f.Avatar;
-
-                        FriendsList.Add(new FriendList
-                        {
-                            Username = f.Username,
-                            AvatarFile = avatar,
-                            AvatarSource = PathProvider.LoadAvatar(avatar),
-                            Status = f.ConnectionState ? FriendStatus.Online : FriendStatus.Offline
-                        });
-                    }
+                        Username = f.Username,
+                        AvatarFile = avatarFile,
+                        AvatarSource = PathProvider.LoadAvatar(avatarFile),
+                        Status = f.ConnectionState ? FriendStatus.Online : FriendStatus.Offline
+                    });
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Friends.LoadFriends] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.FriendsLoadError, PopupType.Warning);
+            }
+            finally
+            {
+                if (temporaryClient)
+                {
+                    CloseClientSafely(client);
+                }
             }
         }
 
@@ -106,7 +154,9 @@ namespace DamasChinas_Client.UI.Pages
                 x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
             if (f != null)
+            {
                 Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
+            }
         }
 
         private void OnPlayerDisconnected(string username)
@@ -115,7 +165,9 @@ namespace DamasChinas_Client.UI.Pages
                 x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
             if (f != null)
+            {
                 Dispatcher.Invoke(() => f.Status = FriendStatus.Offline);
+            }
         }
 
         private void OnPlayerInGame(string username)
@@ -124,7 +176,9 @@ namespace DamasChinas_Client.UI.Pages
                 x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
             if (f != null)
+            {
                 Dispatcher.Invoke(() => f.Status = FriendStatus.InGame);
+            }
         }
 
         private void OnPlayerLeftGame(string username)
@@ -133,11 +187,13 @@ namespace DamasChinas_Client.UI.Pages
                 x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
             if (f != null)
+            {
                 Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
+            }
         }
 
         // ============================================================
-        // EVENTOS DE AMIGOS (CALLBACK)
+        // EVENTOS DE AMIGOS
         // ============================================================
         private void OnFriendRemoved(string username)
         {
@@ -165,6 +221,11 @@ namespace DamasChinas_Client.UI.Pages
             LoadFriends();
         }
 
+        private void OnFriendListUpdated()
+        {
+            Dispatcher.Invoke(() => LoadFriends());
+        }
+
         // ============================================================
         // BOTONES
         // ============================================================
@@ -177,19 +238,30 @@ namespace DamasChinas_Client.UI.Pages
         {
             if (sender is Button btn && btn.DataContext is FriendList friend)
             {
+                FriendServiceClient client = FriendNotificationManager.GetClient();
+                bool temporaryClient = false;
+
+                if (client == null)
+                {
+                    client = CreateTemporaryClient();
+                    temporaryClient = true;
+                }
+
                 try
                 {
-                    var callback = new FriendCallbackHandler();
-                    var context = new InstanceContext(callback);
-                    using (var client = new FriendServiceClient(context))
-                    {
-                        var profile = client.GetFriendPublicProfile(friend.Username);
-                        NavigationService?.Navigate(new ProfileFriend(profile));
-                    }
+                    var profile = client.GetFriendPublicProfile(friend.Username);
+                    NavigationService?.Navigate(new ProfileFriend(profile));
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[Friends.OnViewProfileClick] {ex.Message}");
+                }
+                finally
+                {
+                    if (temporaryClient)
+                    {
+                        CloseClientSafely(client);
+                    }
                 }
             }
         }

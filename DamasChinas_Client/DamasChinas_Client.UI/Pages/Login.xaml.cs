@@ -145,18 +145,6 @@ namespace DamasChinas_Client.UI.Pages
                     // 1) Guardar sesión
                     ClientSession.Initialize(profile, client, callback);
 
-                    // 2) FIX: suscribir al sistema de eventos de amigos
-                    //    (FriendRemoved, UserBlockedYou, etc. siempre)
-                    try
-                    {
-                        FriendNotificationManager.Initialize(profile.Username);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"[Login.ConfigureCallback] Error al suscribir FriendService: {ex.Message}");
-                    }
-
-                    // 3) Suscribir al servicio de sesión (lo que ya tenías)
                     try
                     {
                         var sessionCallback = new SessionCallbackHandler();

@@ -111,13 +111,20 @@ namespace DamasChinas_Server
                 () =>
                 {
                     bool ok = _repo.SendFriendRequest(senderUsername, receiverUsername);
-                    return ok
-                        ? OperationResult.Ok()
-                        : OperationResult.Fail("Friend request failed.", MessageCode.UnknownError);
+
+                    if (ok)
+                    {
+                        FriendCallbackManager.NotifyFriendRequestReceived(receiverUsername, senderUsername);
+
+                        return OperationResult.Ok();
+                    }
+
+                    return OperationResult.Fail("Friend request failed.", MessageCode.UnknownError);
                 },
                 OperationSendFriendRequest
             );
         }
+
 
         public OperationResult DeleteFriend(string username, string friendUsername)
         {
@@ -172,9 +179,23 @@ namespace DamasChinas_Server
                 () =>
                 {
                     bool ok = _repo.UpdateFriendRequestStatus(receiverUsername, senderUsername, accept);
+
+                    if (ok && accept)
+                    {
+                      
+
+                      
+                        FriendCallbackManager.NotifyFriendRequestAccepted(senderUsername);
+
+                  
+                        FriendCallbackManager.NotifyFriendListUpdated(receiverUsername);
+                        FriendCallbackManager.NotifyFriendListUpdated(senderUsername);
+                    }
+
                     return ok
                         ? OperationResult.Ok()
                         : OperationResult.Fail("UpdateFriendRequestStatus returned false.", MessageCode.UnknownError);
+
                 },
                 OperationUpdateFriendRequestStatus
             );

@@ -47,6 +47,9 @@ namespace DamasChinas_Client.UI.Utilities
         public const string FriendRemovedSuccess = "friendRemovedSuccess";
         public const string ConfirmBlockUser = "confirmBlockUser";
         public const string UserBlockedSuccess = "userBlockedSuccess";
+        public const string FriendRequestAlreadyPending = "msg_FriendRequestAlreadyPending";
+        public const string AlreadyFriends = "msg_AlreadyFriends";
+
 
 
 
@@ -184,6 +187,8 @@ namespace DamasChinas_Client.UI.Utilities
         public const string BanTemp10m = "ban_temp_10m";
         public const string BanTemp1h = "ban_temp_1h";
         public const string BanPermanent = "ban_permanent";
+        public const string UserBlocked = "msg_UserBlocked";
+
 
 
 
