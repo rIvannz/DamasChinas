@@ -127,7 +127,6 @@ namespace DamasChinas_Server
                     bool ok = _repo.DeleteFriend(username, friendUsername);
                     if (ok)
                     {
-                        // Notificar a ambos
                         FriendCallbackManager.NotifyFriendRemoved(username, friendUsername);
                         FriendCallbackManager.NotifyFriendRemoved(friendUsername, username);
                         return OperationResult.Ok();
@@ -149,14 +148,12 @@ namespace DamasChinas_Server
                     {
                         if (block)
                         {
-                            // Se bloquea -> quitar amistad y avisar
                             FriendCallbackManager.NotifyFriendRemoved(blockerUsername, blockedUsername);
                             FriendCallbackManager.NotifyFriendRemoved(blockedUsername, blockerUsername);
                             FriendCallbackManager.NotifyUserBlocked(blockedUsername, blockerUsername);
                         }
                         else
                         {
-                            // Solo informar que se desbloqueó (por si quieres usarlo después)
                             FriendCallbackManager.NotifyUserUnblocked(blockedUsername, blockerUsername);
                         }
 
@@ -191,7 +188,6 @@ namespace DamasChinas_Server
                     bool ok = _repo.DeleteFriendAndBlock(blockerUsername, blockedUsername);
                     if (ok)
                     {
-                        // Lo mismo que bloquear, pero en una sola operación
                         FriendCallbackManager.NotifyFriendRemoved(blockerUsername, blockedUsername);
                         FriendCallbackManager.NotifyFriendRemoved(blockedUsername, blockerUsername);
                         FriendCallbackManager.NotifyUserBlocked(blockedUsername, blockerUsername);
@@ -222,7 +218,7 @@ namespace DamasChinas_Server
             }
             catch (RepositoryValidationException ex)
             {
-                _log.Warn($"[{context}]  validation failed: {ex.Code}");
+                _log.Warn($"[{context}] validation failed: {ex.Code}");
 
                 if (faultOnValidation)
                 {

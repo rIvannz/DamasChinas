@@ -99,12 +99,17 @@ namespace DamasChinas_Server
 
         private static void EnsurePendingRequestExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            if (!PendingRequestExists(db, idUserReciever, idUserSender))
-            {
+            bool exists = db.solicitudes_amistad.Any(s =>
+                s.id_emisor == idUserSender &&
+                s.id_receptor == idUserReciever &&
+                s.estado == PendingStatus);
 
+            if (!exists)
+            {
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
             }
         }
+
 
         private static bool FriendshipExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
@@ -147,15 +152,17 @@ namespace DamasChinas_Server
             };
         }
 
-        private (int receiverId, int senderId) GetUserIds(string receiverUsername, string senderUsername)
+        private (int senderId, int receiverId) GetUserIds(string senderUsername, string receiverUsername)
         {
-            int receiverId = _userRepo.GetUserIdByUsername(receiverUsername);
             int senderId = _userRepo.GetUserIdByUsername(senderUsername);
+            int receiverId = _userRepo.GetUserIdByUsername(receiverUsername);
 
-            EnsureDifferentUsers(receiverId, senderId);
+            EnsureDifferentUsers(senderId, receiverId);
 
-            return (receiverId, senderId);
+            return (senderId, receiverId);
         }
+
+
 
         private static void ApplyBlock(damas_chinasEntities db, int blockerId, int blockedId)
         {
@@ -280,12 +287,28 @@ namespace DamasChinas_Server
 
         public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept)
         {
-            var ids = GetUserIds(receiverUsername, senderUsername);
+            // receiver = quien debe aceptar la solicitud
+            // sender = quien originalmente la envió
+            var ids = GetUserIds(senderUsername, receiverUsername);
+
 
             using (var db = CréateDbContext())
             {
-                EnsurePendingRequestExists(db, ids.receiverId, ids.senderId);
+                // VALIDACIÓN DIRECCIONAL CORRECTA
+                // Solo es válido si existe una solicitud:
+                // emisor = senderId
+                // receptor = receiverId
+                bool exists = db.solicitudes_amistad.Any(s =>
+                    s.id_emisor == ids.senderId &&
+                    s.id_receptor == ids.receiverId &&
+                    s.estado == PendingStatus);
 
+                if (!exists)
+                {
+                    throw new RepositoryValidationException(MessageCode.FriendsLoadError);
+                }
+
+                // Obtener la solicitud real
                 var request = db.solicitudes_amistad
                     .FirstOrDefault(s =>
                         s.id_emisor == ids.senderId &&
@@ -294,14 +317,18 @@ namespace DamasChinas_Server
 
                 if (request == null)
                 {
-
                     throw new RepositoryValidationException(MessageCode.FriendsLoadError);
                 }
 
+                // ============================
+                //     SI LA ACEPTA
+                // ============================
                 if (accept)
                 {
+                    // No pueden ser amigos si alguien está bloqueado
                     EnsureNotBlocked(db, ids.senderId, ids.receiverId);
 
+                    // Crear amistad si todavía no existe
                     if (!FriendshipExists(db, ids.senderId, ids.receiverId))
                     {
                         db.amistades.Add(new amistades
@@ -312,10 +339,12 @@ namespace DamasChinas_Server
                         });
                     }
 
+                    // Eliminar la solicitud
                     db.solicitudes_amistad.Remove(request);
                 }
                 else
                 {
+                    // Rechazada
                     request.estado = "rechazada";
                     request.fecha_envio = DateTime.Now;
                 }
@@ -324,6 +353,7 @@ namespace DamasChinas_Server
                 return true;
             }
         }
+
 
         public bool UpdateBlockStatus(string blockerUsername, string blockedUsername, bool block)
         {
