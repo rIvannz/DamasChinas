@@ -5,23 +5,11 @@ namespace DamasChinas_Server.Utilities
 {
     internal static class EmailSender
     {
-        private static Email _emailService;
-
         /// <summary>
-        /// Debe llamarse una sola vez al iniciar el servidor.
+        /// Envía el correo con el código de verificación.
         /// </summary>
-        public static void Configure(IEmailSender sender)
-        {
-            _emailService = new Email(sender);
-        }
-
         public static void SendVerificationEmail(string email, string code)
         {
-            if (_emailService == null)
-            {
-                throw new InvalidOperationException("EmailSender no ha sido configurado. Llama Configure() primero.");
-            }
-
             try
             {
                 var subject = "Código de verificación";
@@ -29,9 +17,7 @@ namespace DamasChinas_Server.Utilities
                     $"Tu código de verificación es: <b>{code}</b><br>" +
                     "Este código expirará en 5 minutos.";
 
-                _emailService.SendAsync(email, subject, body, html: true)
-                             .GetAwaiter()
-                             .GetResult();
+                Email.SendAsync(email, subject, body, html: true).GetAwaiter().GetResult();
 
                 System.Diagnostics.Debug.WriteLine($"[TRACE] Verification email sent to: {email}");
             }
@@ -44,5 +30,3 @@ namespace DamasChinas_Server.Utilities
         }
     }
 }
-
-

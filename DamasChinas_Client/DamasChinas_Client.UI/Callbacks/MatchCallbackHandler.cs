@@ -9,7 +9,6 @@ namespace DamasChinas_Client.UI.Callbacks
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public class MatchCallbackHandler : IMatchServiceCallback
     {
-       
         public event Action<TurnChangeDto> PlayerMoved;
         public event Action<string> MatchEnded;
         public event Action<string> PlayerLeft;
@@ -47,4 +46,5 @@ namespace DamasChinas_Client.UI.Callbacks
             });
         }
     }
+
 }

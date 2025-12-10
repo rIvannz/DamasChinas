@@ -37,7 +37,9 @@ namespace DamasChinas_Server.Logic
         public void CreateMatchFromLobby(int lobbyCode, List<string> players)
         {
             if (_matches.ContainsKey(lobbyCode))
+            {
                 return;
+            }
 
             var colorList = Enum.GetValues(typeof(PlayerColor)).Cast<PlayerColor>().ToList();
             var playerColorMap = new Dictionary<string, PlayerColor>();
@@ -58,16 +60,37 @@ namespace DamasChinas_Server.Logic
             _log.Info($"Match created for Lobby {lobbyCode}. Host={host}");
         }
 
+        private void BroadcastBoardState(int lobbyCode, ActiveMatch match)
+        {
+            var state = GetMatchState(lobbyCode);
+
+            foreach (var cb in match.Callbacks.Values)
+            {
+                try
+                {
+                    cb.OnPlayerMoved(new TurnChangeDto { BoardState = state });
+                }
+                catch
+                {
+                    // Ignoramos fallas individuales de callback
+                }
+            }
+        }
+
         // ================================================
         // REGISTRO DE SESIÓN
         // ================================================
         public void RegisterPlayerSession(int lobbyCode, string username, IMatchCallback callback)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
+            {
                 throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
 
             if (!match.UserColorMap.ContainsKey(username))
+            {
                 throw new RepositoryValidationException(MessageCode.UserNotFound);
+            }
 
             match.Callbacks[username] = callback;
         }
@@ -78,7 +101,9 @@ namespace DamasChinas_Server.Logic
         public void ApplyMove(MoveRequestDto req)
         {
             if (!_matches.TryGetValue(req.LobbyCode, out var match))
+            {
                 throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
 
             var color = match.UserColorMap[req.Username];
 
@@ -90,7 +115,9 @@ namespace DamasChinas_Server.Logic
             var result = match.Game.TryApplyMove(move);
 
             if (!result.Succeeded)
+            {
                 throw new Exception(result.ErrorMessage);
+            }
 
             BroadcastMove(req.LobbyCode, req.Username, match, origin, dest);
 
@@ -123,14 +150,40 @@ namespace DamasChinas_Server.Logic
         }
 
         // ================================================
-        // ABANDONO
+        // SALIDA DE JUGADOR / DESCONEXIÓN
         // ================================================
+        public void HandlePlayerDisconnect(int lobbyCode, string username)
+        {
+            // Wrapper para centralizar la lógica de salida
+            RemovePlayer(lobbyCode, username);
+        }
+
+        // (NO CAMBIA — ya está bien)
         public void RemovePlayer(int lobbyCode, string username)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
                 return;
 
-            // Si quedan solo 2 y uno se va → el otro gana automáticamente
+            if (!match.UserColorMap.TryGetValue(username, out var color))
+                return;
+
+            bool isHost = string.Equals(match.HostUsername, username, StringComparison.OrdinalIgnoreCase);
+
+            if (isHost)
+            {
+                _log.Warn($"[MatchManager] Host disconnected. Lobby={lobbyCode}");
+
+                _matches.TryRemove(lobbyCode, out _);
+
+                foreach (var cb in match.Callbacks.Values)
+                {
+                    try { cb.OnErrorOccurred("msg_HostDisconnected"); }
+                    catch { }
+                }
+
+                return;
+            }
+
             if (match.UserColorMap.Count == 2)
             {
                 string winner = match.UserColorMap.Keys
@@ -143,20 +196,20 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-            // Si el host se va pero hay más jugadores, solo reasignamos host
-            if (username == match.HostUsername)
-            {
-                match.HostUsername = match.UserColorMap.Keys
-                    .First(u => !u.Equals(username));
-            }
-
+            match.Game.RemovePlayer(color);
+            match.UserColorMap.Remove(username);
             match.Callbacks.TryRemove(username, out _);
 
             foreach (var cb in match.Callbacks.Values)
             {
-                try { cb.OnPlayerLeftMatch(username); } catch { }
+                try { cb.OnPlayerLeftMatch(username); }
+                catch { }
             }
+
+            // 🔥 Reacomodo + envío completo del tablero
+            BroadcastBoardState(lobbyCode, match);
         }
+
 
         // ================================================
         // ESTADO TABLERO
@@ -164,7 +217,9 @@ namespace DamasChinas_Server.Logic
         public MatchStateDto GetMatchState(int lobbyCode)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
+            {
                 return null;
+            }
 
             var board = new Dictionary<string, HexCoordinateDto[]>();
 
@@ -211,7 +266,14 @@ namespace DamasChinas_Server.Logic
 
             foreach (var cb in match.Callbacks.Values)
             {
-                try { cb.OnPlayerMoved(dto); } catch { }
+                try
+                {
+                    cb.OnPlayerMoved(dto);
+                }
+                catch
+                {
+                    // Ignoramos errores individuales
+                }
             }
         }
 
@@ -219,7 +281,14 @@ namespace DamasChinas_Server.Logic
         {
             foreach (var cb in match.Callbacks.Values)
             {
-                try { cb.OnMatchEnded(winner); } catch { }
+                try
+                {
+                    cb.OnMatchEnded(winner);
+                }
+                catch
+                {
+                    // Ignoramos errores individuales
+                }
             }
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using DamasChinas_Client.UI.Utilities;
 using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
@@ -30,8 +31,14 @@ namespace DamasChinas_Client.UI.Pages
 
                     LanguageManager.ChangeLanguage(languageCode);
 
-               
                     MessageHelper.ShowPopup(LanguageChangeSuccess, PopupType.Success);
+
+                    // Si estamos dentro de una ventana (caso MatchRoom), la cerramos
+                    var hostWindow = Window.GetWindow(this);
+                    if (hostWindow != null && hostWindow.Owner != null)
+                    {
+                        hostWindow.Close();
+                    }
                 }
                 else
                 {
@@ -49,14 +56,23 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
+                // 1) Si estamos en navegación normal, regresar
                 if (NavigationService?.CanGoBack == true)
                 {
                     NavigationService.GoBack();
+                    return;
                 }
-                else
+
+                // 2) Si estamos alojados en una ventana (caso MatchRoom), cerrarla
+                var hostWindow = Window.GetWindow(this);
+                if (hostWindow != null && hostWindow.Owner != null)
                 {
-                    MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
+                    hostWindow.Close();
+                    return;
                 }
+
+                // 3) Si no hay forma de volver, mostrar error estándar
+                MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
             }
             catch (InvalidOperationException ex)
             {

@@ -334,7 +334,33 @@ namespace DamasChinas_Server.Game
             return true;
         }
 
- 
+        public void RemovePlayer(PlayerColor color)
+        {
+            // 1. Quitar todas las piezas del jugador del tablero
+            foreach (var cell in Board.Cells.Where(c => c.IsOccupied && c.Piece.Color == color))
+            {
+                cell.RemovePiece();
+            }
+
+            // 2. Quitar del diccionario interno
+            _players.Remove(color);
+
+            // 3. Quitar del orden de turnos
+            _turnOrder.Remove(color);
+
+            // 4. Si no quedan jugadores, nada más que hacer
+            if (_turnOrder.Count == 0)
+                return;
+
+            // 5. Reajustar CurrentTurn si apuntaba al jugador desconectado
+            if (CurrentTurn == color)
+            {
+                CurrentTurn = _turnOrder[0]; // o siguiente
+            }
+        }
+
+
+
         private void ExecuteMove(PlayerMove move)
         {
             Piece piece = Board.GetCell(move.Origin).RemovePiece();

@@ -340,6 +340,10 @@
     <sys:String x:Key="msg_RankingUnavailable">
         En este momento no podemos mostrar el ranking de jugadores.
     </sys:String>
+    <sys:String x:Key="msg_HostDisconnected">
+        El host de la partida se desconectó. La partida ha sido cerrada.
+    </sys:String>
+
 
 
 

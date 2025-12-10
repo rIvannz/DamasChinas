@@ -275,6 +275,9 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         InvalidEmailFormat = 3132,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserBlocked = 3202,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,
     }
     

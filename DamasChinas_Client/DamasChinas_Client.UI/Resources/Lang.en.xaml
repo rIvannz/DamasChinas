@@ -61,11 +61,11 @@
     <sys:String x:Key="userBlockedSuccess">
         User has been blocked successfully.
     </sys:String>
-    <sys:String x:Key="FriendRequestAlreadyPending">
+    <sys:String x:Key="msg_FriendRequestAlreadyPending">
         Your friend request is still pending.
     </sys:String>
 
-    <sys:String x:Key="AlreadyFriends">
+    <sys:String x:Key="msg_AlreadyFriends">
         This user is already in your friends list.
     </sys:String>
     <sys:String x:Key="msg_UserBlocked">
@@ -430,6 +430,10 @@
     <!-- General operations -->
     <sys:String x:Key="msg_OperationInterrupted">Operation interrupted due to a validation failure.</sys:String>
     <sys:String x:Key="msg_UserValidationError">Some of your data is invalid. Please review the fields.</sys:String>
+    <sys:String x:Key="msg_HostDisconnected">
+        The host has disconnected. The match has been closed.
+    </sys:String>
+
 
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->

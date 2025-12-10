@@ -195,7 +195,6 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            // Ordenamos por Username para que coincida con el orden del servidor
             var sortedMembers = _lobbySnapshot.Members
                 .OrderBy(m => m.Username)
                 .ToList();
@@ -239,12 +238,10 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (!result.Success)
                 {
-                    // Usamos la infraestructura estándar de mensajes
                     MessageHelper.ShowFromResult(result);
                     return;
                 }
 
-                // Estado inicial (posiciones de fichas)
                 var state = _proxy.GetMatchState(_lobbyCode);
                 if (state != null)
                 {
@@ -303,14 +300,12 @@ namespace DamasChinas_Client.UI.Pages
                     int az = Math.Abs(z);
                     int max = Math.Max(ax, Math.Max(ay, az));
 
-                    // 1) hexágono central
                     if (max <= centerRadius)
                     {
                         cells.Add((x, y, z));
                         continue;
                     }
 
-                    // 2) puntas de la estrella (misma regla que en el servidor)
                     int[] sorted = { ax, ay, az };
                     Array.Sort(sorted);
 
@@ -341,7 +336,6 @@ namespace DamasChinas_Client.UI.Pages
 
             var cubeCoords = GenerateBoardCubeCoordinates();
 
-            // Convertimos cada celda cúbica → axial → pixel
             foreach (var c in cubeCoords)
             {
                 int q = c.X;
@@ -352,7 +346,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private void DrawPlayerLabels()
         {
-            // Por ahora el panel lateral ya indica claramente los jugadores y colores.
+            // Panel lateral ya indica claramente jugadores y colores
         }
 
         private Point HexToPixel(int q, int r)
@@ -391,7 +385,6 @@ namespace DamasChinas_Client.UI.Pages
 
             if (!_holesVisuals.TryGetValue(point, out var hole))
             {
-                // Sin hoyo para esa coordenada → algo desincronizado; no rompemos la partida.
                 return;
             }
 
@@ -451,7 +444,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 foreach (var coord in entry.Value)
                 {
-                    // Mapeo servidor -> visual: q = X, r = Z
                     PlaceMarble(coord.X, coord.Z, color);
                 }
             }
@@ -475,13 +467,20 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        // =========================================================
-        //  HANDLERS DE CALLBACK
-        // =========================================================
-
         public void HandlePlayerMoved(TurnChangeDto turn)
         {
             if (_matchEnded)
+            {
+                return;
+            }
+
+            if (turn.BoardState != null)
+            {
+                UpdateGameState(turn.BoardState);
+                return;
+            }
+
+            if (turn.MoveOrigin == null || turn.MoveDestination == null)
             {
                 return;
             }
@@ -506,16 +505,16 @@ namespace DamasChinas_Client.UI.Pages
         public void HandleMatchEnded(string winner)
         {
             if (_matchEnded)
+            {
                 return;
+            }
 
             _matchEnded = true;
 
             VictoryOverlay.Visibility = Visibility.Visible;
 
-            // Título traducido
             txtFinalTitle.Text = MessageTranslator.GetLocalizedMessage(MessageKeys.GameFinishedTitle);
 
-            // "GANADOR / WINNER"
             string winnerLabel = MessageTranslator.GetLocalizedMessage(MessageKeys.GameWinnerLabel);
             txtWinnerName.Text = $"{winnerLabel}: {winner}";
         }
@@ -523,7 +522,9 @@ namespace DamasChinas_Client.UI.Pages
         public void HandlePlayerLeft(string username)
         {
             if (_matchEnded)
+            {
                 return;
+            }
 
             string msg = MessageTranslator.GetLocalizedMessage(MessageKeys.PlayerLeftMatch);
             AddChatMessage("Sistema", $"{username} {msg}");
@@ -537,15 +538,17 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public void HandleError(string msg)
+        public void HandleError(string msgKey)
         {
             if (_matchEnded)
             {
                 return;
             }
 
-            // msg aquí se usa como resourceKey directo (siguiendo tu diseño actual)
-            MessageHelper.ShowPopup(msg, PopupType.Warning);
+            _matchEnded = true;
+
+            // msgKey viene del servidor (ej. "msg_HostDisconnected")
+            MessageHelper.ShowPopup(msgKey, PopupType.Warning);
             NavigateToMenu();
         }
 
@@ -567,13 +570,11 @@ namespace DamasChinas_Client.UI.Pages
 
             Point clickedCoord = (Point)hole.Tag;
 
-            // Solo el jugador en turno puede interactuar
             if (_currentPlayerTurn != _myUsername)
             {
                 return;
             }
 
-            // 1) Seleccionar ficha propia
             if (_marblesVisuals.ContainsKey(clickedCoord))
             {
                 var marble = _marblesVisuals[clickedCoord];
@@ -586,7 +587,6 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            // 2) Intentar mover a esa casilla
             if (_selectedCoord.HasValue)
             {
                 SendMove(_selectedCoord.Value, clickedCoord);
@@ -658,7 +658,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (!result.Success)
                 {
-                    // Dejamos que el helper resuelva el Code → msg_ → recurso
                     MessageHelper.ShowFromResult(result);
                 }
 
@@ -746,14 +745,37 @@ namespace DamasChinas_Client.UI.Pages
             NavigateToMenu();
         }
 
+        // 🔊⚙️ IMPORTANTE: AHORA SON VENTANAS MODALES, NO NAVEGACIÓN
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ConfiSound());
+            var window = new Window
+            {
+                Content = new ConfiSound(),
+                Owner = Application.Current.MainWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                ResizeMode = ResizeMode.NoResize,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.ToolWindow
+            };
+
+            window.ShowDialog();
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SelectLanguage());
+            var window = new Window
+            {
+                Content = new SelectLanguage(),
+                Owner = Application.Current.MainWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                ResizeMode = ResizeMode.NoResize,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.ToolWindow
+            };
+
+            window.ShowDialog();
         }
 
         private void NavigateToMenu()

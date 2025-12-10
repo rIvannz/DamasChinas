@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI.Pages
@@ -32,7 +33,6 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
         }
-
 
         private static void ValidateVolume(double volume)
         {
@@ -80,6 +80,13 @@ namespace DamasChinas_Client.UI.Pages
                 SoundManager.ApplyVolume(_pendingVolume);
 
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsUpdated, PopupType.Success);
+
+                // Si estamos dentro de una ventana (caso MatchRoom), la cerramos
+                var hostWindow = Window.GetWindow(this);
+                if (hostWindow != null && hostWindow.Owner != null)
+                {
+                    hostWindow.Close();
+                }
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -102,14 +109,23 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
+                // 1) Navegación normal
                 if (NavigationService?.CanGoBack == true)
                 {
                     NavigationService.GoBack();
+                    return;
                 }
-                else
+
+                // 2) Si estamos incrustados en una ventana modal (MatchRoom), cerrarla
+                var hostWindow = Window.GetWindow(this);
+                if (hostWindow != null && hostWindow.Owner != null)
                 {
-                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
+                    hostWindow.Close();
+                    return;
                 }
+
+                // 3) Sin forma de regresar
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
             }
             catch (InvalidOperationException ex)
             {

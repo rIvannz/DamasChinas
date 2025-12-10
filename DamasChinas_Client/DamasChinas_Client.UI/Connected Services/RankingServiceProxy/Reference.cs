@@ -224,6 +224,12 @@ namespace DamasChinas_Client.UI.RankingServiceProxy {
         LobbyKicked = 1115,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAlreadyPending = 3200,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyFriends = 3201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -315,6 +321,9 @@ namespace DamasChinas_Client.UI.RankingServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidEmailFormat = 3132,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserBlocked = 3202,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,

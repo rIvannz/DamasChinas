@@ -34,6 +34,7 @@
   <xs:element name="ArrayOfHexCoordinateDto" nillable="true" type="tns:ArrayOfHexCoordinateDto" />
   <xs:complexType name="TurnChangeDto">
     <xs:sequence>
+      <xs:element minOccurs="0" name="BoardState" nillable="true" type="tns:MatchStateDto" />
       <xs:element minOccurs="0" name="MoveDestination" nillable="true" type="tns:HexCoordinateDto" />
       <xs:element minOccurs="0" name="MoveOrigin" nillable="true" type="tns:HexCoordinateDto" />
       <xs:element minOccurs="0" name="NextPlayer" nillable="true" type="xs:string" />

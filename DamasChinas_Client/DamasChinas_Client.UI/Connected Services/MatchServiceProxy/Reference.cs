@@ -176,10 +176,19 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
         LobbyKicked = 1115,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAlreadyPending = 3200,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyFriends = 3201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidMove = 2002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RankingUnavailable = 2003,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
@@ -264,6 +273,9 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidEmailFormat = 3132,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserBlocked = 3202,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,
@@ -526,6 +538,9 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DamasChinas_Client.UI.MatchServiceProxy.MatchStateDto BoardStateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private DamasChinas_Client.UI.MatchServiceProxy.HexCoordinateDto MoveDestinationField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -544,6 +559,19 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DamasChinas_Client.UI.MatchServiceProxy.MatchStateDto BoardState {
+            get {
+                return this.BoardStateField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BoardStateField, value) != true)) {
+                    this.BoardStateField = value;
+                    this.RaisePropertyChanged("BoardState");
+                }
             }
         }
         
