@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI.Callbacks;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -15,6 +16,8 @@ namespace DamasChinas_Client.UI.Pages
         private readonly int _matches;
         private readonly int _wins;
         private readonly int _loses;
+
+        private const string DefaultAvatarFile = "avatarIcon.png";
 
         public ProfilePublicPage(string username, string avatarFile, int matches, int wins, int loses)
         {
@@ -31,30 +34,50 @@ namespace DamasChinas_Client.UI.Pages
 
         private void LoadData()
         {
-            UsernameText.Text = _username;
-            AvatarImage.Source = PathProvider.LoadAvatar(_avatarFile);
+            try
+            {
+                UsernameText.Text = _username;
 
-            MatchesPlayedText.Text = _matches.ToString();
-            WinsText.Text = _wins.ToString();
-            LosesText.Text = _loses.ToString();
+                MatchesPlayedText.Text = _matches.ToString();
+                WinsText.Text = _wins.ToString();
+                LosesText.Text = _loses.ToString();
+
+                string avatar = string.IsNullOrWhiteSpace(_avatarFile)
+                    ? DefaultAvatarFile
+                    : _avatarFile;
+
+                AvatarImage.Source = PathProvider.LoadAvatar(avatar);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePublicPage.LoadData] {ex.Message}");
+            }
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
-            try { NavigationService?.GoBack(); }
-            catch { MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error); }
+            try
+            {
+                NavigationService?.GoBack();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePublicPage.OnBackClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
         }
 
         private void OnAddFriendClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                using (var client = new FriendServiceClient())
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
                 {
                     var result = client.SendFriendRequest(
                         ClientSession.CurrentProfile.Username,
-                        _username
-                    );
+                        _username);
 
                     MessageHelper.ShowFromResult(result);
                 }
@@ -66,15 +89,30 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new ConfiSound());
+            try
+            {
+                NavigationService?.Navigate(new ConfiSound());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePublicPage.OnSoundClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new SelectLanguage());
+            try
+            {
+                NavigationService?.Navigate(new SelectLanguage());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfilePublicPage.OnLanguageClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
         }
     }
 }

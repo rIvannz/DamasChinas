@@ -40,6 +40,14 @@ namespace DamasChinas_Client.UI.Utilities
         public const string FriendRequestRejected = "msg_FriendRequestRejected";
         public const string NoPendingRequests = "msg_NoPendingRequests";
         public const string FriendRequestSentOk = "friendRequestSentOk";
+        public const string FriendRequestReceived = "friendRequestReceived";
+        public const string UserBlockedYou = "userBlockedYou";
+        public const string UserUnblockedYou = "userUnblockedYou";
+        public const string ConfirmRemoveFriend = "confirmRemoveFriend";
+        public const string FriendRemovedSuccess = "friendRemovedSuccess";
+        public const string ConfirmBlockUser = "confirmBlockUser";
+        public const string UserBlockedSuccess = "userBlockedSuccess";
+
 
 
 

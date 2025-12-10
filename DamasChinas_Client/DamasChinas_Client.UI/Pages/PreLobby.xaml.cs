@@ -1,9 +1,11 @@
+using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.LobbyServiceProxy;
-using DamasChinas_Client.UI.FriendServiceProxy; // Para FriendServiceClient y FriendDto
 using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,14 +14,18 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class PreLobby : Page
     {
+        private const string DefaultAvatarFile = "avatarIcon.png";
+
         private readonly LobbyManager _lobbyManager;
         private LobbySnapshotDto _snapshot;
         private readonly string _username;
         private readonly int _userId;
 
-        // Colecciones para el UI
-        public ObservableCollection<LobbyMemberViewModel> MembersCollection { get; set; } = new ObservableCollection<LobbyMemberViewModel>();
-        public ObservableCollection<FriendViewModel> FriendsCollection { get; set; } = new ObservableCollection<FriendViewModel>();
+        public ObservableCollection<LobbyMemberViewModel> MembersCollection { get; set; } =
+            new ObservableCollection<LobbyMemberViewModel>();
+
+        public ObservableCollection<FriendViewModel> FriendsCollection { get; set; } =
+            new ObservableCollection<FriendViewModel>();
 
         public PreLobby(LobbySnapshotDto snapshot, string username, int userId)
         {
@@ -36,7 +42,6 @@ namespace DamasChinas_Client.UI.Pages
             _username = username;
             _userId = userId;
 
-            // Bindings de las listas
             membersList.ItemsSource = MembersCollection;
             friendsList.ItemsSource = FriendsCollection;
 
@@ -45,8 +50,6 @@ namespace DamasChinas_Client.UI.Pages
 
             SubscribeEvents();
             ApplySnapshot(snapshot);
-
-            // Cargar lista de amigos
             LoadFriends();
         }
 
@@ -76,14 +79,16 @@ namespace DamasChinas_Client.UI.Pages
             {
                 _snapshot = snapshot;
 
-                lblLobbyCode.Text = $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyCode)}: {snapshot.LobbyCode}";
+                lblLobbyCode.Text =
+                    $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyCode)}: {snapshot.LobbyCode}";
 
-                if (this.FindName("lblPlayerCount") is TextBlock lblCount)
+                if (FindName("lblPlayerCount") is TextBlock lblCount)
                 {
                     lblCount.Text = $"{snapshot.Members.Length} / {snapshot.MaxPlayers}";
                 }
 
                 MembersCollection.Clear();
+
                 bool amIHost = snapshot.Members.Any(m => m.Username == _username && m.IsHost);
 
                 foreach (var m in snapshot.Members)
@@ -92,14 +97,19 @@ namespace DamasChinas_Client.UI.Pages
                     string displayName = m.IsHost ? $"? {m.Username}" : m.Username;
 
                     Visibility kickVis = (amIHost && !isMe) ? Visibility.Visible : Visibility.Collapsed;
-                    Visibility reportVis = (!isMe) ? Visibility.Visible : Visibility.Collapsed;
+                    Visibility reportVis = !isMe ? Visibility.Visible : Visibility.Collapsed;
+
+                    string avatarFile = string.IsNullOrWhiteSpace(m.AvatarFile)
+                        ? DefaultAvatarFile
+                        : m.AvatarFile;
 
                     MembersCollection.Add(new LobbyMemberViewModel
                     {
                         UserId = m.UserId,
                         Username = m.Username,
                         DisplayName = displayName,
-                        AvatarFile = m.AvatarFile,
+                        AvatarFile = avatarFile,
+                        AvatarSource = PathProvider.LoadAvatar(avatarFile),
                         IsHost = m.IsHost,
                         KickVisibility = kickVis,
                         ReportVisibility = reportVis,
@@ -113,37 +123,47 @@ namespace DamasChinas_Client.UI.Pages
 
         private void LoadFriends()
         {
-            // CORRECCIÓN: Instancia directa para evitar error de ServiceHelper
             try
             {
-                using (var friendClient = new FriendServiceClient())
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
                 {
-                    var friends = friendClient.GetFriends(_username); // Usamos username como pide IFriendService
+                    var friends = client.GetFriends(_username);
 
                     Dispatcher.Invoke(() =>
                     {
                         FriendsCollection.Clear();
-                        if (friends != null)
-                        {
-                            foreach (var f in friends)
-                            {
-                                // CORRECCIÓN: Mapeo manual de ConnectionState(bool) a Status(Enum)
-                                var status = f.ConnectionState ? FriendStatus.Online : FriendStatus.Offline;
 
-                                FriendsCollection.Add(new FriendViewModel
-                                {
-                                    Username = f.Username,
-                                    Status = status
-                                    // Agrega Avatar si lo necesitas en el XAML
-                                });
-                            }
+                        if (friends == null)
+                        {
+                            return;
+                        }
+
+                        foreach (var f in friends)
+                        {
+                            var status = f.ConnectionState
+                                ? FriendStatus.Online
+                                : FriendStatus.Offline;
+
+                            string avatarFile = string.IsNullOrWhiteSpace(f.Avatar)
+                                ? DefaultAvatarFile
+                                : f.Avatar;
+
+                            FriendsCollection.Add(new FriendViewModel
+                            {
+                                Username = f.Username,
+                                Status = status,
+                                AvatarFile = avatarFile,
+                                AvatarSource = PathProvider.LoadAvatar(avatarFile)
+                            });
                         }
                     });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading friends: {ex.Message}");
+                Console.WriteLine($"[PreLobby.LoadFriends] {ex.Message}");
             }
         }
 
@@ -201,7 +221,8 @@ namespace DamasChinas_Client.UI.Pages
         private void OnChatTextChanged(object sender, TextChangedEventArgs e)
         {
             txtChatPlaceholder.Visibility = string.IsNullOrWhiteSpace(txtChatMessage.Text)
-                ? Visibility.Visible : Visibility.Collapsed;
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         // ======================= ACCIONES =======================
@@ -216,21 +237,26 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnReportMemberClick(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.DataContext is LobbyMemberViewModel vm)
+            if (!(sender is Button btn) || !(btn.DataContext is LobbyMemberViewModel vm))
             {
-                if (vm.Username == _username) return;
-
-                var req = new ReportPlayerRequest
-                {
-                    LobbyCode = _snapshot.LobbyCode,
-                    ReporterUsername = _username,
-                    ReportedUsername = vm.Username,
-                    Reason = "Reported from lobby"
-                };
-
-                _lobbyManager.ReportPlayer(req);
-                MessageHelper.ShowPopup(MessageKeys.PlayerReported, PopupType.Success);
+                return;
             }
+
+            if (vm.Username == _username)
+            {
+                return;
+            }
+
+            var req = new ReportPlayerRequest
+            {
+                LobbyCode = _snapshot.LobbyCode,
+                ReporterUsername = _username,
+                ReportedUsername = vm.Username,
+                Reason = "Reported from lobby"
+            };
+
+            _lobbyManager.ReportPlayer(req);
+            MessageHelper.ShowPopup(MessageKeys.PlayerReported, PopupType.Success);
         }
 
         private void OnStartGameClick(object sender, RoutedEventArgs e)
@@ -252,18 +278,17 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnInviteFriendClick(object sender, RoutedEventArgs e)
         {
-            // CORRECCIÓN: Usar FriendViewModel
-            if (sender is Button btn && btn.DataContext is FriendViewModel friend)
+            if (!(sender is Button btn) || !(btn.DataContext is FriendViewModel friend))
             {
-                if (friend.Status != FriendStatus.Online)
-                {
-                    // Podrías mostrar un mensaje de error aquí
-                    return;
-                }
-
-                // _lobbyManager.InviteFriend(...)
+                return;
             }
 
+            if (friend.Status != FriendStatus.Online)
+            {
+                return;
+            }
+
+            // Aquí iría la invitación real al amigo
             MessageHelper.ShowPopup(MessageKeys.ChatComingSoon, PopupType.Info);
         }
 
@@ -271,7 +296,7 @@ namespace DamasChinas_Client.UI.Pages
 
         public void ApplyBanInfo(BanInfoDto ban)
         {
-            if (ban?.IsBanned == true)
+            if (ban != null && ban.IsBanned)
             {
                 MessageHelper.ShowPopup(MessageKeys.LobbyUserBanned, PopupType.Error);
                 ExitCleanly();
@@ -313,25 +338,30 @@ namespace DamasChinas_Client.UI.Pages
             NavigationService?.GoBack();
         }
 
-        // ======================= VIEW MODELS =======================
+        
 
         public class LobbyMemberViewModel
         {
             public int UserId { get; set; }
             public string Username { get; set; }
             public string DisplayName { get; set; }
+
             public string AvatarFile { get; set; }
+            public ImageSource AvatarSource { get; set; }
+
             public bool IsHost { get; set; }
             public Visibility KickVisibility { get; set; }
             public Visibility ReportVisibility { get; set; }
             public LobbyMemberDto OriginalDto { get; set; }
         }
 
-        // CORRECCIÓN: ViewModel local para adaptar DTO a UI
         public class FriendViewModel
         {
             public string Username { get; set; }
-            public FriendStatus Status { get; set; } // Necesario para el Converter
+            public FriendStatus Status { get; set; }
+
+            public string AvatarFile { get; set; }
+            public ImageSource AvatarSource { get; set; }
         }
     }
 }

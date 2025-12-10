@@ -5,8 +5,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       Background="{DynamicResource SurfaceBrush}"
-      d:DesignHeight="720"
-      d:DesignWidth="1280">
+      d:DesignHeight="720" d:DesignWidth="1280">
 
     <Grid>
         <!-- ===== FONDO ===== -->
@@ -20,11 +19,8 @@
         <Grid Margin="40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Encabezado -->
                 <RowDefinition Height="*"/>
-                <!-- Cuerpo -->
                 <RowDefinition Height="Auto"/>
-                <!-- Iconos inferiores -->
             </Grid.RowDefinitions>
 
             <!-- ===== ENCABEZADO ===== -->
@@ -43,8 +39,8 @@
                         ToolTip="{DynamicResource back}"
                         Click="OnBackClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
-                           Width="40"
-                           Height="40"
+                           Width="40" Height="40"
+                           Stretch="Uniform"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
 
@@ -65,53 +61,48 @@
                     CornerRadius="10"
                     Padding="25"
                     Margin="0,0,0,10">
-
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="3*"/>
-                        <!-- Información -->
                         <RowDefinition Height="1.3*"/>
-                        <!-- Stats -->
                         <RowDefinition Height="Auto"/>
-                        <!-- Botón Add Friend -->
                     </Grid.RowDefinitions>
 
-                    <!-- ===== INFORMACIÓN DEL PERFIL ===== -->
+                    <!-- ===== INFORMACIÓN DEL JUGADOR ===== -->
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="1.6*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Datos del usuario -->
+                        <!-- ===== DATOS DEL PERFIL ===== -->
                         <Grid Grid.Column="0" Margin="10,10,20,10">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{DynamicResource profile}"
+                            <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                                       Text="{DynamicResource profile}"
                                        FontSize="32"
                                        FontWeight="Bold"
                                        Foreground="White"
                                        Margin="0,0,0,12"/>
 
                             <!-- Username -->
-                            <StackPanel Margin="0,10,0,0">
-                                <TextBlock Text="{DynamicResource username}"
-                                           FontSize="24"
-                                           Foreground="White"/>
-                                <TextBlock x:Name="UsernameText"
-                                           FontSize="20"
-                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,36,20,0">
+                                <TextBlock Text="{DynamicResource username}" FontSize="24" Foreground="White"/>
+                                <TextBlock x:Name="UsernameText" FontSize="20" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
 
-                            <!-- Social Media -->
-                            <StackPanel Margin="0,25,0,0">
-                                <TextBlock Text="{DynamicResource socialmedia}"
-                                           FontSize="24"
-                                           Foreground="White"/>
+                            <!-- Social URL -->
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="20,36,0,0">
+                                <TextBlock Text="{DynamicResource socialmedia}" FontSize="24" Foreground="White"/>
+                                <!-- No tenemos social real desde ranking, usamos placeholder -->
                                 <TextBlock x:Name="SocialUrlText"
                                            FontSize="20"
                                            Text="{DynamicResource msg_FeatureUnavailable}"
@@ -119,12 +110,12 @@
                             </StackPanel>
                         </Grid>
 
-                        <!-- Avatar -->
+                        <!-- ===== AVATAR ===== -->
                         <StackPanel Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    Width="220"
-                                    Margin="0,0,10,0">
+                                    Margin="0,0,10,0"
+                                    Width="220">
 
                             <Border Width="140" Height="140"
                                     BorderBrush="White"
@@ -133,8 +124,8 @@
                                     Margin="0,20">
                                 <Image x:Name="AvatarImage"
                                        Stretch="UniformToFill"
-                                       ClipToBounds="True"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       ClipToBounds="True"/>
                             </Border>
 
                         </StackPanel>
@@ -153,7 +144,7 @@
                                    Foreground="White"
                                    Margin="6,0,0,8"/>
 
-                        <Grid Grid.Row="1">
+                        <Grid Grid.Row="1" Margin="10,0,10,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -177,15 +168,15 @@
                         </Grid>
                     </Grid>
 
-                    <!-- ===== BOTÓN ADD FRIEND ===== -->
+                    <!-- ===== BOTÓN AGREGAR AMIGO ===== -->
                     <Button Grid.Row="2"
-                            Width="200"
+                            Width="220"
                             Height="48"
                             HorizontalAlignment="Center"
+                            Margin="0,25,0,0"
                             Style="{DynamicResource BaseGameButton}"
                             Content="{DynamicResource addFriend}"
-                            Click="OnAddFriendClick"
-                            Margin="0,30,0,0"/>
+                            Click="OnAddFriendClick"/>
                 </Grid>
             </Border>
 
@@ -199,6 +190,7 @@
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
+                        ToolTip="{DynamicResource sound}"
                         Click="OnSoundClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
                            Width="26" Height="26"/>
@@ -207,12 +199,13 @@
                 <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
+                        ToolTip="{DynamicResource language}"
                         Click="OnLanguageClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
                            Width="26" Height="26"/>
                 </Button>
-            </StackPanel>
 
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

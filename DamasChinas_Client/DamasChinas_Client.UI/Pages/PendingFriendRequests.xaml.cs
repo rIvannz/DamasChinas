@@ -1,5 +1,6 @@
 ﻿using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI.Callbacks;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -30,7 +31,9 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                using (var client = new FriendServiceClient())
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
                 {
                     var dtos = client.GetFriendRequests(currentUsername);
 
@@ -59,7 +62,6 @@ namespace DamasChinas_Client.UI.Pages
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);
             }
-
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)
@@ -74,7 +76,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
         private void OnAcceptClick(object sender, RoutedEventArgs e)
         {
             if (sender is FrameworkElement element &&
@@ -84,7 +85,9 @@ namespace DamasChinas_Client.UI.Pages
 
                 try
                 {
-                    using (var client = new FriendServiceClient())
+                    using (var client = new FriendServiceClient(
+                        new InstanceContext(new FriendCallbackHandler()),
+                        "NetTcpBinding_IFriendService"))
                     {
                         var result = client.UpdateFriendRequestStatus(
                             currentUsername,
@@ -124,7 +127,9 @@ namespace DamasChinas_Client.UI.Pages
 
                 try
                 {
-                    using (var client = new FriendServiceClient())
+                    using (var client = new FriendServiceClient(
+                        new InstanceContext(new FriendCallbackHandler()),
+                        "NetTcpBinding_IFriendService"))
                     {
                         var result = client.UpdateFriendRequestStatus(
                             currentUsername,

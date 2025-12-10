@@ -11,12 +11,18 @@
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
       <xsd:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IFriendService_SubscribeFriendEvents_InputMessage">
+    <wsdl:part name="parameters" element="tns:SubscribeFriendEvents" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_UnsubscribeFriendEvents_InputMessage">
+    <wsdl:part name="parameters" element="tns:UnsubscribeFriendEvents" />
+  </wsdl:message>
   <wsdl:message name="IFriendService_GetFriends_InputMessage">
     <wsdl:part name="parameters" element="tns:GetFriends" />
   </wsdl:message>
@@ -74,46 +80,94 @@
   <wsdl:message name="IFriendService_DeleteFriendAndBlock_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteFriendAndBlockResponse" />
   </wsdl:message>
-  <wsdl:portType name="IFriendService">
-    <wsdl:operation name="GetFriends">
+  <wsdl:message name="IFriendService_FriendRequestReceived_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendRequestReceived" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_FriendRequestAccepted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendRequestAccepted" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_FriendRemoved_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendRemoved" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_UserBlockedYou_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UserBlockedYou" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_UserUnblockedYou_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UserUnblockedYou" />
+  </wsdl:message>
+  <wsdl:portType msc:usingSession="true" name="IFriendService">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SubscribeFriendEvents">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/SubscribeFriendEvents" message="tns:IFriendService_SubscribeFriendEvents_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UnsubscribeFriendEvents">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/UnsubscribeFriendEvents" message="tns:IFriendService_UnsubscribeFriendEvents_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetFriends">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriends" message="tns:IFriendService_GetFriends_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetFriendsResponse" message="tns:IFriendService_GetFriends_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetFriendsMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_GetFriends_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetFriendRequests">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetFriendRequests">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriendRequests" message="tns:IFriendService_GetFriendRequests_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetFriendRequestsResponse" message="tns:IFriendService_GetFriendRequests_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetFriendRequestsMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_GetFriendRequests_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetFriendPublicProfile">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetFriendPublicProfile">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriendPublicProfile" message="tns:IFriendService_GetFriendPublicProfile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetFriendPublicProfileResponse" message="tns:IFriendService_GetFriendPublicProfile_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetFriendPublicProfileMessageCodeFault" name="MessageCodeFault" message="tns:IFriendService_GetFriendPublicProfile_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SendFriendRequest">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SendFriendRequest">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequest" message="tns:IFriendService_SendFriendRequest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequestResponse" message="tns:IFriendService_SendFriendRequest_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="DeleteFriend">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="DeleteFriend">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/DeleteFriend" message="tns:IFriendService_DeleteFriend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendResponse" message="tns:IFriendService_DeleteFriend_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateBlockStatus">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UpdateBlockStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/UpdateBlockStatus" message="tns:IFriendService_UpdateBlockStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UpdateBlockStatusResponse" message="tns:IFriendService_UpdateBlockStatus_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateFriendRequestStatus">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UpdateFriendRequestStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatus" message="tns:IFriendService_UpdateFriendRequestStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UpdateFriendRequestStatusResponse" message="tns:IFriendService_UpdateFriendRequestStatus_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="DeleteFriendAndBlock">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="DeleteFriendAndBlock">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlock" message="tns:IFriendService_DeleteFriendAndBlock_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/DeleteFriendAndBlockResponse" message="tns:IFriendService_DeleteFriendAndBlock_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="FriendRequestReceived">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/FriendRequestReceived" message="tns:IFriendService_FriendRequestReceived_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="FriendRequestAccepted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/FriendRequestAccepted" message="tns:IFriendService_FriendRequestAccepted_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="FriendRemoved">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/FriendRemoved" message="tns:IFriendService_FriendRemoved_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UserBlockedYou">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UserBlockedYou" message="tns:IFriendService_UserBlockedYou_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UserUnblockedYou">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/UserUnblockedYou" message="tns:IFriendService_UserUnblockedYou_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IFriendService" type="tns:IFriendService">
     <wsp:PolicyReference URI="#NetTcpBinding_IFriendService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="SubscribeFriendEvents">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/SubscribeFriendEvents" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeFriendEvents">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/UnsubscribeFriendEvents" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="GetFriends">
       <soap12:operation soapAction="http://tempuri.org/IFriendService/GetFriends" style="document" />
       <wsdl:input>
@@ -191,6 +245,36 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FriendRequestReceived">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/FriendRequestReceived" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FriendRequestAccepted">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/FriendRequestAccepted" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FriendRemoved">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/FriendRemoved" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserBlockedYou">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/UserBlockedYou" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserUnblockedYou">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/UserUnblockedYou" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

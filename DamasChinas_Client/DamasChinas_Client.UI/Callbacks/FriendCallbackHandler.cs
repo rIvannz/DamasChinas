@@ -1,15 +1,23 @@
 ﻿using System;
+using System.ServiceModel;
 using DamasChinas_Client.UI.FriendServiceProxy;
 
 namespace DamasChinas_Client.UI.Callbacks
 {
-    public class FriendCallbackHandler : IFriendServiceCallback
+    // Igual que LobbyCallbackHandler para evitar deadlocks
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
+    public sealed class FriendCallbackHandler : IFriendServiceCallback
     {
+        // ================================================================
+        // EVENTOS PARA ACTUALIZAR UI EN PÁGINAS
+        // ================================================================
         public static event Action<string> FriendRequestReceivedEvent;
         public static event Action<string> FriendRequestAcceptedEvent;
         public static event Action<string> FriendRemovedEvent;
-        public static event Action<string> UserBlockedEvent;
-        public static event Action<string> UserUnblockedEvent;
+        public static event Action<string> UserBlockedYouEvent;
+        public static event Action<string> UserUnblockedYouEvent;
+
+        // Solo disparamos eventos. La UI decide si muestra popups o no.
 
         public void FriendRequestReceived(string fromUsername)
         {
@@ -28,12 +36,12 @@ namespace DamasChinas_Client.UI.Callbacks
 
         public void UserBlockedYou(string username)
         {
-            UserBlockedEvent?.Invoke(username);
+            UserBlockedYouEvent?.Invoke(username);
         }
 
         public void UserUnblockedYou(string username)
         {
-            UserUnblockedEvent?.Invoke(username);
+            UserUnblockedYouEvent?.Invoke(username);
         }
     }
 }

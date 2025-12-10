@@ -142,10 +142,21 @@ namespace DamasChinas_Client.UI.Pages
                         loading.Close();
                     }
 
-                    // 1) GUARDAR SESIÓN (tu forma original)
+                    // 1) Guardar sesión
                     ClientSession.Initialize(profile, client, callback);
 
-                    // 2) SUSCRIBIR AL SERVICIO DE SESIÓN (nuevamente agregado aquí)
+                    // 2) FIX: suscribir al sistema de eventos de amigos
+                    //    (FriendRemoved, UserBlockedYou, etc. siempre)
+                    try
+                    {
+                        FriendNotificationManager.Initialize(profile.Username);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[Login.ConfigureCallback] Error al suscribir FriendService: {ex.Message}");
+                    }
+
+                    // 3) Suscribir al servicio de sesión (lo que ya tenías)
                     try
                     {
                         var sessionCallback = new SessionCallbackHandler();
@@ -161,10 +172,11 @@ namespace DamasChinas_Client.UI.Pages
                         Debug.WriteLine($"[Login.ConfigureCallback] Error al suscribir SessionService: {ex.Message}");
                     }
 
-                    // 3) NAVEGAR AL MENÚ (manteniendo tu conversión actual)
+                    // 4) Navegar al menú
                     TryNavigateToMenu(profile);
                 });
             };
+
 
             // =============================
             // LOGIN ERROR

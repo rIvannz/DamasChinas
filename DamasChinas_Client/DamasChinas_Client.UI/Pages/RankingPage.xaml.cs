@@ -1,36 +1,94 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.FriendServiceProxy;
+using DamasChinas_Client.UI.RankingServiceProxy;
+using DamasChinas_Client.UI.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using DamasChinas_Client.UI.RankingServiceProxy;
-using DamasChinas_Client.UI.Utilities;
-using DamasChinas_Client.UI.PopUps;
-using static DamasChinas_Client.UI.Utilities.MessageKeys;
+using System.Windows.Media;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class RankingPage : Page
     {
+        private const string DefaultAvatarFile = "avatar1.png";
+        private readonly List<RankingItemViewModel> _items = new List<RankingItemViewModel>();
+
         public RankingPage()
         {
             InitializeComponent();
             Loaded += OnPageLoaded;
         }
 
+        // =========================================================
+        //  EVENTOS DE PÁGINA
+        // =========================================================
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             LoadRanking();
         }
 
-        private void OnRefreshClick(object sender, RoutedEventArgs e)
+        // =========================================================
+        //  CARGA DE RANKING
+        // =========================================================
+        private void LoadRanking()
         {
-            LoadRanking();
+            try
+            {
+                using (var client = new RankingServiceClient())
+                {
+                    var data = client.GetTop10Ranking();
+
+                    _items.Clear();
+
+                    if (data != null)
+                    {
+                        int position = 1;
+
+                        foreach (var entry in data)
+                        {
+                            _items.Add(new RankingItemViewModel
+                            {
+                                Position = position,
+                                Username = entry.Username,
+                                AvatarFile = string.IsNullOrWhiteSpace(entry.AvatarFile)
+                                    ? DefaultAvatarFile
+                                    : entry.AvatarFile,
+                                MatchesPlayed = entry.MatchesPlayed,
+                                Wins = entry.Wins,
+                                Loses = entry.Loses
+                            });
+
+                            position++;
+                        }
+                    }
+
+                    lvRanking.ItemsSource = null;
+                    lvRanking.ItemsSource = _items;
+                }
+            }
+            catch (Exception ex) when (
+                ex is EndpointNotFoundException ||
+                ex is CommunicationException ||
+                ex is TimeoutException)
+            {
+                Debug.WriteLine($"[RankingPage.LoadRanking - Comm] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.RankingUnavailable, PopupType.Info);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[RankingPage.LoadRanking - General] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
         }
 
+        // =========================================================
+        //  HANDLERS DE BOTONES
+        // =========================================================
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -40,138 +98,188 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[RankingPage.OnBackClick] {ex.Message}");
-                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
-        // ============================================================
-        // CARGA DE RANKING
-        // ============================================================
-        private void LoadRanking()
+        private void OnRefreshClick(object sender, RoutedEventArgs e)
         {
-            RankingServiceClient client = null;
+            LoadRanking();
+        }
 
+        private void OnSoundClick(object sender, RoutedEventArgs e)
+        {
             try
             {
-                client = new RankingServiceClient();
-                var entries = client.GetTop10Ranking() ?? Array.Empty<RankingEntry>();
-
-                var viewModels = entries
-                    .Select((e, index) => new RankingItemViewModel(e, index + 1))
-                    .ToList();
-
-                lvRanking.ItemsSource = viewModels;
-            }
-            catch (FaultException<MessageCode> ex)
-            {
-                HandleServiceFault(ex.Detail);
-            }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is TimeoutException ||
-                ex is CommunicationException)
-            {
-                Debug.WriteLine($"[RankingPage.LoadRanking - Connection] {ex.Message}");
-                MessageHelper.ShowPopup(RankingUnavailable, PopupType.Error);
+                NavigationService?.Navigate(new ConfiSound());
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[RankingPage.LoadRanking - General] {ex}");
-                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
-            }
-            finally
-            {
-                CloseClientSafely(client);
+                Debug.WriteLine($"[RankingPage.OnSoundClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
-        private static void HandleServiceFault(MessageCode code)
+        private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            switch (code)
-            {
-                case MessageCode.RankingUnavailable:
-                    MessageHelper.ShowPopup(RankingUnavailable, PopupType.Error);
-                    break;
-
-                case MessageCode.ServerUnavailable:
-                    MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
-                    break;
-
-                default:
-                    MessageHelper.ShowPopup(UnknownError, PopupType.Error);
-                    break;
-            }
-        }
-
-        private static void CloseClientSafely(RankingServiceClient client)
-        {
-            if (client == null) return;
-
             try
             {
-                if (client.State == CommunicationState.Opened)
-                    client.Close();
-                else
-                    client.Abort();
+                NavigationService?.Navigate(new SelectLanguage());
             }
-            catch
+            catch (Exception ex)
             {
-                client.Abort();
+                Debug.WriteLine($"[RankingPage.OnLanguageClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
+
+        // =========================================================
+        //  PERFIL DESDE RANKING
+        // =========================================================
+        private bool IsFriend(string username)
+        {
+            try
+            {
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
+                {
+                    var friends = client.GetFriends(ClientSession.CurrentProfile.Username);
+
+                    if (friends == null)
+                    {
+                        return false;
+                    }
+
+                    return friends.Any(f =>
+                        string.Equals(f.Username, username, StringComparison.OrdinalIgnoreCase));
+                }
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[RankingPage.IsFriend - Endpoint] {ex.Message}");
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[RankingPage.IsFriend - Timeout] {ex.Message}");
+                return false;
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[RankingPage.IsFriend - Comm] {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[RankingPage.IsFriend - General] {ex.Message}");
+                return false;
+            }
+        }
+
 
         private void OnViewProfileClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (sender is Button btn && btn.DataContext is RankingItemViewModel vm)
+                if (!(sender is Button button) || !(button.DataContext is RankingItemViewModel vm))
                 {
+                    return;
+                }
+
+                // Si es el propio usuario → ir a ProfilePlayer
+                if (string.Equals(vm.Username, ClientSession.CurrentProfile.Username, StringComparison.OrdinalIgnoreCase))
+                {
+                    NavigationService?.Navigate(new ProfilePlayer());
+                    return;
+                }
+
+                // Si ES amigo → obtener perfil completo
+                if (IsFriend(vm.Username))
+                {
+                    using (var client = new FriendServiceClient(
+                        new InstanceContext(new FriendCallbackHandler()),
+                        "NetTcpBinding_IFriendService"))
+                    {
+                        var friendProfile = client.GetFriendPublicProfile(vm.Username);
+
+                        if (friendProfile == null)
+                        {
+                            MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
+                            return;
+                        }
+
+                        NavigationService?.Navigate(new ProfileFriend(friendProfile));
+                    }
+                }
+                else
+                {
+                    // Si NO es amigo → mostrar perfil limitado
                     NavigationService?.Navigate(
-                        new ProfilePublicPage(vm.Username, vm.AvatarFile, vm.MatchesPlayed, vm.Wins, vm.Loses)
-                    );
+                        new ProfilePublicPage(
+                            vm.Username,
+                            vm.AvatarFile,
+                            vm.MatchesPlayed,
+                            vm.Wins,
+                            vm.Loses));
                 }
             }
-            catch
+            catch (EndpointNotFoundException ex)
             {
+                Debug.WriteLine($"[RankingPage.OnViewProfileClick - Endpoint] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[RankingPage.OnViewProfileClick - Timeout] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[RankingPage.OnViewProfileClick - Comm] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[RankingPage.OnViewProfileClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
 
-
-        private void OnSoundClick(object sender, RoutedEventArgs e)
+        // =========================================================
+        //  VIEW MODEL INTERNO
+        // =========================================================
+        private sealed class RankingItemViewModel
         {
-            Debug.WriteLine("[RankingPage.OnSoundClick] Not implemented");
+            public int Position { get; set; }
+
+            public string PositionText => $"#{Position}";
+
+            public string Username { get; set; }
+
+            public string AvatarFile { get; set; }
+
+            public int MatchesPlayed { get; set; }
+
+            public int Wins { get; set; }
+
+            public int Loses { get; set; }
+
+            // ---- FIX: Cargar imagen real ----
+            public ImageSource AvatarSource
+            {
+                get
+                {
+                    string file = string.IsNullOrWhiteSpace(AvatarFile)
+                        ? "avatarIcon.png"
+                        : AvatarFile;
+
+                    return PathProvider.LoadAvatar(file);
+                }
+            }
         }
 
-        private void OnLanguageClick(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("[RankingPage.OnLanguageClick] Not implemented");
-        }
-    }
 
-    public sealed class RankingItemViewModel
-    {
-        public RankingItemViewModel(RankingEntry entry, int position)
-        {
-            Position = position;
-            Username = entry.Username;
-            AvatarFile = entry.AvatarFile;
-            MatchesPlayed = entry.MatchesPlayed;
-            Wins = entry.Wins;
-            Loses = entry.Loses;
-            WinRate = entry.WinRate;
-        }
-
-        public int Position { get; }
-        public string PositionText => $"#{Position}";
-
-        public string Username { get; }
-        public string AvatarFile { get; }
-
-        public int MatchesPlayed { get; }
-        public int Wins { get; }
-        public int Loses { get; }
-        public double WinRate { get; }
     }
 }

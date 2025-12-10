@@ -200,6 +200,13 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="RankingUnavailable">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2003</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="NetworkLatency">
         <xs:annotation>
           <xs:appinfo>

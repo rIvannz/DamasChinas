@@ -11,6 +11,9 @@ namespace DamasChinas_Client.UI.PopUps
         public ConfirmPopupWindow()
         {
             InitializeComponent();
+
+            // Centrar SIEMPRE el popup (como tus otros popups)
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         // Constructor que acepta la clave del recurso para el mensaje
@@ -18,8 +21,6 @@ namespace DamasChinas_Client.UI.PopUps
         {
             if (!string.IsNullOrWhiteSpace(messageResourceKey))
             {
-                // Busca el recurso en los diccionarios merged de la aplicación
-                // Si falla (porque la key no existe), intenta poner el texto directo
                 try
                 {
                     MessageText.SetResourceReference(TextBlock.TextProperty, messageResourceKey);

@@ -1,6 +1,7 @@
 ﻿using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI.Callbacks;
 using System;
 using System.Diagnostics;
 using System.ServiceModel;
@@ -46,19 +47,21 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                using (var client = new FriendServiceClient())
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
                 {
-                    var result = client.SendFriendRequest(ClientSession.safeUsername, username);
+                    var result = client.SendFriendRequest(
+                        ClientSession.SafeUsernameNormalized,
+                        username);
 
                     if (!result.Success)
                     {
-                       
                         string message = MessageTranslator.GetLocalizedMessage(result.Code);
                         MessageHelper.ShowPopup(message, PopupType.Warning);
                         return;
                     }
 
-                 
                     MessageHelper.ShowPopup(
                         MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestSentOk),
                         PopupType.Success);
@@ -80,13 +83,12 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[AddFriend.OnSendClick] {ex.Message}");
+                Debug.WriteLine($"[AddFriend.OnSendClick] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
                     PopupType.Error);
             }
         }
-
     }
 }

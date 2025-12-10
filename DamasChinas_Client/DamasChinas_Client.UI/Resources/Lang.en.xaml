@@ -42,6 +42,28 @@
         You have no pending friend requests.
     </sys:String>
 
+    <sys:String x:Key="friendRequestReceived">New friend request from {0}</sys:String>
+    <sys:String x:Key="friendRequestAccepted">{0} accepted your friend request</sys:String>
+    <sys:String x:Key="friendRemoved">{0} removed you from their friends list</sys:String>
+    <sys:String x:Key="userBlockedYou">{0} has blocked you</sys:String>
+    <sys:String x:Key="userUnblockedYou">{0} has unblocked you</sys:String>
+
+    <sys:String x:Key="confirmRemoveFriend">
+        Are you sure you want to remove this friend?
+    </sys:String>
+    <sys:String x:Key="friendRemovedSuccess">
+        Friend removed successfully.
+    </sys:String>
+
+    <sys:String x:Key="confirmBlockUser">
+        Are you sure you want to block this user?
+    </sys:String>
+    <sys:String x:Key="userBlockedSuccess">
+        User has been blocked successfully.
+    </sys:String>
+
+
+
     <!-- ===== INVITED USERS ===== -->
     <sys:String  x:Key="msg_GuestProfile">Guest profile (not registered)</sys:String>
     <sys:String  x:Key="msg_GuestNoEmail">This user has no email (guest)</sys:String>
@@ -50,6 +72,13 @@
     <sys:String x:Key="guestProfileTitle">Guest Profile</sys:String>
     <sys:String x:Key="guestProfileUnavailable">This user is an unregistered guest. Only their username is available. Register to enable full profile and statistics.</sys:String>
     <sys:String x:Key="guestNoEmail">No email (guest)</sys:String>
+
+
+    <!-- FRIEND PROFILE -->
+    <sys:String x:Key="friendProfile">Friend Profile</sys:String>
+
+    <!-- REMOVE FRIEND BUTTON -->
+    <sys:String x:Key="removeFriend">Remove Friend</sys:String>
 
 
 

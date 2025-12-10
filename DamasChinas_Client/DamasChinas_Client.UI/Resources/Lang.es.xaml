@@ -43,6 +43,33 @@
         No tienes solicitudes pendientes.
     </sys:String>
 
+    <sys:String x:Key="friendRequestReceived">Nueva solicitud de amistad de {0}</sys:String>
+    <sys:String x:Key="friendRequestAccepted">{0} ha aceptado tu solicitud de amistad</sys:String>
+    <sys:String x:Key="friendRemoved">{0} te ha eliminado de su lista de amigos</sys:String>
+    <sys:String x:Key="userBlockedYou">{0} te ha bloqueado</sys:String>
+    <sys:String x:Key="userUnblockedYou">{0} te ha desbloqueado</sys:String>
+    <sys:String x:Key="confirmRemoveFriend">
+        ¿Estás seguro de que deseas eliminar a este amigo?
+    </sys:String>
+    <sys:String x:Key="friendRemovedSuccess">
+        El amigo se eliminó correctamente.
+    </sys:String>
+
+    <sys:String x:Key="confirmBlockUser">
+        ¿Estás seguro de que deseas bloquear a este usuario?
+    </sys:String>
+    <sys:String x:Key="userBlockedSuccess">
+        El usuario se bloqueó correctamente.
+    </sys:String>
+
+
+    <!-- PERFIL DE AMIGO -->
+    <sys:String x:Key="friendProfile">Perfil del amigo</sys:String>
+
+    <!-- BOTÓN ELIMINAR AMIGO -->
+    <sys:String x:Key="removeFriend">Eliminar amigo</sys:String>
+
+
     <!-- ===== USUARIOS INVITADOS ===== -->
     <sys:String  x:Key="msg_GuestProfile">Perfil de invitado (no registrado)</sys:String>
     <sys:String  x:Key="msg_GuestNoEmail">Este usuario no tiene correo (invitado)</sys:String>

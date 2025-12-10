@@ -2,6 +2,20 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
   <xs:import schemaLocation="http://localhost:8004/FriendService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+  <xs:element name="SubscribeFriendEvents">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UnsubscribeFriendEvents">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetFriends">
     <xs:complexType>
       <xs:sequence>
@@ -118,6 +132,41 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="DeleteFriendAndBlockResult" nillable="true" type="q8:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FriendRequestReceived">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="fromUsername" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FriendRequestAccepted">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="byUsername" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FriendRemoved">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserBlockedYou">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserUnblockedYou">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

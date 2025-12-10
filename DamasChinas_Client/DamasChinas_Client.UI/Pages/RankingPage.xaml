@@ -35,16 +35,13 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Retroceder -->
-                <Button Width="60"
-                        Height="60"
+                <Button Width="60" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        ToolTip="{DynamicResource back}"
                         Cursor="Hand"
                         Click="OnBackClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
-                           Width="40"
-                           Height="40"/>
+                           Width="40" Height="40"/>
                 </Button>
 
                 <TextBlock Grid.Column="1"
@@ -56,16 +53,11 @@
                            TextAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center">
-                    <Button Width="150"
-                            Height="40"
-                            Style="{DynamicResource BaseGameButton}"
-                            Content="{DynamicResource refresh}"
-                            Click="OnRefreshClick"/>
-                </StackPanel>
+                <Button Grid.Column="2"
+                        Width="150" Height="40"
+                        Style="{DynamicResource BaseGameButton}"
+                        Content="{DynamicResource refresh}"
+                        Click="OnRefreshClick"/>
             </Grid>
 
             <!-- LISTA -->
@@ -79,8 +71,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
 
-                    <ItemsControl x:Name="lvRanking"
-                                  Margin="10">
+                    <ItemsControl x:Name="lvRanking" Margin="10">
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -89,45 +80,53 @@
                                         BorderBrush="#666"
                                         BorderThickness="1"
                                         CornerRadius="8"
-                                        Padding="10"
-                                        Margin="0,0,0,10">
+                                        Padding="12"
+                                        Margin="0,0,0,12">
 
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="130"/>
+                                            <ColumnDefinition Width="60"/>
+                                            <!-- Position -->
+                                            <ColumnDefinition Width="70"/>
+                                            <!-- Avatar -->
+                                            <ColumnDefinition Width="2.5*"/>
+                                            <!-- Username + matches -->
+                                            <ColumnDefinition Width="1.2*"/>
+                                            <!-- WINS -->
+                                            <ColumnDefinition Width="1.2*"/>
+                                            <!-- LOSES -->
+                                            <ColumnDefinition Width="150"/>
+                                            <!-- Profile button -->
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Posición -->
                                         <TextBlock Grid.Column="0"
                                                    Text="{Binding PositionText}"
                                                    Foreground="White"
-                                                   FontSize="18"
+                                                   FontSize="22"
                                                    FontWeight="Bold"
-                                                   Margin="0,0,15,0"
                                                    VerticalAlignment="Center"/>
 
-                                        <!-- Avatar -->
-                                        <Image Grid.Column="1"
-                                               Source="{Binding AvatarFile}"
-                                               Width="45"
-                                               Height="45"
-                                               Stretch="UniformToFill"
-                                               Margin="0,0,15,0"/>
+                                        <!-- Avatar circular -->
+                                        <Ellipse Grid.Column="1"
+                                                 Width="50" Height="50"
+                                                 Stroke="White" StrokeThickness="2">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding AvatarSource}" Stretch="UniformToFill"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
 
-                                        <!-- Usuario y partidas -->
+                                        <!-- Usuario + Matches -->
                                         <StackPanel Grid.Column="2"
                                                     VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Username}"
                                                        Foreground="White"
                                                        FontSize="18"
                                                        FontWeight="Bold"/>
-                                            <TextBlock Foreground="White"
-                                                       FontSize="12">
+
+                                            <TextBlock Foreground="#CCCCCC"
+                                                       FontSize="12"
+                                                       Margin="0,2,0,0">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}{0} {1}">
                                                         <Binding Path="MatchesPlayed"/>
@@ -139,29 +138,34 @@
                                         </StackPanel>
 
                                         <!-- WINS -->
-                                        <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                        <StackPanel Grid.Column="3"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
                                             <TextBlock Text="{DynamicResource wins}"
-                                                       Foreground="White"
-                                                       FontSize="10"/>
+                                                       Foreground="#DDDDDD"
+                                                       FontSize="12"/>
                                             <TextBlock Text="{Binding Wins}"
                                                        Foreground="White"
-                                                       FontSize="16"
+                                                       FontSize="20"
                                                        FontWeight="Bold"/>
                                         </StackPanel>
 
-                                        <!-- LOSSES -->
-                                        <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                                        <!-- LOSES -->
+                                        <StackPanel Grid.Column="4"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
                                             <TextBlock Text="{DynamicResource loses}"
-                                                       Foreground="White"
-                                                       FontSize="10"/>
+                                                       Foreground="#DDDDDD"
+                                                       FontSize="12"/>
                                             <TextBlock Text="{Binding Loses}"
                                                        Foreground="White"
-                                                       FontSize="16"
+                                                       FontSize="20"
                                                        FontWeight="Bold"/>
                                         </StackPanel>
 
-                                        <!-- Ver perfil -->
+                                        <!-- Botón Perfil -->
                                         <Button Grid.Column="5"
+                                                Width="140"
                                                 Height="40"
                                                 Style="{DynamicResource BaseGameButton}"
                                                 Content="{DynamicResource profile}"
@@ -179,28 +183,24 @@
 
             </Border>
 
-            <!-- BOTONES IDIOMA / SONIDO -->
+            <!-- BOTONES INFERIORES -->
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                <Button Width="44"
-                        Height="44"
+                <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
                         Click="OnSoundClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/soundIcon.png"
-                           Width="26"
-                           Height="26"/>
+                           Width="26" Height="26"/>
                 </Button>
 
-                <Button Width="44"
-                        Height="44"
+                <Button Width="44" Height="44"
                         Background="Transparent"
                         BorderThickness="0"
                         Click="OnLanguageClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/languageIcon.png"
-                           Width="26"
-                           Height="26"/>
+                           Width="26" Height="26"/>
                 </Button>
             </StackPanel>
 

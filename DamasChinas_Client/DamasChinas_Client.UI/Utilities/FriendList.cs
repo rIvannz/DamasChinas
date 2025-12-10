@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace DamasChinas_Client.UI.Utilities
 {
@@ -8,7 +9,12 @@ namespace DamasChinas_Client.UI.Utilities
         private FriendStatus _status;
 
         public string Username { get; set; }
-        public string Avatar { get; set; }
+
+        // Archivo del avatar (para BD)
+        public string AvatarFile { get; set; }
+
+        // Imagen cargada (para UI)
+        public ImageSource AvatarSource { get; set; }
 
         public FriendStatus Status
         {
