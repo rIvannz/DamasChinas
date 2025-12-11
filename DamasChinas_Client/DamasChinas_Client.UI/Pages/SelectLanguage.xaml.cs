@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using DamasChinas_Client.UI.Utilities;
 using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
@@ -30,8 +31,14 @@ namespace DamasChinas_Client.UI.Pages
 
                     LanguageManager.ChangeLanguage(languageCode);
 
-               
                     MessageHelper.ShowPopup(LanguageChangeSuccess, PopupType.Success);
+
+              
+                    var hostWindow = Window.GetWindow(this);
+                    if (hostWindow != null && hostWindow.Owner != null)
+                    {
+                        hostWindow.Close();
+                    }
                 }
                 else
                 {
@@ -49,14 +56,22 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
+         
                 if (NavigationService?.CanGoBack == true)
                 {
                     NavigationService.GoBack();
+                    return;
                 }
-                else
+
+       
+                var hostWindow = Window.GetWindow(this);
+                if (hostWindow != null && hostWindow.Owner != null)
                 {
-                    MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
+                    hostWindow.Close();
+                    return;
                 }
+
+                MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
             }
             catch (InvalidOperationException ex)
             {

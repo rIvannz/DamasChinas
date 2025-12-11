@@ -4,11 +4,21 @@ using DamasChinas_Server.Dtos;
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace DamasChinas_Server.Interfaces   
+namespace DamasChinas_Server.Interfaces
 {
-    [ServiceContract]
+    [ServiceContract(
+        CallbackContract = typeof(IFriendCallback),
+        SessionMode = SessionMode.Required)]
     public interface IFriendService
     {
+
+        [OperationContract(IsOneWay = true)]
+        void SubscribeFriendEvents(string username);
+
+        [OperationContract(IsOneWay = true)]
+        void UnsubscribeFriendEvents(string username);
+
+        
         [OperationContract]
         [FaultContract(typeof(MessageCode))]
         List<FriendDto> GetFriends(string username);

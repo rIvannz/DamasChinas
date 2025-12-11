@@ -1,7 +1,8 @@
+using DamasChinas_Server.Common;
+using DamasChinas_Server.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DamasChinas_Server.Dtos;
 
 namespace DamasChinas_Server
 {
@@ -73,7 +74,7 @@ namespace DamasChinas_Server
         {
             if (string.IsNullOrWhiteSpace(username))
             {
-                throw new ArgumentException("El nombre de usuario no puede estar vacío.");
+                throw new ArgumentException(MessageCode.RepositoryUsernameEmpty.ToString(), nameof(username));
             }
 
             using (var context = CreateDb())
@@ -85,12 +86,13 @@ namespace DamasChinas_Server
 
                 if (userId == 0)
                 {
-                    throw new InvalidOperationException($"No se encontró el usuario con username '{username}'");
+                    throw new InvalidOperationException(MessageCode.RepositoryUserNotFound.ToString());
                 }
 
                 return userId;
             }
         }
+
 
     }
 }

@@ -19,6 +19,7 @@ namespace DamasChinas_Server.Services
         private const string OperationChangeUsername = nameof(ChangeUsername);
         private const string OperationChangePassword = nameof(ChangePassword);
         private const string OperationChangeAvatar = nameof(ChangeAvatar);
+        private const string OperationChangeSocialUrl = nameof(ChangeSocialUrl);
 
         public AccountManager()
      : this(new RepositoryUsers(), LogFactory.Create<AccountManager>())
@@ -95,6 +96,21 @@ namespace DamasChinas_Server.Services
                 OperationChangeAvatar
             );
         }
+
+        public OperationResult ChangeSocialUrl(int idUser, string socialUrl)
+        {
+            _log.Info($"[ChangeSocialUrl] idUser={idUser}, socialUrl={socialUrl}");
+
+            return ExecuteAccountOperation(
+                () => _repository.ChangeSocialUrl(idUser, socialUrl),
+                MessageCode.Success,
+                MessageCode.UnknownError,
+                MessageCode.ServerUnavailable,
+                nameof(ChangeSocialUrl)
+            );
+        }
+
+
 
 
         // TODO

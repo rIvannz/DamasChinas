@@ -249,6 +249,49 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        private void OnSaveSocialUrlClick(object sender, RoutedEventArgs e)
+        {
+            TryExecuteAction(() =>
+            {
+                var profile = ClientSession.CurrentProfile;
+                if (profile == null)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.UserProfileNotFound, PopupType.Warning);
+                    return;
+                }
+
+                string socialUrl = txtSocialUrl.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(socialUrl))
+                {
+                    MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
+                    return;
+                }
+
+                using (var client = new AccountManagerClient())
+                {
+                    var result = client.ChangeSocialUrl(profile.IdUser, socialUrl);
+
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+
+                    if (result.Success)
+                    {
+                        profile.SocialUrl = socialUrl;            
+                        ClientSession.CurrentProfile.SocialUrl = socialUrl;
+
+                        MessageHelper.ShowPopup(message, PopupType.Success);
+                    }
+                    else
+                    {
+                        MessageHelper.ShowPopup(message, PopupType.Warning);
+                    }
+                }
+
+            }, MessageKeys.UnknownError);
+        }
+
+
+
         private void ClearPasswordInputs()
         {
             txtPassword.Password = string.Empty;
@@ -272,6 +315,11 @@ namespace DamasChinas_Client.UI.Pages
                 txtLastName.Text = profile.LastName;
                 txtEmail.Text = profile.Email;
                 txtCurrentUsername.Text = profile.Username;
+
+                if (txtSocialUrl != null)
+                {
+                    txtSocialUrl.Text = profile.SocialUrl ?? string.Empty;
+                }
             }
             catch (InvalidOperationException ex)
             {
@@ -279,6 +327,43 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
+
+        private void OnSaveSocialMediaClick(object sender, RoutedEventArgs e)
+        {
+            TryExecuteAction(() =>
+            {
+                string url = txtSocialUrl.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
+                    return;
+                }
+
+                using (var client = new AccountManagerClient())
+                {
+                    int idUser = ClientSession.CurrentProfile.IdUser;
+
+                    var result = client.ChangeSocialUrl(idUser, url);
+
+                    string message = MessageTranslator.GetLocalizedMessage(result.Code);
+
+                    if (result.Success)
+                    {
+                  
+                        ClientSession.CurrentProfile.SocialUrl = url;
+
+                        MessageHelper.ShowPopup(message, PopupType.Success);
+                    }
+                    else
+                    {
+                        MessageHelper.ShowPopup(message, PopupType.Warning);
+                    }
+                }
+
+            }, MessageKeys.UnknownError);
+        }
+
 
 
         private static void TryExecuteAction(Action action, string errorKey)

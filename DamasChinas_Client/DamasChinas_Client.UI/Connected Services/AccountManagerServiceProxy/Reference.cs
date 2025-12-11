@@ -522,10 +522,19 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         LobbyKicked = 1115,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAlreadyPending = 3200,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyFriends = 3201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidMove = 2002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RankingUnavailable = 2003,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
@@ -612,6 +621,9 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         InvalidEmailFormat = 3132,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserBlocked = 3202,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,
     }
     
@@ -648,6 +660,12 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeAvatar", ReplyAction="http://tempuri.org/IAccountManager/ChangeAvatarResponse")]
         System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeAvatarAsync(int idUser, string avatarFile);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeSocialUrl", ReplyAction="http://tempuri.org/IAccountManager/ChangeSocialUrlResponse")]
+        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeSocialUrl(int idUser, string socialUrl);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ChangeSocialUrl", ReplyAction="http://tempuri.org/IAccountManager/ChangeSocialUrlResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeSocialUrlAsync(int idUser, string socialUrl);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -715,6 +733,14 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         
         public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeAvatarAsync(int idUser, string avatarFile) {
             return base.Channel.ChangeAvatarAsync(idUser, avatarFile);
+        }
+        
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ChangeSocialUrl(int idUser, string socialUrl) {
+            return base.Channel.ChangeSocialUrl(idUser, socialUrl);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeSocialUrlAsync(int idUser, string socialUrl) {
+            return base.Channel.ChangeSocialUrlAsync(idUser, socialUrl);
         }
     }
 }

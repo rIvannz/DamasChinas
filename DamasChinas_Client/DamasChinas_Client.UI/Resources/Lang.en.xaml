@@ -20,6 +20,18 @@
     <sys:String x:Key="noWord">No</sys:String>
     <sys:String x:Key="report">Report</sys:String>
     <sys:String x:Key="kick">Kick</sys:String>
+    <sys:String x:Key="matchesPlayedShort">matches</sys:String>
+    <sys:String x:Key="globalRanking">GLOBAL RANKING</sys:String>
+    <sys:String x:Key="currentData">Current data</sys:String>
+    <sys:String x:Key="openLink">Open Link</sys:String>
+    <sys:String x:Key="passwordRules">
+        The password must contain at least 8 characters,
+including one uppercase letter, one number,
+and one special character (*, $, #).
+    </sys:String>
+
+
+
 
     <!-- ========================================================= -->
     <!-- ADD FRIENDS                           -->
@@ -39,6 +51,39 @@
         You have no pending friend requests.
     </sys:String>
 
+    <sys:String x:Key="friendRequestReceived">New friend request from {0}</sys:String>
+    <sys:String x:Key="friendRequestAccepted">{0} accepted your friend request</sys:String>
+    <sys:String x:Key="friendRemoved">{0} removed you from their friends list</sys:String>
+    <sys:String x:Key="userBlockedYou">{0} has blocked you</sys:String>
+    <sys:String x:Key="userUnblockedYou">{0} has unblocked you</sys:String>
+
+    <sys:String x:Key="confirmRemoveFriend">
+        Are you sure you want to remove this friend?
+    </sys:String>
+    <sys:String x:Key="friendRemovedSuccess">
+        Friend removed successfully.
+    </sys:String>
+
+    <sys:String x:Key="confirmBlockUser">
+        Are you sure you want to block this user?
+    </sys:String>
+    <sys:String x:Key="userBlockedSuccess">
+        User has been blocked successfully.
+    </sys:String>
+    <sys:String x:Key="msg_FriendRequestAlreadyPending">
+        Your friend request is still pending.
+    </sys:String>
+
+    <sys:String x:Key="msg_AlreadyFriends">
+        This user is already in your friends list.
+    </sys:String>
+    <sys:String x:Key="msg_UserBlocked">
+        Your request could not be completed.
+    </sys:String>
+
+
+
+
     <!-- ===== INVITED USERS ===== -->
     <sys:String  x:Key="msg_GuestProfile">Guest profile (not registered)</sys:String>
     <sys:String  x:Key="msg_GuestNoEmail">This user has no email (guest)</sys:String>
@@ -47,6 +92,13 @@
     <sys:String x:Key="guestProfileTitle">Guest Profile</sys:String>
     <sys:String x:Key="guestProfileUnavailable">This user is an unregistered guest. Only their username is available. Register to enable full profile and statistics.</sys:String>
     <sys:String x:Key="guestNoEmail">No email (guest)</sys:String>
+
+
+    <!-- FRIEND PROFILE -->
+    <sys:String x:Key="friendProfile">Friend Profile</sys:String>
+
+    <!-- REMOVE FRIEND BUTTON -->
+    <sys:String x:Key="removeFriend">Remove Friend</sys:String>
 
 
 
@@ -310,7 +362,12 @@
 
     <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">This feature is not available yet.</sys:String>
- 
+    <sys:String x:Key="msg_RankingUnavailable">
+        We are unable to display the player ranking right now.
+    </sys:String>
+    <sys:String x:Key="msg_SocialUrlMissing">No social media link added.</sys:String>
+    <sys:String x:Key="msg_UrlOpenError">At this moment we cannot open the link.</sys:String> 
+
 
     <!-- Navegación / módulos -->
 
@@ -383,6 +440,18 @@
     <!-- General operations -->
     <sys:String x:Key="msg_OperationInterrupted">Operation interrupted due to a validation failure.</sys:String>
     <sys:String x:Key="msg_UserValidationError">Some of your data is invalid. Please review the fields.</sys:String>
+    <sys:String x:Key="msg_HostDisconnected">
+        The host has disconnected. The match has been closed.
+    </sys:String>
+
+    <sys:String x:Key="msg_SessionNotInitialized">
+        No active session found. Please sign in first.
+    </sys:String>
+    <sys:String x:Key="msg_InvalidUsernameArgument">
+        Username cannot be null or empty.
+    </sys:String>
+
+
 
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->

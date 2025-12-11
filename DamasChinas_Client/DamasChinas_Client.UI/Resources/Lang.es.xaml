@@ -17,6 +17,17 @@
     <sys:String x:Key="noWord">No</sys:String>
     <sys:String x:Key="report">Reportar</sys:String>
     <sys:String x:Key="kick">Expulsar</sys:String>
+    <sys:String x:Key="matchesPlayedShort">jugadas</sys:String>
+    <sys:String x:Key="globalRanking">RANKING GLOBAL</sys:String>
+    <sys:String x:Key="currentData">Datos actuales</sys:String>
+    <sys:String x:Key="openLink">Abrir enlace</sys:String>
+    <sys:String x:Key="passwordRules">
+        La contraseña debe tener al menos 8 caracteres, 
+incluir una letra mayúscula, un número 
+y un carácter especial (*, $, #).
+    </sys:String>
+ 
+
 
     <!-- ========================================================= -->
     <!--  Modulo de agregar amigos                     -->
@@ -39,6 +50,44 @@
     <sys:String x:Key="msg_NoPendingRequests">
         No tienes solicitudes pendientes.
     </sys:String>
+
+    <sys:String x:Key="friendRequestReceived">Nueva solicitud de amistad de {0}</sys:String>
+    <sys:String x:Key="friendRequestAccepted">{0} ha aceptado tu solicitud de amistad</sys:String>
+    <sys:String x:Key="friendRemoved">{0} te ha eliminado de su lista de amigos</sys:String>
+    <sys:String x:Key="userBlockedYou">{0} te ha bloqueado</sys:String>
+    <sys:String x:Key="userUnblockedYou">{0} te ha desbloqueado</sys:String>
+    <sys:String x:Key="confirmRemoveFriend">
+        ¿Estás seguro de que deseas eliminar a este amigo?
+    </sys:String>
+    <sys:String x:Key="friendRemovedSuccess">
+        El amigo se eliminó correctamente.
+    </sys:String>
+
+    <sys:String x:Key="confirmBlockUser">
+        ¿Estás seguro de que deseas bloquear a este usuario?
+    </sys:String>
+    <sys:String x:Key="userBlockedSuccess">
+        El usuario se bloqueó correctamente.
+    </sys:String>
+    <sys:String x:Key="msg_FriendRequestAlreadyPending">
+        La solicitud aún está pendiente.
+    </sys:String>
+
+    <sys:String x:Key="msg_AlreadyFriends">
+        Este usuario ya pertenece a tu lista de amigos.
+    </sys:String>
+    <sys:String x:Key="msg_UserBlocked">
+        No se pudo completar tu solicitud.
+    </sys:String>
+
+
+
+    <!-- PERFIL DE AMIGO -->
+    <sys:String x:Key="friendProfile">Perfil del amigo</sys:String>
+
+    <!-- BOTÓN ELIMINAR AMIGO -->
+    <sys:String x:Key="removeFriend">Eliminar amigo</sys:String>
+
 
     <!-- ===== USUARIOS INVITADOS ===== -->
     <sys:String  x:Key="msg_GuestProfile">Perfil de invitado (no registrado)</sys:String>
@@ -296,6 +345,15 @@
     <sys:String x:Key="msg_FeatureUnavailable">Esta función aún no está disponible.</sys:String>
     <sys:String x:Key="msg_LanguageChangeError">
         Ocurrió un error al cambiar el idioma. Inténtalo nuevamente.</sys:String>
+    <sys:String x:Key="msg_RankingUnavailable">
+        En este momento no podemos mostrar el ranking de jugadores.
+    </sys:String>
+    <sys:String x:Key="msg_HostDisconnected">
+        El host de la partida se desconectó. La partida ha sido cerrada.
+    </sys:String>
+    <sys:String x:Key="msg_SocialUrlMissing">No hay URL registrada.</sys:String>
+    <sys:String x:Key="msg_UrlOpenError">En este momento no podemos abrir el link.</sys:String> 
+
 
 
     <!-- Navegación / módulos -->
@@ -366,6 +424,13 @@
     <!-- Operaciones generales -->
     <sys:String x:Key="msg_OperationInterrupted">La operación fue interrumpida debido a una validación fallida.</sys:String>
     <sys:String x:Key="msg_UserValidationError">Algunos de tus datos no son válidos. Revisa los campos.</sys:String>
+    <sys:String x:Key="msg_SessionNotInitialized">
+        No active session found. Please sign in first.
+    </sys:String>
+    <sys:String x:Key="msg_InvalidUsernameArgument">
+        El nombre de usuario no puede ser nulo ni estar vacío.
+    </sys:String>
+
 
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — MENSAJES ESPECÍFICOS                      -->

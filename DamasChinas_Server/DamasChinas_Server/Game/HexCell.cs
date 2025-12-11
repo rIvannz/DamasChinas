@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DamasChinas_Server.Common;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Represents a board cell along with the zone and the occupying piece.
-    /// </summary>
     public class HexCell
     {
         private Piece _piece;
@@ -50,7 +44,7 @@ namespace DamasChinas_Server.Game
 
             if (_piece != null)
             {
-                throw new InvalidOperationException("The cell is already occupied.");
+                throw new InvalidOperationException(MessageCode.CellAlreadyOccupied.ToString());
             }
 
             _piece = piece;
@@ -60,7 +54,7 @@ namespace DamasChinas_Server.Game
         {
             if (_piece == null)
             {
-                throw new InvalidOperationException("The cell does not contain a piece.");
+                throw new InvalidOperationException(MessageCode.CellHasNoPiece.ToString());
             }
 
             Piece piece = _piece;

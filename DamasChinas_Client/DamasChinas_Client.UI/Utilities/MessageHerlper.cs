@@ -8,7 +8,7 @@ namespace DamasChinas_Client.UI.Utilities
     {
         private const PopupType DefaultType = PopupType.Info;
 
-    
+
         public static void ShowPopup(string messageKey, PopupType type = DefaultType, bool autoClose = false)
         {
             string message = MessageTranslator.GetLocalizedMessage(messageKey);
@@ -20,6 +20,7 @@ namespace DamasChinas_Client.UI.Utilities
 
             popup.ShowDialog();
         }
+
 
         public static void ShowFromCode(Enum code, PopupType type = DefaultType)
         {

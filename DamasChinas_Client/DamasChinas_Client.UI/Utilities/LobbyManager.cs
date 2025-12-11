@@ -6,9 +6,7 @@ using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities
 {
-    // =========================================================================
-    // CONFIGURACIÓN WCF PARA EVITAR CONGELAMIENTO (DEADLOCK)
-    // =========================================================================
+
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public sealed class LobbyManager : ILobbyServiceCallback
     {
@@ -19,7 +17,6 @@ namespace DamasChinas_Client.UI.Utilities
         public string CurrentUsername { get; private set; }
         public string HostUsername { get; private set; }
 
-        // Eventos para la UI
         public event Action<LobbySnapshotDto> SnapshotReceived;
         public event Action<string> Kicked;
         public event Action<string> Closed;
@@ -60,9 +57,7 @@ namespace DamasChinas_Client.UI.Utilities
             CurrentLobbyCode = code;
         }
 
-        // =========================================================
-        //  OPERACIONES (Retornan OperationResult)
-        // =========================================================
+      
 
         public OperationResult CreateLobby(string username, CreateLobbyRequest request)
         {
@@ -198,7 +193,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                // Log silencioso
+                
             }
         }
 
@@ -227,9 +222,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // =========================================================
-        //  CALLBACKS
-        // =========================================================
+ 
 
         public void OnLobbySnapshot(LobbySnapshotDto snapshot)
         {

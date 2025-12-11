@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DamasChinas_Server.Common;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Minimal model for a player connected to the server.
-    /// </summary>
     public class Player
     {
         public string Id { get; }
@@ -19,12 +13,12 @@ namespace DamasChinas_Server.Game
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                throw new ArgumentException("The player identifier is required.", nameof(id));
+                throw new ArgumentException(MessageCode.PlayerIdRequired.ToString(), nameof(id));
             }
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("The player name is required.", nameof(name));
+                throw new ArgumentException(MessageCode.PlayerNameRequired.ToString(), nameof(name));
             }
 
             Id = id;

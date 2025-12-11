@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using DamasChinas_Client.UI.FriendServiceProxy;   // <-- Solo el correcto
+using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI.PopUps;
+using DamasChinas_Client.UI.Callbacks;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -15,13 +18,11 @@ namespace DamasChinas_Client.UI.Pages
         public ProfileFriend(PublicFriendProfile friendProfile)
         {
             InitializeComponent();
-
-            _friendProfile = friendProfile
-                             ?? throw new ArgumentNullException(nameof(friendProfile));
-
+            _friendProfile = friendProfile ?? throw new ArgumentNullException(nameof(friendProfile));
             LoadFriendData();
         }
 
+     
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -35,25 +36,21 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+  
         private void LoadFriendData()
         {
             try
             {
-                // ===== DATOS BÁSICOS =====
                 UsernameText.Text = _friendProfile.Username;
+                SocialUrlText.Text = _friendProfile.SocialUrl ?? string.Empty;
 
-                if (!string.IsNullOrWhiteSpace(_friendProfile.SocialUrl))
-                    SocialUrlText.Text = _friendProfile.SocialUrl;
-
-                // ===== ESTADÍSTICAS =====
                 MatchesPlayedText.Text = _friendProfile.MatchesPlayed.ToString();
                 WinsText.Text = _friendProfile.Wins.ToString();
                 LosesText.Text = _friendProfile.Loses.ToString();
 
-                // ===== AVATAR =====
                 string avatar = string.IsNullOrWhiteSpace(_friendProfile.AvatarFile)
-                                ? DefaultAvatarFile
-                                : _friendProfile.AvatarFile;
+                    ? DefaultAvatarFile
+                    : _friendProfile.AvatarFile;
 
                 AvatarImage.Source = PathProvider.LoadAvatar(avatar);
             }
@@ -62,6 +59,95 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ProfileFriend.LoadFriendData] {ex.Message}");
             }
         }
+
+
+        private void OnRemoveFriendClick(object sender, RoutedEventArgs e)
+        {
+            var popup = new ConfirmPopupWindow(MessageKeys.ConfirmRemoveFriend);
+            popup.ShowDialog();
+
+            if (!popup.Result)
+            {
+                return;
+            }
+
+            try
+            {
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
+                {
+                    var result = client.DeleteFriend(
+                        ClientSession.SafeUsernameNormalized,
+                        _friendProfile.Username);
+
+                    if (!result.Success)
+                    {
+                        MessageHelper.ShowPopup(
+                            MessageTranslator.GetLocalizedMessage(result.Code),
+                            PopupType.Warning);
+                        return;
+                    }
+
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRemovedSuccess),
+                        PopupType.Success);
+
+                    NavigationService?.GoBack();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfileFriend.OnRemoveFriendClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
+        }
+
+ 
+
+        private void OnBlockUserClick(object sender, RoutedEventArgs e)
+        {
+            var popup = new ConfirmPopupWindow(MessageKeys.ConfirmBlockUser);
+            popup.ShowDialog();
+
+            if (!popup.Result)
+            {
+                return;
+            }
+
+            try
+            {
+                using (var client = new FriendServiceClient(
+                    new InstanceContext(new FriendCallbackHandler()),
+                    "NetTcpBinding_IFriendService"))
+                {
+                    var result = client.UpdateBlockStatus(
+                        ClientSession.SafeUsernameNormalized,
+                        _friendProfile.Username,
+                        true);
+
+                    if (!result.Success)
+                    {
+                        MessageHelper.ShowPopup(
+                            MessageTranslator.GetLocalizedMessage(result.Code),
+                            PopupType.Warning);
+                        return;
+                    }
+
+                    MessageHelper.ShowPopup(
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.UserBlockedSuccess),
+                        PopupType.Success);
+
+                    NavigationService?.GoBack();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProfileFriend.OnBlockUserClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
+        }
+
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {

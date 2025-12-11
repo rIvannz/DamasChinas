@@ -8,9 +8,7 @@ namespace DamasChinas_Client.UI.Utilities
    
     public static class MessageTranslator
     {
-        // ========================
-        // Mapa CodeName → ResourceKey
-        // ========================
+     
 
         private static readonly IReadOnlyDictionary<string, string> CodeToResourceKey =
             new Dictionary<string, string>(StringComparer.Ordinal)
@@ -83,6 +81,10 @@ namespace DamasChinas_Client.UI.Utilities
 
                 { "SoundSettingsUpdated", MessageKeys.SoundSettingsUpdated },
                 { "SoundSettingsError",   MessageKeys.SoundSettingsError },
+                { "FriendRequestAlreadyPending", MessageKeys.FriendRequestAlreadyPending },
+                { "AlreadyFriends", MessageKeys.AlreadyFriends },
+                { "UserBlocked", MessageKeys.UserBlocked },
+
             };
 
      
@@ -113,9 +115,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ========================
-        // Interno: mapping Enum → ResourceKey
-        // ========================
+
 
         private static string GetResourceKey(Enum code)
         {

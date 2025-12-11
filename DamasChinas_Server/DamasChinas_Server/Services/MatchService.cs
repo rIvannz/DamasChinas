@@ -8,18 +8,28 @@ using DamasChinas_Server.Logic;
 
 namespace DamasChinas_Server.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(
+        InstanceContextMode = InstanceContextMode.PerSession,
+        ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class MatchService : IMatchService
     {
         private readonly MatchManager _manager;
         private readonly ILogService _log;
 
-        public MatchService() : this(MatchManager.Instance, LogFactory.Create<MatchService>()) { }
+        // Contexto de esta sesión
+        private int _lobbyCode;
+        private string _username;
+        private bool _hasLeft;
+
+        public MatchService()
+            : this(MatchManager.Instance, LogFactory.Create<MatchService>())
+        {
+        }
 
         internal MatchService(MatchManager manager, ILogService log)
         {
-            _manager = manager;
-            _log = log;
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public OperationResult ConnectToMatch(int lobbyCode, string username)
@@ -27,6 +37,17 @@ namespace DamasChinas_Server.Services
             try
             {
                 var callback = OperationContext.Current.GetCallbackChannel<IMatchCallback>();
+
+                // Guardamos contexto de esta sesión
+                _lobbyCode = lobbyCode;
+                _username = username;
+                _hasLeft = false;
+
+                // Suscribimos a cierre / fallo del canal
+                var channel = OperationContext.Current.Channel;
+                channel.Closed += OnChannelClosedOrFaulted;
+                channel.Faulted += OnChannelClosedOrFaulted;
+
                 _manager.RegisterPlayerSession(lobbyCode, username, callback);
                 return OperationResult.Ok();
             }
@@ -71,11 +92,41 @@ namespace DamasChinas_Server.Services
         {
             try
             {
+                _hasLeft = true; // salida voluntaria, para no duplicar en Closed/Faulted
                 _manager.RemovePlayer(lobbyCode, username);
             }
             catch (Exception ex)
             {
                 _log.Error($"LeaveMatch error: {ex.Message}", ex);
+            }
+        }
+
+        // =========================================================
+        //  DETECCIÓN DE CIERRE / FALLO DEL CANAL WCF
+        // =========================================================
+        private void OnChannelClosedOrFaulted(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_hasLeft)
+                {
+                    // Ya procesamos la salida por LeaveMatch
+                    return;
+                }
+
+                if (_lobbyCode <= 0 || string.IsNullOrWhiteSpace(_username))
+                {
+                    return;
+                }
+
+                _hasLeft = true;
+                _log.Warn($"[MatchService] Channel closed/faulted for user={_username}, lobby={_lobbyCode}");
+
+                _manager.HandlePlayerDisconnect(_lobbyCode, _username);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[MatchService.OnChannelClosedOrFaulted] {ex.Message}", ex);
             }
         }
     }

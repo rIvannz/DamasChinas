@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Linq;
+<<<<<<< HEAD
 using DamasChinas_Server;                 
+=======
+using DamasChinas_Server;            
+>>>>>>> 096d4752533982c9398c1b7e38f37cff37a7bfd7
 using DamasChinas_Server.Utilidades;
 
 namespace DamasChinas_Server.GameRepositories
@@ -19,7 +23,11 @@ namespace DamasChinas_Server.GameRepositories
             _contextFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 096d4752533982c9398c1b7e38f37cff37a7bfd7
         public void ApplyBan(int userId, bool permanent, DateTime? untilUtc, string reason)
         {
             using (var db = _contextFactory())
@@ -39,6 +47,10 @@ namespace DamasChinas_Server.GameRepositories
             }
         }
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 096d4752533982c9398c1b7e38f37cff37a7bfd7
         public bool HasActiveBan(int userId)
         {
             DateTime now = DateTime.UtcNow;
@@ -52,6 +64,10 @@ namespace DamasChinas_Server.GameRepositories
             }
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 096d4752533982c9398c1b7e38f37cff37a7bfd7
 
         private static void SaveChangesSafely(damas_chinasEntities db)
         {

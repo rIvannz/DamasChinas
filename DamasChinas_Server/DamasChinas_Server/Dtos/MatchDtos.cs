@@ -1,4 +1,4 @@
-﻿using DamasChinas_Server.Game; // Para usar PlayerColor si es necesario, o usa string
+﻿using DamasChinas_Server.Game; 
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -34,9 +34,9 @@ namespace DamasChinas_Server.Dtos
         [DataMember]
         public bool IsActive { get; set; }
         [DataMember]
-        public string CurrentTurnPlayer { get; set; } // Username
+        public string CurrentTurnPlayer { get; set; } 
         [DataMember]
-        public Dictionary<string, HexCoordinateDto[]> BoardPieces { get; set; } // User -> Posiciones
+        public Dictionary<string, HexCoordinateDto[]> BoardPieces { get; set; } 
     }
 
     [DataContract]
@@ -44,11 +44,19 @@ namespace DamasChinas_Server.Dtos
     {
         [DataMember]
         public string PreviousPlayer { get; set; }
+
         [DataMember]
         public string NextPlayer { get; set; }
+
         [DataMember]
         public HexCoordinateDto MoveOrigin { get; set; }
+
         [DataMember]
         public HexCoordinateDto MoveDestination { get; set; }
+
+
+        [DataMember]
+        public MatchStateDto BoardState { get; set; }
     }
+
 }

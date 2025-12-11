@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI.Pages
@@ -32,7 +33,6 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
             }
         }
-
 
         private static void ValidateVolume(double volume)
         {
@@ -80,6 +80,13 @@ namespace DamasChinas_Client.UI.Pages
                 SoundManager.ApplyVolume(_pendingVolume);
 
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsUpdated, PopupType.Success);
+
+   
+                var hostWindow = Window.GetWindow(this);
+                if (hostWindow != null && hostWindow.Owner != null)
+                {
+                    hostWindow.Close();
+                }
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -102,14 +109,22 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
+           
                 if (NavigationService?.CanGoBack == true)
                 {
                     NavigationService.GoBack();
+                    return;
                 }
-                else
+
+       
+                var hostWindow = Window.GetWindow(this);
+                if (hostWindow != null && hostWindow.Owner != null)
                 {
-                    MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
+                    hostWindow.Close();
+                    return;
                 }
+
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
             }
             catch (InvalidOperationException ex)
             {

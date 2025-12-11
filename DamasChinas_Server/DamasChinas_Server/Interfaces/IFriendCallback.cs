@@ -18,5 +18,10 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract(IsOneWay = true)]
         void UserUnblockedYou(string username);
+
+        [OperationContract(IsOneWay = true)]
+        void FriendListUpdated();
+
+
     }
 }

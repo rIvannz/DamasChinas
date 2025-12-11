@@ -235,10 +235,19 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         LobbyKicked = 1115,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAlreadyPending = 3200,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyFriends = 3201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidMove = 2002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RankingUnavailable = 2003,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
@@ -323,6 +332,9 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidEmailFormat = 3132,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserBlocked = 3202,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,

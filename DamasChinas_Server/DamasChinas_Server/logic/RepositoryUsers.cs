@@ -205,6 +205,27 @@ namespace DamasChinas_Server
                 return true;
             });
         }
+        public bool ChangeSocialUrl(int idUser, string socialUrl)
+        {
+            if (idUser <= 0)
+                throw new RepositoryValidationException(MessageCode.UserNotFound);
+
+            socialUrl = socialUrl?.Trim() ?? string.Empty;
+
+            return ExecuteInContext(db =>
+            {
+                var perfil = db.perfiles.SingleOrDefault(p => p.id_usuario == idUser);
+
+                if (perfil == null)
+                    throw new RepositoryValidationException(MessageCode.UserProfileNotFound);
+
+                perfil.url = socialUrl;
+
+                SaveChangesSafely(db);
+                return true;
+            });
+        }
+
 
         private static usuarios CreateUsuario(IApplicationDbContext db, UserDto userDto)
         {

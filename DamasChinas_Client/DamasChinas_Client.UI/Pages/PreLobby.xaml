@@ -33,6 +33,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <!-- TÍTULO -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10,0,20">
                 <TextBlock Text="{DynamicResource preLobby}"
                            FontSize="22"
@@ -43,7 +44,10 @@
                            Margin="12,0,0,0"/>
             </StackPanel>
 
+            <!-- COLUMNA IZQUIERDA: Friends + Members -->
             <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,20,0">
+
+                <!-- FRIENDS -->
                 <Border CornerRadius="12" Background="#22000000" Padding="10" Margin="0,0,0,10">
                     <StackPanel>
                         <TextBlock Text="{DynamicResource friendsList}"
@@ -51,6 +55,7 @@
                                    FontSize="16"
                                    FontWeight="Bold"
                                    Margin="0,0,0,5"/>
+
                         <ListBox x:Name="friendsList"
                                  Background="Transparent"
                                  BorderThickness="0"
@@ -59,13 +64,54 @@
                                  Height="150"
                                  SelectionMode="Single"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel LastChildFill="False" Margin="0,2">
-                                        <Ellipse Width="10" Height="10" VerticalAlignment="Center" Margin="0,0,6,0"
-                                                 Fill="{Binding Status, Converter={StaticResource FriendStatusToColorConverter}}" />
-                                        <TextBlock Text="{Binding Username}" VerticalAlignment="Center" Foreground="White" DockPanel.Dock="Left" />
-                                        <Button Content="{DynamicResource invite}" Style="{DynamicResource BaseGameButton}" Width="70" Height="24" DockPanel.Dock="Right" Margin="10,0,0,0" Tag="{Binding}" Click="OnInviteFriendClick" />
+
+                                        <!-- Avatar + estado -->
+                                        <Grid Width="40" Height="36" DockPanel.Dock="Left" Margin="0,0,8,0">
+                                            <!-- Avatar -->
+                                            <Ellipse Width="32" Height="32"
+                                                     Stroke="White"
+                                                     StrokeThickness="1"
+                                                     HorizontalAlignment="Left">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding AvatarSource}"
+                                                                Stretch="UniformToFill"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+
+                                            <!-- Punto de estado -->
+                                            <Ellipse Width="10" Height="10"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Bottom"
+                                                     Margin="0,0,2,2"
+                                                     Fill="{Binding Status, Converter={StaticResource FriendStatusToColorConverter}}">
+                                                <Ellipse.Effect>
+                                                    <DropShadowEffect BlurRadius="6"
+                                                                      ShadowDepth="0"
+                                                                      Color="Lime"/>
+                                                </Ellipse.Effect>
+                                            </Ellipse>
+                                        </Grid>
+
+                                        <!-- Nombre -->
+                                        <TextBlock Text="{Binding Username}"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="White"
+                                                   DockPanel.Dock="Left"
+                                                   Margin="0,0,8,0"/>
+
+                                        <!-- Botón Invite -->
+                                        <Button Content="{DynamicResource invite}"
+                                                Style="{DynamicResource BaseGameButton}"
+                                                Width="70"
+                                                Height="24"
+                                                DockPanel.Dock="Right"
+                                                Margin="10,0,0,0"
+                                                Tag="{Binding}"
+                                                Click="OnInviteFriendClick" />
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -73,30 +119,64 @@
                     </StackPanel>
                 </Border>
 
+                <!-- MEMBERS -->
                 <Border CornerRadius="12" Background="#22000000" Padding="10">
                     <StackPanel>
-                        <TextBlock Text="{DynamicResource membersList}" Foreground="White" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
-                        <ListBox x:Name="membersList" Background="Transparent" BorderThickness="0" Foreground="White" FontSize="14" Height="200" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{DynamicResource membersList}"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+
+                        <ListBox x:Name="membersList"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Height="200"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel LastChildFill="False" Margin="0,4">
-                                        <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Foreground="White" FontWeight="SemiBold" DockPanel.Dock="Left" />
 
+                                        <!-- Avatar -->
+                                        <Grid Width="40" Height="36" DockPanel.Dock="Left" Margin="0,0,8,0">
+                                            <Ellipse Width="32" Height="32"
+                                                     Stroke="White"
+                                                     StrokeThickness="1">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding AvatarSource}"
+                                                                Stretch="UniformToFill"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                        </Grid>
+
+                                        <!-- Nombre / host -->
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="White"
+                                                   FontWeight="SemiBold"
+                                                   DockPanel.Dock="Left"
+                                                   Margin="0,0,8,0" />
+
+                                        <!-- Botón Report -->
                                         <Button Content="{DynamicResource report}"
                                                 Style="{DynamicResource BaseGameButton}"
                                                 Width="85" Height="30"
                                                 Margin="5,0,0,0"
                                                 DockPanel.Dock="Right"
-                                                Visibility="{Binding ReportVisibility}" 
+                                                Visibility="{Binding ReportVisibility}"
                                                 Tag="{Binding}"
                                                 Click="OnReportMemberClick" />
 
+                                        <!-- Botón Kick -->
                                         <Button Content="{DynamicResource kick}"
                                                 Style="{DynamicResource BaseGameButton}"
                                                 Width="85" Height="30"
                                                 Margin="5,0,0,0"
                                                 DockPanel.Dock="Right"
-                                                Visibility="{Binding KickVisibility}" 
+                                                Visibility="{Binding KickVisibility}"
                                                 Tag="{Binding}"
                                                 Click="OnKickMemberClick" />
                                     </DockPanel>
@@ -107,6 +187,7 @@
                 </Border>
             </StackPanel>
 
+            <!-- COLUMNA DERECHA: Chat -->
             <Border Grid.Row="1" Grid.Column="2" CornerRadius="12" Background="#22000000" Padding="10">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -114,28 +195,78 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                    <ScrollViewer Grid.Row="0"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Margin="0,0,0,10">
                         <StackPanel x:Name="chatContainer"/>
                     </ScrollViewer>
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                         <Grid Width="220" Height="32" Margin="0,0,10,0">
-                            <TextBox x:Name="txtChatMessage" VerticalContentAlignment="Center" Foreground="Black" Background="White" BorderThickness="1" BorderBrush="#444" Padding="5,2" TextChanged="OnChatTextChanged"/>
-                            <TextBlock x:Name="txtChatPlaceholder" Text="{DynamicResource chatPlaceholder}" Foreground="#888" Margin="8,2,0,0" IsHitTestVisible="False" VerticalAlignment="Center" Visibility="Visible" FontStyle="Italic"/>
+                            <TextBox x:Name="txtChatMessage"
+                                     VerticalContentAlignment="Center"
+                                     Foreground="Black"
+                                     Background="White"
+                                     BorderThickness="1"
+                                     BorderBrush="#444"
+                                     Padding="5,2"
+                                     TextChanged="OnChatTextChanged"/>
+                            <TextBlock x:Name="txtChatPlaceholder"
+                                       Text="{DynamicResource chatPlaceholder}"
+                                       Foreground="#888"
+                                       Margin="8,2,0,0"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Center"
+                                       Visibility="Visible"
+                                       FontStyle="Italic"/>
                         </Grid>
-                        <Button Content="{DynamicResource send}" Style="{DynamicResource BaseGameButton}" Width="90" Height="32" Click="OnSendMessageClick"/>
+                        <Button Content="{DynamicResource send}"
+                                Style="{DynamicResource BaseGameButton}"
+                                Width="90"
+                                Height="32"
+                                Click="OnSendMessageClick"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
-                <StackPanel Orientation="Vertical" Margin="0,0,60,0" VerticalAlignment="Center">
-                    <TextBlock x:Name="lblLobbyCode" Text="" Foreground="White" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,4"/>
-                    <TextBlock x:Name="lblPlayerCount" Text="0/6" Foreground="White" FontSize="14" TextAlignment="Center"/>
+            <!-- PIE: info lobby + botones -->
+            <StackPanel Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="0,20,0,0">
+
+                <StackPanel Orientation="Vertical"
+                            Margin="0,0,60,0"
+                            VerticalAlignment="Center">
+                    <TextBlock x:Name="lblLobbyCode"
+                               Text=""
+                               Foreground="White"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               TextAlignment="Center"
+                               Margin="0,0,0,4"/>
+                    <TextBlock x:Name="lblPlayerCount"
+                               Text="0/6"
+                               Foreground="White"
+                               FontSize="14"
+                               TextAlignment="Center"/>
                 </StackPanel>
 
-                <Button Content="{DynamicResource exit}" Style="{DynamicResource BaseGameButton}" Width="150" Height="48" Margin="0,0,15,0" Click="OnExitClick"/>
-                <Button x:Name="btnStartGame" Content="{DynamicResource startGame}" Style="{DynamicResource BaseGameButton}" Width="150" Height="48" Click="OnStartGameClick"/>
+                <Button Content="{DynamicResource exit}"
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="150"
+                        Height="48"
+                        Margin="0,0,15,0"
+                        Click="OnExitClick"/>
+
+                <Button x:Name="btnStartGame"
+                        Content="{DynamicResource startGame}"
+                        Style="{DynamicResource BaseGameButton}"
+                        Width="150"
+                        Height="48"
+                        Click="OnStartGameClick"/>
             </StackPanel>
         </Grid>
     </Grid>

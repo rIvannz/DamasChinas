@@ -17,7 +17,6 @@ namespace DamasChinas_Client.UI.Pages
         public ProfilePlayer()
         {
             InitializeComponent();
-
             Loaded += OnPageLoaded;
 
             try
@@ -32,9 +31,8 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(UserProfileNotFound, PopupType.Warning);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.Ctor(default)] {ex.Message}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
@@ -42,7 +40,6 @@ namespace DamasChinas_Client.UI.Pages
         public ProfilePlayer(PublicProfile profile)
         {
             InitializeComponent();
-
             Loaded += OnPageLoaded;
 
             _profile = profile ?? throw new ArgumentNullException(nameof(profile));
@@ -56,30 +53,21 @@ namespace DamasChinas_Client.UI.Pages
                 _profile = ClientSession.CurrentProfile;
                 UpdateProfileDisplay();
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.OnPageLoaded] {ex.Message}");
-            }
+            catch { }
         }
 
-        // ================= NAVEGACIÓN =================
-
+  
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (NavigationService?.CanGoBack == true)
-                {
                     NavigationService.GoBack();
-                }
                 else
-                {
                     MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
-                }
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.OnBackClick] {ex.Message}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
         }
@@ -88,8 +76,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                bool confirm = MessageHelper.ShowConfirm("msg_LogoutConfirm");
-                if (!confirm)
+                if (!MessageHelper.ShowConfirm("msg_LogoutConfirm"))
                     return;
 
                 var username = ClientSession.CurrentProfile?.Username;
@@ -111,12 +98,10 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 ClientSession.Clear();
-
                 NavigationService?.Navigate(new MainWindow());
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.OnLogoutClick] {ex.Message}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
@@ -127,9 +112,8 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ChangeData());
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.OnChangeDataClick] {ex.Message}");
                 MessageHelper.ShowPopup(ProfileChangeError, PopupType.Error);
             }
         }
@@ -140,9 +124,8 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectAvatar());
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.OnChangeAvatarClick] {ex.Message}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
@@ -153,9 +136,8 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.OnSoundClick] {ex.Message}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
@@ -166,14 +148,41 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[ProfilePlayer.OnLanguageClick] {ex.Message}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
-        // ================= PERFIL / STATS =================
+      
+
+        private void OnOpenSocialClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string url = _profile?.SocialUrl;
+
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    MessageHelper.ShowPopup("msg_SocialUrlMissing", PopupType.Warning);
+                    return;
+                }
+
+                if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+                    url = "https://" + url;
+
+                Process.Start(new ProcessStartInfo(url)
+                {
+                    UseShellExecute = true
+                });
+            }
+            catch
+            {
+                MessageHelper.ShowPopup("msg_UrlOpenError", PopupType.Error);
+            }
+        }
+
+
 
         private void UpdateProfileDisplay()
         {
@@ -186,17 +195,18 @@ namespace DamasChinas_Client.UI.Pages
                 FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
                 EmailTextBlock.Text = _profile.Email;
 
-                // Estadísticas
                 MatchesPlayedTextBlock.Text = _profile.MatchesPlayed.ToString();
                 WinsTextBlock.Text = _profile.Wins.ToString();
                 LosesTextBlock.Text = _profile.Loses.ToString();
 
+                SocialUrlTextBlock.Text =
+                    string.IsNullOrWhiteSpace(_profile.SocialUrl)
+                    ? MessageTranslator.GetLocalizedMessage("msg_SocialUrlMissing")
+                    : _profile.SocialUrl;
+
                 LoadAvatar(_profile);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.UpdateProfileDisplay] {ex.Message}");
-            }
+            catch { }
         }
 
         private void LoadAvatar(PublicProfile profile)
@@ -209,10 +219,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 AvatarImage.Source = PathProvider.LoadAvatar(avatarFile);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ProfilePlayer.LoadAvatar] {ex.Message}");
-            }
+            catch { }
         }
     }
 }

@@ -8,9 +8,6 @@ namespace DamasChinas_Server.Dtos
         [DataMember]
         public LobbyVisibility Visibility { get; set; }
 
-        /// <summary>
-        /// Debe ser 2, 4 o 6.
-        /// </summary>
         [DataMember]
         public int MaxPlayers { get; set; }
     }

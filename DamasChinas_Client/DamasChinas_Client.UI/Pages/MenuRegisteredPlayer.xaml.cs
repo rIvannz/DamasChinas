@@ -25,9 +25,23 @@ namespace DamasChinas_Client.UI.Pages
 
             txtUsername.Text = _profile.Username;
 
+            try
+            {
+                if (!FriendNotificationManager.IsInitialized)
+                {
+                    FriendNotificationManager.Initialize(_profile.Username);
+                    Debug.WriteLine("[MenuRegisteredPlayer] FriendService inicializado OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer] Error al iniciar FriendService: {ex.Message}");
+            }
+
             Loaded += OnPageLoaded;
             LoadAvatar();
         }
+
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
@@ -71,8 +85,24 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {
-            MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Info);
+            try
+            {
+        
+                if (!ClientSession.IsLoggedIn)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.GuestStatsUnavailable, PopupType.Info);
+                    return;
+                }
+
+                NavigationService?.Navigate(new RankingPage());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer.OnStatisticsClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Error);
+            }
         }
+
 
         private void OnFriendsClick(object sender, RoutedEventArgs e)
         {
@@ -111,9 +141,7 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
-        // =========================================================
-        //  CREATE GAME CORREGIDO
-        // =========================================================
+
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
         {
             try
@@ -126,12 +154,12 @@ namespace DamasChinas_Client.UI.Pages
                     Visibility = LobbyVisibility.Public
                 };
 
-                // 1. Crear (Retorna OperationResult)
+      
                 var result = lobbyManager.CreateLobby(_profile.Username, request);
 
                 if (result.Success)
                 {
-                    // 2. Obtener Snapshot pasando el username
+          
                     var snapshot = lobbyManager.GetCurrentLobby(_profile.Username);
 
                     if (snapshot == null)
@@ -140,14 +168,14 @@ namespace DamasChinas_Client.UI.Pages
                         return;
                     }
 
-                    // 3. Navegar
+        
                     NavigationService?.Navigate(
                         new PreLobby(snapshot, _profile.Username, _userId)
                     );
                 }
                 else
                 {
-                    // 4. Mostrar error del server
+    
                     MessageHelper.ShowFromResult(result);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Client.UI.Callbacks;
 using System;
 using System.Diagnostics;
 using System.ServiceModel;
@@ -33,60 +34,45 @@ namespace DamasChinas_Client.UI.Pages
         }
 
         private void OnSendClick(object sender, RoutedEventArgs e)
+{
+    string username = txtFriendUsername.Text.Trim();
+
+    if (string.IsNullOrWhiteSpace(username))
+    {
+        MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
+        return;
+    }
+
+    try
+    {
+        var client = FriendNotificationManager.GetClient();
+
+        var result = client.SendFriendRequest(
+            ClientSession.SafeUsernameNormalized,
+            username);
+
+
+        MessageHelper.ShowFromResult(result);
+
+        if (result.Success)
         {
-            string username = txtFriendUsername.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage(MessageKeys.EmptyCredentials),
-                    PopupType.Warning);
-                return;
-            }
-
-            try
-            {
-                using (var client = new FriendServiceClient())
-                {
-                    var result = client.SendFriendRequest(ClientSession.safeUsername, username);
-
-                    if (!result.Success)
-                    {
-                       
-                        string message = MessageTranslator.GetLocalizedMessage(result.Code);
-                        MessageHelper.ShowPopup(message, PopupType.Warning);
-                        return;
-                    }
-
-                 
-                    MessageHelper.ShowPopup(
-                        MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestSentOk),
-                        PopupType.Success);
-
-                    NavigationService?.GoBack();
-                }
-            }
-            catch (EndpointNotFoundException)
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage(MessageKeys.ServerUnavailable),
-                    PopupType.Error);
-            }
-            catch (TimeoutException)
-            {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage(MessageKeys.NetworkLatency),
-                    PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[AddFriend.OnSendClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
-                    PopupType.Error);
-            }
+            NavigationService?.GoBack();
         }
+    }
+    catch (EndpointNotFoundException)
+    {
+        MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+    }
+    catch (TimeoutException)
+    {
+        MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
+    }
+    catch (Exception ex)
+    {
+        Debug.WriteLine($"[AddFriend.OnSendClick] {ex.Message}");
+        MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+    }
+}
 
     }
 }

@@ -176,10 +176,19 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         LobbyKicked = 1115,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAlreadyPending = 3200,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyFriends = 3201,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         ServerUnavailable = 2001,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidMove = 2002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RankingUnavailable = 2003,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
@@ -264,6 +273,9 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidEmailFormat = 3132,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserBlocked = 3202,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,
@@ -504,8 +516,20 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="FriendServiceProxy.IFriendService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="FriendServiceProxy.IFriendService", CallbackContract=typeof(DamasChinas_Client.UI.FriendServiceProxy.IFriendServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface IFriendService {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/SubscribeFriendEvents")]
+        void SubscribeFriendEvents(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/SubscribeFriendEvents")]
+        System.Threading.Tasks.Task SubscribeFriendEventsAsync(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/UnsubscribeFriendEvents")]
+        void UnsubscribeFriendEvents(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/UnsubscribeFriendEvents")]
+        System.Threading.Tasks.Task UnsubscribeFriendEventsAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.FriendServiceProxy.MessageCode), Action="http://tempuri.org/IFriendService/GetFriendsMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
@@ -560,30 +584,69 @@ namespace DamasChinas_Client.UI.FriendServiceProxy {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IFriendServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/FriendRequestReceived")]
+        void FriendRequestReceived(string fromUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/FriendRequestAccepted")]
+        void FriendRequestAccepted(string byUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/FriendRemoved")]
+        void FriendRemoved(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/UserBlockedYou")]
+        void UserBlockedYou(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/UserUnblockedYou")]
+        void UserUnblockedYou(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendService/FriendListUpdated")]
+        void FriendListUpdated();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IFriendServiceChannel : DamasChinas_Client.UI.FriendServiceProxy.IFriendService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class FriendServiceClient : System.ServiceModel.ClientBase<DamasChinas_Client.UI.FriendServiceProxy.IFriendService>, DamasChinas_Client.UI.FriendServiceProxy.IFriendService {
+    public partial class FriendServiceClient : System.ServiceModel.DuplexClientBase<DamasChinas_Client.UI.FriendServiceProxy.IFriendService>, DamasChinas_Client.UI.FriendServiceProxy.IFriendService {
         
-        public FriendServiceClient() {
+        public FriendServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public FriendServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public FriendServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public FriendServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public FriendServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public FriendServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public FriendServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public FriendServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public FriendServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void SubscribeFriendEvents(string username) {
+            base.Channel.SubscribeFriendEvents(username);
+        }
+        
+        public System.Threading.Tasks.Task SubscribeFriendEventsAsync(string username) {
+            return base.Channel.SubscribeFriendEventsAsync(username);
+        }
+        
+        public void UnsubscribeFriendEvents(string username) {
+            base.Channel.UnsubscribeFriendEvents(username);
+        }
+        
+        public System.Threading.Tasks.Task UnsubscribeFriendEventsAsync(string username) {
+            return base.Channel.UnsubscribeFriendEventsAsync(username);
         }
         
         public DamasChinas_Client.UI.FriendServiceProxy.FriendDto[] GetFriends(string username) {

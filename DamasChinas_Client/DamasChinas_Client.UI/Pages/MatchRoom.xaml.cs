@@ -16,9 +16,7 @@ using AccountProxy = DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
 {
-    // =========================================================
-    //  CALLBACK HANDLER (POR SESIÓN)
-    // =========================================================
+
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public class MatchCallbackHandler : IMatchServiceCallback
     {
@@ -62,14 +60,11 @@ namespace DamasChinas_Client.UI.Pages
         }
     }
 
-    // =========================================================
-    //  MATCH ROOM PAGE
-    // =========================================================
+
     public partial class MatchRoom : Page
     {
-        // =========================================================
-        //  CONSTANTES TABLERO (SINCRONIZADAS CON SERVIDOR)
-        // =========================================================
+     
+
 
         private const int BoardRadius = 4;
         private const int MaxCubeRadius = BoardRadius * 2;
@@ -78,9 +73,6 @@ namespace DamasChinas_Client.UI.Pages
         private const double CenterX = 600.0;
         private const double CenterY = 600.0;
 
-        // =========================================================
-        //  ESTADO GENERAL
-        // =========================================================
 
         private readonly int _lobbyCode;
         private readonly string _myUsername;
@@ -96,14 +88,12 @@ namespace DamasChinas_Client.UI.Pages
 
         private bool _matchEnded;
 
-        // Jugadores
+  
         public ObservableCollection<PlayerViewModel> Players { get; set; }
         private readonly Dictionary<string, Brush> _userColors;
         private readonly List<Brush> _availableColors;
 
-        // =========================================================
-        //  CONSTRUCTOR
-        // =========================================================
+ 
 
         public MatchRoom(int lobbyCode)
         {
@@ -134,9 +124,6 @@ namespace DamasChinas_Client.UI.Pages
             Unloaded += OnPageUnloaded;
         }
 
-        // =========================================================
-        //  CICLO DE VIDA PÁGINA
-        // =========================================================
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
@@ -144,18 +131,17 @@ namespace DamasChinas_Client.UI.Pages
             {
                 _matchEnded = false;
 
-                // 1. Snapshot de lobby
+        
                 _lobbySnapshot = LobbySession.Manager.GetCurrentLobby(_myUsername);
                 SetupPlayersMetadata();
 
-                // 2. Tablero
+   
                 DrawBoardBackground();
                 DrawPlayerLabels();
 
-                // 3. Chat del lobby
+
                 LobbySession.Manager.ChatMessageReceived += OnChatMessageReceived;
 
-                // 4. Conexión a servicio de partida
                 InitializeMatchConnection();
             }
             catch (Exception ex)
@@ -184,9 +170,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  CONFIGURACIÓN DE JUGADORES
-        // =========================================================
+
 
         private void SetupPlayersMetadata()
         {
@@ -195,7 +179,6 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            // Ordenamos por Username para que coincida con el orden del servidor
             var sortedMembers = _lobbySnapshot.Members
                 .OrderBy(m => m.Username)
                 .ToList();
@@ -223,9 +206,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  CONEXIÓN A MATCH SERVICE
-        // =========================================================
+ 
 
         private void InitializeMatchConnection()
         {
@@ -239,12 +220,10 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (!result.Success)
                 {
-                    // Usamos la infraestructura estándar de mensajes
                     MessageHelper.ShowFromResult(result);
                     return;
                 }
 
-                // Estado inicial (posiciones de fichas)
                 var state = _proxy.GetMatchState(_lobbyCode);
                 if (state != null)
                 {
@@ -266,9 +245,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  GEOMETRÍA DEL TABLERO
-        // =========================================================
+ 
 
         private static readonly (int X, int Y, int Z)[] ZoneDirections =
         {
@@ -303,14 +280,12 @@ namespace DamasChinas_Client.UI.Pages
                     int az = Math.Abs(z);
                     int max = Math.Max(ax, Math.Max(ay, az));
 
-                    // 1) hexágono central
                     if (max <= centerRadius)
                     {
                         cells.Add((x, y, z));
                         continue;
                     }
 
-                    // 2) puntas de la estrella (misma regla que en el servidor)
                     int[] sorted = { ax, ay, az };
                     Array.Sort(sorted);
 
@@ -329,9 +304,7 @@ namespace DamasChinas_Client.UI.Pages
             return cells;
         }
 
-        // =========================================================
-        //  DIBUJO DEL TABLERO
-        // =========================================================
+
 
         private void DrawBoardBackground()
         {
@@ -341,7 +314,6 @@ namespace DamasChinas_Client.UI.Pages
 
             var cubeCoords = GenerateBoardCubeCoordinates();
 
-            // Convertimos cada celda cúbica → axial → pixel
             foreach (var c in cubeCoords)
             {
                 int q = c.X;
@@ -352,7 +324,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private void DrawPlayerLabels()
         {
-            // Por ahora el panel lateral ya indica claramente los jugadores y colores.
+           
         }
 
         private Point HexToPixel(int q, int r)
@@ -391,7 +363,6 @@ namespace DamasChinas_Client.UI.Pages
 
             if (!_holesVisuals.TryGetValue(point, out var hole))
             {
-                // Sin hoyo para esa coordenada → algo desincronizado; no rompemos la partida.
                 return;
             }
 
@@ -427,9 +398,7 @@ namespace DamasChinas_Client.UI.Pages
             _marblesVisuals[point] = marble;
         }
 
-        // =========================================================
-        //  ACTUALIZACIÓN DE ESTADO
-        // =========================================================
+
 
         private void UpdateGameState(MatchStateDto state)
         {
@@ -451,7 +420,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 foreach (var coord in entry.Value)
                 {
-                    // Mapeo servidor -> visual: q = X, r = Z
                     PlaceMarble(coord.X, coord.Z, color);
                 }
             }
@@ -475,13 +443,20 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        // =========================================================
-        //  HANDLERS DE CALLBACK
-        // =========================================================
-
         public void HandlePlayerMoved(TurnChangeDto turn)
         {
             if (_matchEnded)
+            {
+                return;
+            }
+
+            if (turn.BoardState != null)
+            {
+                UpdateGameState(turn.BoardState);
+                return;
+            }
+
+            if (turn.MoveOrigin == null || turn.MoveDestination == null)
             {
                 return;
             }
@@ -506,16 +481,16 @@ namespace DamasChinas_Client.UI.Pages
         public void HandleMatchEnded(string winner)
         {
             if (_matchEnded)
+            {
                 return;
+            }
 
             _matchEnded = true;
 
             VictoryOverlay.Visibility = Visibility.Visible;
 
-            // Título traducido
             txtFinalTitle.Text = MessageTranslator.GetLocalizedMessage(MessageKeys.GameFinishedTitle);
 
-            // "GANADOR / WINNER"
             string winnerLabel = MessageTranslator.GetLocalizedMessage(MessageKeys.GameWinnerLabel);
             txtWinnerName.Text = $"{winnerLabel}: {winner}";
         }
@@ -523,7 +498,9 @@ namespace DamasChinas_Client.UI.Pages
         public void HandlePlayerLeft(string username)
         {
             if (_matchEnded)
+            {
                 return;
+            }
 
             string msg = MessageTranslator.GetLocalizedMessage(MessageKeys.PlayerLeftMatch);
             AddChatMessage("Sistema", $"{username} {msg}");
@@ -537,21 +514,14 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public void HandleError(string msg)
+        public void HandleError(string msgKey)
         {
-            if (_matchEnded)
-            {
-                return;
-            }
-
-            // msg aquí se usa como resourceKey directo (siguiendo tu diseño actual)
-            MessageHelper.ShowPopup(msg, PopupType.Warning);
-            NavigateToMenu();
+            MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }
 
-        // =========================================================
-        //  INTERACCIÓN CON EL TABLERO
-        // =========================================================
+
+
+  
 
         private void OnBoardClick(object sender, MouseButtonEventArgs e)
         {
@@ -567,13 +537,11 @@ namespace DamasChinas_Client.UI.Pages
 
             Point clickedCoord = (Point)hole.Tag;
 
-            // Solo el jugador en turno puede interactuar
             if (_currentPlayerTurn != _myUsername)
             {
                 return;
             }
 
-            // 1) Seleccionar ficha propia
             if (_marblesVisuals.ContainsKey(clickedCoord))
             {
                 var marble = _marblesVisuals[clickedCoord];
@@ -586,7 +554,6 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            // 2) Intentar mover a esa casilla
             if (_selectedCoord.HasValue)
             {
                 SendMove(_selectedCoord.Value, clickedCoord);
@@ -614,9 +581,7 @@ namespace DamasChinas_Client.UI.Pages
             _selectedCoord = null;
         }
 
-        // =========================================================
-        //  CREACIÓN DEL REQUEST DE MOVIMIENTO
-        // =========================================================
+
         private MoveRequestDto CreateMoveRequest(Point origin, Point dest)
         {
             int ox = (int)origin.X;
@@ -658,7 +623,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (!result.Success)
                 {
-                    // Dejamos que el helper resuelva el Code → msg_ → recurso
                     MessageHelper.ShowFromResult(result);
                 }
 
@@ -679,9 +643,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  CHAT
-        // =========================================================
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
@@ -720,9 +681,6 @@ namespace DamasChinas_Client.UI.Pages
             });
         }
 
-        // =========================================================
-        //  NAVEGACIÓN / BOTONES
-        // =========================================================
 
         private void OnLeaveMatchClick(object sender, RoutedEventArgs e)
         {
@@ -734,7 +692,6 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 catch
                 {
-                    // Si falla el leave, de todos modos nos regresamos al menú
                 }
 
                 NavigateToMenu();
@@ -748,12 +705,45 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ConfiSound());
+            var main = Application.Current.MainWindow;
+
+            var window = new Window
+            {
+                Owner = main,
+                Content = new ConfiSound(),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+
+                Width = main?.ActualWidth ?? 1280,
+                Height = main?.ActualHeight ?? 720,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.None,
+                WindowState = main?.WindowState ?? WindowState.Normal
+            };
+
+            window.ShowDialog();
         }
+
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new SelectLanguage());
+            var main = Application.Current.MainWindow;
+
+            var window = new Window
+            {
+                Owner = main,
+                Content = new SelectLanguage(),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+
+                Width = main?.ActualWidth ?? 1280,
+                Height = main?.ActualHeight ?? 720,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.None,
+                WindowState = main?.WindowState ?? WindowState.Normal
+            };
+
+            window.ShowDialog();
         }
 
         private void NavigateToMenu()
@@ -767,12 +757,21 @@ namespace DamasChinas_Client.UI.Pages
                 AvatarFile = current.AvatarFile
             };
 
-            NavigationService.Navigate(new MenuRegisteredPlayer(menuProfile));
+            var targetPage = new MenuRegisteredPlayer(menuProfile);
+
+
+            if (NavigationService != null)
+            {
+                NavigationService.Navigate(targetPage);
+            }
+            else
+            {
+
+                Application.Current.MainWindow.Content = targetPage;
+            }
         }
 
-        // =========================================================
-        //  VIEWMODEL JUGADOR
-        // =========================================================
+
 
         public class PlayerViewModel
         {

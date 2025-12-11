@@ -152,7 +152,7 @@ namespace DamasChinas_Server
                 .ToString();
         }
 
-        private static Email _emailService; 
+
 
         private static void SendWelcomeEmail(UserInfo user)
         {
@@ -160,11 +160,12 @@ namespace DamasChinas_Server
             {
                 try
                 {
-                    await _emailService.SendWelcomeAsync(user).ConfigureAwait(false);
+                    await Email.SendWelcomeAsync(user).ConfigureAwait(false);
                 }
                 catch { }
             });
         }
+
 
         private UserInfo MapToUserInfo(usuarios user, UserDto userDto)
         {

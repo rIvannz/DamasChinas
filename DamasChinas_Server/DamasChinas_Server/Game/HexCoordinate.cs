@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DamasChinas_Server.Common;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Represents a cubic (x, y, z) coordinate in a hexagonal board.
-    /// </summary>
     public struct HexCoordinate : IEquatable<HexCoordinate>
     {
         private const int DistanceDivisor = 2;
@@ -34,7 +29,7 @@ namespace DamasChinas_Server.Game
         {
             if (x + y + z != 0)
             {
-                throw new ArgumentException("Cube coordinates must satisfy x + y + z = 0.", nameof(z));
+                throw new ArgumentException(MessageCode.InvalidCubeCoordinate.ToString(), nameof(z));
             }
 
             X = x;
@@ -98,7 +93,7 @@ namespace DamasChinas_Server.Game
         {
             if ((X % HalfDivisor) != 0 || (Y % HalfDivisor) != 0 || (Z % HalfDivisor) != 0)
             {
-                throw new InvalidOperationException("The coordinate cannot be divided by two without losing precision.");
+                throw new InvalidOperationException(MessageCode.InvalidHalfCoordinate.ToString());
             }
 
             return new HexCoordinate(X / HalfDivisor, Y / HalfDivisor, Z / HalfDivisor);

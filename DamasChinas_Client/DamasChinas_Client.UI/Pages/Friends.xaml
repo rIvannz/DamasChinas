@@ -3,9 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:conv="clr-namespace:DamasChinas_Client.UI.Converters"
       mc:Ignorable="d"
       Background="{DynamicResource SurfaceBrush}"
-      d:DesignHeight="720" d:DesignWidth="1280">
+      d:DesignHeight="720"
+      d:DesignWidth="1280">
+
+    <Page.Resources>
+        <conv:FriendStatusToColorConverter x:Key="StatusToColor" />
+    </Page.Resources>
 
     <Grid>
         <!-- Fondo -->
@@ -23,7 +29,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Encabezado -->
+            <!-- ENCABEZADO -->
             <Grid Grid.Row="0" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -31,17 +37,17 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- BACK -->
                 <Button Width="60" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        ToolTip="{DynamicResource back}"
                         Cursor="Hand"
                         Click="OnBackClick">
                     <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/backIcon.png"
-                           Width="40" Height="40"
-                           Stretch="Uniform"/>
+                           Width="40" Height="40"/>
                 </Button>
 
+                <!-- TÍTULO -->
                 <TextBlock Grid.Column="1"
                            Text="{DynamicResource friendsList}"
                            Foreground="White"
@@ -51,26 +57,26 @@
                            TextAlignment="Center"
                            VerticalAlignment="Center"/>
 
+                <!-- BOTONES DERECHA -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
-                            HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-
-                    <Button Width="150" Height="40"
+                    <Button Width="150"
+                            Height="40"
                             Margin="0,0,10,0"
                             Style="{DynamicResource BaseGameButton}"
                             Content="{DynamicResource addFriend}"
                             Click="OnAddFriendClick"/>
 
-                    <Button Width="190" Height="40"
+                    <Button Width="190"
+                            Height="40"
                             Style="{DynamicResource BaseGameButton}"
                             Content="{DynamicResource pendingFriendRequests}"
                             Click="OnViewPendingRequestsClick"/>
-
                 </StackPanel>
             </Grid>
 
-            <!-- Lista -->
+            <!-- LISTA DE AMIGOS -->
             <Border Grid.Row="1"
                     Background="#80222222"
                     BorderBrush="#444"
@@ -78,10 +84,11 @@
                     CornerRadius="10"
                     Padding="20">
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                    <ItemsControl ItemsSource="{Binding FriendsList}" Margin="10">
+                    <ItemsControl ItemsSource="{Binding FriendsList}"
+                                  Margin="10">
+
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
 
@@ -101,46 +108,53 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Estado -->
-                                        <Ellipse Width="16" Height="16"
-                                                 VerticalAlignment="Center"
-                                                 Margin="5,0,10,0"
-                                                 Fill="{Binding Status, Converter={StaticResource StatusToColor}}"
-                                                 Stroke="Black"
-                                                 StrokeThickness="1"/>
+                                        <!-- ESTADO + AVATAR -->
+                                        <Grid Width="50" Height="45" Margin="0,0,10,0">
 
-                                        <!-- Avatar -->
-                                        <Image Grid.Column="1"
-                                               Source="{Binding Avatar}"
-                                               Width="45" Height="45"
-                                               Stretch="UniformToFill"
-                                               Margin="0,0,15,0"
-                                               ClipToBounds="True"/>
+                                            <!-- Avatar redondo -->
+                                            <Ellipse Width="42" Height="42" Stroke="White" StrokeThickness="1">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding AvatarSource}"
+                                                                Stretch="UniformToFill"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
 
-                                        <TextBlock Grid.Column="2"
+                                            <!-- Indicador de estado -->
+                                            <Ellipse Width="12" Height="12"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Bottom"
+                                                     Fill="{Binding Status, Converter={StaticResource StatusToColor}}">
+                                                <Ellipse.Effect>
+                                                    <DropShadowEffect Color="Lime" BlurRadius="6" ShadowDepth="0"/>
+                                                </Ellipse.Effect>
+                                            </Ellipse>
+                                        </Grid>
+
+                                        <!-- USERNAME -->
+                                        <TextBlock Grid.Column="1"
                                                    Text="{Binding Username}"
                                                    Foreground="White"
-                                                   FontSize="18"
-                                                   VerticalAlignment="Center"/>
+                                                   FontSize="20"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,10,0"/>
 
+                                        <!-- BOTÓN PERFIL -->
                                         <Button Grid.Column="3"
                                                 Width="130"
                                                 Height="40"
                                                 Style="{DynamicResource BaseGameButton}"
                                                 Content="{DynamicResource profile}"
-                                                Margin="10,0,10,0"
                                                 Click="OnViewProfileClick"/>
 
+                                        <!-- BOTÓN CHAT -->
                                         <Button Grid.Column="4"
                                                 Background="Transparent"
                                                 BorderThickness="0"
                                                 Cursor="Hand"
-                                                ToolTip="{DynamicResource chat}"
                                                 Click="OnChatClick">
 
                                             <Image Source="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Icons/chatIcon.png"
-                                                   Width="30"
-                                                   Height="30"/>
+                                                   Width="30" Height="30"/>
                                         </Button>
 
                                     </Grid>
@@ -149,16 +163,19 @@
 
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
+
                     </ItemsControl>
 
                 </ScrollViewer>
             </Border>
 
+            <!-- PIE: SONIDO / IDIOMA -->
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom">
-                <Button Width="44" Height="44"
+                        HorizontalAlignment="Right">
+
+                <Button Width="44"
+                        Height="44"
                         Background="Transparent"
                         BorderThickness="0"
                         Click="OnSoundClick">
@@ -166,7 +183,8 @@
                            Width="26" Height="26"/>
                 </Button>
 
-                <Button Width="44" Height="44"
+                <Button Width="44"
+                        Height="44"
                         Background="Transparent"
                         BorderThickness="0"
                         Click="OnLanguageClick">

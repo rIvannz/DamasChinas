@@ -91,6 +91,7 @@
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\PlayerColor.cs" />
     <Compile Include="Game\PlayerMove.cs" />
+    <Compile Include="Interfaces\IFriendCallback.cs" />
     <Compile Include="Interfaces\ILobbyCallback.cs" />
     <Compile Include="Interfaces\ILobbyService.cs" />
     <Compile Include="Interfaces\ILoginCallback.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Sanciones.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\FriendCallbackManager.cs" />
     <Compile Include="Services\FriendService.cs" />
     <Compile Include="Dtos\FriendDto.cs" />
     <Compile Include="Dtos\Message.cs" />

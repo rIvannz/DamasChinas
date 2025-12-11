@@ -1,15 +1,14 @@
 ﻿using System;
 using System.ServiceModel;
 using System.Windows;
-using DamasChinas_Client.UI.MatchServiceProxy; // Namespace de tu Referencia de Servicio
+using DamasChinas_Client.UI.MatchServiceProxy; 
 
 namespace DamasChinas_Client.UI.Callbacks
 {
-    // IMPORTANTE: Evita bloqueos de UI con UseSynchronizationContext = false
+
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public class MatchCallbackHandler : IMatchServiceCallback
     {
-        // Eventos para comunicar a la UI (MatchRoom)
         public event Action<TurnChangeDto> PlayerMoved;
         public event Action<string> MatchEnded;
         public event Action<string> PlayerLeft;
@@ -47,4 +46,5 @@ namespace DamasChinas_Client.UI.Callbacks
             });
         }
     }
+
 }

@@ -2,16 +2,12 @@
 {
     public enum MessageCode
     {
-        // ========================
-        // Éxito
-        // ========================
+
         Success = 0,
         AvatarUpdateSuccess = 5002,
         CodeSentSuccessfully = 3014,
 
-        // ========================
-        // Autenticación
-        // ========================
+
         LoginInvalidCredentials = 1001,
         UserDuplicateEmail = 1002,
         UserNotFound = 1003,
@@ -22,9 +18,6 @@
         VerificationCodeInvalid = 1204,
         VerificationCodeSendError = 1205,
 
-        // ========================
-        // Lobby
-        // ========================
         MatchCreationFailed = 1100,
         LobbyNotFound = 1101,
         LobbyInactive = 1102,
@@ -42,19 +35,18 @@
         LobbyInvitationTargetNotOnline = 1114,
         LobbyKicked = 1115,
 
+        FriendRequestAlreadyPending = 3200,
+        AlreadyFriends = 3201,
 
-        // ========================
-        // Servidor
-        // ========================
+
         ServerUnavailable = 2001,
         InvalidMove = 2002,
+        RankingUnavailable = 2003,
 
         NetworkLatency = 2100,
         UnknownError = 9999,
 
-        // ========================
-        // Validaciones generales
-        // ========================
+
         EmptyCredentials = 3001,
         PasswordsDontMatch = 3002,
         InvalidPassword = 3003,
@@ -66,22 +58,17 @@
         ChatOpenError = 3009,
         NavigationError = 3010,
 
-        // ========================
-        // Validaciones específicas
-        // ========================
 
-        // Nombre
         InvalidNameEmpty = 3100,
         InvalidNameLength = 3101,
         InvalidNameCharacters = 3102,
 
-        // Username
+
         InvalidUsernameEmpty = 3110,
         InvalidUsernameLength = 3111,
         InvalidUsernameCharacters = 3112,
         UsernameExists = 3113,
 
-        // Password
         InvalidPasswordEmpty = 3120,
         InvalidPasswordLength = 3121,
         InvalidPasswordUppercase = 3122,
@@ -89,14 +76,43 @@
         InvalidPasswordDigit = 3124,
         InvalidPasswordSpecial = 3125,
 
-        // Email
         InvalidEmailEmpty = 3130,
         InvalidEmailTooLong = 3131,
         InvalidEmailFormat = 3132,
 
-        // ========================
-        // Avatar
-        // ========================
+        UserBlocked = 3202,
+        NoPieceInOrigin = 4000,
+        DestinationCellOccupied = 4001,
+        CoordinateOutsideBoard = 4002,
+        MatchFinished = 4003,
+        PlayerNotInMatch = 4004,
+        NotPlayersTurn = 4005,
+        OriginCellInvalid = 4006,
+        OriginCellNotPlayersPiece = 4007,
+        PathCellRepeated = 4008,
+        DestinationOutsideBoard = 4009,
+        InvalidStep = 4011,
+        MultistepRequiresJump = 4012,
+        AdjacentMoveSingleStep = 4013,
+        NoPieceToJump = 4014,
+        MultistepMustHaveJump = 4015,
+        InvalidPlayerCount = 4016,
+        PlayerColorDuplicate = 4017,
+        PlayerTargetZoneMissing = 4018,
+        CellAlreadyOccupied = 4019,
+        CellHasNoPiece = 4020,
+        InvalidCubeCoordinate = 4021,
+        InvalidHalfCoordinate = 4022,
+        PlayerIdRequired = 4023,
+        PlayerNameRequired = 4024,
+        RepositoryUsernameEmpty = 4027,
+        RepositoryUserNotFound = 4028,
+
+
+
+
+
+
         AvatarUpdateFailed = 5001
     }
 }

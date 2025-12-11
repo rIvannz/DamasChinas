@@ -22,13 +22,13 @@
     <MetadataSource Address="http://localhost:8004/FriendService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="99dd1422-2bd4-4cd8-a314-2f72e6ccc54b" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?disco" />
-    <MetadataFile FileName="item34.xsd" MetadataType="Schema" ID="8c0d590c-9902-4d74-9007-e2848672f279" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd4" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="04314fa4-c15e-4930-97ce-19ef60193797" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd2" />
-    <MetadataFile FileName="item33.xsd" MetadataType="Schema" ID="3bd0a03b-f055-499e-8590-801bcdd820be" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd3" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="102b5941-7b9d-4333-b243-c332a6b53e7d" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd0" />
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="d89ac286-1437-4821-81cd-3526a5c0fcbd" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd1" />
-    <MetadataFile FileName="FriendService1.wsdl" MetadataType="Wsdl" ID="81b8dad4-3f36-40c5-ae58-4a3513e14ec6" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?wsdl" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="3bc34f7d-97d0-40be-b3fd-71698438a4a6" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="56c6e5be-687e-467a-bef4-7b42f19f54a3" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd4" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="e4b97a35-99e9-45ae-aa35-695d6989b85b" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd2" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="158f837a-ec18-4153-b15a-04ba3176a9e5" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd3" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="fd1bc2ab-9a06-4dcd-afa9-875eac13c7da" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd0" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="be83fbbb-9bc2-4843-98dd-dc234c5816ec" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd1" />
+    <MetadataFile FileName="FriendService1.wsdl" MetadataType="Wsdl" ID="25360dab-95ba-422e-8997-2fe75672fd30" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
