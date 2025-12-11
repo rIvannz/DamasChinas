@@ -54,6 +54,18 @@
   <wsdl:message name="IAccountManager_ChangeSocialUrl_OutputMessage">
     <wsdl:part name="parameters" element="tns:ChangeSocialUrlResponse" />
   </wsdl:message>
+  <wsdl:message name="IAccountManager_RequestPasswordChangeCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequestPasswordChangeCode" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_RequestPasswordChangeCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequestPasswordChangeCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_ConfirmPasswordChange_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmPasswordChange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountManager_ConfirmPasswordChange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmPasswordChangeResponse" />
+  </wsdl:message>
   <wsdl:portType name="IAccountManager">
     <wsdl:operation name="GetPublicProfile">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/GetPublicProfile" message="tns:IAccountManager_GetPublicProfile_InputMessage" />
@@ -78,6 +90,14 @@
     <wsdl:operation name="ChangeSocialUrl">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/ChangeSocialUrl" message="tns:IAccountManager_ChangeSocialUrl_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/ChangeSocialUrlResponse" message="tns:IAccountManager_ChangeSocialUrl_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestPasswordChangeCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/RequestPasswordChangeCode" message="tns:IAccountManager_RequestPasswordChangeCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/RequestPasswordChangeCodeResponse" message="tns:IAccountManager_RequestPasswordChangeCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmPasswordChange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountManager/ConfirmPasswordChange" message="tns:IAccountManager_ConfirmPasswordChange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountManager/ConfirmPasswordChangeResponse" message="tns:IAccountManager_ConfirmPasswordChange_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IAccountManager" type="tns:IAccountManager">
@@ -130,6 +150,24 @@
     </wsdl:operation>
     <wsdl:operation name="ChangeSocialUrl">
       <soap12:operation soapAction="http://tempuri.org/IAccountManager/ChangeSocialUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestPasswordChangeCode">
+      <soap12:operation soapAction="http://tempuri.org/IAccountManager/RequestPasswordChangeCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmPasswordChange">
+      <soap12:operation soapAction="http://tempuri.org/IAccountManager/ConfirmPasswordChange" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -182,7 +182,7 @@ namespace DamasChinas_Server.Logic
             }
 
             // === Caso general: jugador sale (incluye host) ===
-            match.Game.RemovePlayer(color);
+           // match.Game.RemovePlayer(color);
             match.UserColorMap.Remove(username);
             match.Callbacks.TryRemove(username, out _);
 

@@ -24,5 +24,11 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract]
         OperationResult ChangeSocialUrl(int idUser, string socialUrl);
+
+        [OperationContract]
+        OperationResult RequestPasswordChangeCode(string email);
+
+        [OperationContract]
+        OperationResult ConfirmPasswordChange(string email, string code, string newPassword);
     }
 }

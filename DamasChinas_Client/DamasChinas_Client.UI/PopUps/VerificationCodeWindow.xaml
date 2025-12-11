@@ -43,14 +43,14 @@
                             Orientation="Vertical"
                             HorizontalAlignment="Center">
 
-                    <TextBlock Text="{DynamicResource verificationCodeInstruction}"
+                    <TextBlock
                                Foreground="White"
                                FontSize="16"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                Width="320"
                                HorizontalAlignment="Center"
-                               Margin="0 0 0 10"/>
+                               Margin="0 0 0 10"><Run Text="Enter the code sent to your email"/><Run Language="es-mx" Text="aa"/><Run Text=" registration."/></TextBlock>
 
                     <TextBox x:Name="txtVerificationCode"
                              Width="200"

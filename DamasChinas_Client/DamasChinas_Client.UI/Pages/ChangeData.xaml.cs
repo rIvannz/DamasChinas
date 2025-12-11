@@ -93,7 +93,7 @@ namespace DamasChinas_Client.UI.Pages
                 using (var client = new AccountManagerClient())
                 {
                     
-                    var result = client.ChangeUsername(ClientSession.safeUsername, newUsername);
+                    var result = client.ChangeUsername(ClientSession.SafeUsername, newUsername);
 
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
 
@@ -217,7 +217,7 @@ namespace DamasChinas_Client.UI.Pages
                 using (var client = new AccountManagerClient())
                 {
                    
-                    var result = client.ChangePassword(ClientSession.safeUsername, hashedPassword);
+                    var result = client.ChangePassword(ClientSession.SafeUsername, hashedPassword);
 
                     string message = MessageTranslator.GetLocalizedMessage(result.Code);
 

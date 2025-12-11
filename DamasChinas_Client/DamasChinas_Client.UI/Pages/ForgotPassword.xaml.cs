@@ -1,21 +1,23 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.AccountManagerServiceProxy;
+using DamasChinas_Client.UI.PopUps;
+using DamasChinas_Client.UI.Utilities;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using DamasChinas_Client.UI.Utilities;
-using DamasChinas_Client.UI.PopUps;
 
 namespace DamasChinas_Client.UI.Pages
 {
     public partial class ForgotPassword : Page
     {
+        private string _verificationCode; // ← AGREGADO
+
         public ForgotPassword()
         {
             InitializeComponent();
             DisablePasswordFields();
         }
 
-     
         private void OnSendCodeClick(object sender, RoutedEventArgs e)
         {
             try
@@ -24,6 +26,24 @@ namespace DamasChinas_Client.UI.Pages
 
                 Validator.ValidateEmail(email);
 
+                // =======================================
+                // 1. Mandar código al servidor (AGREGADO)
+                // =======================================
+                var client = new AccountManagerClient();
+                var result = client.RequestPasswordChangeCode(email);
+
+                if (!result.Success)
+                {
+                    MessageHelper.ShowPopup(
+                        MessageKeys.UnknownError,
+                        PopupType.Error
+                    );
+                    return;
+                }
+
+                // =======================================
+                // 2. Mostrar ventana de ingresar código
+                // =======================================
                 var codeWindow = new VerificationCodeWindow
                 {
                     Owner = Application.Current.MainWindow
@@ -31,9 +51,11 @@ namespace DamasChinas_Client.UI.Pages
 
                 bool? dialogResult = codeWindow.ShowDialog();
 
-               
                 if (dialogResult == true)
                 {
+                    // Guardar el código ingresado por el usuario (AGREGADO)
+                    _verificationCode = codeWindow.CodeValue;
+
                     EnablePasswordFields();
                 }
             }
@@ -66,7 +88,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-    
         private async void OnChangePasswordClick(object sender, RoutedEventArgs e)
         {
             try
@@ -88,6 +109,21 @@ namespace DamasChinas_Client.UI.Pages
 
                 Validator.ValidatePassword(newPass);
 
+                
+                var client = new AccountManagerClient();
+                var result = client.ConfirmPasswordChange(
+                    txtEmail.Text.Trim(),
+                    _verificationCode,
+                    newPass
+                );
+
+                if (!result.Success)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.InvalidVerificationCode, PopupType.Warning);
+                    return;
+                }
+
+              
                 var loading = new LoadingWindow
                 {
                     Owner = Application.Current.MainWindow
@@ -97,7 +133,7 @@ namespace DamasChinas_Client.UI.Pages
                 await loading.WaitMinimumAsync();
                 loading.Close();
 
-             
+               
                 MessageHelper.ShowPopup(MessageKeys.Success, PopupType.Success);
 
                 NavigationService?.Navigate(new Login());
@@ -122,8 +158,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        
-       
         private void DisablePasswordFields()
         {
             txtNewPassword.IsEnabled = false;
@@ -138,7 +172,6 @@ namespace DamasChinas_Client.UI.Pages
             btnChangePassword.IsEnabled = true;
         }
 
-    
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -191,4 +224,3 @@ namespace DamasChinas_Client.UI.Pages
         }
     }
 }
-

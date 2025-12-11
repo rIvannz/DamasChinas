@@ -67,7 +67,6 @@ namespace DamasChinasHost
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n Servidor detenido correctamente.");
             Console.ResetColor();
-            DamasChinas_Server.Utilities.EmailSender.Configure();
         }
     }
 }

@@ -2,7 +2,9 @@
 using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.ServiceModel;
 
@@ -21,8 +23,14 @@ namespace DamasChinas_Server.Services
         private const string OperationChangeAvatar = nameof(ChangeAvatar);
         private const string OperationChangeSocialUrl = nameof(ChangeSocialUrl);
 
+        // ===============================
+        // NUEVO: ALMACÉN DE CÓDIGOS DE RECUPERACIÓN
+        // ===============================
+        private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)> _passwordCodes =
+            new Dictionary<string, (string Code, DateTime CreatedUtc)>();
+
         public AccountManager()
-     : this(new RepositoryUsers(), LogFactory.Create<AccountManager>())
+            : this(new RepositoryUsers(), LogFactory.Create<AccountManager>())
         {
         }
 
@@ -61,7 +69,6 @@ namespace DamasChinas_Server.Services
                     else
                     {
                         _log.Warn($"[ChangeUsername] FAIL username={username} → {newUsername}");
-
                     }
 
                     return ok;
@@ -110,11 +117,110 @@ namespace DamasChinas_Server.Services
             );
         }
 
+    
+        public OperationResult RequestPasswordChangeCode(string email)
+        {
+            const string context = "RequestPasswordChangeCode";
+            _log.Info($"[{context}] email={email}");
 
+            try
+            {
+                var code = GenerateVerificationCode();
 
+                lock (_passwordCodes)
+                    _passwordCodes[email] = (code, DateTime.UtcNow);
 
-        // TODO
-        // ELIMINAR LOS "NUMEROS MAGICOS" DE TECHNICAL DETAIL
+                EmailSender.SendVerificationEmail(email, code);
+
+                return new OperationResult
+                {
+                    Success = true,
+                    Code = MessageCode.CodeSentSuccessfully,
+                    TechnicalDetail = $"{context}: Code generated and sent."
+                };
+            }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Unexpected exception {ex.Message}", ex);
+                return OperationResult.Fail("Unexpected error.", MessageCode.UnknownError);
+            }
+        }
+
+        public OperationResult ConfirmPasswordChange(string email, string code, string newPassword)
+        {
+            const string context = "ConfirmPasswordChange";
+            _log.Info($"[{context}] email={email}");
+
+            try
+            {
+                string storedCode;
+                DateTime createdUtc;
+
+                lock (_passwordCodes)
+                {
+                    if (!_passwordCodes.TryGetValue(email, out var data))
+                    {
+                        return OperationResult.Fail("Code not found.", MessageCode.VerificationCodeNotFound);
+                    }
+
+                    storedCode = data.Code;
+                    createdUtc = data.CreatedUtc;
+                }
+
+                if (DateTime.UtcNow - createdUtc > TimeSpan.FromMinutes(5))
+                {
+                    RemoveStoredPasswordCode(email);
+                    return OperationResult.Fail("Code expired.", MessageCode.VerificationCodeExpired);
+                }
+
+                if (!string.Equals(storedCode, code, StringComparison.Ordinal))
+                {
+                    return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
+                }
+
+                RemoveStoredPasswordCode(email);
+                bool ok = _repository.ChangePassword(email, newPassword);
+
+                if (!ok)
+                {
+                    return OperationResult.Fail("Failed updating password.", MessageCode.UnknownError);
+                }
+
+                return OperationResult.Ok();
+            }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[{context}] Unexpected exception {ex.Message}", ex);
+                return OperationResult.Fail("Unexpected error.", MessageCode.UnknownError);
+            }
+        }
+
+       
+        private static void RemoveStoredPasswordCode(string email)
+        {
+            lock (_passwordCodes)
+            {
+                if (_passwordCodes.ContainsKey(email))
+                    _passwordCodes.Remove(email);
+            }
+        }
+
+        private static string GenerateVerificationCode()
+        {
+            return new Random().Next(1000, 10000).ToString();
+        }
+
+  
         private static OperationResult ExecuteAccountOperation(
          Func<bool> operation,
          MessageCode successCode,
@@ -165,6 +271,7 @@ namespace DamasChinas_Server.Services
             }
         }
     }
+
     internal static class LogStatic
     {
         private static readonly ILogService _log =

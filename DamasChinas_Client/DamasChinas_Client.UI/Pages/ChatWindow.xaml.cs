@@ -63,7 +63,7 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 Messages.Clear();
-                var history = await Task.Run(() => _client.GetHistoricalMessages(ClientSession.safeUsername, _friendUsername));
+                var history = await Task.Run(() => _client.GetHistoricalMessages(ClientSession.SafeUsername, _friendUsername));
 
                 foreach (var message in history)
                 {
@@ -103,7 +103,7 @@ namespace DamasChinas_Client.UI.Pages
 
             var message = new Message
             {
-                UsarnameSender = ClientSession.safeUsername,
+                UsarnameSender = ClientSession.SafeUsername,
                 DestinationUsername = _friendUsername,
                 Text = text,
                 SendDate = DateTime.Now

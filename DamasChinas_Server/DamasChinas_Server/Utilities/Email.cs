@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Utilidades
 {
-<<<<<<< HEAD
     public class Email
-=======
-    internal static class Email
->>>>>>> 096d4752533982c9398c1b7e38f37cff37a7bfd7
     {
         private const string SmtpHost = "smtp.gmail.com";
         private const int SmtpPort = 587;
