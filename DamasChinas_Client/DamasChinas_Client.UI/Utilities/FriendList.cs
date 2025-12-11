@@ -10,10 +10,9 @@ namespace DamasChinas_Client.UI.Utilities
 
         public string Username { get; set; }
 
-        // Archivo del avatar (para BD)
+
         public string AvatarFile { get; set; }
 
-        // Imagen cargada (para UI)
         public ImageSource AvatarSource { get; set; }
 
         public FriendStatus Status

@@ -26,19 +26,19 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-            // ------- EVENTOS DE PRESENCIA -------
+     
             SessionCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
             SessionCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
             SessionCallbackHandler.PlayerInGameEvent += OnPlayerInGame;
             SessionCallbackHandler.PlayerLeftGameEvent += OnPlayerLeftGame;
 
-            // ------- EVENTOS DE AMIGOS -------
+       
             FriendCallbackHandler.FriendRemovedEvent += OnFriendRemoved;
             FriendCallbackHandler.UserBlockedYouEvent += OnUserBlocked;
             FriendCallbackHandler.UserUnblockedYouEvent += OnUserUnblocked;
             FriendCallbackHandler.FriendRequestAcceptedEvent += OnFriendAccepted;
 
-            // Refresco inmediato cuando el server dice "lista actualizada"
+      
             FriendCallbackHandler.FriendListUpdatedEvent += OnFriendListUpdated;
         }
 
@@ -49,7 +49,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            // ------- LIMPIEZA DE SUSCRIPCIONES -------
+         
             SessionCallbackHandler.PlayerConnectedEvent -= OnPlayerConnected;
             SessionCallbackHandler.PlayerDisconnectedEvent -= OnPlayerDisconnected;
             SessionCallbackHandler.PlayerInGameEvent -= OnPlayerInGame;
@@ -63,9 +63,7 @@ namespace DamasChinas_Client.UI.Pages
             FriendCallbackHandler.FriendListUpdatedEvent -= OnFriendListUpdated;
         }
 
-        // ============================================================
-        // Cliente temporal (fallback)
-        // ============================================================
+
         private static FriendServiceClient CreateTemporaryClient()
         {
             var callback = new FriendCallbackHandler();
@@ -92,9 +90,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // CARGAR LISTA DE AMIGOS
-        // ============================================================
+ 
         private void LoadFriends()
         {
             FriendServiceClient client = FriendNotificationManager.GetClient();
@@ -145,9 +141,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // EVENTOS DE PRESENCIA
-        // ============================================================
+ 
         private void OnPlayerConnected(string username)
         {
             var f = FriendsList.FirstOrDefault(x =>
@@ -192,9 +186,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // EVENTOS DE AMIGOS
-        // ============================================================
+
         private void OnFriendRemoved(string username)
         {
             var friend = FriendsList.FirstOrDefault(f =>
@@ -226,9 +218,7 @@ namespace DamasChinas_Client.UI.Pages
             Dispatcher.Invoke(() => LoadFriends());
         }
 
-        // ============================================================
-        // BOTONES
-        // ============================================================
+
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.GoBack();

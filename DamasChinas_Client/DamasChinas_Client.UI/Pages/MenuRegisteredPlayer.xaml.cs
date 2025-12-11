@@ -87,14 +87,13 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                // 1. Validar que NO sea invitado
+        
                 if (!ClientSession.IsLoggedIn)
                 {
                     MessageHelper.ShowPopup(MessageKeys.GuestStatsUnavailable, PopupType.Info);
                     return;
                 }
 
-                // 2. Navegar a la página de Ranking
                 NavigationService?.Navigate(new RankingPage());
             }
             catch (Exception ex)
@@ -142,9 +141,7 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
-        // =========================================================
-        //  CREATE GAME CORREGIDO
-        // =========================================================
+
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
         {
             try
@@ -157,12 +154,12 @@ namespace DamasChinas_Client.UI.Pages
                     Visibility = LobbyVisibility.Public
                 };
 
-                // 1. Crear (Retorna OperationResult)
+      
                 var result = lobbyManager.CreateLobby(_profile.Username, request);
 
                 if (result.Success)
                 {
-                    // 2. Obtener Snapshot pasando el username
+          
                     var snapshot = lobbyManager.GetCurrentLobby(_profile.Username);
 
                     if (snapshot == null)
@@ -171,14 +168,14 @@ namespace DamasChinas_Client.UI.Pages
                         return;
                     }
 
-                    // 3. Navegar
+        
                     NavigationService?.Navigate(
                         new PreLobby(snapshot, _profile.Username, _userId)
                     );
                 }
                 else
                 {
-                    // 4. Mostrar error del server
+    
                     MessageHelper.ShowFromResult(result);
                 }
             }

@@ -51,7 +51,7 @@ namespace DamasChinas_Client.UI.Pages
             ClientSession.SafeUsernameNormalized,
             username);
 
-        // Deja que el helper haga todo (traducción + tipo de popup)
+
         MessageHelper.ShowFromResult(result);
 
         if (result.Success)

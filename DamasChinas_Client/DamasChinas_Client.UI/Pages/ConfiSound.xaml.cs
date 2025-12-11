@@ -81,7 +81,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsUpdated, PopupType.Success);
 
-                // Si estamos dentro de una ventana (caso MatchRoom), la cerramos
+   
                 var hostWindow = Window.GetWindow(this);
                 if (hostWindow != null && hostWindow.Owner != null)
                 {
@@ -109,14 +109,14 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                // 1) Navegación normal
+           
                 if (NavigationService?.CanGoBack == true)
                 {
                     NavigationService.GoBack();
                     return;
                 }
 
-                // 2) Si estamos incrustados en una ventana modal (MatchRoom), cerrarla
+       
                 var hostWindow = Window.GetWindow(this);
                 if (hostWindow != null && hostWindow.Owner != null)
                 {
@@ -124,7 +124,6 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                // 3) Sin forma de regresar
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
             }
             catch (InvalidOperationException ex)

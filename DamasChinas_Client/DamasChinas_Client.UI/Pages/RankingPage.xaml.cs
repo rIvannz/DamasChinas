@@ -24,17 +24,14 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnPageLoaded;
         }
 
-        // =========================================================
-        //  EVENTOS DE PÁGINA
-        // =========================================================
+
+
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             LoadRanking();
         }
 
-        // =========================================================
-        //  CARGA DE RANKING
-        // =========================================================
+
         private void LoadRanking()
         {
             try
@@ -86,9 +83,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  HANDLERS DE BOTONES
-        // =========================================================
+  
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -133,9 +128,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  PERFIL DESDE RANKING
-        // =========================================================
         private bool IsFriend(string username)
         {
             try
@@ -187,14 +179,14 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                // Si es el propio usuario → ir a ProfilePlayer
+               
                 if (string.Equals(vm.Username, ClientSession.CurrentProfile.Username, StringComparison.OrdinalIgnoreCase))
                 {
                     NavigationService?.Navigate(new ProfilePlayer());
                     return;
                 }
 
-                // Si ES amigo → obtener perfil completo
+             
                 if (IsFriend(vm.Username))
                 {
                     using (var client = new FriendServiceClient(
@@ -214,7 +206,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                    // Si NO es amigo → mostrar perfil limitado
+         
                     NavigationService?.Navigate(
                         new ProfilePublicPage(
                             vm.Username,
@@ -247,9 +239,8 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
-        // =========================================================
-        //  VIEW MODEL INTERNO
-        // =========================================================
+
+
         private sealed class RankingItemViewModel
         {
             public int Position { get; set; }
@@ -266,7 +257,6 @@ namespace DamasChinas_Client.UI.Pages
 
             public int Loses { get; set; }
 
-            // ---- FIX: Cargar imagen real ----
             public ImageSource AvatarSource
             {
                 get

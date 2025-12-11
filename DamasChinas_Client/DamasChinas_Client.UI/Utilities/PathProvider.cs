@@ -64,16 +64,13 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        // USADO POR SelectAvatar → corrige CS0117
-        // ============================================================
         public static IEnumerable<string> GetAvailableAvatarFiles()
         {
             try
             {
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
-                // AvatarsFolder viene con "/" → lo adaptamos al separador del SO
+      
                 string avatarsPath = AvatarsFolder.Replace(
                     '/',
                     Path.DirectorySeparatorChar);

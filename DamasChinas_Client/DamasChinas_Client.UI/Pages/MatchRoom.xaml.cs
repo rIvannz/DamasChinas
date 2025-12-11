@@ -16,9 +16,7 @@ using AccountProxy = DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
 {
-    // =========================================================
-    //  CALLBACK HANDLER (POR SESIÓN)
-    // =========================================================
+
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public class MatchCallbackHandler : IMatchServiceCallback
     {
@@ -62,14 +60,11 @@ namespace DamasChinas_Client.UI.Pages
         }
     }
 
-    // =========================================================
-    //  MATCH ROOM PAGE
-    // =========================================================
+
     public partial class MatchRoom : Page
     {
-        // =========================================================
-        //  CONSTANTES TABLERO (SINCRONIZADAS CON SERVIDOR)
-        // =========================================================
+     
+
 
         private const int BoardRadius = 4;
         private const int MaxCubeRadius = BoardRadius * 2;
@@ -78,9 +73,6 @@ namespace DamasChinas_Client.UI.Pages
         private const double CenterX = 600.0;
         private const double CenterY = 600.0;
 
-        // =========================================================
-        //  ESTADO GENERAL
-        // =========================================================
 
         private readonly int _lobbyCode;
         private readonly string _myUsername;
@@ -96,14 +88,12 @@ namespace DamasChinas_Client.UI.Pages
 
         private bool _matchEnded;
 
-        // Jugadores
+  
         public ObservableCollection<PlayerViewModel> Players { get; set; }
         private readonly Dictionary<string, Brush> _userColors;
         private readonly List<Brush> _availableColors;
 
-        // =========================================================
-        //  CONSTRUCTOR
-        // =========================================================
+ 
 
         public MatchRoom(int lobbyCode)
         {
@@ -134,9 +124,6 @@ namespace DamasChinas_Client.UI.Pages
             Unloaded += OnPageUnloaded;
         }
 
-        // =========================================================
-        //  CICLO DE VIDA PÁGINA
-        // =========================================================
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
@@ -144,18 +131,17 @@ namespace DamasChinas_Client.UI.Pages
             {
                 _matchEnded = false;
 
-                // 1. Snapshot de lobby
+        
                 _lobbySnapshot = LobbySession.Manager.GetCurrentLobby(_myUsername);
                 SetupPlayersMetadata();
 
-                // 2. Tablero
+   
                 DrawBoardBackground();
                 DrawPlayerLabels();
 
-                // 3. Chat del lobby
+
                 LobbySession.Manager.ChatMessageReceived += OnChatMessageReceived;
 
-                // 4. Conexión a servicio de partida
                 InitializeMatchConnection();
             }
             catch (Exception ex)
@@ -184,9 +170,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  CONFIGURACIÓN DE JUGADORES
-        // =========================================================
+
 
         private void SetupPlayersMetadata()
         {
@@ -222,9 +206,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  CONEXIÓN A MATCH SERVICE
-        // =========================================================
+ 
 
         private void InitializeMatchConnection()
         {
@@ -263,9 +245,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  GEOMETRÍA DEL TABLERO
-        // =========================================================
+ 
 
         private static readonly (int X, int Y, int Z)[] ZoneDirections =
         {
@@ -324,9 +304,7 @@ namespace DamasChinas_Client.UI.Pages
             return cells;
         }
 
-        // =========================================================
-        //  DIBUJO DEL TABLERO
-        // =========================================================
+
 
         private void DrawBoardBackground()
         {
@@ -346,7 +324,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private void DrawPlayerLabels()
         {
-            // Panel lateral ya indica claramente jugadores y colores
+           
         }
 
         private Point HexToPixel(int q, int r)
@@ -420,9 +398,7 @@ namespace DamasChinas_Client.UI.Pages
             _marblesVisuals[point] = marble;
         }
 
-        // =========================================================
-        //  ACTUALIZACIÓN DE ESTADO
-        // =========================================================
+
 
         private void UpdateGameState(MatchStateDto state)
         {
@@ -545,9 +521,7 @@ namespace DamasChinas_Client.UI.Pages
 
 
 
-        // =========================================================
-        //  INTERACCIÓN CON EL TABLERO
-        // =========================================================
+  
 
         private void OnBoardClick(object sender, MouseButtonEventArgs e)
         {
@@ -607,9 +581,7 @@ namespace DamasChinas_Client.UI.Pages
             _selectedCoord = null;
         }
 
-        // =========================================================
-        //  CREACIÓN DEL REQUEST DE MOVIMIENTO
-        // =========================================================
+
         private MoveRequestDto CreateMoveRequest(Point origin, Point dest)
         {
             int ox = (int)origin.X;
@@ -671,9 +643,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // =========================================================
-        //  CHAT
-        // =========================================================
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
@@ -712,9 +681,6 @@ namespace DamasChinas_Client.UI.Pages
             });
         }
 
-        // =========================================================
-        //  NAVEGACIÓN / BOTONES
-        // =========================================================
 
         private void OnLeaveMatchClick(object sender, RoutedEventArgs e)
         {
@@ -726,7 +692,6 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 catch
                 {
-                    // Si falla el leave, de todos modos nos regresamos al menú
                 }
 
                 NavigateToMenu();
@@ -807,9 +772,6 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
-        // =========================================================
-        //  VIEWMODEL JUGADOR
-        // =========================================================
 
         public class PlayerViewModel
         {

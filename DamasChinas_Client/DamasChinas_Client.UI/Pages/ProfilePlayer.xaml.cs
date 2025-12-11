@@ -56,8 +56,7 @@ namespace DamasChinas_Client.UI.Pages
             catch { }
         }
 
-        // ===================== NAVEGACIÓN =====================
-
+  
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -155,7 +154,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ===================== SOCIAL URL =====================
+      
 
         private void OnOpenSocialClick(object sender, RoutedEventArgs e)
         {
@@ -183,7 +182,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ===================== UI =====================
+
 
         private void UpdateProfileDisplay()
         {

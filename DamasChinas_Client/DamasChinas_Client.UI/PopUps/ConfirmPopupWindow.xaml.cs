@@ -12,11 +12,11 @@ namespace DamasChinas_Client.UI.PopUps
         {
             InitializeComponent();
 
-            // Centrar SIEMPRE el popup (como tus otros popups)
+   
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
-        // Constructor que acepta la clave del recurso para el mensaje
+      
         public ConfirmPopupWindow(string messageResourceKey) : this()
         {
             if (!string.IsNullOrWhiteSpace(messageResourceKey))

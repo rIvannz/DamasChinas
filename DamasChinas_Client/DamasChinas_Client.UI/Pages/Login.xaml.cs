@@ -121,28 +121,24 @@ namespace DamasChinas_Client.UI.Pages
         {
             var channel = client.InnerChannel;
 
-            // =============================
-            // MANEJO DE PÉRDIDA DE CONEXIÓN
-            // =============================
+
             channel.Faulted += (_, __) => HandleConnectionLoss(loading);
             channel.Closed += (_, __) => HandleConnectionLoss(loading);
 
-            // =============================
-            // LOGIN OK
-            // =============================
+
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // Cerrar el loading si sigue abierto
+               
                     if (loading?.IsVisible == true)
                     {
                         loading.Close();
                     }
 
-                    // 1) Guardar sesión
+           
                     ClientSession.Initialize(profile, client, callback);
 
                     try
@@ -160,15 +156,12 @@ namespace DamasChinas_Client.UI.Pages
                         Debug.WriteLine($"[Login.ConfigureCallback] Error al suscribir SessionService: {ex.Message}");
                     }
 
-                    // 4) Navegar al menú
                     TryNavigateToMenu(profile);
                 });
             };
 
 
-            // =============================
-            // LOGIN ERROR
-            // =============================
+   
             callback.LoginError += async code =>
             {
                 string msg = MessageTranslator.GetLocalizedMessage(code);
@@ -225,7 +218,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                // Convertimos al tipo del AccountManager
+
                 var converted = new AccountManagerServiceProxy.PublicProfile
                 {
                     Name = profile.Name,

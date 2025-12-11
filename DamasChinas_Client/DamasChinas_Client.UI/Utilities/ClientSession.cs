@@ -2,6 +2,8 @@ using System;
 using System.ServiceModel;
 using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.SessionServiceProxy;
+using static DamasChinas_Client.UI.Utilities.MessageKeys;
+using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI.Utilities
 {
@@ -15,17 +17,14 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static SessionServiceClient SessionClient { get; set; }
 
-        // ============================================================
-        // PERFIL / SESIÓN
-        // ============================================================
         public static PublicProfile CurrentProfile
         {
             get
             {
                 if (_currentProfile == null)
                 {
-                    throw new InvalidOperationException(
-                        "No hay una sesión activa. Inicia sesión primero.");
+                    string message = MessageTranslator.GetLocalizedMessage(SessionNotInitialized);
+                    throw new InvalidOperationException(message);
                 }
 
                 return _currentProfile;
@@ -34,15 +33,10 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static bool IsLoggedIn => _currentProfile != null;
 
-        public static string safeUsername =>
-            _currentProfile == null
-                ? null
-                : _currentProfile.Username;
+        public static string SafeUsername => _currentProfile?.Username;
 
         public static string SafeUsernameNormalized =>
-            _currentProfile == null
-                ? null
-                : _currentProfile.Username?.Trim()?.ToLower();
+            _currentProfile?.Username?.Trim()?.ToLower();
 
         public static void Initialize(
             PublicProfile profile,
@@ -56,50 +50,31 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static void Clear()
         {
-            // Cerrar LoginClient
-            try
-            {
-                if (LoginClient != null)
-                {
-                    if (LoginClient.State != CommunicationState.Faulted)
-                    {
-                        LoginClient.Close();
-                    }
-                    else
-                    {
-                        LoginClient.Abort();
-                    }
-                }
-            }
-            catch
-            {
-                LoginClient?.Abort();
-            }
-
-            // Cerrar SessionClient
-            try
-            {
-                if (SessionClient != null)
-                {
-                    if (SessionClient.State != CommunicationState.Faulted)
-                    {
-                        SessionClient.Close();
-                    }
-                    else
-                    {
-                        SessionClient.Abort();
-                    }
-                }
-            }
-            catch
-            {
-                SessionClient?.Abort();
-            }
+            CloseClientSafely(LoginClient);
+            CloseClientSafely(SessionClient);
 
             LoginClient = null;
             SessionClient = null;
             CallbackHandler = null;
             _currentProfile = null;
+        }
+
+        private static void CloseClientSafely(ICommunicationObject client)
+        {
+            if (client == null)
+                return;
+
+            try
+            {
+                if (client.State != CommunicationState.Faulted)
+                    client.Close();
+                else
+                    client.Abort();
+            }
+            catch
+            {
+                try { client.Abort(); } catch { }
+            }
         }
     }
 }

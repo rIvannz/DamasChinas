@@ -444,6 +444,14 @@ and one special character (*, $, #).
         The host has disconnected. The match has been closed.
     </sys:String>
 
+    <sys:String x:Key="msg_SessionNotInitialized">
+        No active session found. Please sign in first.
+    </sys:String>
+    <sys:String x:Key="msg_InvalidUsernameArgument">
+        Username cannot be null or empty.
+    </sys:String>
+
+
 
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->

@@ -30,7 +30,6 @@ namespace DamasChinas_Client.UI.Pages
             FriendCallbackHandler.FriendRequestAcceptedEvent += OnFriendRequestAccepted;
             FriendCallbackHandler.FriendRemovedEvent += OnFriendRemoved;
 
-            // Refresco automático cuando cambie la lista
             FriendCallbackHandler.FriendListUpdatedEvent += OnFriendListUpdated;
         }
 
@@ -48,9 +47,7 @@ namespace DamasChinas_Client.UI.Pages
             FriendCallbackHandler.FriendListUpdatedEvent -= OnFriendListUpdated;
         }
 
-        // ============================================================
-        // Cliente fallback
-        // ============================================================
+ 
         private static FriendServiceClient CreateTemporaryClient()
         {
             var callback = new FriendCallbackHandler();
@@ -77,9 +74,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // CARGAR SOLICITUDES DESDE SERVIDOR
-        // ============================================================
+  
         private void LoadRequestsFromServer()
         {
             Requests.Clear();
@@ -125,9 +120,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ============================================================
-        // CALLBACKS
-        // ============================================================
         private void OnFriendRequestReceived(string fromUsername)
         {
             Dispatcher.Invoke(() =>
@@ -178,9 +170,6 @@ namespace DamasChinas_Client.UI.Pages
             Dispatcher.Invoke(() => LoadRequestsFromServer());
         }
 
-        // ============================================================
-        // ACEPTAR / RECHAZAR SOLICITUD
-        // ============================================================
         private void OnAcceptClick(object sender, RoutedEventArgs e)
         {
             if (sender is FrameworkElement el && el.DataContext is PendingRequest req)
@@ -278,9 +267,7 @@ namespace DamasChinas_Client.UI.Pages
             NavigationService?.GoBack();
         }
 
-        // ============================================================
-        // MODELO
-        // ============================================================
+
         public class PendingRequest
         {
             public string Username { get; set; }

@@ -424,6 +424,13 @@ y un carácter especial (*, $, #).
     <!-- Operaciones generales -->
     <sys:String x:Key="msg_OperationInterrupted">La operación fue interrumpida debido a una validación fallida.</sys:String>
     <sys:String x:Key="msg_UserValidationError">Algunos de tus datos no son válidos. Revisa los campos.</sys:String>
+    <sys:String x:Key="msg_SessionNotInitialized">
+        No active session found. Please sign in first.
+    </sys:String>
+    <sys:String x:Key="msg_InvalidUsernameArgument">
+        El nombre de usuario no puede ser nulo ni estar vacío.
+    </sys:String>
+
 
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — MENSAJES ESPECÍFICOS                      -->

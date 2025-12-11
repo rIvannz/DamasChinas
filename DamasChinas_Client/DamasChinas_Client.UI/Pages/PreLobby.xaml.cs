@@ -180,8 +180,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ======================= CHAT =======================
-
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
             string text = txtChatMessage.Text.Trim();
@@ -225,7 +223,7 @@ namespace DamasChinas_Client.UI.Pages
                 : Visibility.Collapsed;
         }
 
-        // ======================= ACCIONES =======================
+
 
         private void OnKickMemberClick(object sender, RoutedEventArgs e)
         {
@@ -288,11 +286,11 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            // Aquí iría la invitación real al amigo
+
             MessageHelper.ShowPopup(MessageKeys.ChatComingSoon, PopupType.Info);
         }
 
-        // ======================= EVENTOS SERVER =======================
+
 
         public void ApplyBanInfo(BanInfoDto ban)
         {

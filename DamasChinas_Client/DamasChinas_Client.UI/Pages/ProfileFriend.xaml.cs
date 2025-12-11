@@ -22,9 +22,7 @@ namespace DamasChinas_Client.UI.Pages
             LoadFriendData();
         }
 
-        // ======================================================
-        // NAVEGACIÓN
-        // ======================================================
+     
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -38,9 +36,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ======================================================
-        // CARGA DATOS
-        // ======================================================
+  
         private void LoadFriendData()
         {
             try
@@ -64,9 +60,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ======================================================
-        // ELIMINAR AMIGO
-        // ======================================================
+
         private void OnRemoveFriendClick(object sender, RoutedEventArgs e)
         {
             var popup = new ConfirmPopupWindow(MessageKeys.ConfirmRemoveFriend);
@@ -109,9 +103,8 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ======================================================
-        // BLOQUEAR USUARIO
-        // ======================================================
+ 
+
         private void OnBlockUserClick(object sender, RoutedEventArgs e)
         {
             var popup = new ConfirmPopupWindow(MessageKeys.ConfirmBlockUser);
@@ -155,9 +148,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        // ======================================================
-        // ICONOS
-        // ======================================================
+
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ConfiSound());

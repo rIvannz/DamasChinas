@@ -4,14 +4,10 @@ namespace DamasChinas_Client.UI.Utilities
 {
     public static class MessageKeys
     {
-        // ========================
-        // Éxitos
-        // ========================
+       
         public const string Success = "msg_Success";
 
-        // ========================
-        // Autenticación / Usuarios
-        // ========================
+    
         public const string LoginInvalidCredentials = "msg_LoginInvalidCredentials";
         public const string UserDuplicateEmail = "msg_UserDuplicateEmail";
         public const string UserNotFound = "msg_UserNotFound";
@@ -22,9 +18,6 @@ namespace DamasChinas_Client.UI.Utilities
         public const string InvalidVerificationCode = "msg_InvalidVerificationCode";
         public const string VerificationCodeSendError = "msg_CodeSendingError";
 
-        // ========================
-        // Partidas / Lobby
-        // ========================
         public const string MatchCreationFailed = "msg_MatchCreationFailed";
         public const string LobbyNotFound = "msg_LobbyNotFound";
         public const string LobbyInactive = "msg_LobbyInactive";
@@ -32,9 +25,7 @@ namespace DamasChinas_Client.UI.Utilities
         public const string LobbyClosed = "msg_LobbyClosed";
 
 
-        // ========================
-        // Amigos
-        // ========================
+   
         public const string FriendUserNotFound = "msg_FriendUserNotFound";
         public const string FriendRequestAccepted = "msg_FriendRequestAccepted";
         public const string FriendRequestRejected = "msg_FriendRequestRejected";
@@ -52,18 +43,11 @@ namespace DamasChinas_Client.UI.Utilities
 
 
 
-
-
-        // ========================
-        // Backend / Servidor
-        // ========================
         public const string ServerUnavailable = "msg_ServerUnavailable";
         public const string NetworkLatency = "msg_NetworkLatency";
         public const string UnknownError = "msg_UnknownError";
 
-        // ========================
-        // Validaciones universales
-        // ========================
+     
         public const string EmptyCredentials = "msg_EmptyCredentials";
         public const string PasswordsDontMatch = "msg_PasswordsDontMatch";
         public const string InvalidPassword = "msg_InvalidPassword";
@@ -81,9 +65,8 @@ namespace DamasChinas_Client.UI.Utilities
         public const string UsernameExists = "msg_UsernameExists";
         public const string RankingUnavailable = "msg_RankingUnavailable";
 
-        // ========================
-        // UI / Menús (nuevos keys)
-        // ========================
+     
+       
         public const string TutorialUnavailable = "msg_TutorialUnavailable";
         public const string JoinPartyOpenError = "msg_JoinPartyOpenError";
         public const string CreateLobbyError = "msg_CreateLobbyError";
@@ -96,9 +79,7 @@ namespace DamasChinas_Client.UI.Utilities
         public const string FriendRemoved = "msg_FriendRemoved";
         public const string ChatComingSoon = "msg_ChatComingSoon";
 
-        // ========================
-        // Lobby / Join Party
-        // ========================
+     
 
         public const string PlayerLeftMatch = "playerLeftMatch";
         public const string StatusTurn = "status_Turn";
@@ -121,14 +102,10 @@ namespace DamasChinas_Client.UI.Utilities
         public const string InvalidCodeWarning = "invalidCodeWarning";
 
         public const string JoiningLobbyError = "joiningLobbyError";
-
-        // Lobby interno
         public const string LobbyCodeUnknown = "msg_LobbyCodeUnknown";
-
-        // Reportes
         public const string ReportReasonLobby = "msg_ReportReasonLobby";
 
-        // PreLobby
+
         public const string YouWereKicked = "msg_YouWereKicked";
         public const string PlayerKicked = "msg_PlayerKicked";
         public const string PlayerReported = "msg_PlayerReported";
@@ -138,72 +115,44 @@ namespace DamasChinas_Client.UI.Utilities
         public const string PlayersCount = "PlayersCount";
         public const string HostDisconnected = "msg_HostDisconnected";
 
-
-        // Create/Start game
         public const string ErrorStartingGame = "msg_ErrorStartingGame";
-
-
-        // ========================
-        // Validaciones específicas – Nombre
-        // ========================
         public const string InvalidNameEmpty = "msg_InvalidNameEmpty";
         public const string InvalidNameLength = "msg_InvalidNameLength";
         public const string InvalidNameCharacters = "msg_InvalidNameCharacters";
 
-        // ========================
-        // Validaciones específicas – Username
-        // ========================
         public const string InvalidUsernameEmpty = "msg_InvalidUsernameEmpty";
         public const string InvalidUsernameLength = "msg_InvalidUsernameLength";
         public const string InvalidUsernameCharacters = "msg_InvalidUsernameCharacters";
-
-        // ========================
-        // Validaciones específicas – Password
-        // ========================
         public const string InvalidPasswordEmpty = "msg_InvalidPasswordEmpty";
         public const string InvalidPasswordLength = "msg_InvalidPasswordLength";
         public const string InvalidPasswordUppercase = "msg_InvalidPasswordUppercase";
         public const string InvalidPasswordLowercase = "msg_InvalidPasswordLowercase";
         public const string InvalidPasswordDigit = "msg_InvalidPasswordDigit";
         public const string InvalidPasswordSpecial = "msg_InvalidPasswordSpecial";
-
-        // ========================
-        // Validaciones específicas – Email
-        // ========================
         public const string InvalidEmailEmpty = "msg_InvalidEmailEmpty";
         public const string InvalidEmailTooLong = "msg_InvalidEmailTooLong";
         public const string InvalidEmailFormat = "msg_InvalidEmailFormat";
 
-        // ========================
-        // Guest / Invitados
-        // ========================
         public const string GuestProfile = "msg_GuestProfile";
         public const string GuestNoEmail = "msg_GuestNoEmail";
         public const string GuestProfileUnavailable = "msg_GuestProfileUnavailable";
         public const string GuestAccountWarning = "msg_GuestAccountWarning";
         public const string GuestProfileTitle = "guestProfileTitle";
+        public const string SessionNotInitialized = "msg_SessionNotInitialized";
+        public const string InvalidUsername = "msg_InvalidUsernameArgument";
 
-        // ========================
-        // Sanciones / Baneos
-        // ========================
+
+
+
+
         public const string BanTemp10m = "ban_temp_10m";
         public const string BanTemp1h = "ban_temp_1h";
         public const string BanPermanent = "ban_permanent";
         public const string UserBlocked = "msg_UserBlocked";
 
-
-
-
-        // ========================
-        // Lenguaje
-        // ========================
         public const string LanguageChangeSuccess = "msg_LanguageChangeSuccess";
         public const string SelectLanguageFirst = "msg_SelectLanguageFirst";
 
-
-        // ========================
-        // Sonido
-        // ========================
         public const string SoundSettingsUpdated = "msg_SoundSettingsUpdated";
         public const string LanguageChangeError = "msg_LanguageChangeError";
         public const string SoundSettingsError = "msg_SoundSettingsError";
