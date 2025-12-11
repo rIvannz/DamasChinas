@@ -1,0 +1,9 @@
+SenderEmail=damaschinas4u@gmail.com
+SenderPassword=prfd slyq tppc mlni
+SmtpHost=smtp.gmail.com
+SmtpPort=587
+EnableSsl=true
+
+WelcomeSubject=Bienvenido a Damas Chinas
+
+WelcomeBodyTemplate=Hola {0},<br><br>Tu usuario es <b>{1}</b>.<br>Ya puedes iniciar sesión en la plataforma de Damas Chinas y disfrutar del juego.<br><br>¡Nos alegra tenerte con nosotros!<br><br>Atentamente,<br>Equipo Damas Chinas
