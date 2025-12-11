@@ -23,9 +23,7 @@ namespace DamasChinas_Server.Services
         private const string OperationChangeAvatar = nameof(ChangeAvatar);
         private const string OperationChangeSocialUrl = nameof(ChangeSocialUrl);
 
-        // ===============================
-        // NUEVO: ALMACÉN DE CÓDIGOS DE RECUPERACIÓN
-        // ===============================
+    
         private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)> _passwordCodes =
             new Dictionary<string, (string Code, DateTime CreatedUtc)>();
 
@@ -181,6 +179,7 @@ namespace DamasChinas_Server.Services
                 if (!string.Equals(storedCode, code, StringComparison.Ordinal))
                 {
                     return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
+          
                 }
 
                 RemoveStoredPasswordCode(email);

@@ -81,7 +81,7 @@ namespace DamasChinas_Server
             return ExecuteInContext(db =>
             {
                 var user = GetUserWithProfile(db, idUsuario);
-                return GetPublicProfile(idUsuario);
+                return BuildPublicProfile(user);
             });
         }
 

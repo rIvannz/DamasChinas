@@ -10,7 +10,7 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class ForgotPassword : Page
     {
-        private string _verificationCode; // ← AGREGADO
+        private string _verificationCode; 
 
         public ForgotPassword()
         {
@@ -22,13 +22,11 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                string email = txtEmail.Text.Trim();
+                string email = txtEmail.Text.Trim().ToLower();
 
                 Validator.ValidateEmail(email);
 
-                // =======================================
-                // 1. Mandar código al servidor (AGREGADO)
-                // =======================================
+              
                 var client = new AccountManagerClient();
                 var result = client.RequestPasswordChangeCode(email);
 
@@ -41,9 +39,7 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-                // =======================================
-                // 2. Mostrar ventana de ingresar código
-                // =======================================
+           
                 var codeWindow = new VerificationCodeWindow
                 {
                     Owner = Application.Current.MainWindow
@@ -53,7 +49,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 if (dialogResult == true)
                 {
-                    // Guardar el código ingresado por el usuario (AGREGADO)
+                  
                     _verificationCode = codeWindow.CodeValue;
 
                     EnablePasswordFields();
@@ -112,7 +108,7 @@ namespace DamasChinas_Client.UI.Pages
                 
                 var client = new AccountManagerClient();
                 var result = client.ConfirmPasswordChange(
-                    txtEmail.Text.Trim(),
+                    txtEmail.Text.Trim().ToLower(),
                     _verificationCode,
                     newPass
                 );
