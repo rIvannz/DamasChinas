@@ -540,17 +540,10 @@ namespace DamasChinas_Client.UI.Pages
 
         public void HandleError(string msgKey)
         {
-            if (_matchEnded)
-            {
-                return;
-            }
-
-            _matchEnded = true;
-
-            // msgKey viene del servidor (ej. "msg_HostDisconnected")
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
-            NavigateToMenu();
         }
+
+
 
         // =========================================================
         //  INTERACCIÓN CON EL TABLERO
@@ -789,8 +782,20 @@ namespace DamasChinas_Client.UI.Pages
                 AvatarFile = current.AvatarFile
             };
 
-            NavigationService.Navigate(new MenuRegisteredPlayer(menuProfile));
+            var targetPage = new MenuRegisteredPlayer(menuProfile);
+
+
+            if (NavigationService != null)
+            {
+                NavigationService.Navigate(targetPage);
+            }
+            else
+            {
+
+                Application.Current.MainWindow.Content = targetPage;
+            }
         }
+
 
         // =========================================================
         //  VIEWMODEL JUGADOR

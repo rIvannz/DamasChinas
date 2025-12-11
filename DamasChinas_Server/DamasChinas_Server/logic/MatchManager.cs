@@ -158,7 +158,6 @@ namespace DamasChinas_Server.Logic
             RemovePlayer(lobbyCode, username);
         }
 
-        // (NO CAMBIA — ya está bien)
         public void RemovePlayer(int lobbyCode, string username)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
@@ -167,23 +166,9 @@ namespace DamasChinas_Server.Logic
             if (!match.UserColorMap.TryGetValue(username, out var color))
                 return;
 
-            bool isHost = string.Equals(match.HostUsername, username, StringComparison.OrdinalIgnoreCase);
+            bool wasHost = string.Equals(match.HostUsername, username, StringComparison.OrdinalIgnoreCase);
 
-            if (isHost)
-            {
-                _log.Warn($"[MatchManager] Host disconnected. Lobby={lobbyCode}");
-
-                _matches.TryRemove(lobbyCode, out _);
-
-                foreach (var cb in match.Callbacks.Values)
-                {
-                    try { cb.OnErrorOccurred("msg_HostDisconnected"); }
-                    catch { }
-                }
-
-                return;
-            }
-
+            // === Caso especial: solo dos jugadores ===
             if (match.UserColorMap.Count == 2)
             {
                 string winner = match.UserColorMap.Keys
@@ -196,6 +181,7 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
+            // === Caso general: jugador sale (incluye host) ===
             match.Game.RemovePlayer(color);
             match.UserColorMap.Remove(username);
             match.Callbacks.TryRemove(username, out _);
@@ -206,9 +192,17 @@ namespace DamasChinas_Server.Logic
                 catch { }
             }
 
-            // 🔥 Reacomodo + envío completo del tablero
+            // Si el host salió, elegir un nuevo host para consistencia interna
+            if (wasHost && match.UserColorMap.Count > 0)
+            {
+                match.HostUsername = match.UserColorMap.Keys.First();
+                _log.Info($"[MatchManager] Host changed to {match.HostUsername}");
+            }
+
+            // Enviar estado nuevo del tablero
             BroadcastBoardState(lobbyCode, match);
         }
+
 
 
         // ================================================
