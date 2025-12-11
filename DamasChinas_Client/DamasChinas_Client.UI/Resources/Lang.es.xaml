@@ -19,6 +19,14 @@
     <sys:String x:Key="kick">Expulsar</sys:String>
     <sys:String x:Key="matchesPlayedShort">jugadas</sys:String>
     <sys:String x:Key="globalRanking">RANKING GLOBAL</sys:String>
+    <sys:String x:Key="currentData">Datos actuales</sys:String>
+    <sys:String x:Key="openLink">Abrir enlace</sys:String>
+    <sys:String x:Key="passwordRules">
+        La contraseña debe tener al menos 8 caracteres, 
+incluir una letra mayúscula, un número 
+y un carácter especial (*, $, #).
+    </sys:String>
+ 
 
 
     <!-- ========================================================= -->
@@ -343,7 +351,8 @@
     <sys:String x:Key="msg_HostDisconnected">
         El host de la partida se desconectó. La partida ha sido cerrada.
     </sys:String>
-
+    <sys:String x:Key="msg_SocialUrlMissing">No hay URL registrada.</sys:String>
+    <sys:String x:Key="msg_UrlOpenError">En este momento no podemos abrir el link.</sys:String> 
 
 
 

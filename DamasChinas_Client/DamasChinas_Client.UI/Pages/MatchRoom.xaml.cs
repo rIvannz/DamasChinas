@@ -738,34 +738,44 @@ namespace DamasChinas_Client.UI.Pages
             NavigateToMenu();
         }
 
-        // 🔊⚙️ IMPORTANTE: AHORA SON VENTANAS MODALES, NO NAVEGACIÓN
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
+            var main = Application.Current.MainWindow;
+
             var window = new Window
             {
+                Owner = main,
                 Content = new ConfiSound(),
-                Owner = Application.Current.MainWindow,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
+
+                Width = main?.ActualWidth ?? 1280,
+                Height = main?.ActualHeight ?? 720,
                 ResizeMode = ResizeMode.NoResize,
-                SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
-                WindowStyle = WindowStyle.ToolWindow
+                WindowStyle = WindowStyle.None,
+                WindowState = main?.WindowState ?? WindowState.Normal
             };
 
             window.ShowDialog();
         }
 
+
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
+            var main = Application.Current.MainWindow;
+
             var window = new Window
             {
+                Owner = main,
                 Content = new SelectLanguage(),
-                Owner = Application.Current.MainWindow,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
+
+                Width = main?.ActualWidth ?? 1280,
+                Height = main?.ActualHeight ?? 720,
                 ResizeMode = ResizeMode.NoResize,
-                SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
-                WindowStyle = WindowStyle.ToolWindow
+                WindowStyle = WindowStyle.None,
+                WindowState = main?.WindowState ?? WindowState.Normal
             };
 
             window.ShowDialog();

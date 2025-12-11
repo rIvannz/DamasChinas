@@ -1,6 +1,6 @@
+using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using System.ServiceModel;
-using DamasChinas_Server.Contracts;
 
 namespace DamasChinas_Server.Interfaces
 {
@@ -22,5 +22,7 @@ namespace DamasChinas_Server.Interfaces
         [OperationContract]
         OperationResult ChangeAvatar(int idUser, string avatarFile);
 
+        [OperationContract]
+        OperationResult ChangeSocialUrl(int idUser, string socialUrl);
     }
 }

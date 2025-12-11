@@ -56,6 +56,7 @@
                         <BlurEffect Radius="1.5"/>
                     </TextBlock.Effect>
                 </TextBlock>
+
                 <TextBlock Text="{DynamicResource signin}"
                            FontFamily="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Fonts/#Oups"
                            FontSize="60"
@@ -99,7 +100,7 @@
             </StackPanel>
 
             <!-- ===== Fila 3: Password + Confirm Password ===== -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,25">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
                     <PasswordBox x:Name="txtPassword" Width="200" Height="36"/>
@@ -111,6 +112,16 @@
                 </StackPanel>
             </StackPanel>
 
+            <!-- ===== TEXTO NUEVO: Reglas de contraseña ===== -->
+            <TextBlock Text="{DynamicResource passwordRules}"
+                       Foreground="White"
+                       FontSize="14"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,15"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Width="440"/>
+
             <!-- ===== Botón Crear cuenta ===== -->
             <Button Style="{DynamicResource BaseGameButton}"
                     Content="{DynamicResource createAccount}"
@@ -120,14 +131,10 @@
 
             <!-- Barra de carga del registro -->
             <utilities:LoaderBar x:Name="loadingBarRegister"
-                     Visibility="Collapsed"
-                     Margin="0 15 0 0"
-                     HorizontalAlignment="Center"/>
-
-
-
+                                 Visibility="Collapsed"
+                                 Margin="0 15 0 0"
+                                 HorizontalAlignment="Center"/>
         </StackPanel>
-        
 
         <!-- ===== Iconos inferiores derechos ===== -->
         <Grid VerticalAlignment="Bottom"
@@ -155,7 +162,6 @@
                        RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
 
-            <!-- Espaciador -->
             <Grid Grid.Column="1"/>
 
             <!-- Icono de idioma -->
@@ -175,5 +181,3 @@
         </Grid>
     </Grid>
 </Page>
-
-

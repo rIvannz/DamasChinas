@@ -606,6 +606,7 @@
     <Content Include="Assets\Avatars\avatarIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\Icons\twitch.png" />
     <Content Include="Assets\Sounds\background_music.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

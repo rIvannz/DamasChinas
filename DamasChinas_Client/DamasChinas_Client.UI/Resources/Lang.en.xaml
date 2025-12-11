@@ -22,7 +22,16 @@
     <sys:String x:Key="kick">Kick</sys:String>
     <sys:String x:Key="matchesPlayedShort">matches</sys:String>
     <sys:String x:Key="globalRanking">GLOBAL RANKING</sys:String>
-  
+    <sys:String x:Key="currentData">Current data</sys:String>
+    <sys:String x:Key="openLink">Open Link</sys:String>
+    <sys:String x:Key="passwordRules">
+        The password must contain at least 8 characters,
+including one uppercase letter, one number,
+and one special character (*, $, #).
+    </sys:String>
+
+
+
 
     <!-- ========================================================= -->
     <!-- ADD FRIENDS                           -->
@@ -356,7 +365,8 @@
     <sys:String x:Key="msg_RankingUnavailable">
         We are unable to display the player ranking right now.
     </sys:String>
-
+    <sys:String x:Key="msg_SocialUrlMissing">No social media link added.</sys:String>
+    <sys:String x:Key="msg_UrlOpenError">At this moment we cannot open the link.</sys:String> 
 
 
     <!-- Navegación / módulos -->

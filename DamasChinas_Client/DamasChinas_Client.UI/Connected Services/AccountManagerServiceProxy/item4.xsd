@@ -76,4 +76,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ChangeSocialUrl">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idUser" type="xs:int" />
+        <xs:element minOccurs="0" name="socialUrl" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeSocialUrlResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="ChangeSocialUrlResult" nillable="true" type="q6:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
