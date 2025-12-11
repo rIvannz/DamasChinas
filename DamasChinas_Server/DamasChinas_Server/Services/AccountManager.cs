@@ -119,7 +119,7 @@ namespace DamasChinas_Server.Services
         public OperationResult RequestPasswordChangeCode(string email)
         {
             const string context = "RequestPasswordChangeCode";
-            _log.Info($"[{context}] email={email}");
+            _log.Info($"[{context}]");
 
             try
             {

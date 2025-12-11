@@ -75,25 +75,19 @@ namespace DamasChinas_Server
                 {
                     string normalizedEmail = email.Trim().ToLower();
 
-                    _log.Info($"[RequestVerificationCode] NORMALIZED EMAIL = '{normalizedEmail}'");
 
                     var code = GenerateCode();
 
                     lock (_codes)
                     {
                         _codes[normalizedEmail] = (code, DateTime.UtcNow);
-                        _log.Info($"[RequestVerificationCode] STORED CODE = '{code}' for '{normalizedEmail}'");
                     }
 
-                    _log.Info($"[RequestVerificationCode] SENDING EMAIL TO '{normalizedEmail}' CODE='{code}'");
 
                     EmailSender.SendVerificationEmail(email, code);
-                    _log.Info($"[RequestVerificationCode] RAW INPUT EMAIL = '{email}'");
-                    _log.Info($"[RequestVerificationCode] LENGTH={email.Length}");
-                    _log.Info($"[RequestVerificationCode] CHARS = " + string.Join(",", email.Select(c => (int)c)));
 
 
-                    _log.Info($"[RequestVerificationCode] EMAIL SENT OK to '{normalizedEmail}'");
+                    _log.Info($"[RequestVerificationCode] EMAIL SENT OK");
 
                     return new OperationResult
                     {
@@ -123,8 +117,9 @@ namespace DamasChinas_Server
                     lock (_codes)
                     {
                         if (!_codes.TryGetValue(userDto.Email, out var data))
+                        {
                             return OperationResult.Fail("Code not found.", MessageCode.VerificationCodeNotFound);
-
+                        }
                         storedCode = data.Code;
                         createdUtc = data.CreatedUtc;
                     }
@@ -136,8 +131,9 @@ namespace DamasChinas_Server
                     }
 
                     if (!string.Equals(storedCode, code, StringComparison.Ordinal))
+                    {
                         return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
-
+                    }
                     RemoveStoredCode(userDto.Email);
 
                     var user = _repository.CreateUser(userDto);
@@ -150,19 +146,22 @@ namespace DamasChinas_Server
                 ex =>
                 {
                     if (ex is SqlException sql)
+                    {
                         return OperationResult.Fail($"SQL error: {sql.Number}", MessageCode.ServerUnavailable);
-
+                    }
                     return OperationResult.Fail("Unexpected exception.", MessageCode.UnknownError);
                 }
             );
         }
 
-  
+
         private static void RemoveStoredCode(string email)
         {
             lock (_codes)
                 if (_codes.ContainsKey(email))
+                {
                     _codes.Remove(email);
+                }
         }
 
         private static string GenerateCode()

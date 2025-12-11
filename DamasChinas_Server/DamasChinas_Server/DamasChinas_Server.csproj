@@ -215,9 +215,9 @@
     <None Include="Damas_Chinas.edmx.diagram">
       <DependentUpon>Damas_Chinas.edmx</DependentUpon>
     </None>
-    <Content Include="emailSettings.txt">
+    <None Include="emailSettings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -12,12 +12,12 @@ namespace DamasChinas_Server.Utilities
         {
             try
             {
-                var subject = "Código de verificación";
-                var body =
-                    $"Tu código de verificación es: <b>{code}</b><br>" +
-                    "Este código expirará en 5 minutos.";
+                string subject = Email.VerificationSubjectValue;
+                string body = string.Format(Email.VerificationBodyValue, code);
 
-                Email.SendAsync(email, subject, body, html: true).GetAwaiter().GetResult();
+                Email.SendAsync(email, subject, body, html: true)
+                     .GetAwaiter()
+                     .GetResult();
 
                 System.Diagnostics.Debug.WriteLine($"[TRACE] Verification email sent to: {email}");
             }

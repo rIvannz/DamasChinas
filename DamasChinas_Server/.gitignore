@@ -2,7 +2,7 @@
 # IGNORAR ARCHIVO DE CREDENCIALES LOCALES
 #######################################
 connectionStrings.config
-emailSettings.config
+emailSettings.txt
 
 #######################################
 # ARCHIVOS Y CARPETAS TEMPORALES DE VISUAL STUDIO

@@ -15,9 +15,13 @@ namespace DamasChinas_Server.Utilidades
         private static string SmtpHost;
         private static int SmtpPort;
         private static bool EnableSsl;
-
+        private static string VerificationSubject;
+        private static string VerificationBody;
         private static string WelcomeSubject;
         private static string WelcomeBodyTemplate;
+
+        public static string VerificationSubjectValue => VerificationSubject;
+        public static string VerificationBodyValue => VerificationBody;
 
         static Email()
         {
@@ -27,6 +31,7 @@ namespace DamasChinas_Server.Utilidades
         private static void LoadConfig()
         {
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "emailSettings.txt");
+            System.Diagnostics.Debug.WriteLine("LOAD PATH = " + path);
 
             if (!File.Exists(path))
             {
@@ -58,6 +63,17 @@ namespace DamasChinas_Server.Utilidades
                 }
             }
 
+            foreach (var key in values.Keys)
+            {
+                System.Diagnostics.Debug.WriteLine("DICTIONARY KEY: " + key);
+            }
+
+            System.Diagnostics.Debug.WriteLine("TOTAL KEYS = " + values.Count);
+
+            // Esto imprime la ruta EXACTA que está cargando.
+            System.Diagnostics.Debug.WriteLine("LOADING FILE FROM: " + path);
+
+
             SenderEmail = values["SenderEmail"];
             SenderPassword = values["SenderPassword"];
             SmtpHost = values["SmtpHost"];
@@ -65,6 +81,9 @@ namespace DamasChinas_Server.Utilidades
             EnableSsl = bool.Parse(values["EnableSsl"]);
             WelcomeSubject = values["WelcomeSubject"];
             WelcomeBodyTemplate = values["WelcomeBodyTemplate"];
+            VerificationSubject = values["VerificationSubject"];
+            VerificationBody = values["VerificationBody"];
+
         }
 
         public static async Task<bool> SendAsync(string receiver, string subject, string body, bool html = true)
