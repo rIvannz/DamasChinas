@@ -2,9 +2,7 @@ using System.ServiceModel;
 
 namespace DamasChinas_Server.Interfaces
 {
-    /// <summary>
-    /// Eventos transversales de sesión (presencia).
-    /// </summary>
+
     [ServiceContract]
     public interface ISessionCallback
     {

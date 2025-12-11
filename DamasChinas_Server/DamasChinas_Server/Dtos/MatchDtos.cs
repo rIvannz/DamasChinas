@@ -1,4 +1,4 @@
-﻿using DamasChinas_Server.Game; // Para usar PlayerColor si es necesario, o usa string
+﻿using DamasChinas_Server.Game; 
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 

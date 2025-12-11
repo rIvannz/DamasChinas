@@ -14,7 +14,6 @@ namespace DamasChinas_Server.Dtos
         [DataMember]
         public int MaxPlayers { get; set; }
 
-        // IMPORTANTE: array, no IReadOnlyList
         [DataMember]
         public LobbyMemberDto[] Members { get; set; }
 

@@ -11,14 +11,14 @@ namespace DamasChinas_Server.Interfaces
         SessionMode = SessionMode.Required)]
     public interface IFriendService
     {
-        // ============ SUBSCRIPCIÓN A EVENTOS ============
+
         [OperationContract(IsOneWay = true)]
         void SubscribeFriendEvents(string username);
 
         [OperationContract(IsOneWay = true)]
         void UnsubscribeFriendEvents(string username);
 
-        // ============ OPERACIONES EXISTENTES ============
+        
         [OperationContract]
         [FaultContract(typeof(MessageCode))]
         List<FriendDto> GetFriends(string username);

@@ -18,9 +18,7 @@ namespace DamasChinas_Server.GameRepositories
             _contextFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        // =========================================================
-        // REPORTES
-        // =========================================================
+
 
         public void AddReport(int reporterId, int reportedId, int matchId, string reason)
         {
@@ -49,9 +47,6 @@ namespace DamasChinas_Server.GameRepositories
             }
         }
 
-        // =========================================================
-        // HELPERS
-        // =========================================================
 
         private static void SaveChangesSafely(damas_chinasEntities db)
         {

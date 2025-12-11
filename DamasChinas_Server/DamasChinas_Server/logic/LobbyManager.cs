@@ -36,9 +36,7 @@ namespace DamasChinas_Server.Logic
 
         public static LobbyManager Instance => _instance.Value;
 
-        // =========================================================
-        //  SAFE CALLBACK INVOCATION
-        // =========================================================
+
         private static void SafeInvokeCallback(
             string context,
             string username,
@@ -61,9 +59,6 @@ namespace DamasChinas_Server.Logic
             }
         }
 
-        // =========================================================
-        //  CONSULTAS
-        // =========================================================
 
         public List<LobbySummaryDto> GetPublicLobbies()
         {
@@ -106,9 +101,6 @@ namespace DamasChinas_Server.Logic
             return new BanInfoDto { IsBanned = false, TotalReports = 0 };
         }
 
-        // =========================================================
-        //  ACCIONES LOBBY
-        // =========================================================
 
         public LobbySnapshotDto CreateLobby(string hostUsername, PublicProfile hostProfile, CreateLobbyRequest request, ILobbyCallback callback)
         {
@@ -167,7 +159,7 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-            // Si quedan jugadores, asignar nuevo host y notificar
+        
             if (wasHost)
             {
                 lobby.AssignNewHostIfNeeded();
@@ -204,7 +196,7 @@ namespace DamasChinas_Server.Logic
             lobby.EnsureCanStartGame(MinPlayersToStart);
             lobby.MarkGameStarted();
 
-            // ==== LOG VITAL PARA DEPURAR ====
+   
             var members = lobby.GetMembers().ToList();
             _log.Info($"[StartGame] Miembros detectados: {string.Join(", ", members.Select(m => m.Username))}");
 
@@ -214,12 +206,12 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.LobbyMinPlayersNotReached);
             }
 
-            // ==== CREAR PARTIDA ====
+      
             var playerUsernames = members.Select(m => m.Username).ToList();
             MatchManager.Instance.CreateMatchFromLobby(lobby.LobbyCode, playerUsernames);
             _log.Info($"[StartGame] Partida creada correctamente con jugadores: {string.Join(", ", playerUsernames)}");
 
-            // ==== NOTIFICAR CLIENTES ====
+       
             foreach (var member in members)
             {
                 SafeInvokeCallback("StartGame", member.Username, cb => cb.OnGameStarting());
@@ -227,9 +219,6 @@ namespace DamasChinas_Server.Logic
         }
 
 
-        // =========================================================
-        //  CHAT & SOCIAL
-        // =========================================================
 
         public void BroadcastMessage(int lobbyCode, string sender, string message)
         {
@@ -265,9 +254,6 @@ namespace DamasChinas_Server.Logic
             });
         }
 
-        // =========================================================
-        //  REPORTES & BANEOS
-        // =========================================================
 
         public void ReportPlayer(ReportPlayerRequest request)
         {
@@ -309,9 +295,7 @@ namespace DamasChinas_Server.Logic
             }
         }
 
-        // =========================================================
-        //  HELPERS PRIVADOS
-        // =========================================================
+
 
         private void BroadcastSnapshot(LobbyState lobby)
         {
@@ -411,9 +395,6 @@ namespace DamasChinas_Server.Logic
             };
         }
 
-        // =========================================================
-        //  CLASES INTERNAS (STATE)
-        // =========================================================
         private sealed class LobbyState
         {
             private readonly ConcurrentDictionary<string, LobbyMember> _members = new ConcurrentDictionary<string, LobbyMember>();

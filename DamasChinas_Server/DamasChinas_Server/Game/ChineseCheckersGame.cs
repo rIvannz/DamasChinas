@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using DamasChinas_Server.Common;
 
 namespace DamasChinas_Server.Game
 {
@@ -29,21 +30,19 @@ namespace DamasChinas_Server.Game
         {
             if (players == null)
             {
-                throw new ArgumentNullException(nameof(players));
+                throw new ArgumentNullException(nameof(players), MessageCode.UserValidationError.ToString());
             }
 
             var playerList = players.ToList();
             if (playerList.Count < MinimumPlayers || playerList.Count > MaximumPlayers)
             {
-                throw new ArgumentException(
-                    $"The match requires between {MinimumPlayers} and {MaximumPlayers} players.",
-                    nameof(players));
+                throw new ArgumentException(MessageCode.InvalidPlayerCount.ToString(), nameof(players));
             }
 
             _players = playerList.ToDictionary(player => player.Color);
             if (_players.Count != playerList.Count)
             {
-                throw new ArgumentException("Each player must have a unique color.", nameof(players));
+                throw new ArgumentException(MessageCode.PlayerColorDuplicate.ToString(), nameof(players));
             }
 
             Board = new ChineseCheckersBoard();
@@ -66,22 +65,22 @@ namespace DamasChinas_Server.Game
         {
             if (move == null)
             {
-                throw new ArgumentNullException(nameof(move));
+                throw new ArgumentNullException(nameof(move), MessageCode.UserValidationError.ToString());
             }
 
             if (Winner.HasValue)
             {
-                return MoveResult.Error("The match has already finished.");
+                return MoveResult.Error(MessageCode.MatchFinished.ToString());
             }
 
             if (!_players.ContainsKey(move.Player))
             {
-                return MoveResult.Error("The player is not part of this match.");
+                return MoveResult.Error(MessageCode.PlayerNotInMatch.ToString());
             }
 
             if (move.Player != CurrentTurn)
             {
-                return MoveResult.Error("It is not the player's turn.");
+                return MoveResult.Error(MessageCode.NotPlayersTurn.ToString());
             }
 
             if (!ValidateMove(move, out string errorMessage))
@@ -101,10 +100,6 @@ namespace DamasChinas_Server.Game
             return MoveResult.Success();
         }
 
-        
-
-
-
         public IReadOnlyDictionary<HexCoordinate, PlayerColor?> GetBoardState()
         {
             var snapshot = Board.Cells.ToDictionary(
@@ -118,7 +113,7 @@ namespace DamasChinas_Server.Game
         {
             if (!_targetZones.TryGetValue(player, out PlayerColor targetZone))
             {
-                throw new ArgumentException("The player does not have a configured target zone.", nameof(player));
+                throw new ArgumentException(MessageCode.PlayerTargetZoneMissing.ToString(), nameof(player));
             }
 
             return targetZone;
@@ -134,8 +129,6 @@ namespace DamasChinas_Server.Game
             return Board.GetZoneCells(targetZone)
                 .All(cell => cell.IsOccupied && cell.Piece.Color == player);
         }
-
-
 
         private static Dictionary<PlayerColor, PlayerColor> CreateTargetZones()
         {
@@ -160,8 +153,6 @@ namespace DamasChinas_Server.Game
                 }
             }
         }
-
-
 
         private bool ValidateMove(PlayerMove move, out string errorMessage)
         {
@@ -223,13 +214,13 @@ namespace DamasChinas_Server.Game
 
             if (!Board.TryGetCell(move.Origin, out originCell))
             {
-                errorMessage = "The origin cell does not exist on the board.";
+                errorMessage = MessageCode.OriginCellInvalid.ToString();
                 return false;
             }
 
             if (!originCell.IsOccupied || originCell.Piece.Color != move.Player)
             {
-                errorMessage = "The origin cell does not contain one of the player's pieces.";
+                errorMessage = MessageCode.OriginCellNotPlayersPiece.ToString();
                 return false;
             }
 
@@ -247,19 +238,19 @@ namespace DamasChinas_Server.Game
 
             if (!visited.Add(destination))
             {
-                errorMessage = "The path cannot visit the same cell twice.";
+                errorMessage = MessageCode.PathCellRepeated.ToString();
                 return false;
             }
 
             if (!Board.TryGetCell(destination, out destinationCell))
             {
-                errorMessage = "One of the destination cells is outside the board.";
+                errorMessage = MessageCode.DestinationOutsideBoard.ToString();
                 return false;
             }
 
             if (destinationCell.IsOccupied)
             {
-                errorMessage = "The path ends on an occupied cell.";
+                errorMessage = MessageCode.DestinationCellOccupied.ToString();
                 return false;
             }
 
@@ -281,7 +272,7 @@ namespace DamasChinas_Server.Game
 
             if (!isAdjacent && !isJump)
             {
-                errorMessage = "The move is neither an adjacent step nor a valid jump.";
+                errorMessage = MessageCode.InvalidStep.ToString();
                 return false;
             }
 
@@ -289,13 +280,13 @@ namespace DamasChinas_Server.Game
             {
                 if (move.Path.Count > SingleStepLength)
                 {
-                    errorMessage = "Multi-step moves must be performed exclusively through jumps.";
+                    errorMessage = MessageCode.MultistepRequiresJump.ToString();
                     return false;
                 }
 
                 if (index != move.Path.Count - LastIndexOffset)
                 {
-                    errorMessage = "Adjacent moves can only consist of a single step.";
+                    errorMessage = MessageCode.AdjacentMoveSingleStep.ToString();
                     return false;
                 }
             }
@@ -311,7 +302,7 @@ namespace DamasChinas_Server.Game
 
             if (!Board.TryGetCell(middle, out HexCell jumpCell) || !jumpCell.IsOccupied)
             {
-                errorMessage = "There is no piece to jump over in the intermediate cell.";
+                errorMessage = MessageCode.NoPieceToJump.ToString();
                 return false;
             }
 
@@ -327,39 +318,12 @@ namespace DamasChinas_Server.Game
 
             if (move.Path.Count > SingleStepLength && !performedJump)
             {
-                errorMessage = "Multi-step moves must contain at least one jump.";
+                errorMessage = MessageCode.MultistepMustHaveJump.ToString();
                 return false;
             }
 
             return true;
         }
-
-        public void RemovePlayer(PlayerColor color)
-        {
-            // 1. Quitar todas las piezas del jugador del tablero
-            foreach (var cell in Board.Cells.Where(c => c.IsOccupied && c.Piece.Color == color))
-            {
-                cell.RemovePiece();
-            }
-
-            // 2. Quitar del diccionario interno
-            _players.Remove(color);
-
-            // 3. Quitar del orden de turnos
-            _turnOrder.Remove(color);
-
-            // 4. Si no quedan jugadores, nada más que hacer
-            if (_turnOrder.Count == 0)
-                return;
-
-            // 5. Reajustar CurrentTurn si apuntaba al jugador desconectado
-            if (CurrentTurn == color)
-            {
-                CurrentTurn = _turnOrder[0]; // o siguiente
-            }
-        }
-
-
 
         private void ExecuteMove(PlayerMove move)
         {

@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Represents the outcome of attempting to apply a move within the game.
-    /// </summary>
+
     public class MoveResult
     {
         private MoveResult(bool succeeded, string errorMessage, PlayerColor? winner)

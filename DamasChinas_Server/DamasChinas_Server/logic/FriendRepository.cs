@@ -56,7 +56,7 @@ namespace DamasChinas_Server
         {
             if (FriendshipExists(db, idUserSender, idUserReciever))
             {
-                // Ya son amigos
+               
                 throw new RepositoryValidationException(MessageCode.AlreadyFriends);
             }
         }
@@ -93,7 +93,7 @@ namespace DamasChinas_Server
         {
             if (PendingRequestExists(db, idUserSender, idUserReciever))
             {
-                // Ya hay una solicitud pendiente
+              
                 throw new RepositoryValidationException(MessageCode.FriendRequestAlreadyPending);
             }
         }
@@ -289,17 +289,13 @@ namespace DamasChinas_Server
 
         public bool UpdateFriendRequestStatus(string receiverUsername, string senderUsername, bool accept)
         {
-            // receiver = quien debe aceptar la solicitud
-            // sender = quien originalmente la envió
+      
             var ids = GetUserIds(senderUsername, receiverUsername);
 
 
             using (var db = CréateDbContext())
             {
-                // VALIDACIÓN DIRECCIONAL CORRECTA
-                // Solo es válido si existe una solicitud:
-                // emisor = senderId
-                // receptor = receiverId
+            
                 bool exists = db.solicitudes_amistad.Any(s =>
                     s.id_emisor == ids.senderId &&
                     s.id_receptor == ids.receiverId &&
@@ -310,7 +306,7 @@ namespace DamasChinas_Server
                     throw new RepositoryValidationException(MessageCode.FriendsLoadError);
                 }
 
-                // Obtener la solicitud real
+         
                 var request = db.solicitudes_amistad
                     .FirstOrDefault(s =>
                         s.id_emisor == ids.senderId &&
@@ -322,15 +318,13 @@ namespace DamasChinas_Server
                     throw new RepositoryValidationException(MessageCode.FriendsLoadError);
                 }
 
-                // ============================
-                //     SI LA ACEPTA
-                // ============================
+        
                 if (accept)
                 {
-                    // No pueden ser amigos si alguien está bloqueado
+           
                     EnsureNotBlocked(db, ids.senderId, ids.receiverId);
 
-                    // Crear amistad si todavía no existe
+                 
                     if (!FriendshipExists(db, ids.senderId, ids.receiverId))
                     {
                         db.amistades.Add(new amistades
@@ -341,12 +335,11 @@ namespace DamasChinas_Server
                         });
                     }
 
-                    // Eliminar la solicitud
                     db.solicitudes_amistad.Remove(request);
                 }
                 else
                 {
-                    // Rechazada
+     
                     request.estado = "rechazada";
                     request.fecha_envio = DateTime.Now;
                 }
