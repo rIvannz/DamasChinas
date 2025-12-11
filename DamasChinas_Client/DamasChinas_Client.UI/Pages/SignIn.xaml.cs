@@ -213,7 +213,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 Name = txtFirstName.Text.Trim(),
                 LastName = txtLastName.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
+                Email = txtEmail.Text.Trim().ToLower(),
                 Username = txtUsername.Text.Trim(),
                 Password = Hasher.HashPassword(txtPassword.Password.Trim())
             };

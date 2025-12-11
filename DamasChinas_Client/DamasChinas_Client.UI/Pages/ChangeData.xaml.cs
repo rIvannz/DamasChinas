@@ -41,11 +41,22 @@ namespace DamasChinas_Client.UI.Pages
         {
             TryExecuteAction(() =>
             {
+                string email = ClientSession.CurrentProfile.Email.Trim().ToLower();
+                var client = new AccountManagerClient();
+
+                var result = client.RequestPasswordChangeCode(email);
+
+                if (!result.Success)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.VerificationCodeSendError, PopupType.Error);
+                    return;
+                }
+
                 MessageHelper.ShowPopup(MessageKeys.CodeSentSuccessfully, PopupType.Success);
             }, MessageKeys.VerificationCodeSendError);
         }
 
-   
+
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {
             TryExecuteAction(() =>
@@ -141,27 +152,48 @@ namespace DamasChinas_Client.UI.Pages
         {
             TryExecuteAction(() =>
             {
-                if (!ValidateVerificationCodeInput())
+                string email = ClientSession.CurrentProfile.Email.Trim().ToLower();
+                string code = txtVerificationCode.Text.Trim();
+                string newPass = txtPassword.Password.Trim();
+                string confirmPass = txtConfirmPassword.Password.Trim();
+
+                if (string.IsNullOrWhiteSpace(code))
                 {
+                    MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
                     return;
                 }
 
-                if (!ValidatePasswordInputs())
+                if (string.IsNullOrWhiteSpace(newPass) || string.IsNullOrWhiteSpace(confirmPass))
                 {
+                    MessageHelper.ShowPopup(MessageKeys.EmptyCredentials, PopupType.Warning);
                     return;
                 }
 
-                if (!ValidatePasswordStrength(txtPassword.Password))
+                if (newPass != confirmPass)
                 {
+                    MessageHelper.ShowPopup(MessageKeys.PasswordsDontMatch, PopupType.Warning);
                     return;
                 }
 
-                string hashedPassword = Hasher.HashPassword(txtPassword.Password.Trim());
+                Validator.ValidatePassword(newPass);
 
-                ChangePassword(hashedPassword);
+                string hashedPassword = Hasher.HashPassword(newPass);
+
+                var client = new AccountManagerClient();
+                var result = client.ConfirmPasswordChange(email, code, hashedPassword);
+
+                if (!result.Success)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.InvalidVerificationCode, PopupType.Warning);
+                    return;
+                }
+
+                MessageHelper.ShowPopup(MessageKeys.Success, PopupType.Success);
+                ClearPasswordInputs();
 
             }, MessageKeys.UnknownError);
         }
+
 
         private bool ValidateVerificationCodeInput()
         {

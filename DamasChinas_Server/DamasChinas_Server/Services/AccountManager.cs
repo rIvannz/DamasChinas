@@ -179,11 +179,11 @@ namespace DamasChinas_Server.Services
                 if (!string.Equals(storedCode, code, StringComparison.Ordinal))
                 {
                     return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
-          
+
                 }
 
                 RemoveStoredPasswordCode(email);
-                bool ok = _repository.ChangePassword(email, newPassword);
+                bool ok = _repository.ChangePasswordbyemail(email, newPassword);
 
                 if (!ok)
                 {

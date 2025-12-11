@@ -88,6 +88,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
+
                 string newPass = txtNewPassword.Password.Trim();
                 string confirmPass = txtConfirmPassword.Password.Trim();
 
@@ -104,13 +105,14 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 Validator.ValidatePassword(newPass);
+                string Password = Hasher.HashPassword(txtNewPassword.Password.Trim());
 
-                
+
                 var client = new AccountManagerClient();
                 var result = client.ConfirmPasswordChange(
                     txtEmail.Text.Trim().ToLower(),
                     _verificationCode,
-                    newPass
+                     Password
                 );
 
                 if (!result.Success)

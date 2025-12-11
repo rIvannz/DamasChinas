@@ -387,6 +387,84 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
         UserBlocked = 3202,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoPieceInOrigin = 4000,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DestinationCellOccupied = 4001,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CoordinateOutsideBoard = 4002,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MatchFinished = 4003,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotInMatch = 4004,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotPlayersTurn = 4005,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OriginCellInvalid = 4006,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OriginCellNotPlayersPiece = 4007,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PathCellRepeated = 4008,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DestinationOutsideBoard = 4009,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidStep = 4011,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MultistepRequiresJump = 4012,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AdjacentMoveSingleStep = 4013,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoPieceToJump = 4014,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MultistepMustHaveJump = 4015,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPlayerCount = 4016,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerColorDuplicate = 4017,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerTargetZoneMissing = 4018,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CellAlreadyOccupied = 4019,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CellHasNoPiece = 4020,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidCubeCoordinate = 4021,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidHalfCoordinate = 4022,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerIdRequired = 4023,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNameRequired = 4024,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RepositoryUsernameEmpty = 4027,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RepositoryUserNotFound = 4028,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,
     }
     

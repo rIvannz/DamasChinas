@@ -73,12 +73,27 @@ namespace DamasChinas_Server
             return ExecuteOperation(
                 () =>
                 {
+                    string normalizedEmail = email.Trim().ToLower();
+
+                    _log.Info($"[RequestVerificationCode] NORMALIZED EMAIL = '{normalizedEmail}'");
+
                     var code = GenerateCode();
 
                     lock (_codes)
-                        _codes[email] = (code, DateTime.UtcNow);
+                    {
+                        _codes[normalizedEmail] = (code, DateTime.UtcNow);
+                        _log.Info($"[RequestVerificationCode] STORED CODE = '{code}' for '{normalizedEmail}'");
+                    }
+
+                    _log.Info($"[RequestVerificationCode] SENDING EMAIL TO '{normalizedEmail}' CODE='{code}'");
 
                     EmailSender.SendVerificationEmail(email, code);
+                    _log.Info($"[RequestVerificationCode] RAW INPUT EMAIL = '{email}'");
+                    _log.Info($"[RequestVerificationCode] LENGTH={email.Length}");
+                    _log.Info($"[RequestVerificationCode] CHARS = " + string.Join(",", email.Select(c => (int)c)));
+
+
+                    _log.Info($"[RequestVerificationCode] EMAIL SENT OK to '{normalizedEmail}'");
 
                     return new OperationResult
                     {
@@ -88,9 +103,14 @@ namespace DamasChinas_Server
                     };
                 },
                 OperationRequestVerificationCode,
-                ex => OperationResult.Fail("Email sending failure.", MessageCode.VerificationCodeSendError)
+                ex =>
+                {
+                    _log.Error($"[RequestVerificationCode] ERROR sending email: {ex.Message}", ex);
+                    return OperationResult.Fail("Email sending failure.", MessageCode.VerificationCodeSendError);
+                }
             );
         }
+
 
         public OperationResult CreateUser(UserDto userDto, string code)
         {

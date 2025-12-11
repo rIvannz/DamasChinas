@@ -168,6 +168,26 @@ namespace DamasChinas_Server
             });
         }
 
+        public bool ChangePasswordbyemail (string email, string newPassword)
+        {
+            Validator.ValidatePassword(newPassword);
+
+            return ExecuteInContext(db =>
+            {
+                var usuario = db.usuarios
+                                .FirstOrDefault(u => u.correo.ToLower() == email.ToLower());
+
+                if (usuario == null)
+                {
+                    throw new RepositoryValidationException(MessageCode.UserNotFound);
+                }
+
+                usuario.password_hash = newPassword;
+                SaveChangesSafely(db);
+                return true;
+            });
+        }
+
         public int GetUserIdByUsername(string username)
         {
             Validator.ValidateUsername(username);
@@ -234,13 +254,21 @@ namespace DamasChinas_Server
                 correo = userDto.Email,
                 password_hash = userDto.Password,
                 rol = "cliente",
-                fecha_creacion = DateTime.UtcNow
+                fecha_creacion = DateTime.UtcNow,
+
+                numero_reportes = 0,
+                baneado_permanentemente = false,
+                esta_sancionado = false,
+
+                fecha_desbaneo = null
             };
 
             db.usuarios.Add(usuario);
             SaveChangesSafely(db);
             return usuario;
         }
+
+
 
         private static void CreatePerfil(IApplicationDbContext db, usuarios usuario, UserDto userDto)
         {
