@@ -3,7 +3,7 @@ using System;
 
 namespace DamasChinas_Server.Utilities
 {
-    internal static class EmailSender
+    public static class EmailSender
     {
         private static Email _emailService;
 

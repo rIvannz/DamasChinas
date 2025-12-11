@@ -6,7 +6,7 @@ using DamasChinas_Server.Dtos;
 
 namespace DamasChinas_Server.Utilities
 {
-    internal class Email
+    public class Email
     {
         private readonly IEmailSender _sender;
 

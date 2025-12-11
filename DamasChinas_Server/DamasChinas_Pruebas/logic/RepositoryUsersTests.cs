@@ -78,7 +78,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void ValidateCreateUser_NoConflicts_DoesNotThrow()
         {
-            // ARRANGE: listas vacías simulan BD sin usuarios
+            // ARRANGE: 
             var usuariosList = new List<usuarios>();
             var perfilesList = new List<perfiles>();
 
@@ -92,13 +92,12 @@ namespace DamasChinas_Pruebas.logic
             mockDb.Setup(db => db.Set<usuarios>()).Returns(mockUsuarios.Object);
             mockDb.Setup(db => db.Set<perfiles>()).Returns(mockPerfiles.Object);
 
-            // SaveChanges NO hace nada
             mockDb.Setup(db => db.SaveChanges()).Returns(1);
 
-            // Repository con contexto mockeado
+            
             var repo = new RepositoryUsers(() => mockDb.Object);
 
-            // DTO válido
+         
             var dto = new UserDto
             {
                 Email = "nuevo@test.com",
@@ -161,7 +160,7 @@ namespace DamasChinas_Pruebas.logic
             Assert.Equal("test@test.com", usuariosData[0].correo);
             Assert.Equal("Usuario", perfilesData[0].username);
 
-            Assert.Equal(10, result.id_usuario);   // ID simulado
+            Assert.Equal(10, result.id_usuario);   
         }
 
 
@@ -238,9 +237,7 @@ namespace DamasChinas_Pruebas.logic
             Assert.Equal(2, saveChangesCalls);  // User + Profile
         }
 
-        // ------------------------------------------------------------
-        // 4) CreateUser asigna correctamente correo y password
-        // ------------------------------------------------------------
+      
         [Fact]
         public void CreateUser_AssignsCorrectFields()
         {
@@ -276,9 +273,6 @@ namespace DamasChinas_Pruebas.logic
         }
 
 
-        // ================================================================
-        //  LOGIN TESTS
-        // ================================================================
 
         [Fact]
         public void Login_ValidCredentials_ReturnsPublicProfile()
@@ -375,6 +369,7 @@ namespace DamasChinas_Pruebas.logic
             };
 
             var mockDb = new Mock<IApplicationDbContext>();
+
             mockDb.Setup(db => db.usuarios)
                   .Returns(MockDbSetHelper.CreateMockSet(usuariosData).Object);
             mockDb.Setup(db => db.perfiles)
@@ -598,7 +593,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void ChangeUsername_CurrentUserNotFound_ThrowsUserProfileNotFound()
         {
-            var perfilesData = new List<perfiles>(); // No existe el username actual
+            var perfilesData = new List<perfiles>(); 
 
             var mockDb = new Mock<IApplicationDbContext>();
             mockDb.Setup(db => db.perfiles)
@@ -650,7 +645,7 @@ namespace DamasChinas_Pruebas.logic
         public void ChangePassword_UserNotFound_ThrowsUserNotFound()
         {
             var usuarios = new List<usuarios>();
-            var perfiles = new List<perfiles>(); // No matching username
+            var perfiles = new List<perfiles>(); 
 
             var mockDb = new Mock<IApplicationDbContext>();
             mockDb.Setup(db => db.usuarios).Returns(MockDbSetHelper.CreateMockSet(usuarios).Object);

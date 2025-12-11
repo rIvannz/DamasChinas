@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Server", "Damas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Shared", "..\DamasChinas_Shared\DamasChinas_Shared.csproj", "{8045C89F-F922-4E55-856F-D7F3F6409B57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Pruebas", "DamasChinas_Pruebas\DamasChinas_Pruebas.csproj", "{48BEABB1-B0FF-4483-B491-E654AAE2E0A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamasChinas_Tests", "DamasChinas_Pruebas\DamasChinas_Tests.csproj", "{48BEABB1-B0FF-4483-B491-E654AAE2E0A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

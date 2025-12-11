@@ -75,12 +75,13 @@ namespace DamasChinas_Server
             });
         }
 
+
         public PublicProfile GetPublicProfile(int idUsuario)
         {
             return ExecuteInContext(db =>
             {
                 var user = GetUserWithProfile(db, idUsuario);
-                return BuildPublicProfile(user);
+                return GetPublicProfile(idUsuario);
             });
         }
 

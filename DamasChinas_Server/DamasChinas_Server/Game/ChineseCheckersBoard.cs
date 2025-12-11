@@ -180,7 +180,7 @@ namespace DamasChinas_Server.Game
                 {
                     int z = -x - y;
 
-                    // Debe cumplir coordenadas cúbicas válidas
+                  
                     if (x + y + z != 0)
                     {
                         continue;
@@ -193,34 +193,27 @@ namespace DamasChinas_Server.Game
 
                     string zone;
 
-                    // ===============================
-                    // 1) HEXÁGONO CENTRAL (61 celdas)
-                    // ===============================
                     if (max <= centerRadius)
                     {
-                        zone = CenterZoneName; // "Center"
+                        zone = CenterZoneName; 
                     }
                     else
                     {
-                        // ===============================
-                        // 2) PUNTAS DE LA ESTRELLA (6x10)
-                        //    - Sólo aceptamos celdas que forman
-                        //      triángulos de altura = centerRadius
-                        // ===============================
+                    
+                     
                         int[] sorted = { ax, ay, az };
                         Array.Sort(sorted);
 
                         bool isArmCell =
                             max > centerRadius &&
                             max <= centerRadius * 2 &&
-                            sorted[1] <= centerRadius; // los otros dos <= 4
+                            sorted[1] <= centerRadius; 
 
                         if (!isArmCell)
                         {
                             continue;
                         }
 
-                        // Dominante único => define la dirección
                         if (az == max)
                         {
                             zone = (z > 0)
@@ -233,7 +226,7 @@ namespace DamasChinas_Server.Game
                                 ? PlayerColor.Blue.ToString()
                                 : PlayerColor.Yellow.ToString();
                         }
-                        else // ax == max
+                        else 
                         {
                             zone = (x > 0)
                                 ? PlayerColor.Orange.ToString()

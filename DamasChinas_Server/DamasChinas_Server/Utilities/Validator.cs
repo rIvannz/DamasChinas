@@ -5,7 +5,7 @@ using DamasChinas_Shared.Validation;
 
 namespace DamasChinas_Server.Utilidades
 {
-    internal static class Validator
+    public class Validator
     {
   
         private static string Normalize(string value)

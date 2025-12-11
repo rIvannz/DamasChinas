@@ -28,7 +28,7 @@ namespace DamasChinas_Server.Game
         {
             get
             {
-                // Reemplazo recomendado por SonarQube
+         
                 return _path[0];
             }
         }
@@ -37,7 +37,6 @@ namespace DamasChinas_Server.Game
         {
             get
             {
-                // Reemplazo recomendado por SonarQube
                 return _path[_path.Count - 1];
             }
         }

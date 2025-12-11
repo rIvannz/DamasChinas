@@ -54,7 +54,7 @@ namespace DamasChinas_Server
 
         private static void EnsureNotFriends(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
-            if (FriendshipExists(db, idUserSender, idUserReciever))
+            if (FriendshipExists(db,idUserReciever, idUserSender))
             {
 
                 throw new RepositoryValidationException(MessageCode.FriendsLoadError);
