@@ -352,7 +352,7 @@ and one special character (*, $, #).
     <sys:String x:Key="msg_LobbyClosed">The lobby has been closed by the host.</sys:String>
 
     <!-- Backend / servidor -->
-    <sys:String x:Key="msg_ServerUnavailable">Server unavailable, please try again later.</sys:String>
+    <sys:String x:Key="msg_ServerUnavailable">The server had an interruption, log in agains.</sys:String>
     <sys:String x:Key="msg_NetworkLatency">Network latency detected.</sys:String>
     <sys:String x:Key="msg_UnknownError">An unexpected error occurred. Please try again.</sys:String>
 

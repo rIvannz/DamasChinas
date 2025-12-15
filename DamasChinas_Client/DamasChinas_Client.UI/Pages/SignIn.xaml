@@ -77,12 +77,12 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="{DynamicResource firstName}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtFirstName" Width="200" Height="36"/>
+                    <TextBox x:Name="txtFirstName" MaxLength="24" Width="200" Height="36"/>
                 </StackPanel>
 
                 <StackPanel>
                     <TextBlock Text="{DynamicResource lastName}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtLastName" Width="200" Height="36"/>
+                    <TextBox x:Name="txtLastName" MaxLength="20" Width="200" Height="36"/>
                 </StackPanel>
             </StackPanel>
 
@@ -90,12 +90,12 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="{DynamicResource email}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtEmail" Width="200" Height="36"/>
+                    <TextBox x:Name="txtEmail" Width="200" MaxLength="12" Height="36"/>
                 </StackPanel>
 
                 <StackPanel>
                     <TextBlock Text="{DynamicResource username}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtUsername" Width="200" Height="36"/>
+                    <TextBox x:Name="txtUsername" MaxLength="12" Width="200" Height="36"/>
                 </StackPanel>
             </StackPanel>
 
@@ -103,16 +103,15 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtPassword" Width="200" Height="36"/>
+                    <PasswordBox x:Name="txtPassword" MaxLength="12" Width="200" Height="36"/>
                 </StackPanel>
 
                 <StackPanel>
                     <TextBlock Text="{DynamicResource confirmPassword}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtConfirmPassword" Width="200" Height="36"/>
+                    <PasswordBox x:Name="txtConfirmPassword" MaxLength="12" Width="200" Height="36"/>
                 </StackPanel>
             </StackPanel>
 
-            <!-- ===== TEXTO NUEVO: Reglas de contraseña ===== -->
             <TextBlock Text="{DynamicResource passwordRules}"
                        Foreground="White"
                        FontSize="14"
@@ -122,7 +121,6 @@
                        TextAlignment="Center"
                        Width="440"/>
 
-            <!-- ===== Botón Crear cuenta ===== -->
             <Button Style="{DynamicResource BaseGameButton}"
                     Content="{DynamicResource createAccount}"
                     Width="220" Height="54"
@@ -136,7 +134,6 @@
                                  HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <!-- ===== Iconos inferiores derechos ===== -->
         <Grid VerticalAlignment="Bottom"
               HorizontalAlignment="Right"
               Margin="20"

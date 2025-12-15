@@ -382,6 +382,34 @@ namespace DamasChinas_Server
             {
                 return operation(db);
             }
+
+
         }
+
+        public string GetEmailByUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new RepositoryValidationException(MessageCode.UsernameEmpty);
+            }
+
+            return ExecuteInContext(db =>
+            {
+                var result = (from u in db.usuarios
+                              join p in db.perfiles on u.id_usuario equals p.id_usuario
+                              where p.username.Equals(username, StringComparison.OrdinalIgnoreCase)
+                              select u.correo)
+                             .FirstOrDefault();
+
+                if (result == null)
+                {
+                    throw new RepositoryValidationException(MessageCode.UserNotFound);
+                }
+
+                return result;
+            });
+        }
+
     }
+
 }

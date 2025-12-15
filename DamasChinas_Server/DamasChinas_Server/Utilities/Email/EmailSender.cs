@@ -19,14 +19,65 @@ namespace DamasChinas_Server.Utilities
                      .GetAwaiter()
                      .GetResult();
 
-                System.Diagnostics.Debug.WriteLine($"[TRACE] Verification email sent to: {email}");
+                System.Diagnostics.Debug.WriteLine($"[TRACE] Verification email sent");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(
-                    $"[ERROR] Failed to send verification email to {email}: {ex.Message}");
+                    $"[ERROR] Failed to send verification email");
                 throw;
             }
+        }
+
+        public static void SendInvitationEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode)
+        {
+            try
+            {
+                string subject = Email.InvitationSubjectValue;
+                string body = string.Format(
+                    Email.InvitationBodyValue,
+                    friendUsername,
+                    hostUsername,
+                    lobbyCode
+                );
+
+                Email.SendAsync(friendEmail, subject, body, html: true)
+                     .GetAwaiter()
+                     .GetResult();
+
+                System.Diagnostics.Debug.WriteLine("[TRACE] Lobby invitation email sent");
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("[ERROR] Failed to send lobby invitation email");
+                throw;
+            }
+
+        }
+        public static void SendInvitationGameEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode)
+        {
+            try
+            {
+                string subject = Email.InvitationSubjectValue;
+                string body = string.Format(
+                    Email.InvitationBodyValue,
+                    friendUsername,
+                    hostUsername,
+                    lobbyCode
+                );
+
+                Email.SendAsync(friendEmail, subject, body, html: true)
+                     .GetAwaiter()
+                     .GetResult();
+
+                System.Diagnostics.Debug.WriteLine("[TRACE] Lobby invitation email sent");
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("[ERROR] Failed to send lobby invitation email");
+                throw;
+            }
+
         }
     }
 }

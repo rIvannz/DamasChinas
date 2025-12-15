@@ -143,6 +143,7 @@
                 <Grid>
                     <TextBox x:Name="txtLobbyCode"
                              VerticalContentAlignment="Center"
+                             MaxLength="12"
                              FontSize="14"
                              Padding="8,2"
                              Background="White"

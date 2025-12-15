@@ -157,6 +157,7 @@
 
                             <TextBox x:Name="txtUsername"
                                      Width="420" Height="38"
+                                     MaxLength="12" 
                                      Background="White"
                                      Foreground="Black"
                                      BorderBrush="#CCCCCC"
@@ -189,6 +190,7 @@
 
                             <TextBox x:Name="txtSocialUrl"
                                      Width="420" Height="38"
+                                     MaxLength="12" 
                                      Background="White"
                                      Foreground="Black"
                                      BorderBrush="#CCCCCC"
@@ -230,6 +232,7 @@
                         <TextBlock Text="{DynamicResource codePassword}" Foreground="White" FontSize="15"/>
                         <TextBox x:Name="txtVerificationCode"
                                  Width="420" Height="38"
+                                 MaxLength="5"
                                  Background="White"
                                  Foreground="Black"
                                  BorderBrush="#CCCCCC"
@@ -246,6 +249,7 @@
                                 <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="15"/>
                                 <PasswordBox x:Name="txtPassword"
                                              Width="200" Height="38"
+                                             MaxLength="12" 
                                              Background="White"
                                              Foreground="Black"
                                              BorderBrush="#CCCCCC"
@@ -257,6 +261,7 @@
                                 <PasswordBox x:Name="txtConfirmPassword"
                                              Width="200" Height="38"
                                              Background="White"
+                                             MaxLength="12"
                                              Foreground="Black"
                                              BorderBrush="#CCCCCC"
                                              BorderThickness="1"/>

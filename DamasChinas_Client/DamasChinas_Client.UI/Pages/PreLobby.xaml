@@ -211,9 +211,10 @@
                                      BorderBrush="#444"
                                      Padding="5,2"
                                      TextChanged="OnChatTextChanged"/>
-                            <TextBlock x:Name="txtChatPlaceholder"
+                            <TextBox x:Name="txtChatPlaceholder"
                                        Text="{DynamicResource chatPlaceholder}"
                                        Foreground="#888"
+                                       MaxLength="12" 
                                        Margin="8,2,0,0"
                                        IsHitTestVisible="False"
                                        VerticalAlignment="Center"

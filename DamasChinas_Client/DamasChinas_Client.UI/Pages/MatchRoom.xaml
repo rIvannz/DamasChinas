@@ -106,7 +106,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="txtChatInput" Height="40" FontSize="14" Padding="5" VerticalContentAlignment="Center" BorderBrush="#444" Background="#EEE"/>
+                    <TextBox x:Name="txtChatInput" Height="40" MaxLength="50"  FontSize="14" Padding="5" VerticalContentAlignment="Center" BorderBrush="#444" Background="#EEE"/>
                     <Button Grid.Column="1" Content="{DynamicResource send}" Style="{DynamicResource BaseGameButton}" Width="70" Height="40" FontSize="12" Margin="10,0,0,0" Padding="0" Click="OnSendMessageClick"/>
                 </Grid>
 

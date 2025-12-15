@@ -19,9 +19,15 @@ namespace DamasChinas_Server.Utilidades
         private static string VerificationBody;
         private static string WelcomeSubject;
         private static string WelcomeBodyTemplate;
+        private static string InvitationSubject;
+        private static string InvitationBody;
+
 
         public static string VerificationSubjectValue => VerificationSubject;
         public static string VerificationBodyValue => VerificationBody;
+        public static string InvitationSubjectValue => InvitationSubject;
+        public static string InvitationBodyValue => InvitationBody;
+
 
         static Email()
         {

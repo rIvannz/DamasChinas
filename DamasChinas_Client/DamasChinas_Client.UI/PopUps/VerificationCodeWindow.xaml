@@ -54,6 +54,7 @@
 
                     <TextBox x:Name="txtVerificationCode"
                              Width="200"
+                             MaxLength="12"
                              Height="35"
                              FontSize="18"
                              MaxLength="6"

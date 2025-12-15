@@ -9,3 +9,8 @@ WelcomeBodyTemplate=Hola {0},<br><br>Tu usuario es <b>{1}</b>.<br>Ya puedes inic
 
 VerificationSubject=Código de verificación
 VerificationBody=Tu código de verificación es: <b>{0}</b><br>Este código expirará en 5 minutos.
+
+
+InvitationSubject=Invitación a lobby de Damas Chinas
+InvitationBody=Hola {0},<br><br>{1} te ha invitado a unirte a un lobby de Damas Chinas.<br><br><b>Código del lobby:</b> {2}<br><br>Abre el juego e ingresa el código para unirte.<br><br>¡Te esperamos!<br><br>Equipo Damas Chinas
+

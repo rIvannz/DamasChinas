@@ -1,12 +1,13 @@
-﻿using System;
+﻿using DamasChinas_Server.Common;
+using DamasChinas_Server.Dtos;
+using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Services;
+using DamasChinas_Server.Utilities;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using DamasChinas_Server.Common;
-using DamasChinas_Server.Dtos;
-using DamasChinas_Server.Interfaces;
-using DamasChinas_Server.Services;
 
 namespace DamasChinas_Server.Logic
 {
@@ -232,8 +233,11 @@ namespace DamasChinas_Server.Logic
                 lobby.BroadcastMessage(sender, message);
             }
         }
-
-        public void InviteFriend(string hostUsername, string friendUsername, int lobbyCode, Func<string, ILobbyCallback> callbackResolver)
+        public void InviteFriend(
+        string hostUsername,
+        string friendUsername,
+        int lobbyCode,
+        Func<string, ILobbyCallback> callbackResolver)
         {
             var lobby = GetLobbyByCode(lobbyCode);
             lobby.EnsureHost(hostUsername);
@@ -243,7 +247,8 @@ namespace DamasChinas_Server.Logic
 
             if (callback == null)
             {
-                throw new RepositoryValidationException(MessageCode.LobbyInvitationTargetNotOnline);
+                throw new RepositoryValidationException(
+                    MessageCode.LobbyInvitationTargetNotOnline);
             }
 
             callback.OnInvitationReceived(new LobbyInvitationDto
@@ -252,7 +257,28 @@ namespace DamasChinas_Server.Logic
                 HostUsername = hostUsername,
                 MaxPlayers = lobby.MaxPlayers
             });
+
+            SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
         }
+
+        private void SendLobbyInvitationEmail(
+        string hostUsername,
+        string friendUsername,
+        int lobbyCode)
+        {
+            var usersRepo = new RepositoryUsers();
+
+            string friendEmail = usersRepo.GetEmailByUsername(friendUsername);
+
+            EmailSender.SendInvitationGameEmail(
+                friendEmail,
+                friendUsername,
+                hostUsername,
+                lobbyCode
+            );
+        }
+
+
 
 
         public void ReportPlayer(ReportPlayerRequest request)
