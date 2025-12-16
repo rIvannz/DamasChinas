@@ -90,12 +90,12 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="{DynamicResource email}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtEmail" Width="200" MaxLength="12" Height="36"/>
+                    <TextBox x:Name="txtEmail" Width="200" MaxLength="40" Height="36"/>
                 </StackPanel>
 
                 <StackPanel>
                     <TextBlock Text="{DynamicResource username}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtUsername" MaxLength="12" Width="200" Height="36"/>
+                    <TextBox x:Name="txtUsername" MaxLength="15" Width="200" Height="36"/>
                 </StackPanel>
             </StackPanel>
 
@@ -103,12 +103,12 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,10,0">
                     <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtPassword" MaxLength="12" Width="200" Height="36"/>
+                    <PasswordBox x:Name="txtPassword" MaxLength="20" Width="200" Height="36"/>
                 </StackPanel>
 
                 <StackPanel>
                     <TextBlock Text="{DynamicResource confirmPassword}" Foreground="White" FontSize="16" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtConfirmPassword" MaxLength="12" Width="200" Height="36"/>
+                    <PasswordBox x:Name="txtConfirmPassword" MaxLength="20" Width="200" Height="36"/>
                 </StackPanel>
             </StackPanel>
 
