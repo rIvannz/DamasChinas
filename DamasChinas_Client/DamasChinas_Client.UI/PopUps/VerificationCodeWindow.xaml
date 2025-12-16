@@ -43,18 +43,17 @@
                             Orientation="Vertical"
                             HorizontalAlignment="Center">
 
-                    <TextBlock
+                    <TextBlock Text="{DynamicResource verificationCodeInstruction}"
                                Foreground="White"
                                FontSize="16"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
                                Width="320"
                                HorizontalAlignment="Center"
-                               Margin="0 0 0 10"><Run Text="Enter the code sent to your email"/><Run Language="es-mx" Text="aa"/><Run Text=" registration."/></TextBlock>
+                               Margin="0 0 0 10"/>
 
                     <TextBox x:Name="txtVerificationCode"
                              Width="200"
-                             MaxLength="12"
                              Height="35"
                              FontSize="18"
                              MaxLength="6"
@@ -64,7 +63,8 @@
                              Foreground="White"
                              BorderBrush="{DynamicResource MarbleYellowBrush}"
                              BorderThickness="2"
-                             Margin="0 0 0 10"/>
+                             Margin="0 0 0 10"
+                             ToolTip="{DynamicResource codeHint}"/>
                 </StackPanel>
 
                 <!-- Botones -->
