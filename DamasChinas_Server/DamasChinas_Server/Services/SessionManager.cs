@@ -19,9 +19,8 @@ namespace DamasChinas_Server.Services
         private const string OperationUpdateSessionUsername = nameof(UpdateSessionUsername);
         private const string OperationForEachSession = nameof(ForEachSession);
 
-        // ============================================================
-        // AGREGAR SESIÓN
-        // ============================================================
+ 
+
         public static void AddSession(string username, ISessionCallback callback)
         {
             ExecuteOperation(() =>
@@ -31,9 +30,7 @@ namespace DamasChinas_Server.Services
             }, OperationAddSession);
         }
 
-        // ============================================================
-        // REMOVER SESIÓN
-        // ============================================================
+
         public static void RemoveSession(string nickname)
         {
             ExecuteOperation(() =>
@@ -43,9 +40,6 @@ namespace DamasChinas_Server.Services
             }, OperationRemoveSession);
         }
 
-        // ============================================================
-        // OBTENER SESIÓN
-        // ============================================================
         public static ISessionCallback GetSession(string nickname)
         {
             return ExecuteOperation(
@@ -60,9 +54,6 @@ namespace DamasChinas_Server.Services
             );
         }
 
-        // ============================================================
-        // DETERMINAR SI UN USUARIO ESTÁ ONLINE
-        // ============================================================
         public static bool IsOnline(string nickname)
         {
             return ExecuteOperation(
@@ -89,15 +80,12 @@ namespace DamasChinas_Server.Services
                     catch (Exception ex)
                     {
                         _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
-                        ActiveSessions.TryRemove(entry.Key, out _); // 🔥 Limpieza automática
+                        ActiveSessions.TryRemove(entry.Key, out _); 
                     }
                 }
             }, OperationForEachSession);
         }
 
-        // ============================================================
-        // ACTUALIZAR USERNAME DE SESIÓN
-        // ============================================================
         public static void UpdateSessionUsername(string currentUsername, string newUsername)
         {
             ExecuteOperation(() =>
@@ -117,9 +105,7 @@ namespace DamasChinas_Server.Services
             }, OperationUpdateSessionUsername);
         }
 
-        // ============================================================
-        // ITERAR SOBRE TODAS LAS SESIONES (CON USERNAME)
-        // ============================================================
+ 
         public static void ForEachSession(Action<string, ISessionCallback> action)
         {
             if (action == null)
@@ -136,9 +122,7 @@ namespace DamasChinas_Server.Services
             }, OperationForEachSession);
         }
 
-        // ============================================================
-        // WRAPPERS ESTÁNDAR
-        // ============================================================
+
         private static void ExecuteOperation(Action action, string context)
         {
             try

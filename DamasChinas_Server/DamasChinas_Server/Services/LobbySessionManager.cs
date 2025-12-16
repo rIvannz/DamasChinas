@@ -12,9 +12,7 @@ namespace DamasChinas_Server.Services
 
         private static readonly ILogService _log = LogFactory.Create(typeof(LobbySessionManager));
 
-        // =========================================================
-        //  REGISTRAR CALLBACK (LOGIN / CREATE / JOIN)
-        // =========================================================
+
         public static void Add(string username, ILobbyCallback callback)
         {
             if (string.IsNullOrWhiteSpace(username) || callback == null)
@@ -24,9 +22,6 @@ namespace DamasChinas_Server.Services
             _log.Info($"[LobbySessionManager] Callback agregado: {username}");
         }
 
-        // =========================================================
-        //  REMOVER CALLBACK (LEAVE / DISCONNECT)
-        // =========================================================
         public static void Remove(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
@@ -36,9 +31,6 @@ namespace DamasChinas_Server.Services
             _log.Info($"[LobbySessionManager] Callback removido: {username}");
         }
 
-        // =========================================================
-        //  OBTENER CALLBACK PARA SNAPSHOTS / INVITACIONES
-        // =========================================================
         public static ILobbyCallback Get(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
@@ -48,9 +40,6 @@ namespace DamasChinas_Server.Services
             return callback;
         }
 
-        // =========================================================
-        //  CHECK ONLINE
-        // =========================================================
         public static bool IsOnline(string username)
         {
             return _activeLobbySessions.ContainsKey(username);

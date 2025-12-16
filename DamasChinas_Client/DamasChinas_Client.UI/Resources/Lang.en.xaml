@@ -30,6 +30,57 @@ including one uppercase letter, one number,
 and one special character (*, $, #).
     </sys:String>
 
+    <!-- HOW TO PLAY -->
+    <sys:String x:Key="howToPlayTitle">How to Play Chinese Checkers</sys:String>
+
+    <sys:String x:Key="howToPlayIntroTitle">Introduction</sys:String>
+    <sys:String x:Key="howToPlayIntroText">
+        Chinese Checkers is a classic strategy board game focused on planning, positioning, and long-term movement.
+In this tutorial, you will learn the basic rules, objectives, and mechanics needed to play a complete match.
+    </sys:String>
+
+
+    <sys:String x:Key="howToPlayObjectiveTitle">Objective of the Game</sys:String>
+    <sys:String x:Key="howToPlayObjectiveText">
+        The goal is to be the first player to move all your pieces into the opposite corner of the board.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayPlayersTitle">Players</sys:String>
+    <sys:String x:Key="howToPlayPlayersText">
+        The game supports 2, 4, or 6 players. Each player controls a set of pieces with a unique color.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayBoardTitle">Board Setup</sys:String>
+    <sys:String x:Key="howToPlayBoardText">
+        Each player starts with all their pieces placed in one triangle of the star-shaped board.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayMovesTitle">How to Move</sys:String>
+    <sys:String x:Key="howToPlayMovesText">
+        On your turn, you may move one piece either to an adjacent empty space or by jumping over other pieces.
+Multiple jumps are allowed in a single turn.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayTurnsTitle">Turns</sys:String>
+    <sys:String x:Key="howToPlayTurnsText">
+        Players take turns in clockwise order. Only one piece may be moved per turn.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayWinTitle">Winning the Game</sys:String>
+    <sys:String x:Key="howToPlayWinText">
+        You win when all of your pieces occupy the target triangle on the opposite side of the board.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayRulesTitle">Important Rules</sys:String>
+    <sys:String x:Key="howToPlayRulesText">
+        You may jump over your own pieces or your opponents'. Pieces are never removed from the board.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayTipsTitle">Tips for Beginners</sys:String>
+    <sys:String x:Key="howToPlayTipsText">
+        Plan ahead, create long jump chains, and avoid blocking your own pieces.
+    </sys:String>
+
 
 
 

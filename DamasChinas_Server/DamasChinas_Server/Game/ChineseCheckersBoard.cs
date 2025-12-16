@@ -199,11 +199,7 @@ namespace DamasChinas_Server.Game
                     }
                     else
                     {
-                        // ===============================
-                        // 2) PUNTAS DE LA ESTRELLA (6x10)
-                        //    - Sólo aceptamos celdas que forman
-                        //      triángulos de altura = centerRadius
-                        // ===============================
+               
                         int[] sorted = { ax, ay, az };
                         Array.Sort(sorted);
 
@@ -217,7 +213,6 @@ namespace DamasChinas_Server.Game
                             continue;
                         }
 
-                        // Dominante único => define la dirección
                         if (az == max)
                         {
                             zone = (z > 0)

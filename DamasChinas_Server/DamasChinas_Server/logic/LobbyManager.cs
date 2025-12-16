@@ -38,10 +38,7 @@ namespace DamasChinas_Server.Logic
         public static LobbyManager Instance => _instance.Value;
 
 
-        private static void SafeInvokeCallback(
-            string context,
-            string username,
-            Action<ILobbyCallback> action)
+        private static void SafeInvokeCallback(string context,string username,Action<ILobbyCallback> action)
         {
             ILobbyCallback callback = LobbySessionManager.Get(username);
 
@@ -56,9 +53,48 @@ namespace DamasChinas_Server.Logic
             }
             catch (Exception ex)
             {
-                _log.Warn($"[{context}] Callback failed for user={username}. Error: {ex.Message}");
+                _log.Warn(
+                    $"[{context}] Callback FAILED → user disconnected: {username}. Error: {ex.Message}");
+
+                LobbySessionManager.Remove(username);
+
+             
+                LobbyManager.Instance.HandleUnexpectedDisconnect(username);
             }
         }
+
+        public void HandleUnexpectedDisconnect(string username)
+        {
+            var lobby = FindLobbyByUser(username);
+            if (lobby == null)
+                return;
+
+            bool wasHost = lobby.IsHost(username);
+
+            lobby.RemoveMember(username);
+
+            _log.Warn($"[LobbyManager] User disconnected unexpectedly: {username}");
+
+       
+            lobby.BroadcastMessage(
+                "Server",
+                $"{username} has been disconnected.");
+
+          
+            if (lobby.IsEmpty || wasHost)
+            {
+                CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
+                return;
+            }
+
+            if (wasHost)
+            {
+                lobby.AssignNewHostIfNeeded();
+            }
+
+            BroadcastSnapshot(lobby);
+        }
+
 
 
         public List<LobbySummaryDto> GetPublicLobbies()
@@ -194,30 +230,48 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.LobbyNotFound);
 
             lobby.EnsureHost(hostUsername);
-            lobby.EnsureCanStartGame(MinPlayersToStart);
-            lobby.MarkGameStarted();
 
-   
-            var members = lobby.GetMembers().ToList();
-            _log.Info($"[StartGame] Miembros detectados: {string.Join(", ", members.Select(m => m.Username))}");
+            
+            var members = lobby.GetMembers()
+                .Where(m => LobbySessionManager.IsOnline(m.Username))
+                .ToList();
 
-            if (members.Count < 2)
+            _log.Info($"[StartGame] Miembros ONLINE detectados: {string.Join(", ", members.Select(m => m.Username))}");
+
+          
+            if (members.Count < MinPlayersToStart ||
+                (members.Count != 2 && members.Count != 4 && members.Count != 6))
             {
-                _log.Error("[StartGame] ERROR: La partida NO puede iniciarse, miembros insuficientes.");
+                _log.Warn(
+                    $"[StartGame] Partida NO iniciada. Jugadores online: {members.Count}");
+
                 throw new RepositoryValidationException(MessageCode.LobbyMinPlayersNotReached);
             }
 
-      
-            var playerUsernames = members.Select(m => m.Username).ToList();
-            MatchManager.Instance.CreateMatchFromLobby(lobby.LobbyCode, playerUsernames);
-            _log.Info($"[StartGame] Partida creada correctamente con jugadores: {string.Join(", ", playerUsernames)}");
+          
+            lobby.MarkGameStarted();
 
-       
+            var playerUsernames = members
+                .Select(m => m.Username)
+                .ToList();
+
+            MatchManager.Instance.CreateMatchFromLobby(
+                lobby.LobbyCode,
+                playerUsernames);
+
+            _log.Info(
+                $"[StartGame] Partida creada correctamente con jugadores: {string.Join(", ", playerUsernames)}");
+
+            
             foreach (var member in members)
             {
-                SafeInvokeCallback("StartGame", member.Username, cb => cb.OnGameStarting());
+                SafeInvokeCallback(
+                    "StartGame",
+                    member.Username,
+                    cb => cb.OnGameStarting());
             }
         }
+
 
 
 

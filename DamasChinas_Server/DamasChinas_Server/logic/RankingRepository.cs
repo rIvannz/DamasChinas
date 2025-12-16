@@ -25,11 +25,7 @@ namespace DamasChinas_Server.Repositories
             return _dbFactory();
         }
 
-        /// <summary>
-        /// Obtiene el top 10 de jugadores ordenado por número de victorias
-        /// y, en caso de empate, por partidas jugadas.
-        /// </summary>
-        /// <returns>Lista de entradas de ranking.</returns>
+    
         public List<RankingEntry> GetTop10Players()
         {
             using (var db = CreateDbContext())

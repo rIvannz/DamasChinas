@@ -31,9 +31,7 @@ namespace DamasChinas_Server.Logic
             _repoMatches = new RepositoryMatches();
         }
 
-        // ================================================
-        // CREAR MATCH
-        // ================================================
+
         public void CreateMatchFromLobby(int lobbyCode, List<string> players)
         {
             if (_matches.ContainsKey(lobbyCode))
@@ -72,14 +70,12 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-                    // Ignoramos fallas individuales de callback
+                    
                 }
             }
         }
 
-        // ================================================
-        // REGISTRO DE SESIÓN
-        // ================================================
+   
         public void RegisterPlayerSession(int lobbyCode, string username, IMatchCallback callback)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
@@ -95,9 +91,7 @@ namespace DamasChinas_Server.Logic
             match.Callbacks[username] = callback;
         }
 
-        // ================================================
-        // APLICAR MOVIMIENTO
-        // ================================================
+  
         public void ApplyMove(MoveRequestDto req)
         {
             if (!_matches.TryGetValue(req.LobbyCode, out var match))
@@ -121,9 +115,7 @@ namespace DamasChinas_Server.Logic
 
             BroadcastMove(req.LobbyCode, req.Username, match, origin, dest);
 
-            // ================================================
-            // FIN DE PARTIDA
-            // ================================================
+      
             if (result.Winner.HasValue)
             {
                 string winner = match.UserColorMap
@@ -149,12 +141,10 @@ namespace DamasChinas_Server.Logic
             }
         }
 
-        // ================================================
-        // SALIDA DE JUGADOR / DESCONEXIÓN
-        // ================================================
+
         public void HandlePlayerDisconnect(int lobbyCode, string username)
         {
-            // Wrapper para centralizar la lógica de salida
+           
             RemovePlayer(lobbyCode, username);
         }
 
@@ -274,7 +264,7 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-                    // Ignoramos errores individuales
+               
                 }
             }
         }
@@ -289,14 +279,11 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-                    // Ignoramos errores individuales
+              
                 }
             }
         }
 
-        // ================================================
-        // CLASE INTERNA
-        // ================================================
         private class ActiveMatch
         {
             public ChineseCheckersGame Game { get; }

@@ -17,9 +17,6 @@ namespace DamasChinas_Server.Services
             return username?.Trim().ToLowerInvariant();
         }
 
-        // ============================================================
-        // ADD CALLBACK
-        // ============================================================
         public static void Add(string username, IFriendCallback callback)
         {
             string key = Normalize(username);
@@ -37,9 +34,7 @@ namespace DamasChinas_Server.Services
             }
         }
 
-        // ============================================================
-        // REMOVE
-        // ============================================================
+     
         public static void Remove(string username)
         {
             string key = Normalize(username);
@@ -57,9 +52,6 @@ namespace DamasChinas_Server.Services
             }
         }
 
-        // ============================================================
-        // GET
-        // ============================================================
         public static IFriendCallback Get(string username)
         {
             string key = Normalize(username);
@@ -78,9 +70,8 @@ namespace DamasChinas_Server.Services
             }
         }
 
-        // ============================================================
-        // NOTIFICATIONS
-        // ============================================================
+    
+
         public static void NotifyFriendRemoved(string targetUsername, string removedFriendUsername)
         {
             string key = Normalize(targetUsername);
@@ -141,7 +132,6 @@ namespace DamasChinas_Server.Services
                 callback.FriendRequestAccepted(username);
         }
 
-        // ========================== FIX DEFINITIVO ==========================
         public static void NotifyFriendListUpdated(string username)
         {
             string key = Normalize(username);

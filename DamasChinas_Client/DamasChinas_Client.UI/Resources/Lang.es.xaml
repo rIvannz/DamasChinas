@@ -26,7 +26,58 @@
 incluir una letra mayúscula, un número 
 y un carácter especial (*, $, #).
     </sys:String>
- 
+
+
+    <!-- HOW TO PLAY -->
+    <sys:String x:Key="howToPlayTitle">Cómo jugar Damas Chinas</sys:String>
+
+    <sys:String x:Key="howToPlayIntroTitle">Introducción</sys:String>
+    <sys:String x:Key="howToPlayIntroText">
+        Damas Chinas es un juego de mesa clásico de estrategia que se centra en la planificación, la posición y el movimiento a largo plazo.
+En este tutorial aprenderás las reglas básicas, los objetivos y las mecánicas necesarias para jugar una partida completa.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayObjectiveTitle">Objetivo del Juego</sys:String>
+    <sys:String x:Key="howToPlayObjectiveText">
+        El objetivo es ser el primer jugador en mover todas sus piezas al vértice opuesto del tablero.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayPlayersTitle">Jugadores</sys:String>
+    <sys:String x:Key="howToPlayPlayersText">
+        El juego admite 2, 4 o 6 jugadores. Cada jugador controla piezas de un color distinto.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayBoardTitle">Preparación del Tablero</sys:String>
+    <sys:String x:Key="howToPlayBoardText">
+        Cada jugador comienza con todas sus piezas colocadas en uno de los triángulos del tablero en forma de estrella.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayMovesTitle">Cómo Mover las Piezas</sys:String>
+    <sys:String x:Key="howToPlayMovesText">
+        En tu turno puedes mover una pieza a una casilla adyacente vacía o saltar sobre otras piezas.
+Se permiten múltiples saltos en un solo turno.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayTurnsTitle">Turnos</sys:String>
+    <sys:String x:Key="howToPlayTurnsText">
+        Los jugadores juegan por turnos en sentido horario. Solo se puede mover una pieza por turno.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayWinTitle">Cómo Ganar</sys:String>
+    <sys:String x:Key="howToPlayWinText">
+        Ganas cuando todas tus piezas ocupan el triángulo objetivo en el lado opuesto del tablero.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayRulesTitle">Reglas Importantes</sys:String>
+    <sys:String x:Key="howToPlayRulesText">
+        Puedes saltar sobre tus propias piezas o las de tus oponentes. Ninguna pieza se elimina del tablero.
+    </sys:String>
+
+    <sys:String x:Key="howToPlayTipsTitle">Consejos para Principiantes</sys:String>
+    <sys:String x:Key="howToPlayTipsText">
+        Planea con anticipación, crea cadenas largas de saltos y evita bloquear tus propias piezas.
+    </sys:String>
+
 
 
     <!-- ========================================================= -->

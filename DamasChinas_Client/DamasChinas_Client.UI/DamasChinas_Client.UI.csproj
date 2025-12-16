@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>iconPrincipal.ico</ApplicationIcon>
+  </PropertyGroup>
   <!-- Referencias base del framework -->
   <ItemGroup>
     <Reference Include="DamasChinas_Client.Logic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
@@ -129,6 +132,9 @@
     </Compile>
     <Compile Include="Pages\ForgotPassword.xaml.cs">
       <DependentUpon>ForgotPassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\HowToPlay.xaml.cs">
+      <DependentUpon>HowToPlay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\JoinParty.xaml.cs">
       <DependentUpon>JoinParty.xaml</DependentUpon>
@@ -228,6 +234,10 @@
     <Compile Include="Pages\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\HowToPlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\JoinParty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -517,6 +527,8 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <Resource Include="iconPrincipal.ico" />
+    <Resource Include="iconGamejpg.ico" />
     <None Include="Connected Services\RankingServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -607,6 +619,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Assets\Icons\twitch.png" />
+    <Resource Include="Assets\Icons\boardIcon.png" />
+    <Resource Include="Assets\Icons\infoIcon.png" />
+    <Resource Include="Assets\Icons\moveIcon.png" />
+    <Resource Include="Assets\Icons\rulesIcon.png" />
+    <Resource Include="Assets\Icons\targetIcon.png" />
+    <Resource Include="Assets\Icons\trophyIcon.png" />
+    <Resource Include="Assets\Icons\turnIcon.png" />
     <Content Include="Assets\Sounds\background_music.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

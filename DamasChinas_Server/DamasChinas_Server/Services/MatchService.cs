@@ -16,7 +16,7 @@ namespace DamasChinas_Server.Services
         private readonly MatchManager _manager;
         private readonly ILogService _log;
 
-        // Contexto de esta sesión
+
         private int _lobbyCode;
         private string _username;
         private bool _hasLeft;
@@ -38,12 +38,12 @@ namespace DamasChinas_Server.Services
             {
                 var callback = OperationContext.Current.GetCallbackChannel<IMatchCallback>();
 
-                // Guardamos contexto de esta sesión
+             
                 _lobbyCode = lobbyCode;
                 _username = username;
                 _hasLeft = false;
 
-                // Suscribimos a cierre / fallo del canal
+              
                 var channel = OperationContext.Current.Channel;
                 channel.Closed += OnChannelClosedOrFaulted;
                 channel.Faulted += OnChannelClosedOrFaulted;
@@ -92,7 +92,7 @@ namespace DamasChinas_Server.Services
         {
             try
             {
-                _hasLeft = true; // salida voluntaria, para no duplicar en Closed/Faulted
+                _hasLeft = true;
                 _manager.RemovePlayer(lobbyCode, username);
             }
             catch (Exception ex)
@@ -101,16 +101,14 @@ namespace DamasChinas_Server.Services
             }
         }
 
-        // =========================================================
-        //  DETECCIÓN DE CIERRE / FALLO DEL CANAL WCF
-        // =========================================================
+
         private void OnChannelClosedOrFaulted(object sender, EventArgs e)
         {
             try
             {
                 if (_hasLeft)
                 {
-                    // Ya procesamos la salida por LeaveMatch
+                   
                     return;
                 }
 

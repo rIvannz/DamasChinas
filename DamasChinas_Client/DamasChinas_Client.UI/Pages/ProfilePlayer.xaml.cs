@@ -1,7 +1,9 @@
 using DamasChinas_Client.UI.LogInServiceProxy;
+using DamasChinas_Client.UI.RankingServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,7 +58,41 @@ namespace DamasChinas_Client.UI.Pages
             catch { }
         }
 
-  
+        private void RefreshStatsFromRanking()
+        {
+            try
+            {
+                using (var client = new RankingServiceClient(
+                    "NetTcpBinding_IRankingService"))
+                {
+                    var ranking = client.GetTop10Ranking();
+
+                    if (ranking == null || _profile == null)
+                        return;
+
+                    var me = ranking
+                        .FirstOrDefault(r =>
+                            r.Username.Equals(
+                                _profile.Username,
+                                StringComparison.OrdinalIgnoreCase));
+
+                    if (me == null)
+                        return;
+
+                  
+                    _profile.MatchesPlayed = me.MatchesPlayed;
+                    _profile.Wins = me.Wins;
+                    _profile.Loses = me.Loses;
+                }
+            }
+            catch
+            {
+               
+            }
+        }
+
+
+
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -191,6 +227,9 @@ namespace DamasChinas_Client.UI.Pages
                 if (_profile == null)
                     return;
 
+   
+                RefreshStatsFromRanking();
+
                 UsernameTextBlock.Text = _profile.Username;
                 FullNameTextBlock.Text = $"{_profile.Name} {_profile.LastName}";
                 EmailTextBlock.Text = _profile.Email;
@@ -206,8 +245,12 @@ namespace DamasChinas_Client.UI.Pages
 
                 LoadAvatar(_profile);
             }
-            catch { }
+            catch
+            {
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+            }
         }
+
 
         private void LoadAvatar(PublicProfile profile)
         {

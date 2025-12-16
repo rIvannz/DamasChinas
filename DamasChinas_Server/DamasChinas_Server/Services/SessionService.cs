@@ -13,10 +13,10 @@ namespace DamasChinas_Server.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISessionCallback>();
 
-            // Guardar sesión
+
             SessionManager.AddSession(username, callback);
 
-            // Notificar a todos los demás
+
             SessionManager.ForEachSession((otherUsername, cb) =>
             {
                 if (!otherUsername.Equals(username, StringComparison.OrdinalIgnoreCase))
@@ -27,7 +27,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        // Si algún callback falla, ignoramos
+                  
                     }
                 }
             });
@@ -35,10 +35,10 @@ namespace DamasChinas_Server.Services
 
         public void Unsubscribe(string username)
         {
-            // Remover sesión
+    
             SessionManager.RemoveSession(username);
 
-            // Notificar a todos los demás
+   
             SessionManager.ForEachSession((otherUsername, cb) =>
             {
                 if (!otherUsername.Equals(username, StringComparison.OrdinalIgnoreCase))
@@ -49,7 +49,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        // Ignorar fallos de callbacks
+                    
                     }
                 }
             });

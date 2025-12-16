@@ -38,9 +38,7 @@ namespace DamasChinas_Server
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        // =========================================================
-        //  SUBSCRIPCIÓN A EVENTOS DE AMIGOS
-        // =========================================================
+
         public void SubscribeFriendEvents(string username)
         {
             try
@@ -74,9 +72,7 @@ namespace DamasChinas_Server
             }
         }
 
-        // =========================================================
-        //  MÉTODOS EXISTENTES
-        // =========================================================
+
 
         public List<FriendDto> GetFriends(string username)
         {
@@ -222,9 +218,7 @@ namespace DamasChinas_Server
             );
         }
 
-        // =========================================================
-        //  EJECUTOR GENÉRICO
-        // =========================================================
+    
         private T ExecuteOperation<T>(
             Func<T> func,
             string context,

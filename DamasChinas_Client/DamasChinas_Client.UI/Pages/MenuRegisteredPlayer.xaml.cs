@@ -80,8 +80,22 @@ namespace DamasChinas_Client.UI.Pages
         }
         private void OnHowToPlayClick(object sender, RoutedEventArgs e)
         {
-            MessageHelper.ShowPopup(MessageKeys.TutorialUnavailable, PopupType.Info);
+            try
+            {
+                NavigationService?.Navigate(new HowToPlay());
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer.OnHowToPlayClick - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuRegisteredPlayer.OnHowToPlayClick - General] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
         }
+
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {

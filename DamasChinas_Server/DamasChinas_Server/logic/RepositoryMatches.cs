@@ -32,7 +32,7 @@ namespace DamasChinas_Server
 
             ExecuteInContext(db =>
             {
-                // 1) Crear partida
+       
                 var partida = new partidas
                 {
                     fecha_partida = DateTime.UtcNow
@@ -43,7 +43,7 @@ namespace DamasChinas_Server
 
                 int idPartida = partida.id_partida;
 
-                // 2) Orden de posiciones (ganador primero)
+ 
                 var ordered = new List<string> { winnerUsername };
                 ordered.AddRange(
                     userColorMap.Keys.Where(u =>
@@ -71,16 +71,14 @@ namespace DamasChinas_Server
                     pos++;
                 }
 
-                // 3) Guardar todos
+        
                 SaveChangesSafely(db);
 
                 return true;
             });
         }
 
-        // ============================================================
-        // HELPERS
-        // ============================================================
+
 
         private static void SaveChangesSafely(IApplicationDbContext db)
         {

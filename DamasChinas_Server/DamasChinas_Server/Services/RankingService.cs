@@ -32,26 +32,27 @@ namespace DamasChinas_Server.Services
             {
                 return _repository.GetTop10Players();
             }
-            catch (Exception ex) when (
-                ex is SqlException ||
-                ex is EntityException ||
-                ex is TimeoutException ||
-                ex is InvalidOperationException)
+            catch (SqlException ex)
             {
-                Trace.WriteLine(
-                    $"[RankingService.GetTop10Ranking - DataAccess] {ex}");
-
-                // Se envía solo el código de mensaje; el cliente lo traducirá
-                // a "En este momento no podemos mostrar el ranking..."
+                Trace.WriteLine($"[RankingService][SQL] {ex.Message}");
+                throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
+            }
+            catch (EntityException ex)
+            {
+                Trace.WriteLine($"[RankingService][EF] {ex.Message}");
+                throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
+            }
+            catch (TimeoutException ex)
+            {
+                Trace.WriteLine($"[RankingService][Timeout] {ex.Message}");
                 throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(
-                    $"[RankingService.GetTop10Ranking - General] {ex}");
-
+                Trace.WriteLine($"[RankingService][Unexpected] {ex}");
                 throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
             }
         }
+
     }
 }
