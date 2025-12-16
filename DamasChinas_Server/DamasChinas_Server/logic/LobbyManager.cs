@@ -251,7 +251,7 @@ namespace DamasChinas_Server.Logic
           
             lobby.MarkGameStarted();
 
-            var playerUsernames = members
+            var playerUsernames = members 
                 .Select(m => m.Username)
                 .ToList();
 

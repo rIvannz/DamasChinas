@@ -42,7 +42,7 @@ namespace DamasChinas_Server.Services
                 var profile = GetProfile(hostUsername);
                 var callback = GetLobbyCallback();
 
-                // IMPORTANT: Register callback BEFORE logic
+  
                 LobbySessionManager.Add(hostUsername, callback);
 
                 _lobbyManager.CreateLobby(hostUsername, profile, request, callback);
@@ -58,7 +58,7 @@ namespace DamasChinas_Server.Services
                 var profile = GetProfile(request.Username);
                 var callback = GetLobbyCallback();
 
-                // IMPORTANT: Register callback BEFORE logic to enable updates
+             
                 LobbySessionManager.Add(request.Username, callback);
 
                 _lobbyManager.JoinLobby(request, profile, callback);

@@ -119,9 +119,6 @@ namespace DamasChinas_Server
             );
         }
 
-        // ============================
-        //   HELPERS
-        // ============================
 
         private void ExecuteOperation(Action action, string context)
         {
