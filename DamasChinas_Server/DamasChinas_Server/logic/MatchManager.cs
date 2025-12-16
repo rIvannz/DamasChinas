@@ -161,14 +161,21 @@ namespace DamasChinas_Server.Logic
         public void RemovePlayer(int lobbyCode, string username)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
+            {
                 return;
+            }
 
             if (!match.UserColorMap.TryGetValue(username, out var color))
+            {
                 return;
+            }
 
-            bool wasHost = string.Equals(match.HostUsername, username, StringComparison.OrdinalIgnoreCase);
+            bool wasHost = string.Equals(
+                match.HostUsername,
+                username,
+                StringComparison.OrdinalIgnoreCase);
 
-            // === Caso especial: solo dos jugadores ===
+
             if (match.UserColorMap.Count == 2)
             {
                 string winner = match.UserColorMap.Keys
@@ -181,33 +188,37 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-            // === Caso general: jugador sale (incluye host) ===
-           // match.Game.RemovePlayer(color);
+   
+            match.Game.RemovePlayer(color);
+
+  
             match.UserColorMap.Remove(username);
             match.Callbacks.TryRemove(username, out _);
 
+     
             foreach (var cb in match.Callbacks.Values)
             {
-                try { cb.OnPlayerLeftMatch(username); }
-                catch { }
+                try
+                {
+                    cb.OnPlayerLeftMatch(username);
+                }
+                catch
+                {
+                    
+                }
             }
 
-            // Si el host salió, elegir un nuevo host para consistencia interna
+      
             if (wasHost && match.UserColorMap.Count > 0)
             {
                 match.HostUsername = match.UserColorMap.Keys.First();
                 _log.Info($"[MatchManager] Host changed to {match.HostUsername}");
             }
 
-            // Enviar estado nuevo del tablero
+      
             BroadcastBoardState(lobbyCode, match);
         }
 
-
-
-        // ================================================
-        // ESTADO TABLERO
-        // ================================================
         public MatchStateDto GetMatchState(int lobbyCode)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
@@ -241,9 +252,6 @@ namespace DamasChinas_Server.Logic
             };
         }
 
-        // ================================================
-        // BROADCASTS
-        // ================================================
         private void BroadcastMove(int code, string player, ActiveMatch match,
             HexCoordinate from, HexCoordinate to)
         {

@@ -214,7 +214,7 @@
                             <TextBox x:Name="txtChatPlaceholder"
                                        Text="{DynamicResource chatPlaceholder}"
                                        Foreground="#888"
-                                       MaxLength="12" 
+                                       MaxLength="50" 
                                        Margin="8,2,0,0"
                                        IsHitTestVisible="False"
                                        VerticalAlignment="Center"

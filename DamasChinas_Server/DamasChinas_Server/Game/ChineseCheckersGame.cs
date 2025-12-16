@@ -331,6 +331,41 @@ namespace DamasChinas_Server.Game
             Board.GetCell(move.Destination).PlacePiece(piece);
         }
 
+        public void RemovePlayer(PlayerColor color)
+        {
+ 
+            if (!_players.ContainsKey(color))
+            {
+                return;
+            }
+
+    
+            foreach (var cell in Board.Cells)
+            {
+                if (cell.IsOccupied && cell.Piece.Color == color)
+                {
+                    cell.RemovePiece();
+                }
+            }
+
+       
+            _players.Remove(color);
+            _turnOrder.Remove(color);
+
+     
+            if (_turnOrder.Count > 0 && CurrentTurn == color)
+            {
+                CurrentTurn = _turnOrder[0];
+            }
+
+       
+            if (_turnOrder.Count == 1)
+            {
+                Winner = _turnOrder[0];
+            }
+        }
+
+
         private void AdvanceTurn()
         {
             int currentIndex = _turnOrder.IndexOf(CurrentTurn);

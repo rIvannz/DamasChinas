@@ -66,10 +66,10 @@
             <!-- ===== Campos ===== -->
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                 <TextBlock Text="{DynamicResource username}" Foreground="White" FontSize="18" Margin="0,0,0,5"/>
-                <TextBox x:Name="txtUsername" MaxLength="12" Width="360" Height="38"/>
+                <TextBox x:Name="txtUsername" MaxLength="15" Width="360" Height="38"/>
 
                 <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="18" Margin="0,20,0,5"/>
-                <PasswordBox x:Name="txtPassword" Width="360" MaxLength="12" Height="38"/>
+                <PasswordBox x:Name="txtPassword" Width="360" MaxLength="30" Height="38"/>
 
                 <!-- Enlace “¿Olvidaste tu contraseña?” -->
                 <Border Background="#55000000" 

@@ -157,7 +157,7 @@
 
                             <TextBox x:Name="txtUsername"
                                      Width="420" Height="38"
-                                     MaxLength="12" 
+                                     MaxLength="15" 
                                      Background="White"
                                      Foreground="Black"
                                      BorderBrush="#CCCCCC"
@@ -190,7 +190,7 @@
 
                             <TextBox x:Name="txtSocialUrl"
                                      Width="420" Height="38"
-                                     MaxLength="12" 
+                                     MaxLength="40" 
                                      Background="White"
                                      Foreground="Black"
                                      BorderBrush="#CCCCCC"
@@ -249,7 +249,7 @@
                                 <TextBlock Text="{DynamicResource password}" Foreground="White" FontSize="15"/>
                                 <PasswordBox x:Name="txtPassword"
                                              Width="200" Height="38"
-                                             MaxLength="12" 
+                                             MaxLength="20" 
                                              Background="White"
                                              Foreground="Black"
                                              BorderBrush="#CCCCCC"
@@ -261,7 +261,7 @@
                                 <PasswordBox x:Name="txtConfirmPassword"
                                              Width="200" Height="38"
                                              Background="White"
-                                             MaxLength="12"
+                                             MaxLength="20"
                                              Foreground="Black"
                                              BorderBrush="#CCCCCC"
                                              BorderThickness="1"/>
