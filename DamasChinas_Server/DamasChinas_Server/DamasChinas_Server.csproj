@@ -198,6 +198,7 @@
     <Compile Include="Dtos\AccountMgr.cs" />
     <Compile Include="Utilities\Email\Email.cs" />
     <Compile Include="Utilities\Email\EmailLanguage.cs" />
+    <Compile Include="Utilities\Email\EmailLanguageMapper.cs" />
     <Compile Include="Utilities\Email\EmailSender.cs" />
     <Compile Include="Utilities\DbContextFactory.cs" />
     <Compile Include="Utilities\Email\IEmailSender.cs" />

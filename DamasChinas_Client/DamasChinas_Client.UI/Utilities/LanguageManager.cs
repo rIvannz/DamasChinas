@@ -15,6 +15,8 @@ namespace DamasChinas_Client.UI.Utilities
         private const string ThemePath = "Styles/Theme.xaml";
         private const string ButtonsPath = "Styles/Buttons.xaml";
 
+        public static string CurrentCultureCode { get; private set; } = "en-US";
+
         public static void ChangeLanguage(string cultureCode)
         {
             try
@@ -33,6 +35,7 @@ namespace DamasChinas_Client.UI.Utilities
                 EnsureDictionary(ThemePath);
                 EnsureDictionary(ButtonsPath);
 
+                CurrentCultureCode = cultureCode;
                 UpdateCulture(cultureCode);
             }
             catch (InvalidOperationException)
@@ -61,7 +64,6 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static string MapCultureToLanguagePath(string cultureCode)
         {
-         
             string code = cultureCode.Trim();
 
             if (string.Equals(code, "es-MX", StringComparison.OrdinalIgnoreCase))
@@ -79,7 +81,6 @@ namespace DamasChinas_Client.UI.Utilities
                 return LangFr;
             }
 
-        
             return LangEn;
         }
 
@@ -103,7 +104,6 @@ namespace DamasChinas_Client.UI.Utilities
 
             return null;
         }
-
 
         private static void ReplaceOrAddDictionary(
             ResourceDictionary newDictionary,
@@ -146,6 +146,8 @@ namespace DamasChinas_Client.UI.Utilities
         private static void UpdateCulture(string cultureCode)
         {
             CultureInfo culture = new CultureInfo(cultureCode);
+
+            CurrentCultureCode = cultureCode;
 
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;

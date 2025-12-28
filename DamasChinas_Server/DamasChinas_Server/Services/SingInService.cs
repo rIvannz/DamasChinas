@@ -1,10 +1,10 @@
 using DamasChinas_Server.Common;
 using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
+using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilidades;
 using DamasChinas_Server.Utilities;
-using DamasChinas_Server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -21,15 +21,12 @@ namespace DamasChinas_Server
         private readonly RepositoryUsers _repository;
         private readonly ILogService _log;
 
-      
-
         private const string OperationValidateUserData = nameof(ValidateUserData);
         private const string OperationRequestVerificationCode = nameof(RequestVerificationCode);
         private const string OperationCreateUser = nameof(CreateUser);
         private const string OperationGenerateCode = nameof(GenerateCode);
         private const string OperationSendWelcomeEmail = nameof(SendWelcomeEmail);
         private const string OperationRemoveStoredCode = nameof(RemoveStoredCode);
-
 
         public SingInService()
             : this(new RepositoryUsers(), LogFactory.Create<SingInService>())
@@ -41,7 +38,6 @@ namespace DamasChinas_Server
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
-
 
         public OperationResult ValidateUserData(UserDto userDto)
         {
@@ -68,13 +64,12 @@ namespace DamasChinas_Server
             );
         }
 
-        public OperationResult RequestVerificationCode(string email)
+        public OperationResult RequestVerificationCode(string email, string cultureCode)
         {
             return ExecuteOperation(
                 () =>
                 {
-                    string normalizedEmail = email.Trim().ToLower();
-
+                    string normalizedEmail = NormalizeEmail(email);
 
                     var code = GenerateCode();
 
@@ -83,9 +78,8 @@ namespace DamasChinas_Server
                         _codes[normalizedEmail] = (code, DateTime.UtcNow);
                     }
 
-
-                    EmailSender.SendVerificationEmail(email, code);
-
+         
+                    EmailSender.SendVerificationEmail(email, code, cultureCode);
 
                     _log.Info($"[RequestVerificationCode] EMAIL SENT OK");
 
@@ -105,18 +99,19 @@ namespace DamasChinas_Server
             );
         }
 
-
-        public OperationResult CreateUser(UserDto userDto, string code)
+        public OperationResult CreateUser(UserDto userDto, string code, string cultureCode)
         {
             return ExecuteOperation(
                 () =>
                 {
+                    string normalizedEmail = NormalizeEmail(userDto.Email);
+
                     string storedCode;
                     DateTime createdUtc;
 
                     lock (_codes)
                     {
-                        if (!_codes.TryGetValue(userDto.Email, out var data))
+                        if (!_codes.TryGetValue(normalizedEmail, out var data))
                         {
                             return OperationResult.Fail("Code not found.", MessageCode.VerificationCodeNotFound);
                         }
@@ -126,7 +121,7 @@ namespace DamasChinas_Server
 
                     if (DateTime.UtcNow - createdUtc > TimeSpan.FromMinutes(5))
                     {
-                        RemoveStoredCode(userDto.Email);
+                        RemoveStoredCode(normalizedEmail);
                         return OperationResult.Fail("Code expired.", MessageCode.VerificationCodeExpired);
                     }
 
@@ -134,11 +129,13 @@ namespace DamasChinas_Server
                     {
                         return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
                     }
-                    RemoveStoredCode(userDto.Email);
+
+                    RemoveStoredCode(normalizedEmail);
 
                     var user = _repository.CreateUser(userDto);
 
-                    SendWelcomeEmail(MapToUserInfo(user, userDto));
+                
+                    SendWelcomeEmail(MapToUserInfo(user, userDto), cultureCode);
 
                     return OperationResult.Ok();
                 },
@@ -154,14 +151,15 @@ namespace DamasChinas_Server
             );
         }
 
-
-        private static void RemoveStoredCode(string email)
+        private static void RemoveStoredCode(string normalizedEmail)
         {
             lock (_codes)
-                if (_codes.ContainsKey(email))
+            {
+                if (_codes.ContainsKey(normalizedEmail))
                 {
-                    _codes.Remove(email);
+                    _codes.Remove(normalizedEmail);
                 }
+            }
         }
 
         private static string GenerateCode()
@@ -171,20 +169,20 @@ namespace DamasChinas_Server
                 .ToString();
         }
 
-
-
-        private static void SendWelcomeEmail(UserInfo user)
+        private static void SendWelcomeEmail(UserInfo user, string cultureCode)
         {
             Task.Run(async () =>
             {
                 try
                 {
-                    await Email.SendWelcomeAsync(user).ConfigureAwait(false);
+                    await Email.SendWelcomeAsync(user, cultureCode).ConfigureAwait(false);
                 }
-                catch { }
+                catch
+                {
+                
+                }
             });
         }
-
 
         private UserInfo MapToUserInfo(usuarios user, UserDto userDto)
         {
@@ -201,7 +199,11 @@ namespace DamasChinas_Server
             };
         }
 
-   
+        private static string NormalizeEmail(string email)
+        {
+            return (email ?? string.Empty).Trim().ToLower();
+        }
+
         private OperationResult ExecuteOperation(
             Func<OperationResult> action,
             string context,

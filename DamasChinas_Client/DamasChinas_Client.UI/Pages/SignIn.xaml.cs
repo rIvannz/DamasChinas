@@ -283,7 +283,9 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                var result = await Task.Run(() => client.RequestVerificationCode(dto.Email));
+                string cultureCode = LanguageManager.CurrentCultureCode;
+                var result = await Task.Run(() => client.RequestVerificationCode(dto.Email, cultureCode));
+
 
                 if (result == null)
                 {
@@ -339,7 +341,9 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                var result = await client.CreateUserAsync(dto, code);
+                string cultureCode = LanguageManager.CurrentCultureCode;
+                var result = await client.CreateUserAsync(dto, code, cultureCode);
+
 
                 await CloseLoaderSafeAsync(loader);
 

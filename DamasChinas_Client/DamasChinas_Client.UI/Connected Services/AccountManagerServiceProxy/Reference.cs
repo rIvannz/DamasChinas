@@ -746,10 +746,10 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
         System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> ChangeSocialUrlAsync(int idUser, string socialUrl);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/RequestPasswordChangeCode", ReplyAction="http://tempuri.org/IAccountManager/RequestPasswordChangeCodeResponse")]
-        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult RequestPasswordChangeCode(string email);
+        DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult RequestPasswordChangeCode(string email, string cultureCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/RequestPasswordChangeCode", ReplyAction="http://tempuri.org/IAccountManager/RequestPasswordChangeCodeResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> RequestPasswordChangeCodeAsync(string email);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> RequestPasswordChangeCodeAsync(string email, string cultureCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountManager/ConfirmPasswordChange", ReplyAction="http://tempuri.org/IAccountManager/ConfirmPasswordChangeResponse")]
         DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ConfirmPasswordChange(string email, string code, string newPassword);
@@ -833,12 +833,12 @@ namespace DamasChinas_Client.UI.AccountManagerServiceProxy {
             return base.Channel.ChangeSocialUrlAsync(idUser, socialUrl);
         }
         
-        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult RequestPasswordChangeCode(string email) {
-            return base.Channel.RequestPasswordChangeCode(email);
+        public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult RequestPasswordChangeCode(string email, string cultureCode) {
+            return base.Channel.RequestPasswordChangeCode(email, cultureCode);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> RequestPasswordChangeCodeAsync(string email) {
-            return base.Channel.RequestPasswordChangeCodeAsync(email);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult> RequestPasswordChangeCodeAsync(string email, string cultureCode) {
+            return base.Channel.RequestPasswordChangeCodeAsync(email, cultureCode);
         }
         
         public DamasChinas_Client.UI.AccountManagerServiceProxy.OperationResult ConfirmPasswordChange(string email, string code, string newPassword) {

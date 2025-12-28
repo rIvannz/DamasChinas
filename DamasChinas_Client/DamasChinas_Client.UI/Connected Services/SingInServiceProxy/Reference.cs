@@ -479,16 +479,16 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
         System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> ValidateUserDataAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/RequestVerificationCode", ReplyAction="http://tempuri.org/ISingInService/RequestVerificationCodeResponse")]
-        DamasChinas_Client.UI.SingInServiceProxy.OperationResult RequestVerificationCode(string email);
+        DamasChinas_Client.UI.SingInServiceProxy.OperationResult RequestVerificationCode(string email, string cultureCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/RequestVerificationCode", ReplyAction="http://tempuri.org/ISingInService/RequestVerificationCodeResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> RequestVerificationCodeAsync(string email);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> RequestVerificationCodeAsync(string email, string cultureCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CreateUser", ReplyAction="http://tempuri.org/ISingInService/CreateUserResponse")]
-        DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code);
+        DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code, string cultureCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISingInService/CreateUser", ReplyAction="http://tempuri.org/ISingInService/CreateUserResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code, string cultureCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -526,20 +526,20 @@ namespace DamasChinas_Client.UI.SingInServiceProxy {
             return base.Channel.ValidateUserDataAsync(userDto);
         }
         
-        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult RequestVerificationCode(string email) {
-            return base.Channel.RequestVerificationCode(email);
+        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult RequestVerificationCode(string email, string cultureCode) {
+            return base.Channel.RequestVerificationCode(email, cultureCode);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> RequestVerificationCodeAsync(string email) {
-            return base.Channel.RequestVerificationCodeAsync(email);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> RequestVerificationCodeAsync(string email, string cultureCode) {
+            return base.Channel.RequestVerificationCodeAsync(email, cultureCode);
         }
         
-        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code) {
-            return base.Channel.CreateUser(userDto, code);
+        public DamasChinas_Client.UI.SingInServiceProxy.OperationResult CreateUser(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code, string cultureCode) {
+            return base.Channel.CreateUser(userDto, code, cultureCode);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code) {
-            return base.Channel.CreateUserAsync(userDto, code);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.SingInServiceProxy.OperationResult> CreateUserAsync(DamasChinas_Client.UI.SingInServiceProxy.UserDto userDto, string code, string cultureCode) {
+            return base.Channel.CreateUserAsync(userDto, code, cultureCode);
         }
     }
 }

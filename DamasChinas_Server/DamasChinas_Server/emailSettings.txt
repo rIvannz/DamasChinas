@@ -4,13 +4,38 @@ SmtpHost=smtp.gmail.com
 SmtpPort=587
 EnableSsl=true
 
-WelcomeSubject=Bienvenido a Damas Chinas
-WelcomeBodyTemplate=Hola {0},<br><br>Tu usuario es <b>{1}</b>.<br>Ya puedes iniciar sesión en la plataforma de Damas Chinas y disfrutar del juego.<br><br>¡Nos alegra tenerte con nosotros!<br><br>Atentamente,<br>Equipo Damas Chinas
+WelcomeSubject_es=Bienvenido a Damas Chinas
+WelcomeBodyTemplate_es=Hola {0},<br><br>Tu usuario es <b>{1}</b>.<br>Ya puedes iniciar sesión en la plataforma de Damas Chinas y disfrutar del juego.<br><br>¡Nos alegra tenerte con nosotros!<br><br>Atentamente,<br>Equipo Damas Chinas
 
-VerificationSubject=Código de verificación
-VerificationBody=Tu código de verificación es: <b>{0}</b><br>Este código expirará en 5 minutos.
+VerificationSubject_es=Código de verificación
+VerificationBody_es=Tu código de verificación es: <b>{0}</b><br>Este código expirará en 5 minutos.
 
+InvitationSubject_es=Invitación a lobby de Damas Chinas
+InvitationBody_es=Hola {0},<br><br>{1} te ha invitado a unirte a un lobby de Damas Chinas.<br><br><b>Código del lobby:</b> {2}<br><br>Abre el juego e ingresa el código para unirte.<br><br>¡Te esperamos!<br><br>Equipo Damas Chinas
 
-InvitationSubject=Invitación a lobby de Damas Chinas
-InvitationBody=Hola {0},<br><br>{1} te ha invitado a unirte a un lobby de Damas Chinas.<br><br><b>Código del lobby:</b> {2}<br><br>Abre el juego e ingresa el código para unirte.<br><br>¡Te esperamos!<br><br>Equipo Damas Chinas
+WelcomeSubject_en=Welcome to Chinese Checkers
+WelcomeBodyTemplate_en=Hello {0},<br><br>Your username is <b>{1}</b>.<br>You can now sign in and enjoy Chinese Checkers.<br><br>We’re happy to have you with us!<br><br>Sincerely,<br>Chinese Checkers Team
 
+VerificationSubject_en=Verification code
+VerificationBody_en=Your verification code is: <b>{0}</b><br>This code will expire in 5 minutes.
+
+InvitationSubject_en=Chinese Checkers lobby invitation
+InvitationBody_en=Hello {0},<br><br>{1} has invited you to join a Chinese Checkers lobby.<br><br><b>Lobby code:</b> {2}<br><br>Open the game and enter the code to join.<br><br>See you there!<br><br>Chinese Checkers Team
+
+WelcomeSubject_pt=Bem-vindo ao Damas Chinas
+WelcomeBodyTemplate_pt=Olá {0},<br><br>Seu nome de usuário é <b>{1}</b>.<br>Agora você pode entrar na plataforma e aproveitar o jogo.<br><br>Ficamos felizes em ter você conosco!<br><br>Atenciosamente,<br>Equipe Damas Chinas
+
+VerificationSubject_pt=Código de verificação
+VerificationBody_pt=Seu código de verificação é: <b>{0}</b><br>Este código expirará em 5 minutos.
+
+InvitationSubject_pt=Convite para lobby de Damas Chinas
+InvitationBody_pt=Olá {0},<br><br>{1} convidou você para entrar em um lobby de Damas Chinas.<br><br><b>Código do lobby:</b> {2}<br><br>Abra o jogo e digite o código para entrar.<br><br>Esperamos você!<br><br>Equipe Damas Chinas
+
+WelcomeSubject_fr=Bienvenue sur Dames Chinoises
+WelcomeBodyTemplate_fr=Bonjour {0},<br><br>Votre nom d’utilisateur est <b>{1}</b>.<br>Vous pouvez maintenant vous connecter et profiter du jeu.<br><br>Nous sommes ravis de vous accueillir !<br><br>Cordialement,<br>Équipe Dames Chinoises
+
+VerificationSubject_fr=Code de vérification
+VerificationBody_fr=Votre code de vérification est : <b>{0}</b><br>Ce code expirera dans 5 minutes.
+
+InvitationSubject_fr=Invitation au lobby de Dames Chinoises
+InvitationBody_fr=Bonjour {0},<br><br>{1} vous a invité à rejoindre un lobby de Dames Chinoises.<br><br><b>Code du lobby :</b> {2}<br><br>Ouvrez le jeu et saisissez le code pour rejoindre.<br><br>À bientôt !<br><br>Équipe Dames Chinoises

@@ -1,30 +1,41 @@
-using DamasChinas_Server.Utilidades;
 using System;
+using EmailConfig = DamasChinas_Server.Utilidades.Email;
 
 namespace DamasChinas_Server.Utilities
 {
     public static class EmailSender
     {
-        /// <summary>
-        /// Envía el correo con el código de verificación.
-        /// </summary>
         public static void SendVerificationEmail(string email, string code)
         {
             try
             {
-                string subject = Email.VerificationSubjectValue;
-                string body = string.Format(Email.VerificationBodyValue, code);
+                string subject = EmailConfig.VerificationSubjectValue;
+                string body = string.Format(EmailConfig.VerificationBodyValue, code);
 
-                Email.SendAsync(email, subject, body, html: true)
-                     .GetAwaiter()
-                     .GetResult();
-
-                System.Diagnostics.Debug.WriteLine($"[TRACE] Verification email sent");
+                EmailConfig.SendAsync(email, subject, body, html: true)
+                    .GetAwaiter()
+                    .GetResult();
             }
-            catch (Exception ex)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine(
-                    $"[ERROR] Failed to send verification email");
+                throw;
+            }
+        }
+
+        public static void SendVerificationEmail(string email, string code, string cultureCode)
+        {
+            try
+            {
+                string subject = EmailConfig.GetVerificationSubject(cultureCode);
+                string bodyTemplate = EmailConfig.GetVerificationBody(cultureCode);
+                string body = string.Format(bodyTemplate, code);
+
+                EmailConfig.SendAsync(email, subject, body, html: true)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+            catch
+            {
                 throw;
             }
         }
@@ -33,51 +44,80 @@ namespace DamasChinas_Server.Utilities
         {
             try
             {
-                string subject = Email.InvitationSubjectValue;
+                string subject = EmailConfig.InvitationSubjectValue;
                 string body = string.Format(
-                    Email.InvitationBodyValue,
+                    EmailConfig.InvitationBodyValue,
                     friendUsername,
                     hostUsername,
                     lobbyCode
                 );
 
-                Email.SendAsync(friendEmail, subject, body, html: true)
-                     .GetAwaiter()
-                     .GetResult();
-
-                System.Diagnostics.Debug.WriteLine("[TRACE] Lobby invitation email sent");
+                EmailConfig.SendAsync(friendEmail, subject, body, html: true)
+                    .GetAwaiter()
+                    .GetResult();
             }
-            catch (Exception)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine("[ERROR] Failed to send lobby invitation email");
                 throw;
             }
-
         }
+
+        public static void SendInvitationEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode, string cultureCode)
+        {
+            try
+            {
+                string subject = EmailConfig.GetInvitationSubject(cultureCode);
+                string bodyTemplate = EmailConfig.GetInvitationBody(cultureCode);
+                string body = string.Format(bodyTemplate, friendUsername, hostUsername, lobbyCode);
+
+                EmailConfig.SendAsync(friendEmail, subject, body, html: true)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public static void SendInvitationGameEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode)
         {
             try
             {
-                string subject = Email.InvitationSubjectValue;
+                string subject = EmailConfig.InvitationSubjectValue;
                 string body = string.Format(
-                    Email.InvitationBodyValue,
+                    EmailConfig.InvitationBodyValue,
                     friendUsername,
                     hostUsername,
                     lobbyCode
                 );
 
-                Email.SendAsync(friendEmail, subject, body, html: true)
-                     .GetAwaiter()
-                     .GetResult();
-
-                System.Diagnostics.Debug.WriteLine("[TRACE] Lobby invitation email sent");
+                EmailConfig.SendAsync(friendEmail, subject, body, html: true)
+                    .GetAwaiter()
+                    .GetResult();
             }
-            catch (Exception)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine("[ERROR] Failed to send lobby invitation email");
                 throw;
             }
+        }
 
+        public static void SendInvitationGameEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode, string cultureCode)
+        {
+            try
+            {
+                string subject = EmailConfig.GetInvitationSubject(cultureCode);
+                string bodyTemplate = EmailConfig.GetInvitationBody(cultureCode);
+                string body = string.Format(bodyTemplate, friendUsername, hostUsername, lobbyCode);
+
+                EmailConfig.SendAsync(friendEmail, subject, body, html: true)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

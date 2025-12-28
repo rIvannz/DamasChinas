@@ -20,6 +20,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cultureCode" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -35,6 +36,7 @@
       <xs:sequence>
         <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="userDto" nillable="true" type="q4:UserDto" />
         <xs:element minOccurs="0" name="code" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cultureCode" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -23,7 +23,6 @@ namespace DamasChinas_Server.Services
         private const string OperationChangeAvatar = nameof(ChangeAvatar);
         private const string OperationChangeSocialUrl = nameof(ChangeSocialUrl);
 
-    
         private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)> _passwordCodes =
             new Dictionary<string, (string Code, DateTime CreatedUtc)>();
 
@@ -81,6 +80,7 @@ namespace DamasChinas_Server.Services
         public OperationResult ChangePassword(string email, string newPassword)
         {
             _log.Info($"[ChangePassword] email={email}");
+
             return ExecuteAccountOperation(
                 () => _repository.ChangePassword(email, newPassword),
                 MessageCode.Success,
@@ -93,6 +93,7 @@ namespace DamasChinas_Server.Services
         public OperationResult ChangeAvatar(int idUser, string avatarFile)
         {
             _log.Info($"[ChangeAvatar] idUser={idUser}, avatarFile={avatarFile}");
+
             return ExecuteAccountOperation(
                 () => _repository.ChangeAvatar(idUser, avatarFile),
                 MessageCode.AvatarUpdateSuccess,
@@ -115,20 +116,23 @@ namespace DamasChinas_Server.Services
             );
         }
 
-    
-        public OperationResult RequestPasswordChangeCode(string email)
+        public OperationResult RequestPasswordChangeCode(string email, string cultureCode)
         {
             const string context = "RequestPasswordChangeCode";
             _log.Info($"[{context}]");
 
             try
             {
+                string normalizedEmail = (email ?? string.Empty).Trim().ToLowerInvariant();
+
                 var code = GenerateVerificationCode();
 
                 lock (_passwordCodes)
-                    _passwordCodes[email] = (code, DateTime.UtcNow);
+                {
+                    _passwordCodes[normalizedEmail] = (code, DateTime.UtcNow);
+                }
 
-                EmailSender.SendVerificationEmail(email, code);
+                EmailSender.SendVerificationEmail(normalizedEmail, code, cultureCode);
 
                 return new OperationResult
                 {
@@ -156,12 +160,14 @@ namespace DamasChinas_Server.Services
 
             try
             {
+                string normalizedEmail = (email ?? string.Empty).Trim().ToLowerInvariant();
+
                 string storedCode;
                 DateTime createdUtc;
 
                 lock (_passwordCodes)
                 {
-                    if (!_passwordCodes.TryGetValue(email, out var data))
+                    if (!_passwordCodes.TryGetValue(normalizedEmail, out var data))
                     {
                         return OperationResult.Fail("Code not found.", MessageCode.VerificationCodeNotFound);
                     }
@@ -172,18 +178,18 @@ namespace DamasChinas_Server.Services
 
                 if (DateTime.UtcNow - createdUtc > TimeSpan.FromMinutes(5))
                 {
-                    RemoveStoredPasswordCode(email);
+                    RemoveStoredPasswordCode(normalizedEmail);
                     return OperationResult.Fail("Code expired.", MessageCode.VerificationCodeExpired);
                 }
 
                 if (!string.Equals(storedCode, code, StringComparison.Ordinal))
                 {
                     return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
-
                 }
 
-                RemoveStoredPasswordCode(email);
-                bool ok = _repository.ChangePasswordbyemail(email, newPassword);
+                RemoveStoredPasswordCode(normalizedEmail);
+
+                bool ok = _repository.ChangePasswordbyemail(normalizedEmail, newPassword);
 
                 if (!ok)
                 {
@@ -204,13 +210,14 @@ namespace DamasChinas_Server.Services
             }
         }
 
-       
         private static void RemoveStoredPasswordCode(string email)
         {
             lock (_passwordCodes)
             {
                 if (_passwordCodes.ContainsKey(email))
+                {
                     _passwordCodes.Remove(email);
+                }
             }
         }
 
@@ -219,13 +226,12 @@ namespace DamasChinas_Server.Services
             return new Random().Next(1000, 10000).ToString();
         }
 
-  
         private static OperationResult ExecuteAccountOperation(
-         Func<bool> operation,
-         MessageCode successCode,
-         MessageCode failureCode,
-         MessageCode fatalCode,
-         string context)
+            Func<bool> operation,
+            MessageCode successCode,
+            MessageCode failureCode,
+            MessageCode fatalCode,
+            string context)
         {
             var result = new OperationResult();
 

@@ -28,7 +28,9 @@ namespace DamasChinas_Client.UI.Pages
 
               
                 var client = new AccountManagerClient();
-                var result = client.RequestPasswordChangeCode(email);
+                string cultureCode = LanguageManager.CurrentCultureCode;
+                var result = client.RequestPasswordChangeCode(email, cultureCode);
+
 
                 if (!result.Success)
                 {
