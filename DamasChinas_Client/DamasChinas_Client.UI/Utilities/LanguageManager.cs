@@ -1,20 +1,38 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities
 {
     public static class LanguageManager
     {
+        private const string LangEn = "Resources/Lang.en.xaml";
+        private const string LangEs = "Resources/Lang.es.xaml";
+        private const string LangPt = "Resources/Lang.pt.xaml";
+        private const string LangFr = "Resources/Lang.fr.xaml";
+
+        private const string ThemePath = "Styles/Theme.xaml";
+        private const string ButtonsPath = "Styles/Buttons.xaml";
+
         public static void ChangeLanguage(string cultureCode)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(cultureCode))
+                {
+                    MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
+                    return;
+                }
+
                 ResourceDictionary newLanguageDictionary = CreateLanguageDictionary(cultureCode);
                 ResourceDictionary existingLanguageDictionary = FindExistingLanguageDictionary();
 
                 ReplaceOrAddDictionary(newLanguageDictionary, existingLanguageDictionary);
-                EnsureThemeResources();
+
+                EnsureDictionary(ThemePath);
+                EnsureDictionary(ButtonsPath);
+
                 UpdateCulture(cultureCode);
             }
             catch (InvalidOperationException)
@@ -25,13 +43,15 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
             }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
+            }
         }
 
         private static ResourceDictionary CreateLanguageDictionary(string cultureCode)
         {
-            string relativePath = cultureCode == "es-MX"
-                ? "Resources/Lang.es.xaml"
-                : "Resources/Lang.en.xaml";
+            string relativePath = MapCultureToLanguagePath(cultureCode);
 
             return new ResourceDictionary
             {
@@ -39,28 +59,59 @@ namespace DamasChinas_Client.UI.Utilities
             };
         }
 
+        private static string MapCultureToLanguagePath(string cultureCode)
+        {
+         
+            string code = cultureCode.Trim();
+
+            if (string.Equals(code, "es-MX", StringComparison.OrdinalIgnoreCase))
+            {
+                return LangEs;
+            }
+
+            if (string.Equals(code, "pt-BR", StringComparison.OrdinalIgnoreCase))
+            {
+                return LangPt;
+            }
+
+            if (string.Equals(code, "fr-FR", StringComparison.OrdinalIgnoreCase))
+            {
+                return LangFr;
+            }
+
+        
+            return LangEn;
+        }
+
         private static ResourceDictionary FindExistingLanguageDictionary()
         {
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
             {
-                if (dictionary.Source != null)
+                if (dictionary?.Source == null)
                 {
-                    string src = dictionary.Source.OriginalString;
-                    if (src.Contains("Lang.en.xaml") || src.Contains("Lang.es.xaml"))
-                    {
-                        return dictionary;
-                    }
+                    continue;
+                }
+
+                string src = dictionary.Source.OriginalString;
+
+                if (src.IndexOf("/Resources/Lang.", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    src.IndexOf("Resources/Lang.", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return dictionary;
                 }
             }
 
-            return new ResourceDictionary();
+            return null;
         }
 
-        private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)
+
+        private static void ReplaceOrAddDictionary(
+            ResourceDictionary newDictionary,
+            ResourceDictionary existingDictionary)
         {
-            if (existingDictionary.Source == null)
+            if (existingDictionary == null)
             {
-                Application.Current.Resources.MergedDictionaries.Add(newDictionary);
+                Application.Current.Resources.MergedDictionaries.Insert(0, newDictionary);
                 return;
             }
 
@@ -71,29 +122,31 @@ namespace DamasChinas_Client.UI.Utilities
             }
             else
             {
-                Application.Current.Resources.MergedDictionaries.Add(newDictionary);
+                Application.Current.Resources.MergedDictionaries.Insert(0, newDictionary);
             }
         }
 
-        private static void EnsureThemeResources()
+        private static void EnsureDictionary(string relativePackPath)
         {
-            ResourceDictionary themeDictionary = new ResourceDictionary
-            {
-                Source = PathProvider.GetPackUri("Styles/Theme.xaml")
-            };
+            Uri targetUri = PathProvider.GetPackUri(relativePackPath);
 
-            ResourceDictionary buttonsDictionary = new ResourceDictionary
-            {
-                Source = PathProvider.GetPackUri("Styles/Buttons.xaml")
-            };
+            bool exists = Application.Current.Resources.MergedDictionaries
+                .Any(d => d?.Source != null &&
+                          string.Equals(d.Source.OriginalString, targetUri.OriginalString, StringComparison.OrdinalIgnoreCase));
 
-            Application.Current.Resources.MergedDictionaries.Add(themeDictionary);
-            Application.Current.Resources.MergedDictionaries.Add(buttonsDictionary);
+            if (!exists)
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
+                {
+                    Source = targetUri
+                });
+            }
         }
 
         private static void UpdateCulture(string cultureCode)
         {
             CultureInfo culture = new CultureInfo(cultureCode);
+
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }

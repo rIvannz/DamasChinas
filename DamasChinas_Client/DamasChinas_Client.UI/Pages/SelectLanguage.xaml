@@ -117,15 +117,17 @@
 
                         <!-- ComboBox de idiomas -->
                         <ComboBox x:Name="LanguageComboBox"
-                                  Width="300"
-                                  Height="40"
-                                  FontSize="16"
-                                  HorizontalContentAlignment="Center"
-                                  Margin="0,0,0,30"
-                                  >
+                            Width="300"
+                            Height="40"
+                            FontSize="16"
+                            HorizontalContentAlignment="Center"
+                            Margin="0,0,0,30">
                             <ComboBoxItem Content="English" Tag="en-US"/>
                             <ComboBoxItem Content="Español" Tag="es-MX"/>
+                            <ComboBoxItem Content="Português (Brasil)" Tag="pt-BR"/>
+                            <ComboBoxItem Content="Français" Tag="fr-FR"/>
                         </ComboBox>
+
 
                         <!-- Botón Confirmar -->
                         <Button Style="{DynamicResource BaseGameButton}"

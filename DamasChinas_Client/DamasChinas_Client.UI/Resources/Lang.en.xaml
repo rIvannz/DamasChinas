@@ -2,12 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-
-
     <!-- ========================================================= -->
     <!--  GENERAL SYSTEM TEXTS                                     -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="back">Back</sys:String>
     <sys:String x:Key="exit">Exit</sys:String>
     <sys:String x:Key="ok">OK</sys:String>
@@ -38,7 +35,6 @@ and one special character (*, $, #).
         Chinese Checkers is a classic strategy board game focused on planning, positioning, and long-term movement.
 In this tutorial, you will learn the basic rules, objectives, and mechanics needed to play a complete match.
     </sys:String>
-
 
     <sys:String x:Key="howToPlayObjectiveTitle">Objective of the Game</sys:String>
     <sys:String x:Key="howToPlayObjectiveText">
@@ -81,11 +77,8 @@ Multiple jumps are allowed in a single turn.
         Plan ahead, create long jump chains, and avoid blocking your own pieces.
     </sys:String>
 
-
-
-
     <!-- ========================================================= -->
-    <!-- ADD FRIENDS                           -->
+    <!-- ADD FRIENDS                                               -->
     <!-- ========================================================= -->
     <sys:String x:Key="addFriend">Add friend</sys:String>
     <sys:String x:Key="pendingFriendRequests">Friend requests</sys:String>
@@ -121,6 +114,7 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="userBlockedSuccess">
         User has been blocked successfully.
     </sys:String>
+
     <sys:String x:Key="msg_FriendRequestAlreadyPending">
         Your friend request is still pending.
     </sys:String>
@@ -132,18 +126,14 @@ Multiple jumps are allowed in a single turn.
         Your request could not be completed.
     </sys:String>
 
-
-
-
     <!-- ===== INVITED USERS ===== -->
-    <sys:String  x:Key="msg_GuestProfile">Guest profile (not registered)</sys:String>
-    <sys:String  x:Key="msg_GuestNoEmail">This user has no email (guest)</sys:String>
-    <sys:String  x:Key="msg_GuestProfileUnavailable">This user is not registered, profile limited</sys:String>
-    <sys:String  x:Key="msg_GuestAccountWarning">Register to unlock full profile features</sys:String>
+    <sys:String x:Key="msg_GuestProfile">Guest profile (not registered)</sys:String>
+    <sys:String x:Key="msg_GuestNoEmail">This user has no email (guest)</sys:String>
+    <sys:String x:Key="msg_GuestProfileUnavailable">This user is not registered, profile limited</sys:String>
+    <sys:String x:Key="msg_GuestAccountWarning">Register to unlock full profile features</sys:String>
     <sys:String x:Key="guestProfileTitle">Guest Profile</sys:String>
     <sys:String x:Key="guestProfileUnavailable">This user is an unregistered guest. Only their username is available. Register to enable full profile and statistics.</sys:String>
     <sys:String x:Key="guestNoEmail">No email (guest)</sys:String>
-
 
     <!-- FRIEND PROFILE -->
     <sys:String x:Key="friendProfile">Friend Profile</sys:String>
@@ -151,13 +141,9 @@ Multiple jumps are allowed in a single turn.
     <!-- REMOVE FRIEND BUTTON -->
     <sys:String x:Key="removeFriend">Remove Friend</sys:String>
 
-
-
-
     <!-- ========================================================= -->
     <!--  MAIN MENU / CONFIGURATION                                -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="gameTitle">CHINESE CHECKERS</sys:String>
     <sys:String x:Key="sound">Sound</sys:String>
     <sys:String x:Key="language">Language</sys:String>
@@ -182,11 +168,10 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="msg_FriendsOpenError">Unable to open the friends list.</sys:String>
     <sys:String x:Key="msg_GuestFeatureOnly">This feature is only available for registered users.</sys:String>
     <sys:String x:Key="msg_GuestStatsUnavailable">Guests cannot view statistics.</sys:String>
-  
+
     <!-- ========================================================= -->
     <!--  SIGN IN / REGISTRATION                                   -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="signin">Sign in</sys:String>
     <sys:String x:Key="fillFields">Fill in each of the fields</sys:String>
     <sys:String x:Key="firstName">Name</sys:String>
@@ -198,7 +183,6 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="msg_AccountCreated">
         Account successfully created. You are ready to play!
     </sys:String>
-
 
     <!-- Local validations -->
     <sys:String x:Key="emptyCredentials">Fields can't be empty.</sys:String>
@@ -214,11 +198,9 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="loading_Login">Signing in...</sys:String>
     <sys:String x:Key="loading_Register">Creating your account...</sys:String>
 
-
     <!-- ========================================================= -->
     <!--  PROFILE / USER DATA                                      -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="yourProfile">YOUR PROFILE</sys:String>
     <sys:String x:Key="fullName">Full Name</sys:String>
     <sys:String x:Key="socialmedia">Social Media</sys:String>
@@ -228,20 +210,16 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="wins">WINS</sys:String>
     <sys:String x:Key="loses">LOSES</sys:String>
 
-
     <sys:String x:Key="deleteFriend">DELETE FRIEND</sys:String>
     <sys:String x:Key="blockUser">BLOCK USER</sys:String>
-
 
     <!-- LOGOUT CONFIRMATION -->
     <sys:String x:Key="title_Confirm">Confirm</sys:String>
     <sys:String x:Key="msg_LogoutConfirm">Do you want to log out?</sys:String>
 
-
     <!-- FRIENDS CONFIRMATION -->
-    <sys:String x:Key="msg_BlockConfirm"> are you shure to bloch the user ?</sys:String>
+    <sys:String x:Key="msg_BlockConfirm">are you shure to bloch the user ?</sys:String>
     <sys:String x:Key="msg_DeleteFriendConfirm">are you shure to delete ypur friend ?</sys:String>
-
 
     <!-- Change Data -->
     <sys:String x:Key="changeData">CHANGE DATA</sys:String>
@@ -268,12 +246,9 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="acceptRequest">Accept request</sys:String>
     <sys:String x:Key="rejectRequest">Reject request</sys:String>
 
-
-
     <!-- ========================================================= -->
-    <!--  LOGIN                                                     -->
+    <!--  LOGIN                                                    -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="login">Log in</sys:String>
     <sys:String x:Key="loginErrorMessage">Username or password is incorrect.</sys:String>
     <sys:String x:Key="playasGuest">Play as Guest</sys:String>
@@ -284,7 +259,6 @@ Multiple jumps are allowed in a single turn.
     <!-- ========================================================= -->
     <!--  PRE-LOBBY / GAME LIST                                    -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="preLobby">Pre-Lobby</sys:String>
     <sys:String x:Key="availableGames">Available Games</sys:String>
     <sys:String x:Key="refresh">Refresh</sys:String>
@@ -295,6 +269,7 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="invalidCodeWarning">Please enter a valid code.</sys:String>
     <sys:String x:Key="errorLoadingLobbies">Error loading public games.</sys:String>
     <sys:String x:Key="joiningLobbyError">Unable to join the selected lobby.</sys:String>
+
     <!-- ===== LOBBY / PRELOBBY ===== -->
     <sys:String x:Key="msg_LobbyCodeUnknown">Unknown code</sys:String>
     <sys:String x:Key="msg_ReportReasonLobby">Reported from lobby</sys:String>
@@ -308,11 +283,9 @@ Multiple jumps are allowed in a single turn.
 
     <sys:String x:Key="msg_ErrorStartingGame">The match could not be started</sys:String>
 
-
     <!-- ========================================================= -->
-    <!--  LOBBY / GAME                                              -->
+    <!--  LOBBY / GAME                                             -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="friendsList">Friends</sys:String>
     <sys:String x:Key="membersList">Members</sys:String>
     <sys:String x:Key="invite">Invite</sys:String>
@@ -324,6 +297,10 @@ Multiple jumps are allowed in a single turn.
 
     <sys:String x:Key="lobbyCode">Lobby Code</sys:String>
     <sys:String x:Key="players">Players</sys:String>
+
+    <!-- ✅ NUEVA (para igualar estructura con ES/PT/FR) -->
+    <sys:String x:Key="playersCount">Players</sys:String>
+
     <sys:String x:Key="waitingForPlayers">Waiting for players...</sys:String>
     <sys:String x:Key="lobbyCreated">Lobby created successfully!</sys:String>
     <sys:String x:Key="youJoinedLobby">You joined the lobby.</sys:String>
@@ -337,6 +314,7 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="public">Public</sys:String>
 
     <sys:String x:Key="lobbyLeft">You have left the lobby.</sys:String>
+
     <!-- Baneos -->
     <sys:String x:Key="ban_temp_10m">Has sido baneado temporalmente por 10 minutos debido a reportes acumulados.</sys:String>
     <sys:String x:Key="ban_temp_1h">Has sido baneado temporalmente por 1 hora debido a reportes acumulados.</sys:String>
@@ -360,14 +338,9 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="msg_CellOccupied">The destination cell is occupied.</sys:String>
     <sys:String x:Key="msg_MoveNotAllowed">Move not allowed.</sys:String>
 
-
-
-
-
     <!-- ========================================================= -->
-    <!-- POPUPS                                                     -->
+    <!--  POPUPS                                                   -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="verificationCodeTitle">VERIFICATION CODE</sys:String>
     <sys:String x:Key="verificationCodeInstruction">
         Enter the code sent to your email to complete your registration.
@@ -379,15 +352,11 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="processCompletedTitle">Process completed</sys:String>
     <sys:String x:Key="processCompletedInstruction">Your registration has been successfully completed.</sys:String>
 
-
-
     <!-- ========================================================= -->
-    <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                    -->
+    <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                   -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="msg_ChatServerUnavailable">The chat server is unavailable.</sys:String>
     <sys:String x:Key="msg_ChatCommunicationError">A communication error occurred in the chat.</sys:String>
-
 
     <!-- Resultados generales -->
     <sys:String x:Key="msg_Success">Operation completed successfully.</sys:String>
@@ -417,11 +386,9 @@ Multiple jumps are allowed in a single turn.
         We are unable to display the player ranking right now.
     </sys:String>
     <sys:String x:Key="msg_SocialUrlMissing">No social media link added.</sys:String>
-    <sys:String x:Key="msg_UrlOpenError">At this moment we cannot open the link.</sys:String> 
-
+    <sys:String x:Key="msg_UrlOpenError">At this moment we cannot open the link.</sys:String>
 
     <!-- Navegación / módulos -->
-
     <sys:String x:Key="msg_ProfileChangeError">Unable to open the change data page.</sys:String>
     <sys:String x:Key="msg_FriendRemoved">Friend removed successfully.</sys:String>
     <sys:String x:Key="msg_ChatComingSoon">Chat feature coming soon.</sys:String>
@@ -432,8 +399,6 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="msg_LanguageChangeSuccess">
         Language has been successfully changed.
     </sys:String>
-
-
 
     <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Please enter the verification code.</sys:String>
@@ -502,14 +467,9 @@ Multiple jumps are allowed in a single turn.
         Username cannot be null or empty.
     </sys:String>
 
-
-
     <!-- ========================================================= -->
     <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->
     <!-- ========================================================= -->
-
-   
-
 
     <!-- NAME -->
     <sys:String x:Key="msg_InvalidNameEmpty">Name cannot be empty.</sys:String>
@@ -533,7 +493,5 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="msg_InvalidEmailEmpty">Email cannot be empty.</sys:String>
     <sys:String x:Key="msg_InvalidEmailTooLong">The email is too long.</sys:String>
     <sys:String x:Key="msg_InvalidEmailFormat">The email format is invalid.</sys:String>
-
-
 
 </ResourceDictionary>

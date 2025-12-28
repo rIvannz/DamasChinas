@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ========================================================= -->
-    <!--  TEXTOS GENERALES DEL SISTEMA                             -->
+    <!--  GENERAL SYSTEM TEXTS                                     -->
     <!-- ========================================================= -->
     <sys:String x:Key="back">Regresar</sys:String>
     <sys:String x:Key="exit">Salir</sys:String>
@@ -12,8 +12,8 @@
     <sys:String x:Key="infoTitle">Información</sys:String>
     <sys:String x:Key="confirmTitle">Confirmación</sys:String>
     <sys:String x:Key="music">Música</sys:String>
-    <sys:String x:Key="effects">Efectos de Sonido</sys:String>
-    <sys:String x:Key="yesWord">Si</sys:String>
+    <sys:String x:Key="effects">Efectos de sonido</sys:String>
+    <sys:String x:Key="yesWord">Sí</sys:String>
     <sys:String x:Key="noWord">No</sys:String>
     <sys:String x:Key="report">Reportar</sys:String>
     <sys:String x:Key="kick">Expulsar</sys:String>
@@ -22,11 +22,10 @@
     <sys:String x:Key="currentData">Datos actuales</sys:String>
     <sys:String x:Key="openLink">Abrir enlace</sys:String>
     <sys:String x:Key="passwordRules">
-        La contraseña debe tener al menos 8 caracteres, 
-incluir una letra mayúscula, un número 
+        La contraseña debe tener al menos 8 caracteres,
+incluir una letra mayúscula, un número
 y un carácter especial (*, $, #).
     </sys:String>
-
 
     <!-- HOW TO PLAY -->
     <sys:String x:Key="howToPlayTitle">Cómo jugar Damas Chinas</sys:String>
@@ -37,7 +36,7 @@ y un carácter especial (*, $, #).
 En este tutorial aprenderás las reglas básicas, los objetivos y las mecánicas necesarias para jugar una partida completa.
     </sys:String>
 
-    <sys:String x:Key="howToPlayObjectiveTitle">Objetivo del Juego</sys:String>
+    <sys:String x:Key="howToPlayObjectiveTitle">Objetivo del juego</sys:String>
     <sys:String x:Key="howToPlayObjectiveText">
         El objetivo es ser el primer jugador en mover todas sus piezas al vértice opuesto del tablero.
     </sys:String>
@@ -47,12 +46,12 @@ En este tutorial aprenderás las reglas básicas, los objetivos y las mecánicas
         El juego admite 2, 4 o 6 jugadores. Cada jugador controla piezas de un color distinto.
     </sys:String>
 
-    <sys:String x:Key="howToPlayBoardTitle">Preparación del Tablero</sys:String>
+    <sys:String x:Key="howToPlayBoardTitle">Preparación del tablero</sys:String>
     <sys:String x:Key="howToPlayBoardText">
         Cada jugador comienza con todas sus piezas colocadas en uno de los triángulos del tablero en forma de estrella.
     </sys:String>
 
-    <sys:String x:Key="howToPlayMovesTitle">Cómo Mover las Piezas</sys:String>
+    <sys:String x:Key="howToPlayMovesTitle">Cómo mover las piezas</sys:String>
     <sys:String x:Key="howToPlayMovesText">
         En tu turno puedes mover una pieza a una casilla adyacente vacía o saltar sobre otras piezas.
 Se permiten múltiples saltos en un solo turno.
@@ -63,41 +62,35 @@ Se permiten múltiples saltos en un solo turno.
         Los jugadores juegan por turnos en sentido horario. Solo se puede mover una pieza por turno.
     </sys:String>
 
-    <sys:String x:Key="howToPlayWinTitle">Cómo Ganar</sys:String>
+    <sys:String x:Key="howToPlayWinTitle">Cómo ganar</sys:String>
     <sys:String x:Key="howToPlayWinText">
         Ganas cuando todas tus piezas ocupan el triángulo objetivo en el lado opuesto del tablero.
     </sys:String>
 
-    <sys:String x:Key="howToPlayRulesTitle">Reglas Importantes</sys:String>
+    <sys:String x:Key="howToPlayRulesTitle">Reglas importantes</sys:String>
     <sys:String x:Key="howToPlayRulesText">
         Puedes saltar sobre tus propias piezas o las de tus oponentes. Ninguna pieza se elimina del tablero.
     </sys:String>
 
-    <sys:String x:Key="howToPlayTipsTitle">Consejos para Principiantes</sys:String>
+    <sys:String x:Key="howToPlayTipsTitle">Consejos para principiantes</sys:String>
     <sys:String x:Key="howToPlayTipsText">
         Planea con anticipación, crea cadenas largas de saltos y evita bloquear tus propias piezas.
     </sys:String>
 
-
-
     <!-- ========================================================= -->
-    <!--  Modulo de agregar amigos                     -->
+    <!-- ADD FRIENDS                                               -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="addFriend">Agregar amigo</sys:String>
     <sys:String x:Key="pendingFriendRequests">Solicitudes de amistad</sys:String>
 
-    <!-- Para la ventana de enviado -->
     <sys:String x:Key="friendRequestSentTitle">Solicitud enviada</sys:String>
     <sys:String x:Key="friendRequestSentOk">Tu solicitud fue enviada correctamente.</sys:String>
 
-    <!-- Mensajes de error relacionados -->
     <sys:String x:Key="msg_FriendUserNotFound">El usuario que quieres agregar no se encontró.</sys:String>
-    <!-- Resultados módulo de amigos -->
-    <sys:String x:Key="msg_FriendRequestAccepted">
-        Has aceptado la solicitud de amistad correctamente.</sys:String>
-    <sys:String x:Key="msg_FriendRequestRejected">
-        Has rechazado la solicitud de amistad.</sys:String>
+
+    <!-- Friends module result messages -->
+    <sys:String x:Key="msg_FriendRequestAccepted">Solicitud de amistad aceptada correctamente.</sys:String>
+    <sys:String x:Key="msg_FriendRequestRejected">Solicitud de amistad rechazada.</sys:String>
     <sys:String x:Key="msg_NoPendingRequests">
         No tienes solicitudes pendientes.
     </sys:String>
@@ -107,69 +100,65 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="friendRemoved">{0} te ha eliminado de su lista de amigos</sys:String>
     <sys:String x:Key="userBlockedYou">{0} te ha bloqueado</sys:String>
     <sys:String x:Key="userUnblockedYou">{0} te ha desbloqueado</sys:String>
+
     <sys:String x:Key="confirmRemoveFriend">
         ¿Estás seguro de que deseas eliminar a este amigo?
     </sys:String>
     <sys:String x:Key="friendRemovedSuccess">
-        El amigo se eliminó correctamente.
+        Amigo eliminado correctamente.
     </sys:String>
 
     <sys:String x:Key="confirmBlockUser">
         ¿Estás seguro de que deseas bloquear a este usuario?
     </sys:String>
     <sys:String x:Key="userBlockedSuccess">
-        El usuario se bloqueó correctamente.
+        Usuario bloqueado correctamente.
     </sys:String>
+
     <sys:String x:Key="msg_FriendRequestAlreadyPending">
-        La solicitud aún está pendiente.
+        Tu solicitud de amistad sigue pendiente.
     </sys:String>
 
     <sys:String x:Key="msg_AlreadyFriends">
-        Este usuario ya pertenece a tu lista de amigos.
+        Este usuario ya está en tu lista de amigos.
     </sys:String>
     <sys:String x:Key="msg_UserBlocked">
         No se pudo completar tu solicitud.
     </sys:String>
 
-
-
-    <!-- PERFIL DE AMIGO -->
-    <sys:String x:Key="friendProfile">Perfil del amigo</sys:String>
-
-    <!-- BOTÓN ELIMINAR AMIGO -->
-    <sys:String x:Key="removeFriend">Eliminar amigo</sys:String>
-
-
-    <!-- ===== USUARIOS INVITADOS ===== -->
-    <sys:String  x:Key="msg_GuestProfile">Perfil de invitado (no registrado)</sys:String>
-    <sys:String  x:Key="msg_GuestNoEmail">Este usuario no tiene correo (invitado)</sys:String>
-    <sys:String  x:Key="msg_GuestProfileUnavailable">Este usuario no está registrado, perfil limitado</sys:String>
-    <sys:String  x:Key="msg_GuestAccountWarning">Regístrate para desbloquear todas las funciones del perfil</sys:String>
+    <!-- ===== INVITED USERS ===== -->
+    <sys:String x:Key="msg_GuestProfile">Perfil de invitado (no registrado)</sys:String>
+    <sys:String x:Key="msg_GuestNoEmail">Este usuario no tiene correo (invitado)</sys:String>
+    <sys:String x:Key="msg_GuestProfileUnavailable">Este usuario no está registrado, perfil limitado</sys:String>
+    <sys:String x:Key="msg_GuestAccountWarning">Regístrate para desbloquear todas las funciones del perfil</sys:String>
     <sys:String x:Key="guestProfileTitle">Perfil de invitado</sys:String>
     <sys:String x:Key="guestProfileUnavailable">Este usuario es un invitado no registrado. Solo su nombre de usuario está disponible. Regístrate para habilitar estadísticas y un perfil completo.</sys:String>
     <sys:String x:Key="guestNoEmail">Sin correo (invitado)</sys:String>
 
+    <!-- FRIEND PROFILE -->
+    <sys:String x:Key="friendProfile">Perfil del amigo</sys:String>
 
-
-
+    <!-- REMOVE FRIEND BUTTON -->
+    <sys:String x:Key="removeFriend">Eliminar amigo</sys:String>
 
     <!-- ========================================================= -->
-    <!--  MENÚ PRINCIPAL / CONFIGURACIÓN                           -->
+    <!--  MAIN MENU / CONFIGURATION                                -->
     <!-- ========================================================= -->
     <sys:String x:Key="gameTitle">DAMAS CHINAS</sys:String>
     <sys:String x:Key="sound">Sonido</sys:String>
-    <sys:String x:Key="language">Lenguaje</sys:String>
-    <sys:String x:Key="applyLanguage">Aplicar Lenguaje</sys:String>
+    <sys:String x:Key="language">Idioma</sys:String>
+    <sys:String x:Key="applyLanguage">Aplicar idioma</sys:String>
     <sys:String x:Key="spanish">Español</sys:String>
     <sys:String x:Key="english">Inglés</sys:String>
-    <sys:String x:Key="instructionLanguage">Selecciona un lenguaje y presiona Aplicar Lenguaje.</sys:String>
-
+    <sys:String x:Key="instructionLanguage">
+        Selecciona un idioma y presiona Aplicar idioma.
+    </sys:String>
 
     <!-- MENU REGISTERED PLAYER -->
-    <sys:String x:Key="createGame">Crear Partida</sys:String>
-    <sys:String x:Key="joinParty">Unirse a Partida</sys:String>
-    <sys:String x:Key="howToPlay">Cómo Jugar</sys:String>
-    <sys:String x:Key="logout">Cerrar Sesión</sys:String>
+    <sys:String x:Key="createGame">Crear partida</sys:String>
+    <sys:String x:Key="joinParty">Unirse a partida</sys:String>
+    <sys:String x:Key="howToPlay">Cómo jugar</sys:String>
+    <sys:String x:Key="logout">CERRAR SESIÓN</sys:String>
 
     <sys:String x:Key="msg_TutorialUnavailable">El tutorial no está disponible por el momento.</sys:String>
     <sys:String x:Key="msg_JoinPartyOpenError">No se pudo abrir la ventana para unirse a una partida.</sys:String>
@@ -178,66 +167,61 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_StatsUnavailable">Las estadísticas no están disponibles por el momento.</sys:String>
     <sys:String x:Key="msg_FriendsOpenError">No se pudo abrir la lista de amigos.</sys:String>
     <sys:String x:Key="msg_GuestFeatureOnly">Esta función solo está disponible para usuarios registrados.</sys:String>
-    <sys:String x:Key="msg_GuestStatsUnavailable">Los invitados no pueden visualizar estadísticas.</sys:String>
-
-
+    <sys:String x:Key="msg_GuestStatsUnavailable">Los invitados no pueden ver estadísticas.</sys:String>
 
     <!-- ========================================================= -->
-    <!--  SIGN IN / REGISTRO                                       -->
+    <!--  SIGN IN / REGISTRATION                                   -->
     <!-- ========================================================= -->
     <sys:String x:Key="signin">Registrarse</sys:String>
     <sys:String x:Key="fillFields">Rellena cada uno de los campos</sys:String>
     <sys:String x:Key="firstName">Nombre</sys:String>
     <sys:String x:Key="lastName">Apellido</sys:String>
-    <sys:String x:Key="email">Correo Electrónico</sys:String>
+    <sys:String x:Key="email">Correo electrónico</sys:String>
     <sys:String x:Key="username">Nombre de usuario</sys:String>
     <sys:String x:Key="password">Contraseña</sys:String>
     <sys:String x:Key="confirmPassword">Confirma tu contraseña</sys:String>
     <sys:String x:Key="msg_AccountCreated">
-        Cuenta creada correctamente. ¡Bienvenido a Damas Chinas!
+        Cuenta creada correctamente. ¡Ya puedes jugar!
     </sys:String>
-    <sys:String x:Key="deleteFriend">ELIMINAR AMIGO</sys:String>
-    <sys:String x:Key="blockUser">BLOQUEAR USUARIO</sys:String>
 
-
-    <!-- Validaciones locales -->
+    <!-- Local validations -->
     <sys:String x:Key="emptyCredentials">Los campos no pueden estar vacíos.</sys:String>
     <sys:String x:Key="passwordDontMatchErrorMessage">Las contraseñas no coinciden.</sys:String>
     <sys:String x:Key="passwordMax10Error">La contraseña debe tener 10 caracteres o menos.</sys:String>
     <sys:String x:Key="emailError">El correo electrónico debe llevar un formato válido.</sys:String>
 
-    <!-- Botones -->
+    <!-- Buttons -->
     <sys:String x:Key="createAccount">Crear cuenta</sys:String>
 
-    <!-- CARGA / PROGRESO -->
+    <!-- LOADING / PROGRESS -->
     <sys:String x:Key="loadingTitle">Cargando...</sys:String>
     <sys:String x:Key="loading_Login">Iniciando sesión...</sys:String>
     <sys:String x:Key="loading_Register">Creando tu cuenta...</sys:String>
 
-
     <!-- ========================================================= -->
-    <!--  PERFIL / DATOS DE USUARIO                                -->
+    <!--  PROFILE / USER DATA                                      -->
     <!-- ========================================================= -->
     <sys:String x:Key="yourProfile">TU PERFIL</sys:String>
     <sys:String x:Key="fullName">Nombre completo</sys:String>
     <sys:String x:Key="socialmedia">Redes sociales</sys:String>
     <sys:String x:Key="profile">Perfil</sys:String>
     <sys:String x:Key="statistics">Estadísticas</sys:String>
-
     <sys:String x:Key="matchesPlayed">PARTIDAS JUGADAS</sys:String>
     <sys:String x:Key="wins">VICTORIAS</sys:String>
     <sys:String x:Key="loses">DERROTAS</sys:String>
 
-    <!-- LOGOUT CONFIRMACION -->
+    <sys:String x:Key="deleteFriend">ELIMINAR AMIGO</sys:String>
+    <sys:String x:Key="blockUser">BLOQUEAR USUARIO</sys:String>
+
+    <!-- LOGOUT CONFIRMATION -->
     <sys:String x:Key="title_Confirm">Confirmar</sys:String>
-    <sys:String x:Key="msg_LogoutConfirm">¿Deseas cerrar tu sesión?</sys:String>
+    <sys:String x:Key="msg_LogoutConfirm">¿Deseas cerrar sesión?</sys:String>
 
     <!-- FRIENDS CONFIRMATION -->
-    <sys:String x:Key="msg_BlockConfirm">¿Estas seguro de este bloqueo?</sys:String>
-    <sys:String x:Key="msg_DeleteFriendConfirm">¿Estas seguro de eliminar a tu amigo?</sys:String>
+    <sys:String x:Key="msg_BlockConfirm">¿Estás seguro de bloquear al usuario?</sys:String>
+    <sys:String x:Key="msg_DeleteFriendConfirm">¿Estás seguro de eliminar a tu amigo?</sys:String>
 
-
-    <!-- Cambio de datos -->
+    <!-- Change Data -->
     <sys:String x:Key="changeData">CAMBIAR DATOS</sys:String>
     <sys:String x:Key="changeDataInstruction">Ingresa los nuevos datos en los campos correspondientes.</sys:String>
     <sys:String x:Key="saveChanges">Guardar cambios</sys:String>
@@ -245,34 +229,35 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="changeUsername">Cambiar nombre de usuario</sys:String>
     <sys:String x:Key="saveUsername">Guardar nombre de usuario</sys:String>
     <sys:String x:Key="changePassword">Cambiar contraseña</sys:String>
-    <sys:String x:Key="passwordInstruction">Para cambiar tu contraseña, se enviará un código de verificación a tu correo.</sys:String>
+    <sys:String x:Key="passwordInstruction">
+        Para cambiar tu contraseña, se enviará un código de verificación a tu correo.
+    </sys:String>
     <sys:String x:Key="newUsername">Nuevo nombre de usuario</sys:String>
     <sys:String x:Key="codePassword">Código de verificación</sys:String>
     <sys:String x:Key="sendCode">Enviar código</sys:String>
     <sys:String x:Key="savePassword">Guardar contraseña</sys:String>
     <sys:String x:Key="usernameUpdated">Nombre de usuario actualizado correctamente.</sys:String>
- 
     <sys:String x:Key="codeSentMessage">Código de verificación enviado a tu correo.</sys:String>
 
     <!-- Extra UI -->
-    <sys:String x:Key="chatError">No se pudo abrir el chat.</sys:String>
     <sys:String x:Key="userProfile">Perfil de usuario</sys:String>
+    <sys:String x:Key="chatError">No se pudo abrir el chat.</sys:String>
     <sys:String x:Key="reviewRequest">Revisar solicitud</sys:String>
     <sys:String x:Key="acceptRequest">Aceptar solicitud</sys:String>
     <sys:String x:Key="rejectRequest">Rechazar solicitud</sys:String>
 
     <!-- ========================================================= -->
-    <!--  LOGIN                                                     -->
+    <!--  LOGIN                                                    -->
     <!-- ========================================================= -->
     <sys:String x:Key="login">Iniciar sesión</sys:String>
-    <sys:String x:Key="loginErrorMessage">Usuario o contraseña incorrecto.</sys:String>
+    <sys:String x:Key="loginErrorMessage">Usuario o contraseña incorrectos.</sys:String>
     <sys:String x:Key="playasGuest">Jugar como invitado</sys:String>
     <sys:String x:Key="forgotPassword">¿Olvidaste tu contraseña?</sys:String>
     <sys:String x:Key="welcome">Bienvenido a DAMAS CHINAS</sys:String>
     <sys:String x:Key="loadMain">Cargar</sys:String>
 
     <!-- ========================================================= -->
-    <!--  PRE-LOBBY / LISTA DE PARTIDAS                             -->
+    <!--  PRE-LOBBY / GAME LIST                                    -->
     <!-- ========================================================= -->
     <sys:String x:Key="preLobby">Pre-Lobby</sys:String>
     <sys:String x:Key="availableGames">Partidas disponibles</sys:String>
@@ -284,6 +269,7 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="invalidCodeWarning">Introduce un código válido.</sys:String>
     <sys:String x:Key="errorLoadingLobbies">Error al cargar las partidas públicas.</sys:String>
     <sys:String x:Key="joiningLobbyError">No fue posible unirse a la partida seleccionada.</sys:String>
+
     <!-- ===== LOBBY / PRELOBBY ===== -->
     <sys:String x:Key="msg_LobbyCodeUnknown">Código desconocido</sys:String>
     <sys:String x:Key="msg_ReportReasonLobby">Reportado desde el lobby</sys:String>
@@ -296,11 +282,9 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_OnlyHostCanStart">Solo el anfitrión puede iniciar la partida</sys:String>
 
     <sys:String x:Key="msg_ErrorStartingGame">No se pudo iniciar la partida</sys:String>
-    <sys:String x:Key="playersCount">Jugadores</sys:String>
-
 
     <!-- ========================================================= -->
-    <!--  LOBBY / PARTIDA                                          -->
+    <!--  LOBBY / GAME                                             -->
     <!-- ========================================================= -->
     <sys:String x:Key="friendsList">Amigos</sys:String>
     <sys:String x:Key="membersList">Miembros</sys:String>
@@ -311,8 +295,10 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="startGame">Iniciar partida</sys:String>
     <sys:String x:Key="leaveLobby">Salir del lobby</sys:String>
 
-    <sys:String x:Key="lobbyCode">Código de Lobby</sys:String>
+    <sys:String x:Key="lobbyCode">Código de lobby</sys:String>
     <sys:String x:Key="players">Jugadores</sys:String>
+    <sys:String x:Key="playersCount">Jugadores</sys:String>
+
     <sys:String x:Key="waitingForPlayers">Esperando jugadores...</sys:String>
     <sys:String x:Key="lobbyCreated">¡Lobby creado con éxito!</sys:String>
     <sys:String x:Key="youJoinedLobby">Te uniste al lobby.</sys:String>
@@ -324,14 +310,16 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="host">Anfitrión</sys:String>
     <sys:String x:Key="private">Privado</sys:String>
     <sys:String x:Key="public">Pública</sys:String>
+
     <sys:String x:Key="lobbyLeft">Has salido del lobby.</sys:String>
+
     <!-- Baneos -->
     <sys:String x:Key="ban_temp_10m">Has sido baneado temporalmente por 10 minutos debido a reportes acumulados.</sys:String>
     <sys:String x:Key="ban_temp_1h">Has sido baneado temporalmente por 1 hora debido a reportes acumulados.</sys:String>
     <sys:String x:Key="ban_permanent">Has sido baneado permanentemente debido a un alto número de reportes.</sys:String>
 
     <sys:String x:Key="status_Connected">Conectado</sys:String>
-    <sys:String x:Key="status_Turn">SU TURNO</sys:String>
+    <sys:String x:Key="status_Turn">TU TURNO</sys:String>
     <sys:String x:Key="status_Waiting">Esperando...</sys:String>
     <sys:String x:Key="status_Disconnected">DESCONECTADO</sys:String>
     <sys:String x:Key="winner">GANADOR</sys:String>
@@ -348,15 +336,14 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_CellOccupied">La casilla destino está ocupada.</sys:String>
     <sys:String x:Key="msg_MoveNotAllowed">Movimiento no permitido.</sys:String>
 
-
-
-
     <!-- ========================================================= -->
-    <!--  POPUPS                                                    -->
+    <!--  POPUPS                                                   -->
     <!-- ========================================================= -->
     <sys:String x:Key="verificationCodeTitle">CÓDIGO DE VERIFICACIÓN</sys:String>
-    <sys:String x:Key="verificationCodeInstruction">Ingresa el código enviado a tu correo.</sys:String>
-    <sys:String x:Key="codeHint">Ingresa el código</sys:String>
+    <sys:String x:Key="verificationCodeInstruction">
+        Ingresa el código enviado a tu correo para completar tu registro.
+    </sys:String>
+    <sys:String x:Key="codeHint">Ingresa el código de verificación</sys:String>
     <sys:String x:Key="cancel">Cancelar</sys:String>
     <sys:String x:Key="verify">Verificar</sys:String>
 
@@ -364,9 +351,8 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="processCompletedInstruction">Tu registro se ha completado correctamente.</sys:String>
 
     <!-- ========================================================= -->
-    <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                    -->
+    <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                   -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="msg_ChatServerUnavailable">El servidor de chat no está disponible.</sys:String>
     <sys:String x:Key="msg_ChatCommunicationError">Ocurrió un error de comunicación en el chat.</sys:String>
 
@@ -380,43 +366,37 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_MatchCreationFailed">No se pudo crear la partida.</sys:String>
     <sys:String x:Key="msg_LobbyNotFound">No se encontró la partida.</sys:String>
     <sys:String x:Key="msg_LobbyInactive">Esta partida ya no está activa.</sys:String>
-    <sys:String x:Key="msg_LobbyUserBanned">Has sido bloqueado de esta partida.</sys:String>
+    <sys:String x:Key="msg_LobbyUserBanned">Estás baneado de esta partida.</sys:String>
     <sys:String x:Key="msg_LobbyClosed">La partida ha sido cerrada por el anfitrión.</sys:String>
 
-    <!-- Backend / Servidor -->
-    <sys:String x:Key="msg_ServerUnavailable">Servidor no disponible, inténtalo más tarde.</sys:String>
-    <sys:String x:Key="msg_NetworkLatency">El servidor sufrio una unterrupción, inicia seción nuevamente.</sys:String>
-    <sys:String x:Key="msg_UnknownError">Ocurrió un error inesperado.</sys:String>
+    <!-- Backend / servidor -->
+    <sys:String x:Key="msg_ServerUnavailable">El servidor tuvo una interrupción, inicia sesión de nuevo.</sys:String>
+    <sys:String x:Key="msg_NetworkLatency">Se detectó latencia de red.</sys:String>
+    <sys:String x:Key="msg_UnknownError">Ocurrió un error inesperado. Inténtalo nuevamente.</sys:String>
 
     <!-- Recuperación / cambios -->
     <sys:String x:Key="msg_PasswordUpdated">Contraseña actualizada correctamente.</sys:String>
-    <sys:String x:Key="msg_PasswordChangeSuccess">Tu contraseña ha sido actualizada correctamente.</sys:String>
+    <sys:String x:Key="msg_PasswordChangeSuccess">Tu contraseña se actualizó correctamente.</sys:String>
 
     <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">Esta función aún no está disponible.</sys:String>
-    <sys:String x:Key="msg_LanguageChangeError">
-        Ocurrió un error al cambiar el idioma. Inténtalo nuevamente.</sys:String>
     <sys:String x:Key="msg_RankingUnavailable">
         En este momento no podemos mostrar el ranking de jugadores.
     </sys:String>
-    <sys:String x:Key="msg_HostDisconnected">
-        El host de la partida se desconectó. La partida ha sido cerrada.
-    </sys:String>
-    <sys:String x:Key="msg_SocialUrlMissing">No hay URL registrada.</sys:String>
-    <sys:String x:Key="msg_UrlOpenError">En este momento no podemos abrir el link.</sys:String> 
-
-
+    <sys:String x:Key="msg_SocialUrlMissing">No hay enlace de redes sociales agregado.</sys:String>
+    <sys:String x:Key="msg_UrlOpenError">En este momento no podemos abrir el enlace.</sys:String>
 
     <!-- Navegación / módulos -->
-
     <sys:String x:Key="msg_ProfileChangeError">No se pudo abrir la pantalla para cambiar datos.</sys:String>
     <sys:String x:Key="msg_FriendRemoved">Amigo eliminado correctamente.</sys:String>
     <sys:String x:Key="msg_ChatComingSoon">La función de chat estará disponible pronto.</sys:String>
     <sys:String x:Key="msg_SelectLanguageFirst">Selecciona un idioma antes de aplicar.</sys:String>
-    <sys:String x:Key="msg_LanguageChangeSuccess">
-        El idioma se ha cambiado correctamente.
+    <sys:String x:Key="msg_LanguageChangeError">
+        Ocurrió un error al cambiar el idioma. Inténtalo nuevamente.
     </sys:String>
-
+    <sys:String x:Key="msg_LanguageChangeSuccess">
+        El idioma se cambió correctamente.
+    </sys:String>
 
     <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Por favor ingresa el código de verificación.</sys:String>
@@ -427,10 +407,10 @@ Se permiten múltiples saltos en un solo turno.
 
     <!-- Email / recuperación -->
     <sys:String x:Key="msg_EmptyEmail">El correo no puede estar vacío.</sys:String>
-    <sys:String x:Key="msg_RecoveryCodeSent">Se ha enviado un código de verificación a tu correo.</sys:String>
+    <sys:String x:Key="msg_RecoveryCodeSent">Te hemos enviado un código de verificación.</sys:String>
 
     <!-- ========================================================= -->
-    <!--  Títulos                                                   -->
+    <!--  TITLES                                                   -->
     <!-- ========================================================= -->
     <sys:String x:Key="title_Success">Éxito</sys:String>
     <sys:String x:Key="title_Warning">Advertencia</sys:String>
@@ -440,16 +420,15 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="forgotPasswordTitle">Olvidé mi contraseña</sys:String>
     <sys:String x:Key="newPassword">Nueva contraseña</sys:String>
 
-    <!-- Módulo sonido -->
+    <!-- ========================================================= -->
+    <!--  SOUND MODULE                                             -->
+    <!-- ========================================================= -->
     <sys:String x:Key="msg_SoundSettingsUpdated">Configuración de sonido actualizada correctamente.</sys:String>
     <sys:String x:Key="msg_SoundSettingsError">No se pudieron actualizar las configuraciones de sonido.</sys:String>
-    
-
 
     <!-- ========================================================= -->
-    <!--  Validaciones universales (GENÉRICAS)                     -->
+    <!--  UNIVERSAL / VALIDATION CODES (GENÉRICOS)                 -->
     <!-- ========================================================= -->
-
     <sys:String x:Key="msg_EmptyCredentials">Los campos no pueden estar vacíos.</sys:String>
     <sys:String x:Key="msg_PasswordsDontMatch">Las contraseñas no coinciden.</sys:String>
     <sys:String x:Key="msg_InvalidPassword">La contraseña no cumple con los requisitos.</sys:String>
@@ -460,31 +439,34 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_UserProfileNotFound">No se encontró el perfil del usuario.</sys:String>
     <sys:String x:Key="msg_FriendsLoadError">No se pudo cargar la lista de amigos.</sys:String>
 
-    <!-- Chat / navegación -->
+    <!-- Chat / navigation -->
     <sys:String x:Key="msg_ChatOpenError">No se pudo abrir el chat.</sys:String>
     <sys:String x:Key="msg_ChatUnavailable">El chat no está disponible en este momento.</sys:String>
     <sys:String x:Key="msg_NavigationError">Ocurrió un error durante la navegación.</sys:String>
 
-    <!-- Verificación -->
+    <!-- Verification -->
     <sys:String x:Key="msg_CodeSendingError">Error al enviar el código de verificación.</sys:String>
     <sys:String x:Key="msg_CodeSentSuccessfully">Código de verificación enviado correctamente.</sys:String>
 
-    <!-- Sonido -->
+    <!-- Sound -->
     <sys:String x:Key="msg_SoundVolumeInvalid">Valor de volumen inválido.</sys:String>
 
-    <!-- Operaciones generales -->
+    <!-- General operations -->
     <sys:String x:Key="msg_OperationInterrupted">La operación fue interrumpida debido a una validación fallida.</sys:String>
     <sys:String x:Key="msg_UserValidationError">Algunos de tus datos no son válidos. Revisa los campos.</sys:String>
+    <sys:String x:Key="msg_HostDisconnected">
+        El host se desconectó. La partida ha sido cerrada.
+    </sys:String>
+
     <sys:String x:Key="msg_SessionNotInitialized">
-        No active session found. Please sign in first.
+        No se encontró una sesión activa. Por favor inicia sesión primero.
     </sys:String>
     <sys:String x:Key="msg_InvalidUsernameArgument">
         El nombre de usuario no puede ser nulo ni estar vacío.
     </sys:String>
 
-
     <!-- ========================================================= -->
-    <!--  VALIDATOR.cs — MENSAJES ESPECÍFICOS                      -->
+    <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->
     <!-- ========================================================= -->
 
     <!-- NAME -->
@@ -509,6 +491,5 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_InvalidEmailEmpty">El correo no puede estar vacío.</sys:String>
     <sys:String x:Key="msg_InvalidEmailTooLong">El correo es demasiado largo.</sys:String>
     <sys:String x:Key="msg_InvalidEmailFormat">El formato del correo electrónico no es válido.</sys:String>
-
 
 </ResourceDictionary>

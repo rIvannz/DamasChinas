@@ -22,9 +22,9 @@
     <MetadataSource Address="http://localhost:8086/SessionService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="177d616f-909f-4be9-a3ec-e50d6d133640" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="cd308f58-c9ff-40ef-9016-f0dc95f23c6f" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="3ca3b43c-0ae4-4863-acdd-0fff5239207b" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
+    <MetadataFile FileName="service11.wsdl" MetadataType="Wsdl" ID="473cef39-df67-4d95-a308-782cecbbde11" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
+    <MetadataFile FileName="service22.xsd" MetadataType="Schema" ID="65dae7b2-027a-4b91-aaa4-bc4d053c9c29" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
+    <MetadataFile FileName="service23.xsd" MetadataType="Schema" ID="2fd8f10f-1b8e-45c7-a0a9-67af153f2e12" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

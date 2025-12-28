@@ -22,12 +22,12 @@
     <MetadataSource Address="http://localhost:8007/RankingService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="80a8d070-478c-407f-96e5-5744c67654bd" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd1" />
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="dc28ed9e-371e-436d-8956-b6ddef842707" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?disco" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="e3f26fa1-b2f2-4ab5-b8ce-24b25430aa80" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd0" />
-    <MetadataFile FileName="RankingService.wsdl" MetadataType="Wsdl" ID="28650693-1fc8-49d3-9241-974123e40cb0" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?wsdl" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="dbd6eabf-e622-45db-889e-d9c771f275b4" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd3" />
-    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="3baded8f-75ea-4235-a66c-ed955aa2b5d9" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd2" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="a135d8f8-1cc5-44b3-bfd6-1a22f51ac71e" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd1" />
+    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="2fb9e91e-82b3-4849-9dac-8df0fcb000a0" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?disco" />
+    <MetadataFile FileName="item41.xsd" MetadataType="Schema" ID="594b1ee3-94be-40c4-95bd-cc74e577bda6" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd0" />
+    <MetadataFile FileName="RankingService1.wsdl" MetadataType="Wsdl" ID="cf131a63-46a7-4eea-9ab7-fe4b3b998b44" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?wsdl" />
+    <MetadataFile FileName="item42.xsd" MetadataType="Schema" ID="3f02c521-53ad-432f-a1f7-7a5f41c6746f" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd3" />
+    <MetadataFile FileName="item43.xsd" MetadataType="Schema" ID="9b3b8fa6-fe27-4f81-8d3e-90bff0422d90" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
