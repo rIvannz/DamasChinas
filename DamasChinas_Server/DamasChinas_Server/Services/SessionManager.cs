@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using DamasChinas_Server.Common;
+﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Interfaces;
+using System;
+using System.Collections.Concurrent;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
 
 namespace DamasChinas_Server.Services
 {
@@ -19,7 +21,7 @@ namespace DamasChinas_Server.Services
         private const string OperationUpdateSessionUsername = nameof(UpdateSessionUsername);
         private const string OperationForEachSession = nameof(ForEachSession);
 
- 
+
 
         public static void AddSession(string username, ISessionCallback callback)
         {
@@ -80,7 +82,7 @@ namespace DamasChinas_Server.Services
                     catch (Exception ex)
                     {
                         _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
-                        ActiveSessions.TryRemove(entry.Key, out _); 
+                        ActiveSessions.TryRemove(entry.Key, out _);
                     }
                 }
             }, OperationForEachSession);
@@ -100,12 +102,12 @@ namespace DamasChinas_Server.Services
                 if (ActiveSessions.TryRemove(currentUsername, out var callback))
                 {
                     ActiveSessions[newUsername] = callback;
-                    _log.Info($"[{OperationUpdateSessionUsername}] {currentUsername} → {newUsername}");
+                    _log.Info($"[{OperationUpdateSessionUsername}] {currentUsername} to {newUsername}");
                 }
             }, OperationUpdateSessionUsername);
         }
 
- 
+
         public static void ForEachSession(Action<string, ISessionCallback> action)
         {
             if (action == null)
@@ -128,12 +130,29 @@ namespace DamasChinas_Server.Services
             try
             {
                 _log.Info($"[{context}] START");
+
                 action();
+
                 _log.Info($"[{context}] SUCCESS");
+            }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}");
+            }
+            catch (EntityException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                }
+                else
+                {
+                    _log.Error($"[{context}] ENTITY ERROR: {ex.Message}");
+                }
             }
             catch (Exception ex)
             {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
             }
         }
 
@@ -142,13 +161,32 @@ namespace DamasChinas_Server.Services
             try
             {
                 _log.Info($"[{context}] START");
+
                 var result = action();
+
                 _log.Info($"[{context}] SUCCESS");
+
                 return result;
+            }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}");
+                return defaultValue;
+            }
+            catch (EntityException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                    return defaultValue;
+                }
+
+                _log.Error($"[{context}] ENTITY ERROR: {ex.Message}");
+                return defaultValue;
             }
             catch (Exception ex)
             {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
                 return defaultValue;
             }
         }

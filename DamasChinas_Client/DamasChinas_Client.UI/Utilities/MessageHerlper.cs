@@ -1,5 +1,7 @@
 using DamasChinas_Client.UI.PopUps;
+using DamasChinas_Client.UI.Pages;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities
@@ -8,18 +10,60 @@ namespace DamasChinas_Client.UI.Utilities
     {
         private const PopupType DefaultType = PopupType.Info;
 
+        private static readonly Dictionary<string, Action> SpecialKeyActions =
+    new Dictionary<string, Action>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "msg_SessionExpired", () =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ClientSession.Clear();
+                    Application.Current.MainWindow.Content = new MainWindow();
+                });
+            }
+        },
+
+        { "msg_ServerUnavailable", () =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ClientSession.Clear();
+                    Application.Current.MainWindow.Content = new MainWindow();
+                });
+            }
+        },
+    };
+
 
         public static void ShowPopup(string messageKey, PopupType type = DefaultType, bool autoClose = false)
         {
             string message = MessageTranslator.GetLocalizedMessage(messageKey);
+
+            if (SpecialKeyActions.TryGetValue(messageKey, out var action))
+            {
+                try
+                {
+                    action?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("[MessageHelper] SpecialKeyAction failed: " + ex.Message);
+                }
+            }
 
             var popup = new MessagePopupWindow(message, type.ToString().ToLower(), autoClose)
             {
                 Owner = Application.Current.MainWindow
             };
 
+            if (popup.IsDuplicate)
+            {
+                return;
+            }
+
             popup.ShowDialog();
         }
+
 
 
         public static void ShowFromCode(Enum code, PopupType type = DefaultType)

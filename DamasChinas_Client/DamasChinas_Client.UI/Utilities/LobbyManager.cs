@@ -166,6 +166,27 @@ namespace DamasChinas_Client.UI.Utilities
             return new OperationResult { Success = true };
         }
 
+        public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode)
+        {
+            if (_client.State == CommunicationState.Faulted)
+            {
+                InitializeClient();
+            }
+
+            try
+            {
+                return _client.InviteFriend(hostUsername, friendUsername, lobbyCode);
+            }
+            catch
+            {
+                return new OperationResult
+                {
+                    Success = false,
+                    Code = MessageCode.ServerUnavailable
+                };
+            }
+        }
+
         public void StartGame()
         {
             if (_client.State == CommunicationState.Opened)

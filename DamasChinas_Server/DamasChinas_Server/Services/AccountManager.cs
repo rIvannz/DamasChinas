@@ -5,6 +5,7 @@ using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.ServiceModel;
 
@@ -112,7 +113,7 @@ namespace DamasChinas_Server.Services
                 MessageCode.Success,
                 MessageCode.UnknownError,
                 MessageCode.ServerUnavailable,
-                nameof(ChangeSocialUrl)
+                OperationChangeSocialUrl
             );
         }
 
@@ -144,6 +145,11 @@ namespace DamasChinas_Server.Services
             catch (SqlException ex)
             {
                 _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+            }
+            catch (EntityException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
                 return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
             }
             catch (Exception ex)
@@ -182,12 +188,7 @@ namespace DamasChinas_Server.Services
                     return OperationResult.Fail("Code expired.", MessageCode.VerificationCodeExpired);
                 }
 
-                if (!string.Equals(storedCode, code, StringComparison.Ordinal))
-                {
-                    return OperationResult.Fail("Invalid code.", MessageCode.VerificationCodeInvalid);
-                }
-
-                RemoveStoredPasswordCode(normalizedEmail);
+                
 
                 bool ok = _repository.ChangePasswordbyemail(normalizedEmail, newPassword);
 
@@ -201,6 +202,11 @@ namespace DamasChinas_Server.Services
             catch (SqlException ex)
             {
                 _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+            }
+            catch (EntityException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
                 return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
             }
             catch (Exception ex)
@@ -249,16 +255,35 @@ namespace DamasChinas_Server.Services
             }
             catch (SqlException ex)
             {
-                LogStatic.Error($"[SQL ERROR] {context} (Number={ex.Number})", ex);
+                LogStatic.Error($"[{context}] SQL ERROR {ex.Number}");
 
                 result.Success = false;
                 result.Code = fatalCode;
                 result.TechnicalDetail = $"SQL error ({ex.Number})";
                 return result;
             }
+            catch (EntityException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    LogStatic.Error($"[{context}] SQL ERROR {sqlEx.Number}");
+
+                    result.Success = false;
+                    result.Code = fatalCode;
+                    result.TechnicalDetail = $"SQL error ({sqlEx.Number})";
+                    return result;
+                }
+
+                LogStatic.Error($"[{context}] ENTITY ERROR: {ex.Message}");
+
+                result.Success = false;
+                result.Code = failureCode;
+                result.TechnicalDetail = "Entity error.";
+                return result;
+            }
             catch (ArgumentException ex)
             {
-                LogStatic.Warn($"[ARGUMENT ERROR] {context}", ex);
+                LogStatic.Warn($"[{context}] ARGUMENT ERROR: {ex.Message}");
 
                 result.Success = false;
                 result.Code = failureCode;
@@ -267,11 +292,20 @@ namespace DamasChinas_Server.Services
             }
             catch (InvalidOperationException ex)
             {
-                LogStatic.Error($"[INVALID OPERATION] {context}", ex);
+                LogStatic.Error($"[{context}] INVALID OPERATION: {ex.Message}");
 
                 result.Success = false;
                 result.Code = failureCode;
                 result.TechnicalDetail = "Invalid operation.";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogStatic.Error($"[{context}] Unexpected exception: {ex.Message}");
+
+                result.Success = false;
+                result.Code = failureCode;
+                result.TechnicalDetail = "Unexpected error.";
                 return result;
             }
         }

@@ -17,10 +17,28 @@ namespace DamasChinas_Client.UI.PopUps
 {
     public partial class MessagePopupWindow : Window
     {
+        private static MessagePopupWindow _openedInstance;
+        private static string _lastMessage;
+        private static string _lastType;
+
         private readonly bool _autoClose;
+
+        public bool IsDuplicate { get; private set; }
 
         public MessagePopupWindow(string message, string type = "info", bool autoClose = false)
         {
+            if (_openedInstance != null &&
+                _lastMessage == message &&
+                (_lastType?.ToLower() ?? "") == (type?.ToLower() ?? ""))
+            {
+                IsDuplicate = true;
+                return;
+            }
+
+            _openedInstance = this;
+            _lastMessage = message;
+            _lastType = type;
+
             InitializeComponent();
 
             MessageText.Text = message;
@@ -33,7 +51,6 @@ namespace DamasChinas_Client.UI.PopUps
         {
             type = type?.ToLower() ?? "info";
 
-       
             string titleKey;
 
             if (type == "success")
@@ -45,10 +62,7 @@ namespace DamasChinas_Client.UI.PopUps
             else
                 titleKey = "title_Information";
 
-
             TitleText.Text = MessageTranslator.GetLocalizedMessage(titleKey);
-
-         
 
             switch (type)
             {
@@ -87,7 +101,17 @@ namespace DamasChinas_Client.UI.PopUps
         {
             Close();
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            if (_openedInstance == this)
+            {
+                _openedInstance = null;
+                _lastMessage = null;
+                _lastType = null;
+            }
+
+            base.OnClosed(e);
+        }
     }
 }
-
-

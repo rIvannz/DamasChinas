@@ -281,13 +281,20 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            if (friend.Status != FriendStatus.Online)
+            int lobbyCode = _snapshot.LobbyCode;
+            string hostUsername = _username;
+
+            var result = _lobbyManager.InviteFriend(hostUsername, friend.Username, lobbyCode);
+
+            if (result.Success)
             {
-                return;
+                //todo invitationsent
+                //MessageHelper.ShowPopup(MessageKeys.InvitationSent, PopupType.Success);
             }
-
-
-            MessageHelper.ShowPopup(MessageKeys.ChatComingSoon, PopupType.Info);
+            else
+            {
+                MessageHelper.ShowFromResult(result);
+            }
         }
 
 

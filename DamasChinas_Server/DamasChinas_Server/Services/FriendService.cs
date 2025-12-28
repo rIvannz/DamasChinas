@@ -5,6 +5,8 @@ using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
 using System.ServiceModel;
 
 namespace DamasChinas_Server
@@ -178,12 +180,12 @@ namespace DamasChinas_Server
 
                     if (ok && accept)
                     {
-                      
 
-                      
+
+
                         FriendCallbackManager.NotifyFriendRequestAccepted(senderUsername);
 
-                  
+
                         FriendCallbackManager.NotifyFriendListUpdated(receiverUsername);
                         FriendCallbackManager.NotifyFriendListUpdated(senderUsername);
                     }
@@ -218,29 +220,41 @@ namespace DamasChinas_Server
             );
         }
 
-    
+
         private T ExecuteOperation<T>(
-            Func<T> func,
-            string context,
-            bool faultOnValidation = false)
+     Func<T> func,
+     string context,
+     bool faultOnValidation = false)
         {
+            T ReturnFail(MessageCode code, string message = null)
+            {
+                if (faultOnValidation)
+                    throw new FaultException<MessageCode>(code, code.ToString());
+
+                return (T)(object)OperationResult.Fail(message ?? code.ToString(), code);
+            }
+
+            void LogSqlOrEntity(Exception ex)
+            {
+                if (ex is SqlException sqlEx)
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                else if (ex is EntityException entityEx && entityEx.InnerException is SqlException innerSql)
+                    _log.Error($"[{context}] SQL ERROR {innerSql.Number}", innerSql);
+            }
+
             try
             {
                 _log.Info($"[{context}] START");
+
                 T result = func();
+
                 _log.Info($"[{context}] SUCCESS");
                 return result;
             }
             catch (RepositoryValidationException ex)
             {
                 _log.Warn($"[{context}] validation failed: {ex.Code}");
-
-                if (faultOnValidation)
-                {
-                    throw new FaultException<MessageCode>(ex.Code, ex.Code.ToString());
-                }
-
-                return (T)(object)OperationResult.Fail(ex.Code.ToString(), ex.Code);
+                return ReturnFail(ex.Code, ex.Code.ToString());
             }
             catch (FaultException<MessageCode>)
             {
@@ -248,14 +262,12 @@ namespace DamasChinas_Server
             }
             catch (Exception ex)
             {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+                LogSqlOrEntity(ex);
 
-                if (faultOnValidation)
-                {
-                    throw new FaultException<MessageCode>(MessageCode.UnknownError, MessageCode.UnknownError.ToString());
-                }
+                if (ex is SqlException || ex is EntityException)
+                    return ReturnFail(MessageCode.ServerUnavailable);
 
-                return (T)(object)OperationResult.Fail(ex.Message, MessageCode.UnknownError);
+                return ReturnFail(MessageCode.UnknownError, ex.Message);
             }
         }
     }

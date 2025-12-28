@@ -55,14 +55,10 @@ namespace DamasChinas_Server.Utilidades
                 string line = raw.Trim();
 
                 if (string.IsNullOrWhiteSpace(line))
-                {
                     continue;
-                }
 
                 if (!line.Contains("="))
-                {
                     continue;
-                }
 
                 var parts = line.Split(new[] { '=' }, 2);
 

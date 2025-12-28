@@ -117,7 +117,6 @@ namespace DamasChinas_Server.Services
             }
         }
 
-        // --- Helpers ---
 
         private PublicProfile GetProfile(string username)
         {

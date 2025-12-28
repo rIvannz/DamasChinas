@@ -301,17 +301,11 @@ namespace DamasChinas_Server.Logic
 
             if (callback == null)
             {
-                throw new RepositoryValidationException(
-                    MessageCode.LobbyInvitationTargetNotOnline);
+                SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
             }
 
-            callback.OnInvitationReceived(new LobbyInvitationDto
-            {
-                LobbyCode = lobbyCode,
-                HostUsername = hostUsername,
-                MaxPlayers = lobby.MaxPlayers
-            });
-
+        
+            
             SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
         }
 

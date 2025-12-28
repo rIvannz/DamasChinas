@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.ServiceModel;
-using DamasChinas_Server.Common;
+﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
+using System;
+using System.Collections.Concurrent;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
+using System.Linq;
+using System.ServiceModel;
 
 namespace DamasChinas_Server
 {
@@ -17,7 +19,7 @@ namespace DamasChinas_Server
         private readonly ChatRepository _repo;
         private readonly ILogService _log;
 
- 
+
         private const string OperationRegistrateClient = nameof(RegistrateClient);
         private const string OperationSendMessage = nameof(SendMessage);
         private const string OperationSendMessage_SaveMessage = OperationSendMessage + ".SaveMessage";
@@ -128,6 +130,21 @@ namespace DamasChinas_Server
                 action();
                 _log.Info($"[{context}] SUCCESS");
             }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+            }
+            catch (EntityException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                }
+                else
+                {
+                    _log.Error($"[{context}] ENTITY ERROR: {ex.Message}", ex);
+                }
+            }
             catch (ArgumentException ex)
             {
                 _log.Warn($"[{context}] ArgumentException: {ex.Message}");
@@ -146,6 +163,7 @@ namespace DamasChinas_Server
             }
         }
 
+
         private T ExecuteOperation<T>(Func<T> func, string context, T defaultValue)
         {
             try
@@ -154,6 +172,21 @@ namespace DamasChinas_Server
                 var result = func();
                 _log.Info($"[{context}] SUCCESS");
                 return result;
+            }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+            }
+            catch (EntityException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                }
+                else
+                {
+                    _log.Error($"[{context}] ENTITY ERROR: {ex.Message}", ex);
+                }
             }
             catch (ArgumentException ex)
             {

@@ -7,6 +7,7 @@ using DamasChinas_Server.Utilidades;
 using DamasChinas_Server.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace DamasChinas_Server
 
         private readonly RepositoryUsers _repository;
         private readonly ILogService _log;
+
+      
 
         private const string OperationValidateUserData = nameof(ValidateUserData);
         private const string OperationRequestVerificationCode = nameof(RequestVerificationCode);
@@ -199,28 +202,49 @@ namespace DamasChinas_Server
             };
         }
 
-        private static string NormalizeEmail(string email)
-        {
-            return (email ?? string.Empty).Trim().ToLower();
-        }
 
         private OperationResult ExecuteOperation(
-            Func<OperationResult> action,
-            string context,
-            Func<Exception, OperationResult> onError)
+      Func<OperationResult> action,
+      string context,
+      Func<Exception, OperationResult> onError)
         {
             try
             {
                 _log.Info($"[{context}] START");
+
                 var result = action();
+
                 _log.Info($"[{context}] SUCCESS");
                 return result;
             }
             catch (Exception ex)
             {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
+                if (ex is SqlException sqlEx)
+                {
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                    return onError(sqlEx);
+                }
+
+                if (ex is EntityException entityEx)
+                {
+                    if (entityEx.InnerException is SqlException innerSql)
+                    {
+                        _log.Error($"[{context}] SQL ERROR {innerSql.Number}");
+                        return onError(innerSql);
+                    }
+
+                    _log.Error($"[{context}] ENTITY ERROR: {entityEx.Message}");
+                    return onError(entityEx);
+                }
+
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
                 return onError(ex);
             }
         }
+        private static string NormalizeEmail(string email)
+        {
+            return (email ?? string.Empty).Trim().ToLower();
+        }
     }
-}
+
+    }
