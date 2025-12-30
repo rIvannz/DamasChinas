@@ -2,6 +2,7 @@ using DamasChinas_Client.UI.LobbyServiceProxy;
 using System;
 using System.Linq;
 using System.ServiceModel;
+using DamasChinas_Shared.Contracts.Dtos;
 using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities

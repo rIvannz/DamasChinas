@@ -192,6 +192,8 @@
     <Compile Include="Utilities\MessageKey.cs" />
     <Compile Include="Utilities\MessageTranslator.cs" />
     <Compile Include="Utilities\PathProvider.cs" />
+    <Compile Include="Utilities\PendingBanNotificationStore.cs" />
+    <Compile Include="Utilities\PendingReportNotificationStore.cs" />
     <Compile Include="Utilities\PopupType.cs" />
     <Compile Include="Utilities\ServiceHelper.cs" />
     <Compile Include="Utilities\Validator.cs" />
@@ -403,9 +405,6 @@
     <None Include="Connected Services\FriendServiceProxy\item39.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -422,6 +421,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Server.Dtos11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Shared.Contracts.Dtos.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LobbyServiceProxy\service.xsd">
@@ -455,6 +457,9 @@
     </None>
     <None Include="Connected Services\MatchServiceProxy\DamasChinas_Client.UI.MatchServiceProxy.OperationResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\MatchServiceProxy\item.xsd">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\MatchServiceProxy\item6.xsd">
       <SubType>Designer</SubType>
@@ -504,6 +509,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\RankingServiceProxy\RankingService1.wsdl" />
+    <None Include="Connected Services\SessionServiceProxy\DamasChinas_Shared.Contracts.Dtos.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\SessionServiceProxy\service11.wsdl" />
     <None Include="Connected Services\SessionServiceProxy\service22.xsd">
       <SubType>Designer</SubType>
@@ -531,6 +539,7 @@
     </None>
     <None Include="Connected Services\SingInServiceProxy\SingInService1.wsdl" />
     <None Include="Properties\DataSources\DamasChinas_Client.Logic.LobbyServiceProxy.Lobby.datasource" />
+    <None Include="Properties\DataSources\DamasChinas_Shared.Contracts.Dtos.BanInfoDto.datasource" />
     <None Include="Properties\Settings.settings" />
   </ItemGroup>
   <!-- Archivos de recursos -->

@@ -28,6 +28,7 @@
     <MetadataFile FileName="DamasChinas_Server.Dtos11.xsd" MetadataType="Schema" ID="8b2cba0d-b163-461c-b2d5-a30097ea05f7" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
     <MetadataFile FileName="DamasChinas_Server.Common1.xsd" MetadataType="Schema" ID="7c9064fd-69f3-435d-98f0-2bdc535fefb9" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
     <MetadataFile FileName="DamasChinas_Server.Contracts1.xsd" MetadataType="Schema" ID="d09f68dd-4cd4-4cef-8087-c86684fb64e4" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
+    <MetadataFile FileName="DamasChinas_Shared.Contracts.Dtos.xsd" MetadataType="Schema" ID="d9922438-2c80-4352-9fd1-9f24b4d99ecb" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
     <MetadataFile FileName="service3.xsd" MetadataType="Schema" ID="eaebb4ef-ccf2-4a68-b2ac-c22a90d868a7" SourceId="1" SourceUrl="http://localhost:8005/LobbyService/mex" />
   </Metadata>
   <Extensions>

@@ -18,9 +18,8 @@ namespace DamasChinas_Server.GameRepositories
             _contextFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-
-
-        public void AddReport(int reporterId, int reportedId, int matchId, string reason)
+        // ✅ idPartida y codigoLobby son opcionales
+        public void AddReport(int reporterId, int reportedId, int? idPartida, int? codigoLobby, string motivo)
         {
             using (var db = _contextFactory())
             {
@@ -28,8 +27,14 @@ namespace DamasChinas_Server.GameRepositories
                 {
                     id_usuario_reportador = reporterId,
                     id_usuario_reportado = reportedId,
-                    id_partida = matchId,
-                    motivo = reason,
+
+                    // ✅ si viene de lobby, idPartida debe ir NULL para NO romper FK
+                    id_partida = idPartida,
+
+                    // ✅ nuevo campo (requiere update del EDMX)
+                    codigo_lobby = codigoLobby,
+
+                    motivo = motivo ?? string.Empty,
                     fecha_reporte = DateTime.UtcNow,
                     estado = "pendiente"
                 };
@@ -47,6 +52,11 @@ namespace DamasChinas_Server.GameRepositories
             }
         }
 
+        public int AddReportAndGetTotal(int reporterId, int reportedId, int? idPartida, int? codigoLobby, string motivo)
+        {
+            AddReport(reporterId, reportedId, idPartida, codigoLobby, motivo);
+            return CountReportsForUser(reportedId);
+        }
 
         private static void SaveChangesSafely(damas_chinasEntities db)
         {
@@ -54,9 +64,9 @@ namespace DamasChinas_Server.GameRepositories
             {
                 db.SaveChanges();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Report repository error: unable to save changes.");
+                throw new Exception($"Report repository error: unable to save changes. {ex.Message}");
             }
         }
     }

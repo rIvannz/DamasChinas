@@ -6,6 +6,8 @@ using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Logic;
+using DamasChinas_Shared.Contracts.Dtos;
+
 
 namespace DamasChinas_Server.Services
 {

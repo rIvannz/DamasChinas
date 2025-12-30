@@ -15,6 +15,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/" />
     </xsd:schema>
   </wsdl:types>

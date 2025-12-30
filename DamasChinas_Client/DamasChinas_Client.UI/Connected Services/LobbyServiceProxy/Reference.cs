@@ -821,192 +821,6 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ReportPlayerRequest", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
-    [System.SerializableAttribute()]
-    public partial class ReportPlayerRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int LobbyCodeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ReasonField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ReportedUsernameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ReporterUsernameField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int LobbyCode {
-            get {
-                return this.LobbyCodeField;
-            }
-            set {
-                if ((this.LobbyCodeField.Equals(value) != true)) {
-                    this.LobbyCodeField = value;
-                    this.RaisePropertyChanged("LobbyCode");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Reason {
-            get {
-                return this.ReasonField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ReasonField, value) != true)) {
-                    this.ReasonField = value;
-                    this.RaisePropertyChanged("Reason");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ReportedUsername {
-            get {
-                return this.ReportedUsernameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ReportedUsernameField, value) != true)) {
-                    this.ReportedUsernameField = value;
-                    this.RaisePropertyChanged("ReportedUsername");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ReporterUsername {
-            get {
-                return this.ReporterUsernameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ReporterUsernameField, value) != true)) {
-                    this.ReporterUsernameField = value;
-                    this.RaisePropertyChanged("ReporterUsername");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BanInfoDto", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos")]
-    [System.SerializableAttribute()]
-    public partial class BanInfoDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<System.DateTime> BanUntilUtcField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsBannedField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsPermanentField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int TotalReportsField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<System.DateTime> BanUntilUtc {
-            get {
-                return this.BanUntilUtcField;
-            }
-            set {
-                if ((this.BanUntilUtcField.Equals(value) != true)) {
-                    this.BanUntilUtcField = value;
-                    this.RaisePropertyChanged("BanUntilUtc");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsBanned {
-            get {
-                return this.IsBannedField;
-            }
-            set {
-                if ((this.IsBannedField.Equals(value) != true)) {
-                    this.IsBannedField = value;
-                    this.RaisePropertyChanged("IsBanned");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsPermanent {
-            get {
-                return this.IsPermanentField;
-            }
-            set {
-                if ((this.IsPermanentField.Equals(value) != true)) {
-                    this.IsPermanentField = value;
-                    this.RaisePropertyChanged("IsPermanent");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int TotalReports {
-            get {
-                return this.TotalReportsField;
-            }
-            set {
-                if ((this.TotalReportsField.Equals(value) != true)) {
-                    this.TotalReportsField = value;
-                    this.RaisePropertyChanged("TotalReports");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LobbyInvitationDto", Namespace="http://schemas.datacontract.org/2004/07/")]
     [System.SerializableAttribute()]
     public partial class LobbyInvitationDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -1137,17 +951,17 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/ReportPlayer", ReplyAction="http://tempuri.org/ILobbyService/ReportPlayerResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/ReportPlayerMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReportPlayer(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request);
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReportPlayer(DamasChinas_Shared.Contracts.Dtos.ReportPlayerRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/ReportPlayer", ReplyAction="http://tempuri.org/ILobbyService/ReportPlayerResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReportPlayerAsync(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReportPlayerAsync(DamasChinas_Shared.Contracts.Dtos.ReportPlayerRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetBanInfo", ReplyAction="http://tempuri.org/ILobbyService/GetBanInfoResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/GetBanInfoMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto GetBanInfo(string username);
+        DamasChinas_Shared.Contracts.Dtos.BanInfoDto GetBanInfo(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/GetBanInfo", ReplyAction="http://tempuri.org/ILobbyService/GetBanInfoResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto> GetBanInfoAsync(string username);
+        System.Threading.Tasks.Task<DamasChinas_Shared.Contracts.Dtos.BanInfoDto> GetBanInfoAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/InviteFriendMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
@@ -1182,7 +996,7 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         void OnKickedFromLobby(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode reason);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnBanStatusUpdated")]
-        void OnBanStatusUpdated(DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto banInfo);
+        void OnBanStatusUpdated(DamasChinas_Shared.Contracts.Dtos.BanInfoDto banInfo);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/OnChatMessageReceived")]
         void OnChatMessageReceived(string sender, string message, string timestamp);
@@ -1272,19 +1086,19 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
             return base.Channel.KickPlayerAsync(hostUsername, lobbyCode, targetUsername);
         }
         
-        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReportPlayer(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request) {
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReportPlayer(DamasChinas_Shared.Contracts.Dtos.ReportPlayerRequest request) {
             return base.Channel.ReportPlayer(request);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReportPlayerAsync(DamasChinas_Client.UI.LobbyServiceProxy.ReportPlayerRequest request) {
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReportPlayerAsync(DamasChinas_Shared.Contracts.Dtos.ReportPlayerRequest request) {
             return base.Channel.ReportPlayerAsync(request);
         }
         
-        public DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto GetBanInfo(string username) {
+        public DamasChinas_Shared.Contracts.Dtos.BanInfoDto GetBanInfo(string username) {
             return base.Channel.GetBanInfo(username);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.BanInfoDto> GetBanInfoAsync(string username) {
+        public System.Threading.Tasks.Task<DamasChinas_Shared.Contracts.Dtos.BanInfoDto> GetBanInfoAsync(string username) {
             return base.Channel.GetBanInfoAsync(username);
         }
         

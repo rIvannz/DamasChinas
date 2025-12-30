@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="damas_chinasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="damas_chinasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="amistades">
           <Key>
             <PropertyRef Name="id_usuario1" />
@@ -83,6 +83,7 @@
           <Property Name="motivo" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="fecha_reporte" Type="datetime" />
           <Property Name="estado" Type="nvarchar" MaxLength="20" />
+          <Property Name="codigo_lobby" Type="int" />
         </EntityType>
         <EntityType Name="Sanciones">
           <Key>
@@ -472,7 +473,8 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <End Role="solicitudes_amistad" EntitySet="solicitudes_amistad" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="damas_chinasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -497,6 +499,18 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Name="fecha_bloqueo" Type="DateTime" Precision="7" />
           <NavigationProperty Name="usuarios" Relationship="Self.fk_bloqueado" FromRole="bloqueos" ToRole="usuarios" />
           <NavigationProperty Name="usuarios1" Relationship="Self.fk_bloqueador" FromRole="bloqueos" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="mensajes">
+          <Key>
+            <PropertyRef Name="id_mensaje" />
+          </Key>
+          <Property Name="id_mensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario_remitente" Type="Int32" Nullable="false" />
+          <Property Name="id_usuario_destino" Type="Int32" Nullable="false" />
+          <Property Name="texto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_envio" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="usuarios" Relationship="Self.fk_mensaje_destino" FromRole="mensajes" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="Self.fk_mensaje_remitente" FromRole="mensajes" ToRole="usuarios" />
         </EntityType>
         <EntityType Name="movimientos">
           <Key>
@@ -528,7 +542,7 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Name="id_partida" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fecha_partida" Type="DateTime" Precision="7" />
           <NavigationProperty Name="participantes_partida" Relationship="Self.fk_pp_partida" FromRole="partidas" ToRole="participantes_partida" />
-          <NavigationProperty Name="Reportes" Relationship="damas_chinasModel.FK__Reportes__id_par__1BC821DD" FromRole="partidas" ToRole="Reportes" />
+          <NavigationProperty Name="Reportes" Relationship="Self.FK__Reportes__id_par__1BC821DD" FromRole="partidas" ToRole="Reportes" />
         </EntityType>
         <EntityType Name="perfiles">
           <Key>
@@ -543,6 +557,35 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Name="ultimo_login" Type="DateTime" Precision="7" />
           <Property Name="apellido_materno" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="usuarios" Relationship="Self.fk_perfil_usuario" FromRole="perfiles" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="Reportes">
+          <Key>
+            <PropertyRef Name="id_reporte" />
+          </Key>
+          <Property Name="id_reporte" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario_reportador" Type="Int32" Nullable="false" />
+          <Property Name="id_usuario_reportado" Type="Int32" Nullable="false" />
+          <Property Name="id_partida" Type="Int32" />
+          <Property Name="motivo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_reporte" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="codigo_lobby" Type="Int32" />
+          <NavigationProperty Name="partidas" Relationship="Self.FK__Reportes__id_par__1BC821DD" FromRole="Reportes" ToRole="partidas" />
+          <NavigationProperty Name="usuarios" Relationship="Self.FK__Reportes__id_usu__19DFD96B" FromRole="Reportes" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="Self.FK__Reportes__id_usu__1AD3FDA4" FromRole="Reportes" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="Sanciones">
+          <Key>
+            <PropertyRef Name="id_sancion" />
+          </Key>
+          <Property Name="id_sancion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="tipo_sancion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Precision="3" />
+          <Property Name="fecha_fin" Type="DateTime" Precision="3" />
+          <Property Name="motivo_acumulado" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="usuarios" Relationship="Self.FK__Sanciones__id_us__208CD6FA" FromRole="Sanciones" ToRole="usuarios" />
         </EntityType>
         <EntityType Name="solicitudes_amistad">
           <Key>
@@ -575,23 +618,23 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="rol" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="fecha_creacion" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="amistades" Relationship="Self.fk_amistad_usuario1" FromRole="usuarios" ToRole="amistades" />
-          <NavigationProperty Name="amistades1" Relationship="Self.fk_amistad_usuario2" FromRole="usuarios" ToRole="amistades" />
-          <NavigationProperty Name="bloqueos" Relationship="Self.fk_bloqueado" FromRole="usuarios" ToRole="bloqueos" />
-          <NavigationProperty Name="bloqueos1" Relationship="Self.fk_bloqueador" FromRole="usuarios" ToRole="bloqueos" />
-          <NavigationProperty Name="participantes_partida" Relationship="Self.fk_pp_usuario" FromRole="usuarios" ToRole="participantes_partida" />
-          <NavigationProperty Name="perfiles" Relationship="Self.fk_perfil_usuario" FromRole="usuarios" ToRole="perfiles" />
-          <NavigationProperty Name="solicitudes_amistad" Relationship="Self.fk_solicitud_emisor" FromRole="usuarios" ToRole="solicitudes_amistad" />
-          <NavigationProperty Name="solicitudes_amistad1" Relationship="Self.fk_solicitud_receptor" FromRole="usuarios" ToRole="solicitudes_amistad" />
-          <NavigationProperty Name="mensajes" Relationship="damas_chinasModel.fk_mensaje_destino" FromRole="usuarios" ToRole="mensajes" />
-          <NavigationProperty Name="mensajes1" Relationship="damas_chinasModel.fk_mensaje_remitente" FromRole="usuarios" ToRole="mensajes" />
           <Property Name="numero_reportes" Type="Int32" Nullable="false" />
           <Property Name="fecha_desbaneo" Type="DateTime" Precision="3" />
           <Property Name="baneado_permanentemente" Type="Boolean" Nullable="false" />
           <Property Name="esta_sancionado" Type="Boolean" />
-          <NavigationProperty Name="Reportes" Relationship="damas_chinasModel.FK__Reportes__id_usu__19DFD96B" FromRole="usuarios" ToRole="Reportes" />
-          <NavigationProperty Name="Reportes1" Relationship="damas_chinasModel.FK__Reportes__id_usu__1AD3FDA4" FromRole="usuarios" ToRole="Reportes" />
-          <NavigationProperty Name="Sanciones" Relationship="damas_chinasModel.FK__Sanciones__id_us__208CD6FA" FromRole="usuarios" ToRole="Sanciones" />
+          <NavigationProperty Name="amistades" Relationship="Self.fk_amistad_usuario1" FromRole="usuarios" ToRole="amistades" />
+          <NavigationProperty Name="amistades1" Relationship="Self.fk_amistad_usuario2" FromRole="usuarios" ToRole="amistades" />
+          <NavigationProperty Name="bloqueos" Relationship="Self.fk_bloqueado" FromRole="usuarios" ToRole="bloqueos" />
+          <NavigationProperty Name="bloqueos1" Relationship="Self.fk_bloqueador" FromRole="usuarios" ToRole="bloqueos" />
+          <NavigationProperty Name="mensajes" Relationship="Self.fk_mensaje_destino" FromRole="usuarios" ToRole="mensajes" />
+          <NavigationProperty Name="mensajes1" Relationship="Self.fk_mensaje_remitente" FromRole="usuarios" ToRole="mensajes" />
+          <NavigationProperty Name="participantes_partida" Relationship="Self.fk_pp_usuario" FromRole="usuarios" ToRole="participantes_partida" />
+          <NavigationProperty Name="perfiles" Relationship="Self.fk_perfil_usuario" FromRole="usuarios" ToRole="perfiles" />
+          <NavigationProperty Name="Reportes" Relationship="Self.FK__Reportes__id_usu__19DFD96B" FromRole="usuarios" ToRole="Reportes" />
+          <NavigationProperty Name="Reportes1" Relationship="Self.FK__Reportes__id_usu__1AD3FDA4" FromRole="usuarios" ToRole="Reportes" />
+          <NavigationProperty Name="Sanciones" Relationship="Self.FK__Sanciones__id_us__208CD6FA" FromRole="usuarios" ToRole="Sanciones" />
+          <NavigationProperty Name="solicitudes_amistad" Relationship="Self.fk_solicitud_emisor" FromRole="usuarios" ToRole="solicitudes_amistad" />
+          <NavigationProperty Name="solicitudes_amistad1" Relationship="Self.fk_solicitud_receptor" FromRole="usuarios" ToRole="solicitudes_amistad" />
         </EntityType>
         <EntityType Name="historial_partidas">
           <Key>
@@ -657,6 +700,32 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_mensaje_destino">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="id_usuario_destino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mensaje_remitente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="id_usuario_remitente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_movimiento_pp">
           <End Role="participantes_partida" Type="Self.participantes_partida" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -701,6 +770,18 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Reportes__id_par__1BC821DD">
+          <End Role="partidas" Type="Self.partidas" Multiplicity="0..1" />
+          <End Role="Reportes" Type="Self.Reportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partidas">
+              <PropertyRef Name="id_partida" />
+            </Principal>
+            <Dependent Role="Reportes">
+              <PropertyRef Name="id_partida" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_perfil_usuario">
           <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -711,6 +792,42 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
               <PropertyRef Name="id_usuario" />
             </Principal>
             <Dependent Role="perfiles">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reportes__id_usu__19DFD96B">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="Reportes" Type="Self.Reportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Reportes">
+              <PropertyRef Name="id_usuario_reportador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reportes__id_usu__1AD3FDA4">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="Reportes" Type="Self.Reportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Reportes">
+              <PropertyRef Name="id_usuario_reportado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sanciones__id_us__208CD6FA">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="Sanciones" Type="Self.Sanciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Sanciones">
               <PropertyRef Name="id_usuario" />
             </Dependent>
           </ReferentialConstraint>
@@ -744,10 +861,13 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
         <EntityContainer Name="damas_chinasEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="amistades" EntityType="Self.amistades" />
           <EntitySet Name="bloqueos" EntityType="Self.bloqueos" />
+          <EntitySet Name="mensajes" EntityType="Self.mensajes" />
           <EntitySet Name="movimientos" EntityType="Self.movimientos" />
           <EntitySet Name="participantes_partida" EntityType="Self.participantes_partida" />
           <EntitySet Name="partidas" EntityType="Self.partidas" />
           <EntitySet Name="perfiles" EntityType="Self.perfiles" />
+          <EntitySet Name="Reportes" EntityType="Self.Reportes" />
+          <EntitySet Name="Sanciones" EntityType="Self.Sanciones" />
           <EntitySet Name="solicitudes_amistad" EntityType="Self.solicitudes_amistad" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="usuarios" EntityType="Self.usuarios" />
@@ -768,6 +888,14 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="bloqueos" EntitySet="bloqueos" />
           </AssociationSet>
+          <AssociationSet Name="fk_mensaje_destino" Association="Self.fk_mensaje_destino">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mensaje_remitente" Association="Self.fk_mensaje_remitente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
           <AssociationSet Name="fk_movimiento_pp" Association="Self.fk_movimiento_pp">
             <End Role="participantes_partida" EntitySet="participantes_partida" />
             <End Role="movimientos" EntitySet="movimientos" />
@@ -780,9 +908,25 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="participantes_partida" EntitySet="participantes_partida" />
           </AssociationSet>
+          <AssociationSet Name="FK__Reportes__id_par__1BC821DD" Association="Self.FK__Reportes__id_par__1BC821DD">
+            <End Role="partidas" EntitySet="partidas" />
+            <End Role="Reportes" EntitySet="Reportes" />
+          </AssociationSet>
           <AssociationSet Name="fk_perfil_usuario" Association="Self.fk_perfil_usuario">
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="perfiles" EntitySet="perfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reportes__id_usu__19DFD96B" Association="Self.FK__Reportes__id_usu__19DFD96B">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="Reportes" EntitySet="Reportes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reportes__id_usu__1AD3FDA4" Association="Self.FK__Reportes__id_usu__1AD3FDA4">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="Reportes" EntitySet="Reportes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sanciones__id_us__208CD6FA" Association="Self.FK__Sanciones__id_us__208CD6FA">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="Sanciones" EntitySet="Sanciones" />
           </AssociationSet>
           <AssociationSet Name="fk_solicitud_emisor" Association="Self.fk_solicitud_emisor">
             <End Role="usuarios" EntitySet="usuarios" />
@@ -822,33 +966,6 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <EntitySet Name="mensajes" EntityType="damas_chinasModel.mensajes" />
-          <AssociationSet Name="fk_mensaje_destino" Association="damas_chinasModel.fk_mensaje_destino">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="mensajes" EntitySet="mensajes" />
-          </AssociationSet>
-          <AssociationSet Name="fk_mensaje_remitente" Association="damas_chinasModel.fk_mensaje_remitente">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="mensajes" EntitySet="mensajes" />
-          </AssociationSet>
-          <EntitySet Name="Reportes" EntityType="damas_chinasModel.Reportes" />
-          <EntitySet Name="Sanciones" EntityType="damas_chinasModel.Sanciones" />
-          <AssociationSet Name="FK__Reportes__id_par__1BC821DD" Association="damas_chinasModel.FK__Reportes__id_par__1BC821DD">
-            <End Role="partidas" EntitySet="partidas" />
-            <End Role="Reportes" EntitySet="Reportes" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Reportes__id_usu__19DFD96B" Association="damas_chinasModel.FK__Reportes__id_usu__19DFD96B">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="Reportes" EntitySet="Reportes" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Reportes__id_usu__1AD3FDA4" Association="damas_chinasModel.FK__Reportes__id_usu__1AD3FDA4">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="Reportes" EntitySet="Reportes" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Sanciones__id_us__208CD6FA" Association="damas_chinasModel.FK__Sanciones__id_us__208CD6FA">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="Sanciones" EntitySet="Sanciones" />
-          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -861,120 +978,6 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="mensajes">
-          <Key>
-            <PropertyRef Name="id_mensaje" />
-          </Key>
-          <Property Name="id_mensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_usuario_remitente" Type="Int32" Nullable="false" />
-          <Property Name="id_usuario_destino" Type="Int32" Nullable="false" />
-          <Property Name="texto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="fecha_envio" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="usuarios" Relationship="damas_chinasModel.fk_mensaje_destino" FromRole="mensajes" ToRole="usuarios" />
-          <NavigationProperty Name="usuarios1" Relationship="damas_chinasModel.fk_mensaje_remitente" FromRole="mensajes" ToRole="usuarios" />
-        </EntityType>
-        <Association Name="fk_mensaje_destino">
-          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1" />
-          <End Type="damas_chinasModel.mensajes" Role="mensajes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="mensajes">
-              <PropertyRef Name="id_usuario_destino" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_mensaje_remitente">
-          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="damas_chinasModel.mensajes" Role="mensajes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="mensajes">
-              <PropertyRef Name="id_usuario_remitente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Reportes">
-          <Key>
-            <PropertyRef Name="id_reporte" />
-          </Key>
-          <Property Name="id_reporte" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_usuario_reportador" Type="Int32" Nullable="false" />
-          <Property Name="id_usuario_reportado" Type="Int32" Nullable="false" />
-          <Property Name="id_partida" Type="Int32" />
-          <Property Name="motivo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="fecha_reporte" Type="DateTime" Precision="3" />
-          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="partidas" Relationship="damas_chinasModel.FK__Reportes__id_par__1BC821DD" FromRole="Reportes" ToRole="partidas" />
-          <NavigationProperty Name="usuarios" Relationship="damas_chinasModel.FK__Reportes__id_usu__19DFD96B" FromRole="Reportes" ToRole="usuarios" />
-          <NavigationProperty Name="usuarios1" Relationship="damas_chinasModel.FK__Reportes__id_usu__1AD3FDA4" FromRole="Reportes" ToRole="usuarios" />
-        </EntityType>
-        <EntityType Name="Sanciones">
-          <Key>
-            <PropertyRef Name="id_sancion" />
-          </Key>
-          <Property Name="id_sancion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_usuario" Type="Int32" Nullable="false" />
-          <Property Name="tipo_sancion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fecha_inicio" Type="DateTime" Precision="3" />
-          <Property Name="fecha_fin" Type="DateTime" Precision="3" />
-          <Property Name="motivo_acumulado" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="activo" Type="Boolean" />
-          <NavigationProperty Name="usuarios" Relationship="damas_chinasModel.FK__Sanciones__id_us__208CD6FA" FromRole="Sanciones" ToRole="usuarios" />
-        </EntityType>
-        <Association Name="FK__Reportes__id_par__1BC821DD">
-          <End Type="damas_chinasModel.partidas" Role="partidas" Multiplicity="0..1" />
-          <End Type="damas_chinasModel.Reportes" Role="Reportes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="partidas">
-              <PropertyRef Name="id_partida" />
-            </Principal>
-            <Dependent Role="Reportes">
-              <PropertyRef Name="id_partida" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Reportes__id_usu__19DFD96B">
-          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1" />
-          <End Type="damas_chinasModel.Reportes" Role="Reportes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="Reportes">
-              <PropertyRef Name="id_usuario_reportador" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Reportes__id_usu__1AD3FDA4">
-          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1" />
-          <End Type="damas_chinasModel.Reportes" Role="Reportes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="Reportes">
-              <PropertyRef Name="id_usuario_reportado" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Sanciones__id_us__208CD6FA">
-          <End Type="damas_chinasModel.usuarios" Role="usuarios" Multiplicity="1" />
-          <End Type="damas_chinasModel.Sanciones" Role="Sanciones" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="Sanciones">
-              <PropertyRef Name="id_usuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -996,6 +999,17 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
                 <ScalarProperty Name="id_bloqueador" ColumnName="id_bloqueador" />
                 <ScalarProperty Name="id_bloqueado" ColumnName="id_bloqueado" />
                 <ScalarProperty Name="fecha_bloqueo" ColumnName="fecha_bloqueo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mensajes">
+            <EntityTypeMapping TypeName="damas_chinasModel.mensajes">
+              <MappingFragment StoreEntitySet="mensajes">
+                <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
+                <ScalarProperty Name="id_usuario_remitente" ColumnName="id_usuario_remitente" />
+                <ScalarProperty Name="id_usuario_destino" ColumnName="id_usuario_destino" />
+                <ScalarProperty Name="texto" ColumnName="texto" />
+                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1030,14 +1044,41 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <EntitySetMapping Name="perfiles">
             <EntityTypeMapping TypeName="damas_chinasModel.perfiles">
               <MappingFragment StoreEntitySet="perfiles">
-                <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="id_perfil" ColumnName="id_perfil" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="imagen_perfil" ColumnName="imagen_perfil" />
                 <ScalarProperty Name="ultimo_login" ColumnName="ultimo_login" />
                 <ScalarProperty Name="apellido_materno" ColumnName="apellido_materno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reportes">
+            <EntityTypeMapping TypeName="damas_chinasModel.Reportes">
+              <MappingFragment StoreEntitySet="Reportes">
+                <ScalarProperty Name="id_reporte" ColumnName="id_reporte" />
+                <ScalarProperty Name="id_usuario_reportador" ColumnName="id_usuario_reportador" />
+                <ScalarProperty Name="id_usuario_reportado" ColumnName="id_usuario_reportado" />
+                <ScalarProperty Name="id_partida" ColumnName="id_partida" />
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="fecha_reporte" ColumnName="fecha_reporte" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="codigo_lobby" ColumnName="codigo_lobby" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sanciones">
+            <EntityTypeMapping TypeName="damas_chinasModel.Sanciones">
+              <MappingFragment StoreEntitySet="Sanciones">
+                <ScalarProperty Name="id_sancion" ColumnName="id_sancion" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="tipo_sancion" ColumnName="tipo_sancion" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+                <ScalarProperty Name="motivo_acumulado" ColumnName="motivo_acumulado" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1066,15 +1107,15 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           <EntitySetMapping Name="usuarios">
             <EntityTypeMapping TypeName="damas_chinasModel.usuarios">
               <MappingFragment StoreEntitySet="usuarios">
-                <ScalarProperty Name="esta_sancionado" ColumnName="esta_sancionado" />
-                <ScalarProperty Name="baneado_permanentemente" ColumnName="baneado_permanentemente" />
-                <ScalarProperty Name="fecha_desbaneo" ColumnName="fecha_desbaneo" />
-                <ScalarProperty Name="numero_reportes" ColumnName="numero_reportes" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="correo" ColumnName="correo" />
                 <ScalarProperty Name="password_hash" ColumnName="password_hash" />
                 <ScalarProperty Name="rol" ColumnName="rol" />
                 <ScalarProperty Name="fecha_creacion" ColumnName="fecha_creacion" />
+                <ScalarProperty Name="numero_reportes" ColumnName="numero_reportes" />
+                <ScalarProperty Name="fecha_desbaneo" ColumnName="fecha_desbaneo" />
+                <ScalarProperty Name="baneado_permanentemente" ColumnName="baneado_permanentemente" />
+                <ScalarProperty Name="esta_sancionado" ColumnName="esta_sancionado" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1113,43 +1154,6 @@ advertencia 6002: La tabla o vista 'damas_chinas.dbo.historial_partidas' no tien
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="damas_chinasModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="damas_chinasModel.Store.sp_upgraddiagrams" />
-          <EntitySetMapping Name="mensajes">
-            <EntityTypeMapping TypeName="damas_chinasModel.mensajes">
-              <MappingFragment StoreEntitySet="mensajes">
-                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
-                <ScalarProperty Name="texto" ColumnName="texto" />
-                <ScalarProperty Name="id_usuario_destino" ColumnName="id_usuario_destino" />
-                <ScalarProperty Name="id_usuario_remitente" ColumnName="id_usuario_remitente" />
-                <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Reportes">
-            <EntityTypeMapping TypeName="damas_chinasModel.Reportes">
-              <MappingFragment StoreEntitySet="Reportes">
-                <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="fecha_reporte" ColumnName="fecha_reporte" />
-                <ScalarProperty Name="motivo" ColumnName="motivo" />
-                <ScalarProperty Name="id_partida" ColumnName="id_partida" />
-                <ScalarProperty Name="id_usuario_reportado" ColumnName="id_usuario_reportado" />
-                <ScalarProperty Name="id_usuario_reportador" ColumnName="id_usuario_reportador" />
-                <ScalarProperty Name="id_reporte" ColumnName="id_reporte" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Sanciones">
-            <EntityTypeMapping TypeName="damas_chinasModel.Sanciones">
-              <MappingFragment StoreEntitySet="Sanciones">
-                <ScalarProperty Name="activo" ColumnName="activo" />
-                <ScalarProperty Name="motivo_acumulado" ColumnName="motivo_acumulado" />
-                <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
-                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
-                <ScalarProperty Name="tipo_sancion" ColumnName="tipo_sancion" />
-                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
-                <ScalarProperty Name="id_sancion" ColumnName="id_sancion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

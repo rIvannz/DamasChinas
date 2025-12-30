@@ -63,22 +63,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="JoinLobbyRequest" nillable="true" type="tns:JoinLobbyRequest" />
-  <xs:complexType name="ReportPlayerRequest">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="LobbyCode" type="xs:int" />
-      <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ReportedUsername" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ReporterUsername" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ReportPlayerRequest" nillable="true" type="tns:ReportPlayerRequest" />
-  <xs:complexType name="BanInfoDto">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BanUntilUtc" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="IsBanned" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsPermanent" type="xs:boolean" />
-      <xs:element minOccurs="0" name="TotalReports" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BanInfoDto" nillable="true" type="tns:BanInfoDto" />
 </xs:schema>

@@ -1,6 +1,8 @@
 ﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using System.ServiceModel;
+using DamasChinas_Shared.Contracts.Dtos;
+
 
 namespace DamasChinas_Server.Interfaces
 {

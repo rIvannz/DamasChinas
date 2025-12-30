@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace DamasChinas_Server.Dtos
+namespace DamasChinas_Shared.Contracts.Dtos
 {
     [DataContract]
     public sealed class BanInfoDto

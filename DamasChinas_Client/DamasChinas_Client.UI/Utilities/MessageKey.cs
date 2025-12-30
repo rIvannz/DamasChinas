@@ -112,7 +112,7 @@ namespace DamasChinas_Client.UI.Utilities
         public const string OnlyHostCanKick = "msg_OnlyHostCanKick";
         public const string OnlyHostCanStart = "msg_OnlyHostCanStart";
         public const string LobbyCode = "lobbyCode";
-        public const string PlayersCount = "PlayersCount";
+        public const string PlayersCount = "playersCount";
         public const string HostDisconnected = "msg_HostDisconnected";
 
         public const string ErrorStartingGame = "msg_ErrorStartingGame";

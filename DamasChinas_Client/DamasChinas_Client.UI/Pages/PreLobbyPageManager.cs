@@ -1,4 +1,5 @@
 ﻿using DamasChinas_Client.UI.LobbyServiceProxy;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
 
 namespace DamasChinas_Client.UI.Pages

@@ -45,6 +45,9 @@ namespace DamasChinas_Client.UI.SessionServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ISessionService/PlayerLeftGame")]
         void PlayerLeftGame(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ISessionService/OnBanStatusUpdated")]
+        void OnBanStatusUpdated(DamasChinas_Shared.Contracts.Dtos.BanInfoDto banInfo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

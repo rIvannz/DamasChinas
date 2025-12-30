@@ -762,6 +762,9 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IMatchService/OnErrorOccurred")]
         void OnErrorOccurred(string message);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IMatchService/OnBanStatusUpdated")]
+        void OnBanStatusUpdated(DamasChinas_Shared.Contracts.Dtos.BanInfoDto banInfo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

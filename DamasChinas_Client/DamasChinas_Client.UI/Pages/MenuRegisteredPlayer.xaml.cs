@@ -50,7 +50,30 @@ namespace DamasChinas_Client.UI.Pages
                 LoadAvatar();
                 ForceAvatarRefresh = false;
             }
+
+            try
+            {
+                var pendingBan = PendingBanNotificationStore.Load();
+                if (pendingBan != null && pendingBan.IsBanned)
+                {
+                    string msg = PendingBanNotificationStore.BuildBanMessage(pendingBan);
+                    MessageHelper.ShowPopup(msg, PopupType.Error);
+                    PendingBanNotificationStore.Clear();
+                }
+
+                var pendingReport = PendingReportNotificationStore.Load();
+                if (pendingReport != null && !pendingReport.IsBanned && pendingReport.TotalReports > 0)
+                {
+                    string msg = PendingReportNotificationStore.BuildMessage(pendingReport);
+                    MessageHelper.ShowPopup(msg, PopupType.Warning);
+                    PendingReportNotificationStore.Clear();
+                }
+            }
+            catch
+            {
+            }
         }
+
 
         private void LoadAvatar()
         {

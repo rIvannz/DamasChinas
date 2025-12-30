@@ -16,6 +16,7 @@
       <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
       <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
       <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMatchService_ConnectToMatch_InputMessage">
@@ -66,6 +67,9 @@
   <wsdl:message name="IMatchService_OnErrorOccurred_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnErrorOccurred" />
   </wsdl:message>
+  <wsdl:message name="IMatchService_OnBanStatusUpdated_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnBanStatusUpdated" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="IMatchService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ConnectToMatch">
       <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/ConnectToMatch" message="tns:IMatchService_ConnectToMatch_InputMessage" />
@@ -98,6 +102,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnErrorOccurred">
       <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/OnErrorOccurred" message="tns:IMatchService_OnErrorOccurred_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnBanStatusUpdated">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/OnBanStatusUpdated" message="tns:IMatchService_OnBanStatusUpdated_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IMatchService" type="tns:IMatchService">
@@ -171,6 +178,12 @@
     </wsdl:operation>
     <wsdl:operation name="OnErrorOccurred">
       <soap12:operation soapAction="http://tempuri.org/IMatchService/OnErrorOccurred" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBanStatusUpdated">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/OnBanStatusUpdated" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

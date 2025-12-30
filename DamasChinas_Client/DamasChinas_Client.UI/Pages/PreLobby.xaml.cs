@@ -3,6 +3,7 @@ using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System;
+using DamasChinas_Shared.Contracts.Dtos;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
@@ -240,39 +241,31 @@ namespace DamasChinas_Client.UI.Pages
                 return;
             }
 
-            if (vm.Username == _username)
+            if (string.Equals(vm.Username, _username, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
             var req = new ReportPlayerRequest
             {
-                LobbyCode = _snapshot.LobbyCode,
+                CodigoLobby = _snapshot?.LobbyCode, // antes LobbyCode
+                IdPartida = null,                  // viene desde lobby, no desde match
                 ReporterUsername = _username,
                 ReportedUsername = vm.Username,
                 Reason = "Reported from lobby"
             };
 
-            _lobbyManager.ReportPlayer(req);
-            MessageHelper.ShowPopup(MessageKeys.PlayerReported, PopupType.Success);
-        }
-
-        private void OnStartGameClick(object sender, RoutedEventArgs e)
-        {
-            _lobbyManager.StartGame();
-        }
-
-        private void OnExitClick(object sender, RoutedEventArgs e)
-        {
-            var res = _lobbyManager.LeaveLobby();
-
-            if (!res.Success)
+            try
             {
-                ClientSession.Clear();
+                _lobbyManager.ReportPlayer(req);
+                MessageHelper.ShowPopup(MessageKeys.PlayerReported, PopupType.Success);
             }
-
-            ExitCleanly();
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
         }
+
 
         private void OnInviteFriendClick(object sender, RoutedEventArgs e)
         {
@@ -343,7 +336,24 @@ namespace DamasChinas_Client.UI.Pages
             NavigationService?.GoBack();
         }
 
-        
+        private void OnStartGameClick(object sender, RoutedEventArgs e)
+        {
+            _lobbyManager.StartGame();
+        }
+
+        private void OnExitClick(object sender, RoutedEventArgs e)
+        {
+            var res = _lobbyManager.LeaveLobby();
+
+            if (!res.Success)
+            {
+                ClientSession.Clear();
+            }
+
+            ExitCleanly();
+        }
+
+
 
         public class LobbyMemberViewModel
         {

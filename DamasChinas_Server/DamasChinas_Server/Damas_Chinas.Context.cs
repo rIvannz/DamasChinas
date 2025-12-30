@@ -29,17 +29,17 @@ namespace DamasChinas_Server
     
         public virtual DbSet<amistades> amistades { get; set; }
         public virtual DbSet<bloqueos> bloqueos { get; set; }
+        public virtual DbSet<mensajes> mensajes { get; set; }
         public virtual DbSet<movimientos> movimientos { get; set; }
         public virtual DbSet<participantes_partida> participantes_partida { get; set; }
         public virtual DbSet<partidas> partidas { get; set; }
         public virtual DbSet<perfiles> perfiles { get; set; }
+        public virtual DbSet<Reportes> Reportes { get; set; }
+        public virtual DbSet<Sanciones> Sanciones { get; set; }
         public virtual DbSet<solicitudes_amistad> solicitudes_amistad { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<usuarios> usuarios { get; set; }
         public virtual DbSet<historial_partidas> historial_partidas { get; set; }
-        public virtual DbSet<mensajes> mensajes { get; set; }
-        public virtual DbSet<Reportes> Reportes { get; set; }
-        public virtual DbSet<Sanciones> Sanciones { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

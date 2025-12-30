@@ -21,6 +21,7 @@ namespace DamasChinas_Server
         public string motivo { get; set; }
         public Nullable<System.DateTime> fecha_reporte { get; set; }
         public string estado { get; set; }
+        public Nullable<int> codigo_lobby { get; set; }
     
         public virtual partidas partidas { get; set; }
         public virtual usuarios usuarios { get; set; }

@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/" />
   <xs:element name="GetPublicLobbies">
@@ -106,7 +107,7 @@
   <xs:element name="ReportPlayer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="request" nillable="true" type="q10:ReportPlayerRequest" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" minOccurs="0" name="request" nillable="true" type="q10:ReportPlayerRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -127,7 +128,7 @@
   <xs:element name="GetBanInfoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="GetBanInfoResult" nillable="true" type="q12:BanInfoDto" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" minOccurs="0" name="GetBanInfoResult" nillable="true" type="q12:BanInfoDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -192,7 +193,7 @@
   <xs:element name="OnBanStatusUpdated">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="banInfo" nillable="true" type="q18:BanInfoDto" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" minOccurs="0" name="banInfo" nillable="true" type="q18:BanInfoDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

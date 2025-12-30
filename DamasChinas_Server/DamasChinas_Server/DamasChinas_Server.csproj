@@ -60,12 +60,32 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="amistades.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bloqueos.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Common\ILogService.cs" />
     <Compile Include="Common\LogFactory.cs" />
     <Compile Include="Common\MessageCode.cs" />
     <Compile Include="Common\RepositoryValidationException.cs" />
     <Compile Include="Contracts\OperationResult.cs" />
-    <Compile Include="Dtos\BanInfoDto.cs" />
+    <Compile Include="Damas_Chinas.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Damas_Chinas.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Damas_Chinas.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Damas_Chinas.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Damas_Chinas.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Dtos\CreateLobbyRequest.cs" />
     <Compile Include="Dtos\JoinLobbyRequest.cs" />
     <Compile Include="Dtos\Lobby.cs" />
@@ -78,7 +98,6 @@
     <Compile Include="Dtos\MatchDtos.cs" />
     <Compile Include="Dtos\PublicFriendProfile.cs" />
     <Compile Include="Dtos\RankingEntry.cs" />
-    <Compile Include="Dtos\ReportPlayerRequest.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="GameRepositories\RepositoryReports.cs" />
     <Compile Include="GameRepositories\RepositorySanctions.cs" />
@@ -91,6 +110,9 @@
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\PlayerColor.cs" />
     <Compile Include="Game\PlayerMove.cs" />
+    <Compile Include="historial_partidas.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IFriendCallback.cs" />
     <Compile Include="Interfaces\ILobbyCallback.cs" />
     <Compile Include="Interfaces\ILobbyService.cs" />
@@ -113,6 +135,18 @@
     <Compile Include="mensajes.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
+    <Compile Include="movimientos.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="participantes_partida.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="partidas.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="perfiles.cs">
+      <DependentUpon>Damas_Chinas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Reportes.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
@@ -130,47 +164,11 @@
     <Compile Include="Services\LobbyService.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Services\AccountManager.cs" />
-    <Compile Include="amistades.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
-    <Compile Include="bloqueos.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Damas_Chinas.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Damas_Chinas.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Damas_Chinas.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Damas_Chinas.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Damas_Chinas.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Dtos\PublicProfile.cs" />
-    <Compile Include="historial_partidas.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
     <Compile Include="Interfaces\IAccountManager.cs" />
     <Compile Include="Interfaces\ILoginService.cs" />
     <Compile Include="Interfaces\ISingInService.cs" />
-    <Compile Include="movimientos.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
     <Compile Include="logic\RepositoryUsers.cs" />
-    <Compile Include="participantes_partida.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
-    <Compile Include="partidas.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
-    <Compile Include="perfiles.cs">
-      <DependentUpon>Damas_Chinas.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LobbySessionManager.cs" />
     <Compile Include="Services\Log4NetService.cs" />
@@ -180,6 +178,7 @@
     <Compile Include="Services\SessionManager.cs" />
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\SingInService.cs" />
+    <Compile Include="Dtos\AccountMgr.cs" />
     <Compile Include="solicitudes_amistad.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
@@ -195,7 +194,6 @@
     <Compile Include="usuarios.cs">
       <DependentUpon>Damas_Chinas.tt</DependentUpon>
     </Compile>
-    <Compile Include="Dtos\AccountMgr.cs" />
     <Compile Include="Utilities\Email\Email.cs" />
     <Compile Include="Utilities\Email\EmailLanguage.cs" />
     <Compile Include="Utilities\Email\EmailLanguageMapper.cs" />
@@ -209,23 +207,7 @@
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EntityDeploy Include="Damas_Chinas.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Damas_Chinas.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="connectionStrings.config" />
-    <None Include="Damas_Chinas.edmx.diagram">
-      <DependentUpon>Damas_Chinas.edmx</DependentUpon>
-    </None>
-    <Content Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="emailSettings.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Damas_Chinas.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Damas_Chinas.edmx</DependentUpon>
@@ -236,6 +218,20 @@
       <DependentUpon>Damas_Chinas.edmx</DependentUpon>
       <LastGenOutput>Damas_Chinas.cs</LastGenOutput>
     </Content>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="Damas_Chinas.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Damas_Chinas.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Damas_Chinas.edmx.diagram">
+      <DependentUpon>Damas_Chinas.edmx</DependentUpon>
+    </None>
+    <None Include="emailSettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

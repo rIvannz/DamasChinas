@@ -25,6 +25,7 @@
     <MetadataFile FileName="service11.wsdl" MetadataType="Wsdl" ID="473cef39-df67-4d95-a308-782cecbbde11" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
     <MetadataFile FileName="service22.xsd" MetadataType="Schema" ID="65dae7b2-027a-4b91-aaa4-bc4d053c9c29" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
     <MetadataFile FileName="service23.xsd" MetadataType="Schema" ID="2fd8f10f-1b8e-45c7-a0a9-67af153f2e12" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
+    <MetadataFile FileName="DamasChinas_Shared.Contracts.Dtos.xsd" MetadataType="Schema" ID="83f43857-3e4b-4527-b637-963fd71cc65f" SourceId="1" SourceUrl="http://localhost:8086/SessionService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

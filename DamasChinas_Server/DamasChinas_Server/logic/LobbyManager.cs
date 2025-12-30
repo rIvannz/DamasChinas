@@ -1,5 +1,6 @@
 ﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
+using DamasChinas_Server.GameRepositories;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilities;
@@ -7,7 +8,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using DamasChinas_Shared.Contracts.Dtos;
 using System.ServiceModel;
+
 
 namespace DamasChinas_Server.Logic
 {
@@ -15,9 +18,6 @@ namespace DamasChinas_Server.Logic
     {
         private const int MinPlayersToStart = 2;
         private const int MaxPlayersPerLobby = 6;
-        private const int ReportsFirstBan = 3;
-        private const int ReportsSecondBan = 6;
-        private const int ReportsPermanentBan = 10;
 
         private static readonly Lazy<LobbyManager> _instance =
             new Lazy<LobbyManager>(() => new LobbyManager());
@@ -37,8 +37,7 @@ namespace DamasChinas_Server.Logic
 
         public static LobbyManager Instance => _instance.Value;
 
-
-        private static void SafeInvokeCallback(string context,string username,Action<ILobbyCallback> action)
+        private static void SafeInvokeCallback(string context, string username, Action<ILobbyCallback> action)
         {
             ILobbyCallback callback = LobbySessionManager.Get(username);
 
@@ -58,7 +57,6 @@ namespace DamasChinas_Server.Logic
 
                 LobbySessionManager.Remove(username);
 
-             
                 LobbyManager.Instance.HandleUnexpectedDisconnect(username);
             }
         }
@@ -75,12 +73,10 @@ namespace DamasChinas_Server.Logic
 
             _log.Warn($"[LobbyManager] User disconnected unexpectedly: {username}");
 
-       
             lobby.BroadcastMessage(
                 "Server",
                 $"{username} has been disconnected.");
 
-          
             if (lobby.IsEmpty || wasHost)
             {
                 CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
@@ -94,8 +90,6 @@ namespace DamasChinas_Server.Logic
 
             BroadcastSnapshot(lobby);
         }
-
-
 
         public List<LobbySummaryDto> GetPublicLobbies()
         {
@@ -127,17 +121,30 @@ namespace DamasChinas_Server.Logic
 
         public BanInfoDto GetBanInfo(string username)
         {
-            if (_bans.TryGetValue(username, out var ban))
+            if (string.IsNullOrWhiteSpace(username))
             {
-                if (ban.IsBanned && !ban.IsPermanent && ban.BanUntilUtc.HasValue && ban.BanUntilUtc.Value <= DateTime.UtcNow)
-                {
-                    ban.IsBanned = false;
-                }
-                return ban.ToDto();
+                return new BanInfoDto { IsBanned = false, TotalReports = 0 };
             }
-            return new BanInfoDto { IsBanned = false, TotalReports = 0 };
-        }
 
+            try
+            {
+                var usersRepo = new RepositoryUsers();
+                int userId = usersRepo.GetUserIdByUsername(username);
+
+                var reportsRepo = new RepositoryReports();
+                int total = reportsRepo.CountReportsForUser(userId);
+
+                var sanctionsRepo = new RepositorySanctions();
+                BanInfoDto ban = sanctionsRepo.GetActiveBanInfo(userId);
+
+                ban.TotalReports = total;
+                return ban;
+            }
+            catch
+            {
+                return new BanInfoDto { IsBanned = false, TotalReports = 0 };
+            }
+        }
 
         public LobbySnapshotDto CreateLobby(string hostUsername, PublicProfile hostProfile, CreateLobbyRequest request, ILobbyCallback callback)
         {
@@ -166,6 +173,10 @@ namespace DamasChinas_Server.Logic
             EnsureNotBanned(profile.Username);
 
             var lobby = GetLobbyByCode(request.LobbyCode);
+
+            // ✅ NUEVO: si fue kickeado de este lobby, no puede reingresar
+            lobby.ThrowIfKicked(profile.Username);
+
             lobby.ThrowIfGameStarted();
             lobby.ThrowIfFull();
 
@@ -196,7 +207,6 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-        
             if (wasHost)
             {
                 lobby.AssignNewHostIfNeeded();
@@ -210,10 +220,13 @@ namespace DamasChinas_Server.Logic
             var lobby = GetLobbyByCode(lobbyCode);
             lobby.EnsureHost(hostUsername);
 
-            if (hostUsername == targetUsername)
+            if (string.Equals(hostUsername, targetUsername, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
+
+            // ✅ NUEVO: marcar como kick en ESTE lobby (no es ban global)
+            lobby.AddKickedUser(targetUsername);
 
             lobby.RemoveMember(targetUsername);
 
@@ -231,14 +244,12 @@ namespace DamasChinas_Server.Logic
 
             lobby.EnsureHost(hostUsername);
 
-            
             var members = lobby.GetMembers()
                 .Where(m => LobbySessionManager.IsOnline(m.Username))
                 .ToList();
 
             _log.Info($"[StartGame] Miembros ONLINE detectados: {string.Join(", ", members.Select(m => m.Username))}");
 
-          
             if (members.Count < MinPlayersToStart ||
                 (members.Count != 2 && members.Count != 4 && members.Count != 6))
             {
@@ -248,10 +259,9 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.LobbyMinPlayersNotReached);
             }
 
-          
             lobby.MarkGameStarted();
 
-            var playerUsernames = members 
+            var playerUsernames = members
                 .Select(m => m.Username)
                 .ToList();
 
@@ -262,7 +272,6 @@ namespace DamasChinas_Server.Logic
             _log.Info(
                 $"[StartGame] Partida creada correctamente con jugadores: {string.Join(", ", playerUsernames)}");
 
-            
             foreach (var member in members)
             {
                 SafeInvokeCallback(
@@ -271,9 +280,6 @@ namespace DamasChinas_Server.Logic
                     cb => cb.OnGameStarting());
             }
         }
-
-
-
 
         public void BroadcastMessage(int lobbyCode, string sender, string message)
         {
@@ -287,6 +293,7 @@ namespace DamasChinas_Server.Logic
                 lobby.BroadcastMessage(sender, message);
             }
         }
+
         public void InviteFriend(
         string hostUsername,
         string friendUsername,
@@ -304,8 +311,6 @@ namespace DamasChinas_Server.Logic
                 SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
             }
 
-        
-            
             SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
         }
 
@@ -326,9 +331,6 @@ namespace DamasChinas_Server.Logic
             );
         }
 
-
-
-
         public void ReportPlayer(ReportPlayerRequest request)
         {
             if (request == null)
@@ -336,40 +338,107 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-            var banState = _bans.GetOrAdd(request.ReportedUsername, new BanState { TotalReports = 0, IsBanned = false });
-
-            lock (banState)
+            if (string.IsNullOrWhiteSpace(request.ReporterUsername) ||
+                string.IsNullOrWhiteSpace(request.ReportedUsername))
             {
-                banState.TotalReports++;
-                ApplyBanLogic(banState);
+                return;
+            }
+
+            if (string.Equals(
+                request.ReporterUsername,
+                request.ReportedUsername,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            try
+            {
+                var usersRepo = new RepositoryUsers();
+                int reporterId = usersRepo.GetUserIdByUsername(request.ReporterUsername);
+                int reportedId = usersRepo.GetUserIdByUsername(request.ReportedUsername);
+
+                string motivo = request.Reason ?? string.Empty;
+
+                // OJO: ahora se guarda de forma general:
+                // - si viene del lobby: CodigoLobby trae valor y IdPartida puede ser null
+                // - si viene de match: IdPartida trae valor y CodigoLobby puede ser null
+                var reportsRepo = new RepositoryReports();
+
+                int totalReports = reportsRepo.AddReportAndGetTotal(
+                    reporterId,
+                    reportedId,
+                    request.IdPartida,
+                    request.CodigoLobby,
+                    motivo);
+
+                var sanctionsRepo = new RepositorySanctions();
+                BanInfoDto banInfo = sanctionsRepo.ApplyBanFromReports(
+                    reportedId,
+                    totalReports,
+                    motivo);
+
+                // Notificar al usuario reportado (si está conectado)
+                var sessionCb = SessionManager.GetSession(request.ReportedUsername);
+                if (sessionCb != null)
+                {
+                    try
+                    {
+                        sessionCb.OnBanStatusUpdated(banInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Warn($"[LobbyManager.ReportPlayer] Session callback FAILED for {request.ReportedUsername}: {ex.Message}");
+                        SessionManager.RemoveSession(request.ReportedUsername);
+                    }
+                }
+
+                // Notificar también por callback de lobby si existe
+                SafeInvokeCallback(
+                    "BanStatusUpdated",
+                    request.ReportedUsername,
+                    cb => cb.OnBanStatusUpdated(banInfo));
+
+                // Si ya quedó baneado, expulsar del lobby si está en uno
+                if (banInfo.IsBanned)
+                {
+                    MatchManager.Instance.NotifyBanAndKickIfInMatch(
+                        request.ReportedUsername,
+                        banInfo);
+
+                    var lobby = FindLobbyByUser(request.ReportedUsername);
+                    if (lobby != null)
+                    {
+                        lobby.RemoveMember(request.ReportedUsername);
+
+                        SafeInvokeCallback(
+                            "KickedFromLobby",
+                            request.ReportedUsername,
+                            cb => cb.OnKickedFromLobby(MessageCode.LobbyUserBanned));
+
+                        LobbySessionManager.Remove(request.ReportedUsername);
+                        BroadcastSnapshot(lobby);
+                    }
+                }
+            }
+            catch (RepositoryValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[LobbyManager.ReportPlayer] Error: {ex.Message}", ex);
+                throw new RepositoryValidationException(MessageCode.UnknownError);
             }
         }
+
+
+
 
         public void ApplyReportsOnMatchEnd(string username)
         {
             var banState = _bans.GetOrAdd(username, new BanState());
         }
-
-        private void ApplyBanLogic(BanState state)
-        {
-            if (state.TotalReports >= ReportsPermanentBan)
-            {
-                state.IsBanned = true;
-                state.IsPermanent = true;
-            }
-            else if (state.TotalReports >= ReportsSecondBan)
-            {
-                state.IsBanned = true;
-                state.BanUntilUtc = DateTime.UtcNow.AddDays(7);
-            }
-            else if (state.TotalReports >= ReportsFirstBan)
-            {
-                state.IsBanned = true;
-                state.BanUntilUtc = DateTime.UtcNow.AddHours(24);
-            }
-        }
-
-
 
         private void BroadcastSnapshot(LobbyState lobby)
         {
@@ -408,12 +477,18 @@ namespace DamasChinas_Server.Logic
 
         private void EnsureNotBanned(string username)
         {
-            if (_bans.TryGetValue(username, out var ban))
+            if (string.IsNullOrWhiteSpace(username))
             {
-                if (ban.IsBanned && (!ban.BanUntilUtc.HasValue || ban.BanUntilUtc > DateTime.UtcNow))
-                {
-                    throw new RepositoryValidationException(MessageCode.LobbyUserBanned);
-                }
+                return;
+            }
+
+            var usersRepo = new RepositoryUsers();
+            int userId = usersRepo.GetUserIdByUsername(username);
+
+            var sanctionsRepo = new RepositorySanctions();
+            if (sanctionsRepo.HasActiveBan(userId))
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyUserBanned);
             }
         }
 
@@ -471,7 +546,12 @@ namespace DamasChinas_Server.Logic
 
         private sealed class LobbyState
         {
-            private readonly ConcurrentDictionary<string, LobbyMember> _members = new ConcurrentDictionary<string, LobbyMember>();
+            private readonly ConcurrentDictionary<string, LobbyMember> _members =
+                new ConcurrentDictionary<string, LobbyMember>(StringComparer.OrdinalIgnoreCase);
+
+            // ✅ NUEVO: expulsados por lobby (kick)
+            private readonly ConcurrentDictionary<string, byte> _kickedUsers =
+                new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
 
             public int LobbyCode { get; }
             public LobbyVisibility Visibility { get; }
@@ -486,6 +566,29 @@ namespace DamasChinas_Server.Logic
                 Visibility = vis;
                 MaxPlayers = max;
                 HostUsername = host;
+            }
+
+            public void AddKickedUser(string username)
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    return;
+                }
+
+                _kickedUsers[username] = 0;
+            }
+
+            public void ThrowIfKicked(string username)
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    return;
+                }
+
+                if (_kickedUsers.ContainsKey(username))
+                {
+                    throw new RepositoryValidationException(MessageCode.LobbyKicked);
+                }
             }
 
             public void AddOrUpdateMember(LobbyMemberDto dto)
@@ -575,7 +678,7 @@ namespace DamasChinas_Server.Logic
 
             public void BroadcastMessage(string sender, string msg)
             {
-                string time = DateTime.UtcNow.ToString("O"); // Formato ISO 8601 estándar
+                string time = DateTime.UtcNow.ToString("O");
 
                 foreach (var m in _members.Values)
                 {

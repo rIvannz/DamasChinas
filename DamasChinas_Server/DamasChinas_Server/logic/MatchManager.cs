@@ -9,6 +9,8 @@ using DamasChinas_Server.Game;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.logic;
+using DamasChinas_Shared.Contracts.Dtos;
+
 
 namespace DamasChinas_Server.Logic
 {
@@ -30,7 +32,6 @@ namespace DamasChinas_Server.Logic
             _log = LogFactory.Create(typeof(MatchManager));
             _repoMatches = new RepositoryMatches();
         }
-
 
         public void CreateMatchFromLobby(int lobbyCode, List<string> players)
         {
@@ -70,12 +71,10 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-                    
                 }
             }
         }
 
-   
         public void RegisterPlayerSession(int lobbyCode, string username, IMatchCallback callback)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
@@ -91,7 +90,6 @@ namespace DamasChinas_Server.Logic
             match.Callbacks[username] = callback;
         }
 
-  
         public void ApplyMove(MoveRequestDto req)
         {
             if (!_matches.TryGetValue(req.LobbyCode, out var match))
@@ -115,7 +113,6 @@ namespace DamasChinas_Server.Logic
 
             BroadcastMove(req.LobbyCode, req.Username, match, origin, dest);
 
-      
             if (result.Winner.HasValue)
             {
                 string winner = match.UserColorMap
@@ -141,10 +138,8 @@ namespace DamasChinas_Server.Logic
             }
         }
 
-
         public void HandlePlayerDisconnect(int lobbyCode, string username)
         {
-           
             RemovePlayer(lobbyCode, username);
         }
 
@@ -165,7 +160,6 @@ namespace DamasChinas_Server.Logic
                 username,
                 StringComparison.OrdinalIgnoreCase);
 
-
             if (match.UserColorMap.Count == 2)
             {
                 string winner = match.UserColorMap.Keys
@@ -178,14 +172,11 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-   
             match.Game.RemovePlayer(color);
 
-  
             match.UserColorMap.Remove(username);
             match.Callbacks.TryRemove(username, out _);
 
-     
             foreach (var cb in match.Callbacks.Values)
             {
                 try
@@ -194,18 +185,15 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-                    
                 }
             }
 
-      
             if (wasHost && match.UserColorMap.Count > 0)
             {
                 match.HostUsername = match.UserColorMap.Keys.First();
                 _log.Info($"[MatchManager] Host changed to {match.HostUsername}");
             }
 
-      
             BroadcastBoardState(lobbyCode, match);
         }
 
@@ -242,6 +230,59 @@ namespace DamasChinas_Server.Logic
             };
         }
 
+        public void NotifyBanAndKickIfInMatch(string username, BanInfoDto banInfo)
+        {
+            if (string.IsNullOrWhiteSpace(username) || banInfo == null || !banInfo.IsBanned)
+            {
+                return;
+            }
+
+            int lobbyCode = FindLobbyCodeByUser(username);
+            if (lobbyCode <= 0)
+            {
+                return;
+            }
+
+            if (!_matches.TryGetValue(lobbyCode, out var match))
+            {
+                return;
+            }
+
+            if (match.Callbacks.TryGetValue(username, out var cb))
+            {
+                try
+                {
+                    cb.OnBanStatusUpdated(banInfo);
+                }
+                catch
+                {
+                }
+            }
+
+            RemovePlayer(lobbyCode, username);
+        }
+
+
+        private int FindLobbyCodeByUser(string username)
+        {
+            foreach (var entry in _matches)
+            {
+                var match = entry.Value;
+
+                if (match == null)
+                {
+                    continue;
+                }
+
+                if (match.Callbacks.ContainsKey(username) || match.UserColorMap.ContainsKey(username))
+                {
+                    return entry.Key;
+                }
+            }
+
+            return -1;
+        }
+
         private void BroadcastMove(int code, string player, ActiveMatch match,
             HexCoordinate from, HexCoordinate to)
         {
@@ -264,7 +305,6 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-               
                 }
             }
         }
@@ -279,7 +319,6 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
-              
                 }
             }
         }

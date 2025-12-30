@@ -27,6 +27,7 @@
     <MetadataFile FileName="item62.xsd" MetadataType="Schema" ID="8fc2f1e2-bb6c-40b2-ac58-3ddc9a18487e" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd0" />
     <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="1ddeae16-5fcd-469a-abaa-c59df20b7198" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?disco" />
     <MetadataFile FileName="item63.xsd" MetadataType="Schema" ID="266c503e-ab3b-467f-a45e-a1acc159d555" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd5" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="3c8758e0-1187-4738-96fa-ae249b617354" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd6" />
     <MetadataFile FileName="MatchService1.wsdl" MetadataType="Wsdl" ID="9ee2bf71-208e-429d-86de-3f57cb8b806b" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?wsdl" />
     <MetadataFile FileName="item64.xsd" MetadataType="Schema" ID="6c3e4591-421b-465e-9ebd-bd035509f844" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd4" />
     <MetadataFile FileName="item65.xsd" MetadataType="Schema" ID="71aa0f2b-aa6a-4a7c-841d-f5c54f972ff4" SourceId="1" SourceUrl="http://localhost:8008/MatchService/?xsd=xsd2" />

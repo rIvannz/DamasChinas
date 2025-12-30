@@ -12,6 +12,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ISessionService_Subscribe_InputMessage">
@@ -35,6 +36,9 @@
   <wsdl:message name="ISessionService_PlayerLeftGame_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerLeftGame" />
   </wsdl:message>
+  <wsdl:message name="ISessionService_OnBanStatusUpdated_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnBanStatusUpdated" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ISessionService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Subscribe">
       <wsdl:input wsaw:Action="http://tempuri.org/ISessionService/Subscribe" message="tns:ISessionService_Subscribe_InputMessage" />
@@ -56,6 +60,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PlayerLeftGame">
       <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/PlayerLeftGame" message="tns:ISessionService_PlayerLeftGame_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnBanStatusUpdated">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/OnBanStatusUpdated" message="tns:ISessionService_OnBanStatusUpdated_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ISessionService" type="tns:ISessionService">
@@ -99,6 +106,12 @@
     </wsdl:operation>
     <wsdl:operation name="PlayerLeftGame">
       <soap12:operation soapAction="http://tempuri.org/ISessionService/PlayerLeftGame" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnBanStatusUpdated">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/OnBanStatusUpdated" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

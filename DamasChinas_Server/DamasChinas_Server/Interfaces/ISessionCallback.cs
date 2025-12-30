@@ -1,8 +1,8 @@
 using System.ServiceModel;
+using DamasChinas_Shared.Contracts.Dtos;
 
 namespace DamasChinas_Server.Interfaces
 {
-
     [ServiceContract]
     public interface ISessionCallback
     {
@@ -21,5 +21,7 @@ namespace DamasChinas_Server.Interfaces
         [OperationContract(IsOneWay = true)]
         void PlayerLeftGame(string username);
 
+        [OperationContract(IsOneWay = true)]
+        void OnBanStatusUpdated(BanInfoDto banInfo);
     }
 }

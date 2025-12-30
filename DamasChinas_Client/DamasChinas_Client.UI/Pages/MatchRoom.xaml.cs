@@ -1,5 +1,6 @@
 ﻿using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.MatchServiceProxy;
+using DamasChinas_Client.UI.Callbacks;
 using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,55 +11,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using DamasChinas_Shared.Contracts.Dtos;
 using System.Windows.Shapes;
 
 using AccountProxy = DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
 {
-
-    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
-    public class MatchCallbackHandler : IMatchServiceCallback
-    {
-        private readonly MatchRoom _page;
-
-        public MatchCallbackHandler(MatchRoom page)
-        {
-            _page = page ?? throw new ArgumentNullException(nameof(page));
-        }
-
-        public void OnPlayerMoved(TurnChangeDto turnInfo)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _page.HandlePlayerMoved(turnInfo);
-            });
-        }
-
-        public void OnMatchEnded(string winnerUsername)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _page.HandleMatchEnded(winnerUsername);
-            });
-        }
-
-        public void OnPlayerLeftMatch(string username)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _page.HandlePlayerLeft(username);
-            });
-        }
-
-        public void OnErrorOccurred(string message)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _page.HandleError(message);
-            });
-        }
-    }
 
 
     public partial class MatchRoom : Page
@@ -131,14 +90,15 @@ namespace DamasChinas_Client.UI.Pages
             {
                 _matchEnded = false;
 
-        
+          
+                Players.Clear();
+                _userColors.Clear();
+
                 _lobbySnapshot = LobbySession.Manager.GetCurrentLobby(_myUsername);
                 SetupPlayersMetadata();
 
-   
                 DrawBoardBackground();
                 DrawPlayerLabels();
-
 
                 LobbySession.Manager.ChatMessageReceived += OnChatMessageReceived;
 
@@ -152,6 +112,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+
         private void OnPageUnloaded(object sender, RoutedEventArgs e)
         {
             LobbySession.Manager.ChatMessageReceived -= OnChatMessageReceived;
@@ -159,16 +120,39 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
+                
                 if (_proxy != null && _proxy.State == CommunicationState.Opened)
                 {
-                    _proxy.Close();
+                    try
+                    {
+                        _proxy.LeaveMatch(_lobbyCode, _myUsername);
+                    }
+                    catch
+                    {
+                      
+                    }
                 }
             }
-            catch
+            finally
             {
-                _proxy?.Abort();
+             
+                try
+                {
+                    if (_proxy != null)
+                    {
+                        if (_proxy.State == CommunicationState.Faulted)
+                            _proxy.Abort();
+                        else
+                            _proxy.Close();
+                    }
+                }
+                catch
+                {
+                    _proxy?.Abort();
+                }
             }
         }
+
 
 
 
@@ -770,6 +754,53 @@ namespace DamasChinas_Client.UI.Pages
                 Application.Current.MainWindow.Content = targetPage;
             }
         }
+        public void HandleBanStatusUpdated(BanInfoDto banInfo)
+        {
+            if (banInfo == null || !banInfo.IsBanned)
+            {
+                return;
+            }
+
+            try
+            {
+                PendingBanNotificationStore.Save(banInfo);
+
+                _matchEnded = true;
+
+                string msg = PendingBanNotificationStore.BuildBanMessage(banInfo);
+                MessageHelper.ShowPopup(msg, PopupType.Error);
+
+                PendingBanNotificationStore.Clear();
+            }
+            catch
+            {
+                // Si algo falla, por lo menos intenta guardar el ban para mostrarlo en menú
+                try { PendingBanNotificationStore.Save(banInfo); } catch { }
+            }
+            finally
+            {
+                // ✅ cerrar canal sin mandar LeaveMatch (porque el server ya te removió)
+                try
+                {
+                    if (_proxy != null)
+                    {
+                        if (_proxy.State == CommunicationState.Faulted)
+                            _proxy.Abort();
+                        else
+                            _proxy.Close();
+                    }
+                }
+                catch
+                {
+                    _proxy?.Abort();
+                }
+
+                NavigateToMenu();
+            }
+        }
+
+
+
 
 
 
