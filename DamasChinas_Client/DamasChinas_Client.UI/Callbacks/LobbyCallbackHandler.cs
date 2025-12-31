@@ -51,7 +51,7 @@ namespace DamasChinas_Client.UI.Callbacks
                 return;
             }
 
-            app.Dispatcher.Invoke(() =>
+            app.Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (banInfo.IsBanned)
                 {
@@ -73,7 +73,8 @@ namespace DamasChinas_Client.UI.Callbacks
 
                     PendingReportNotificationStore.Clear();
                 }
-            });
+            }));
+
         }
 
         public void OnChatMessageReceived(string sender, string message, string timestamp)

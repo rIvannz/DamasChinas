@@ -83,16 +83,21 @@ namespace DamasChinas_Client.UI.Utilities
                 return string.Empty;
 
             if (banInfo.IsPermanent)
-                return MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyUserBanned);
+                return MessageTranslator.GetLocalizedMessage(MessageKeys.UserBannedPermanent);
 
             if (banInfo.BanUntilUtc.HasValue)
             {
                 DateTime local = banInfo.BanUntilUtc.Value.ToLocalTime();
                 string until = local.ToString("dd/MM/yyyy HH:mm");
-                return $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyUserBanned)} ({until})";
+
+                string template =
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.UserBannedUntil);
+
+                return string.Format(template, until);
             }
 
-            return MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyUserBanned);
+            return MessageTranslator.GetLocalizedMessage(MessageKeys.UserBanned);
         }
+
     }
 }

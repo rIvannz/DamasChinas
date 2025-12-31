@@ -368,6 +368,11 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_LobbyInactive">Esta partida ya no está activa.</sys:String>
     <sys:String x:Key="msg_LobbyUserBanned">Estás baneado de esta partida.</sys:String>
     <sys:String x:Key="msg_LobbyClosed">La partida ha sido cerrada por el anfitrión.</sys:String>
+    <sys:String x:Key="msg_UserBanned">Estás baneado. En este momento no puedes jugar.</sys:String>
+    <sys:String x:Key="msg_UserBannedUntil">Estás baneado hasta: {0}. En este momento no puedes jugar.</sys:String>
+    <sys:String x:Key="msg_UserBannedPermanent">Estás baneado permanentemente. En este momento no puedes jugar.</sys:String>
+    
+
 
     <!-- Backend / servidor -->
     <sys:String x:Key="msg_ServerUnavailable">El servidor tuvo una interrupción, inicia sesión de nuevo.</sys:String>
@@ -397,6 +402,8 @@ Se permiten múltiples saltos en un solo turno.
     <sys:String x:Key="msg_LanguageChangeSuccess">
         El idioma se cambió correctamente.
     </sys:String>
+    <sys:String x:Key="msg_SessionExpired">Tu sesión expiró. Por favor, inicia sesión nuevamente.</sys:String>
+
 
     <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Por favor ingresa el código de verificación.</sys:String>

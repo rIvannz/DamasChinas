@@ -3,12 +3,13 @@ using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.SessionServiceProxy;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Diagnostics;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
 namespace DamasChinas_Client.UI.Pages
@@ -50,30 +51,22 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[Login.OnLoginClick - Network] {ex}");
                 await SafeWait(loading);
 
-                Application.Current.Dispatcher.Invoke(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    if (loading?.IsVisible == true)
-                    {
-                        loading.Close();
-                    }
-
+                    loading?.Close();
                     MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
-                });
+                }));
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - General] {ex}");
                 await SafeWait(loading);
 
-                Application.Current.Dispatcher.Invoke(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    if (loading?.IsVisible == true)
-                    {
-                        loading.Close();
-                    }
-
+                    loading?.Close();
                     MessageHelper.ShowPopup(UnknownError, PopupType.Error);
-                });
+                }));
             }
         }
 
@@ -110,8 +103,6 @@ namespace DamasChinas_Client.UI.Pages
             var context = new InstanceContext(callback);
 
             var client = new LoginServiceClient(context);
-
-           
             callback.AttachClient(client);
 
             return client;
@@ -119,26 +110,42 @@ namespace DamasChinas_Client.UI.Pages
 
         private void ConfigureCallback(LoginCallbackHandler callback, LoadingWindow loading, LoginServiceClient client)
         {
+            if (callback == null) throw new ArgumentNullException(nameof(callback));
+            if (client == null) throw new ArgumentNullException(nameof(client));
+
             var channel = client.InnerChannel;
 
+            channel.Faulted += (_, __) =>
+            {
+                if (ClientSession.IsIntentionalDisconnect)
+                {
+                    return;
+                }
 
-            channel.Faulted += (_, __) => HandleConnectionLoss(loading);
-            channel.Closed += (_, __) => HandleConnectionLoss(loading);
+                _ = HandleConnectionLossAsync(loading);
+            };
 
+            channel.Closed += (_, __) =>
+            {
+                if (ClientSession.IsIntentionalDisconnect)
+                {
+                    return;
+                }
 
+                _ = HandleConnectionLossAsync(loading);
+            };
+
+            // =========================
+            // LOGIN OK
+            // =========================
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
 
-                Application.Current.Dispatcher.Invoke(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-               
-                    if (loading?.IsVisible == true)
-                    {
-                        loading.Close();
-                    }
+                    loading?.Close();
 
-           
                     ClientSession.Initialize(profile, client, callback);
 
                     try
@@ -148,56 +155,82 @@ namespace DamasChinas_Client.UI.Pages
                         var sessionClient = new SessionServiceClient(ctx);
 
                         sessionClient.Subscribe(profile.Username);
-
                         ClientSession.SessionClient = sessionClient;
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"[Login.ConfigureCallback] Error al suscribir SessionService: {ex.Message}");
+                        Debug.WriteLine($"[Login.ConfigureCallback] Session subscribe error: {ex.Message}");
                     }
 
                     TryNavigateToMenu(profile);
-                });
+                }));
             };
 
-
-   
+            // =========================
+            // LOGIN ERROR
+            // =========================
             callback.LoginError += async code =>
             {
-                string msg = MessageTranslator.GetLocalizedMessage(code);
-
                 await SafeWait(loading);
 
-                Application.Current.Dispatcher.Invoke(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    if (loading?.IsVisible == true)
+                    loading?.Close();
+                    MessageHelper.ShowFromCode(code, PopupType.Warning);
+                }));
+            };
+
+            // =========================
+            // LOGIN BANNED
+            // =========================
+            callback.LoginBanned += async banInfo =>
+            {
+                await SafeWait(loading);
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    loading?.Close();
+
+                    PendingBanNotificationStore.Save(banInfo);
+
+                    string msg = PendingBanNotificationStore.BuildBanMessage(banInfo);
+                    MessageHelper.ShowPopup(msg, PopupType.Error);
+
+                    PendingBanNotificationStore.Clear();
+
+                    try
                     {
-                        loading.Close();
+                        // Corte de raíz: evita Closed/Faulted “en cascada”
+                        ClientSession.ClearForced();
+                    }
+                    catch
+                    {
                     }
 
-                    MessageHelper.ShowPopup(msg, PopupType.Warning);
-                });
+                    AppNavigator.NavigateToRoot(new MainWindow());
+                }));
             };
         }
 
-
-
-        private static async void HandleConnectionLoss(LoadingWindow loading)
+        private static async Task HandleConnectionLossAsync(LoadingWindow loading)
         {
             await SafeWait(loading);
 
-            Application.Current.Dispatcher.Invoke(() =>
+            _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                if (loading?.IsVisible == true)
+                // Si ya fue intencional (logout/ban), no muestres error
+                if (ClientSession.IsIntentionalDisconnect)
                 {
-                    loading.Close();
+                    loading?.Close();
+                    return;
                 }
 
+                loading?.Close();
                 MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
-            });
+            }));
         }
 
-        private static async System.Threading.Tasks.Task SafeWait(LoadingWindow loading)
+        private static async Task SafeWait(LoadingWindow loading)
         {
             if (loading == null)
             {
@@ -218,7 +251,6 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-
                 var converted = new AccountManagerServiceProxy.PublicProfile
                 {
                     Name = profile.Name,
@@ -303,7 +335,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                action.Invoke();
+                action?.Invoke();
             }
             catch (InvalidOperationException ex)
             {

@@ -1,5 +1,6 @@
 ﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
+using DamasChinas_Shared.Contracts.Dtos;
 using System.ServiceModel;
 
 namespace DamasChinas_Server.Interfaces
@@ -12,5 +13,8 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract(IsOneWay = true)]
         void OnLoginError(MessageCode code);
+
+        [OperationContract(IsOneWay = true)]
+        void OnLoginBanned(BanInfoDto banInfo);
     }
 }

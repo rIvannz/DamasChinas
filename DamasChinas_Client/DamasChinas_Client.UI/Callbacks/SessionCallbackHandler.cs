@@ -2,6 +2,7 @@
 using DamasChinas_Client.UI.Utilities;
 using DamasChinas_Shared.Contracts.Dtos;
 using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace DamasChinas_Client.UI.Callbacks
@@ -53,7 +54,6 @@ namespace DamasChinas_Client.UI.Callbacks
             var app = Application.Current;
             if (app?.Dispatcher == null)
             {
-
                 if (banInfo.IsBanned)
                 {
                     PendingBanNotificationStore.Save(banInfo);
@@ -66,7 +66,7 @@ namespace DamasChinas_Client.UI.Callbacks
                 return;
             }
 
-            app.Dispatcher.Invoke(() =>
+            app.Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (banInfo.IsBanned)
                 {
@@ -76,6 +76,18 @@ namespace DamasChinas_Client.UI.Callbacks
                     MessageHelper.ShowPopup(msg, PopupType.Error);
 
                     PendingBanNotificationStore.Clear();
+
+             
+                    try
+                    {
+                        ClientSession.ClearForced();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[SessionCallbackHandler.OnBanStatusUpdated] ClearForced: {ex.Message}");
+                    }
+
+                    AppNavigator.NavigateToRoot(new Pages.MainWindow());
                     return;
                 }
 
@@ -88,8 +100,7 @@ namespace DamasChinas_Client.UI.Callbacks
 
                     PendingReportNotificationStore.Clear();
                 }
-            });
+            }));
         }
-
     }
 }

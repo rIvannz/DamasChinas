@@ -357,6 +357,9 @@ Multiple jumps are allowed in a single turn.
     <!-- ========================================================= -->
     <sys:String x:Key="msg_ChatServerUnavailable">The chat server is unavailable.</sys:String>
     <sys:String x:Key="msg_ChatCommunicationError">A communication error occurred in the chat.</sys:String>
+    <sys:String x:Key="msg_UserBanned">You are banned. You cannot play at this time.</sys:String>
+    <sys:String x:Key="msg_UserBannedUntil">You are banned until: {0}. You cannot play at this time.</sys:String>
+    <sys:String x:Key="msg_UserBannedPermanent">You are permanently banned. You cannot play at this time.</sys:String>
 
     <!-- Resultados generales -->
     <sys:String x:Key="msg_Success">Operation completed successfully.</sys:String>
@@ -399,6 +402,8 @@ Multiple jumps are allowed in a single turn.
     <sys:String x:Key="msg_LanguageChangeSuccess">
         Language has been successfully changed.
     </sys:String>
+    <sys:String x:Key="msg_SessionExpired">Your session has expired. Please sign in again.</sys:String>
+
 
     <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Please enter the verification code.</sys:String>

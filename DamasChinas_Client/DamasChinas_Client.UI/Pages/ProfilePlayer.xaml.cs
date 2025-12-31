@@ -115,32 +115,35 @@ namespace DamasChinas_Client.UI.Pages
                 if (!MessageHelper.ShowConfirm("msg_LogoutConfirm"))
                     return;
 
-                var username = ClientSession.CurrentProfile?.Username;
-                var sessionClient = ClientSession.SessionClient;
+                // Marca cierre intencional para que NO salga "ServerUnavailable"
+                ClientSession.MarkIntentionalDisconnect();
 
-                if (!string.IsNullOrWhiteSpace(username) &&
-                    sessionClient != null &&
-                    sessionClient.State == CommunicationState.Opened)
+                // Si quieres intentar Unsubscribe, hazlo, pero NO te cases con Close.
+                try
                 {
-                    try
+                    var username = ClientSession.SafeUsername;
+                    var sessionClient = ClientSession.SessionClient;
+
+                    if (!string.IsNullOrWhiteSpace(username) &&
+                        sessionClient != null &&
+                        sessionClient.State == CommunicationState.Opened)
                     {
                         sessionClient.Unsubscribe(username);
-                        sessionClient.Close();
-                    }
-                    catch
-                    {
-                        sessionClient.Abort();
                     }
                 }
+                catch { }
 
-                ClientSession.Clear();
-                NavigationService?.Navigate(new MainWindow());
+                // Corta de raíz
+                ClientSession.ClearForced();
+
+                AppNavigator.NavigateToRoot(new MainWindow());
             }
             catch
             {
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
+
 
         private void OnChangeDataClick(object sender, RoutedEventArgs e)
         {

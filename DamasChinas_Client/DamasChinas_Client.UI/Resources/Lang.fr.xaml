@@ -355,6 +355,9 @@ Plusieurs sauts sont autorisés en un seul tour.
     <!-- ========================================================= -->
     <sys:String x:Key="msg_ChatServerUnavailable">Le serveur de chat n’est pas disponible.</sys:String>
     <sys:String x:Key="msg_ChatCommunicationError">Une erreur de communication s’est produite dans le chat.</sys:String>
+    <sys:String x:Key="msg_UserBanned">Vous êtes banni. Vous ne pouvez pas jouer pour le moment.</sys:String>
+    <sys:String x:Key="msg_UserBannedUntil">Vous êtes banni jusqu’au : {0}. Vous ne pouvez pas jouer pour le moment.</sys:String>
+    <sys:String x:Key="msg_UserBannedPermanent">Vous êtes banni définitivement. Vous ne pouvez pas jouer pour le moment.</sys:String>
 
     <!-- Resultados generales -->
     <sys:String x:Key="msg_Success">Opération effectuée correctement.</sys:String>
@@ -397,6 +400,8 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_LanguageChangeSuccess">
         La langue a été changée correctement.
     </sys:String>
+    <sys:String x:Key="msg_SessionExpired">Votre session a expiré. Veuillez vous reconnecter.</sys:String>
+
 
     <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Veuillez saisir le code de vérification.</sys:String>

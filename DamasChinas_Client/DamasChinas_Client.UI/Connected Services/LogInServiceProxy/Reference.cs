@@ -551,6 +551,9 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/OnLoginError")]
         void OnLoginError(DamasChinas_Client.UI.LogInServiceProxy.MessageCode code);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILoginService/OnLoginBanned")]
+        void OnLoginBanned(DamasChinas_Shared.Contracts.Dtos.BanInfoDto banInfo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

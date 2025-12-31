@@ -2,7 +2,9 @@ using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Pages;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace DamasChinas_Client.UI.Utilities
 {
@@ -10,35 +12,47 @@ namespace DamasChinas_Client.UI.Utilities
     {
         private const PopupType DefaultType = PopupType.Info;
 
+        // OJO: aquí NO usamos Invoke (bloqueante). Todo será BeginInvoke.
+        // Además: si la desconexión fue intencional, NO dispares acciones de "ServerUnavailable".
         private static readonly Dictionary<string, Action> SpecialKeyActions =
-    new Dictionary<string, Action>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "msg_SessionExpired", () =>
+            new Dictionary<string, Action>(StringComparer.OrdinalIgnoreCase)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ClientSession.Clear();
-                    Application.Current.MainWindow.Content = new MainWindow();
-                });
-            }
-        },
+                { MessageKeys.SessionExpired, () =>
+                    {
+                        // Si fue intencional (logout/ban), no hagas redirect “como error”
+                        if (ClientSession.IsIntentionalDisconnect)
+                            return;
 
-        { "msg_ServerUnavailable", () =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ClientSession.Clear();
-                    Application.Current.MainWindow.Content = new MainWindow();
-                });
-            }
-        },
-    };
+                        SafeUi(() =>
+                        {
+                            try { ClientSession.ClearForced(); } catch { }
+                            AppNavigator.NavigateToRoot(new MainWindow());
+                        });
+                    }
+                },
 
+                { MessageKeys.ServerUnavailable, () =>
+                    {
+                        if (ClientSession.IsIntentionalDisconnect)
+                            return;
+
+                        SafeUi(() =>
+                        {
+                            try { ClientSession.ClearForced(); } catch { }
+                            AppNavigator.NavigateToRoot(new MainWindow());
+                        });
+                    }
+                },
+            };
 
         public static void ShowPopup(string messageKey, PopupType type = DefaultType, bool autoClose = false)
         {
-            string message = MessageTranslator.GetLocalizedMessage(messageKey);
+            if (string.IsNullOrWhiteSpace(messageKey))
+            {
+                messageKey = MessageKeys.UnknownError;
+            }
 
+            // 1) Ejecuta acciones especiales (sin bloquear UI)
             if (SpecialKeyActions.TryGetValue(messageKey, out var action))
             {
                 try
@@ -47,24 +61,30 @@ namespace DamasChinas_Client.UI.Utilities
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("[MessageHelper] SpecialKeyAction failed: " + ex.Message);
+                    Debug.WriteLine("[MessageHelper] SpecialKeyAction failed: " + ex.Message);
                 }
             }
 
-            var popup = new MessagePopupWindow(message, type.ToString().ToLower(), autoClose)
+            // 2) Muestra el popup SIEMPRE en UI thread y sin Invoke
+            SafeUi(() =>
             {
-                Owner = Application.Current.MainWindow
-            };
+                string message = MessageTranslator.GetLocalizedMessage(messageKey);
 
-            if (popup.IsDuplicate)
-            {
-                return;
-            }
+                var popup = new MessagePopupWindow(message, type.ToString().ToLower(), autoClose)
+                {
+                    Owner = Application.Current?.MainWindow
+                };
 
-            popup.ShowDialog();
+                if (popup.IsDuplicate)
+                {
+                    return;
+                }
+
+                // Nota: ShowDialog bloquea (es modal), pero aquí ya estás en UI thread correctamente.
+                // Si aun así te “congela” por llamadas consecutivas, se puede migrar a Show() + autoclose.
+                popup.ShowDialog();
+            });
         }
-
-
 
         public static void ShowFromCode(Enum code, PopupType type = DefaultType)
         {
@@ -74,25 +94,33 @@ namespace DamasChinas_Client.UI.Utilities
                 return;
             }
 
-       
             string resourceKey = "msg_" + code.ToString();
-
             ShowPopup(resourceKey, type);
         }
 
-
         public static bool ShowConfirm(string messageResourceKey)
         {
-            var popup = new ConfirmPopupWindow(messageResourceKey)
+            // Confirm necesita ser modal y retornar bool, así que sí o sí debe correrse en UI thread.
+            if (Application.Current?.Dispatcher == null)
             {
-                Owner = Application.Current.MainWindow
-            };
+                return false;
+            }
 
-            popup.ShowDialog();
-            return popup.Result;
+            bool result = false;
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var popup = new ConfirmPopupWindow(messageResourceKey)
+                {
+                    Owner = Application.Current.MainWindow
+                };
+
+                popup.ShowDialog();
+                result = popup.Result;
+            });
+
+            return result;
         }
-
-
 
         public static void ShowFromResult(dynamic result)
         {
@@ -109,6 +137,33 @@ namespace DamasChinas_Client.UI.Utilities
 
             ShowPopup(resourceKey, popupType);
         }
+
+        // ==========================
+        // Helpers
+        // ==========================
+        private static void SafeUi(Action uiAction)
+        {
+            try
+            {
+                var dispatcher = Application.Current?.Dispatcher;
+
+                if (dispatcher == null)
+                {
+                    return;
+                }
+
+                if (dispatcher.CheckAccess())
+                {
+                    uiAction?.Invoke();
+                    return;
+                }
+
+                dispatcher.BeginInvoke(uiAction, DispatcherPriority.Normal);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MessageHelper.SafeUi] {ex.Message}");
+            }
+        }
     }
 }
-

@@ -15,6 +15,7 @@
       <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
       <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/" />
       <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
+      <xsd:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ILoginService_Login_InputMessage">
@@ -26,6 +27,9 @@
   <wsdl:message name="ILoginService_OnLoginError_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnLoginError" />
   </wsdl:message>
+  <wsdl:message name="ILoginService_OnLoginBanned_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnLoginBanned" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ILoginService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Login">
       <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/Login" message="tns:ILoginService_Login_InputMessage" />
@@ -35,6 +39,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnLoginError">
       <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/OnLoginError" message="tns:ILoginService_OnLoginError_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnLoginBanned">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/OnLoginBanned" message="tns:ILoginService_OnLoginBanned_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILoginService" type="tns:ILoginService">
@@ -54,6 +61,12 @@
     </wsdl:operation>
     <wsdl:operation name="OnLoginError">
       <soap12:operation soapAction="http://tempuri.org/ILoginService/OnLoginError" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnLoginBanned">
+      <soap12:operation soapAction="http://tempuri.org/ILoginService/OnLoginBanned" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

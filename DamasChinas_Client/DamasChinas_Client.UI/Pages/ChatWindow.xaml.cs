@@ -136,12 +136,24 @@ namespace DamasChinas_Client.UI.Pages
 
         public void ReceiveMessage(Message message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null)
             {
                 Messages.Add(message);
-                MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
-            });
+                return;
+            }
+
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                Messages.Add(message);
+
+                if (MessagesList.Items.Count > 0)
+                {
+                    MessagesList.ScrollIntoView(MessagesList.Items[MessagesList.Items.Count - 1]);
+                }
+            }));
         }
+
     }
 
 }

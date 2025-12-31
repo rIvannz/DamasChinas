@@ -650,7 +650,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             string localTime = DateTime.Now.ToString("HH:mm");
 
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 var tb = new TextBlock
                 {
@@ -662,8 +662,9 @@ namespace DamasChinas_Client.UI.Pages
 
                 ChatContainer.Children.Add(tb);
                 ChatScroll.ScrollToEnd();
-            });
+            }));
         }
+
 
 
         private void OnLeaveMatchClick(object sender, RoutedEventArgs e)
@@ -774,30 +775,23 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
-                // Si algo falla, por lo menos intenta guardar el ban para mostrarlo en menú
                 try { PendingBanNotificationStore.Save(banInfo); } catch { }
             }
             finally
             {
-                // ✅ cerrar canal sin mandar LeaveMatch (porque el server ya te removió)
+                // ✅ cortar canal rápido (evita freeze / bloqueos de Close)
                 try
                 {
-                    if (_proxy != null)
-                    {
-                        if (_proxy.State == CommunicationState.Faulted)
-                            _proxy.Abort();
-                        else
-                            _proxy.Close();
-                    }
+                    _proxy?.Abort();
                 }
                 catch
                 {
-                    _proxy?.Abort();
                 }
 
                 NavigateToMenu();
             }
         }
+
 
 
 

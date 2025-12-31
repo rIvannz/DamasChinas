@@ -140,6 +140,12 @@ namespace DamasChinas_Client.UI.Utilities
         public const string GuestProfileTitle = "guestProfileTitle";
         public const string SessionNotInitialized = "msg_SessionNotInitialized";
         public const string InvalidUsername = "msg_InvalidUsernameArgument";
+        public const string UserBanned = "msg_UserBanned";
+        public const string UserBannedUntil = "msg_UserBannedUntil";
+        public const string UserBannedPermanent = "msg_UserBannedPermanent";
+        public const string SessionExpired = "msg_SessionExpired";
+
+
 
 
 

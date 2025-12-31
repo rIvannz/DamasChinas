@@ -15,10 +15,17 @@ namespace DamasChinas_Client.UI.Callbacks
 
         public void ReceiveMessage(Message message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null)
             {
                 _onMessageReceived?.Invoke(message);
-            });
+                return;
+            }
+
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                _onMessageReceived?.Invoke(message);
+            }));
         }
     }
 }

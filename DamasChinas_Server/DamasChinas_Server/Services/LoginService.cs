@@ -1,8 +1,10 @@
 using DamasChinas_Server.Common;
 using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
+using DamasChinas_Server.GameRepositories;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
@@ -18,9 +20,7 @@ namespace DamasChinas_Server
         private readonly RepositoryUsers _repository;
         private readonly ILogService _log;
 
-
         private const string OperationLogin = nameof(Login);
-
 
         public LoginService()
             : this(new RepositoryUsers(), LogFactory.Create<LoginService>())
@@ -33,7 +33,6 @@ namespace DamasChinas_Server
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-
         public void Login(LoginRequest loginRequest)
         {
             ExecuteOperation(
@@ -45,8 +44,18 @@ namespace DamasChinas_Server
 
                     var profile = _repository.Login(loginRequest);
 
-                    _log.Info($"[{OperationLogin}] Login exitoso: {profile.Username}");
+                    int userId = profile.IdUser;
 
+                    var sanctionsRepo = new RepositorySanctions();
+                    if (sanctionsRepo.HasActiveBan(userId))
+                    {
+                        BanInfoDto banInfo = sanctionsRepo.GetActiveBanInfo(userId);
+                        callback.OnLoginBanned(banInfo);
+                        _log.Warn($"[{OperationLogin}] Usuario baneado: {profile.Username}");
+                        return;
+                    }
+
+                    _log.Info($"[{OperationLogin}] Login exitoso: {profile.Username}");
                     callback.OnLoginSuccess(profile);
                 },
                 OperationLogin,
@@ -54,12 +63,11 @@ namespace DamasChinas_Server
                 {
                     var callback = OperationContext.Current.GetCallbackChannel<ILoginCallback>();
 
-                    if (ex is System.Data.Entity.Core.EntityException ||
-                        ex is System.Data.SqlClient.SqlException ||
-                        ex.InnerException is System.Data.Entity.Core.EntityException ||
-                        ex.InnerException is System.Data.SqlClient.SqlException)
+                    if (ex is EntityException ||
+                        ex is SqlException ||
+                        ex.InnerException is EntityException ||
+                        ex.InnerException is SqlException)
                     {
-
                         callback.OnLoginError(MessageCode.ServerUnavailable);
                         return;
                     }
@@ -69,9 +77,6 @@ namespace DamasChinas_Server
                 }
             );
         }
-
-
-
 
 
         private void ExecuteOperation(Action action, string context, Action<Exception> onError = null)
@@ -106,6 +111,5 @@ namespace DamasChinas_Server
                 onError?.Invoke(ex);
             }
         }
-
     }
 }

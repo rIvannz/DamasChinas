@@ -23,6 +23,7 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="01bd01db-99ca-415b-bd2d-59c17a6525bd" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd2" />
+    <MetadataFile FileName="item10.xsd" MetadataType="Schema" ID="0430b7a6-5397-4959-b819-1aee9c79f64f" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd5" />
     <MetadataFile FileName="LoginService1.wsdl" MetadataType="Wsdl" ID="0a8280f9-8d87-4979-bdd5-a5da04eb398b" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?wsdl" />
     <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="f8f27f7d-4f25-46f0-bb4c-e40ee956e35f" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd3" />
     <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="f27dae37-8d63-4873-8acb-c4b5fa12ebeb" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd0" />

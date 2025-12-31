@@ -355,6 +355,15 @@ Saltos múltiplos são permitidos em um único turno.
     <!-- ========================================================= -->
     <sys:String x:Key="msg_ChatServerUnavailable">O servidor de chat não está disponível.</sys:String>
     <sys:String x:Key="msg_ChatCommunicationError">Ocorreu um erro de comunicação no chat.</sys:String>
+    <sys:String x:Key="msg_UserBanned">Você está banido. No momento, não é possível jogar.</sys:String>
+    <sys:String x:Key="msg_UserBannedUntil">Você está banido até: {0}. No momento, não é possível jogar.</sys:String>
+    <sys:String x:Key="msg_UserBannedPermanent">Você está banido permanentemente. No momento, não é possível jogar.</sys:String>
+
+
+
+
+
+
 
     <!-- Resultados gerais -->
     <sys:String x:Key="msg_Success">Operação concluída com sucesso.</sys:String>
@@ -397,6 +406,8 @@ Saltos múltiplos são permitidos em um único turno.
     <sys:String x:Key="msg_LanguageChangeSuccess">
         O idioma foi alterado com sucesso.
     </sys:String>
+    <sys:String x:Key="msg_SessionExpired">Sua sessão expirou. Por favor, faça login novamente.</sys:String>
+
 
     <!-- Verificação de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Por favor, insira o código de verificação.</sys:String>

@@ -26,19 +26,16 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-     
             SessionCallbackHandler.PlayerConnectedEvent += OnPlayerConnected;
             SessionCallbackHandler.PlayerDisconnectedEvent += OnPlayerDisconnected;
             SessionCallbackHandler.PlayerInGameEvent += OnPlayerInGame;
             SessionCallbackHandler.PlayerLeftGameEvent += OnPlayerLeftGame;
 
-       
             FriendCallbackHandler.FriendRemovedEvent += OnFriendRemoved;
             FriendCallbackHandler.UserBlockedYouEvent += OnUserBlocked;
             FriendCallbackHandler.UserUnblockedYouEvent += OnUserUnblocked;
             FriendCallbackHandler.FriendRequestAcceptedEvent += OnFriendAccepted;
 
-      
             FriendCallbackHandler.FriendListUpdatedEvent += OnFriendListUpdated;
         }
 
@@ -49,7 +46,6 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-         
             SessionCallbackHandler.PlayerConnectedEvent -= OnPlayerConnected;
             SessionCallbackHandler.PlayerDisconnectedEvent -= OnPlayerDisconnected;
             SessionCallbackHandler.PlayerInGameEvent -= OnPlayerInGame;
@@ -62,7 +58,6 @@ namespace DamasChinas_Client.UI.Pages
 
             FriendCallbackHandler.FriendListUpdatedEvent -= OnFriendListUpdated;
         }
-
 
         private static FriendServiceClient CreateTemporaryClient()
         {
@@ -86,11 +81,10 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
-                client.Abort();
+                try { client.Abort(); } catch { }
             }
         }
 
- 
         private void LoadFriends()
         {
             FriendServiceClient client = FriendNotificationManager.GetClient();
@@ -149,7 +143,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (f != null)
             {
-                Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
+                Dispatcher.BeginInvoke(new Action(() => f.Status = FriendStatus.Online));
             }
         }
 
@@ -160,7 +154,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (f != null)
             {
-                Dispatcher.Invoke(() => f.Status = FriendStatus.Offline);
+                Dispatcher.BeginInvoke(new Action(() => f.Status = FriendStatus.Offline));
             }
         }
 
@@ -171,7 +165,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (f != null)
             {
-                Dispatcher.Invoke(() => f.Status = FriendStatus.InGame);
+                Dispatcher.BeginInvoke(new Action(() => f.Status = FriendStatus.InGame));
             }
         }
 
@@ -182,10 +176,9 @@ namespace DamasChinas_Client.UI.Pages
 
             if (f != null)
             {
-                Dispatcher.Invoke(() => f.Status = FriendStatus.Online);
+                Dispatcher.BeginInvoke(new Action(() => f.Status = FriendStatus.Online));
             }
         }
-
 
         private void OnFriendRemoved(string username)
         {
@@ -194,7 +187,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (friend != null)
             {
-                Dispatcher.Invoke(() => FriendsList.Remove(friend));
+                Dispatcher.BeginInvoke(new Action(() => FriendsList.Remove(friend)));
             }
         }
 
@@ -215,9 +208,8 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnFriendListUpdated()
         {
-            Dispatcher.Invoke(() => LoadFriends());
+            Dispatcher.BeginInvoke(new Action(LoadFriends));
         }
-
 
         private void OnBackClick(object sender, RoutedEventArgs e)
         {

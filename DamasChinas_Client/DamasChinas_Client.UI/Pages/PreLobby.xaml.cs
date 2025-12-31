@@ -2,8 +2,8 @@ using DamasChinas_Client.UI.Callbacks;
 using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.Utilities;
-using System;
 using DamasChinas_Shared.Contracts.Dtos;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
@@ -76,7 +76,8 @@ namespace DamasChinas_Client.UI.Pages
 
         public void ApplySnapshot(LobbySnapshotDto snapshot)
         {
-            Dispatcher.Invoke(() =>
+       
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 _snapshot = snapshot;
 
@@ -119,7 +120,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 UpdateStartButtonState(amIHost, snapshot.Members.Length);
-            });
+            }));
         }
 
         private void LoadFriends()
@@ -132,7 +133,8 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     var friends = client.GetFriends(_username);
 
-                    Dispatcher.Invoke(() =>
+         
+                    Dispatcher.BeginInvoke(new Action(() =>
                     {
                         FriendsCollection.Clear();
 
@@ -159,7 +161,7 @@ namespace DamasChinas_Client.UI.Pages
                                 AvatarSource = PathProvider.LoadAvatar(avatarFile)
                             });
                         }
-                    });
+                    }));
                 }
             }
             catch (Exception ex)
@@ -196,7 +198,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnChatMessageReceived(string user, string message, string serverTimeIso)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 string localTime = DateTime.TryParse(serverTimeIso, out DateTime dt)
                     ? dt.ToLocalTime().ToString("HH:mm")
@@ -214,7 +216,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     sv.ScrollToEnd();
                 }
-            });
+            }));
         }
 
         private void OnChatTextChanged(object sender, TextChangedEventArgs e)
@@ -223,8 +225,6 @@ namespace DamasChinas_Client.UI.Pages
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }
-
-
 
         private void OnKickMemberClick(object sender, RoutedEventArgs e)
         {
@@ -248,8 +248,8 @@ namespace DamasChinas_Client.UI.Pages
 
             var req = new ReportPlayerRequest
             {
-                CodigoLobby = _snapshot?.LobbyCode, // antes LobbyCode
-                IdPartida = null,                  // viene desde lobby, no desde match
+                CodigoLobby = _snapshot?.LobbyCode,
+                IdPartida = null,
                 ReporterUsername = _username,
                 ReportedUsername = vm.Username,
                 Reason = "Reported from lobby"
@@ -266,7 +266,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
         private void OnInviteFriendClick(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button btn) || !(btn.DataContext is FriendViewModel friend))
@@ -281,16 +280,14 @@ namespace DamasChinas_Client.UI.Pages
 
             if (result.Success)
             {
-                //todo invitationsent
-                //MessageHelper.ShowPopup(MessageKeys.InvitationSent, PopupType.Success);
+                // TODO: Invitation sent
+                // MessageHelper.ShowPopup(MessageKeys.InvitationSent, PopupType.Success);
             }
             else
             {
                 MessageHelper.ShowFromResult(result);
             }
         }
-
-
 
         public void ApplyBanInfo(BanInfoDto ban)
         {
@@ -303,30 +300,33 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnKicked(string reason)
         {
-            Dispatcher.Invoke(() =>
+        
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 MessageHelper.ShowPopup(MessageKeys.YouWereKicked, PopupType.Warning);
                 ExitCleanly();
-            });
+            }));
         }
 
         private void OnLobbyClosed(string reason)
         {
-            Dispatcher.Invoke(() =>
+         
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 MessageHelper.ShowPopup(MessageKeys.LobbyClosed, PopupType.Info);
                 ExitCleanly();
-            });
+            }));
         }
 
         private void OnGameStarting()
         {
-            Dispatcher.Invoke(() =>
+        
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 UnsubscribeEvents();
                 PreLobbyPageManager.Unregister(this);
                 NavigationService?.Navigate(new MatchRoom(_snapshot.LobbyCode));
-            });
+            }));
         }
 
         private void ExitCleanly()
@@ -352,8 +352,6 @@ namespace DamasChinas_Client.UI.Pages
 
             ExitCleanly();
         }
-
-
 
         public class LobbyMemberViewModel
         {
