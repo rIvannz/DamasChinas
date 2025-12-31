@@ -8,7 +8,6 @@ using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Logic;
 using DamasChinas_Shared.Contracts.Dtos;
 
-
 namespace DamasChinas_Server.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
@@ -18,7 +17,13 @@ namespace DamasChinas_Server.Services
         private readonly LobbyManager _lobbyManager;
         private readonly ILogService _log;
 
-        public LobbyService() : this(new RepositoryUsers(), LobbyManager.Instance, LogFactory.Create<LobbyService>()) { }
+        private string _username;
+        private bool _hasLeft;
+
+        public LobbyService()
+            : this(new RepositoryUsers(), LobbyManager.Instance, LogFactory.Create<LobbyService>())
+        {
+        }
 
         internal LobbyService(RepositoryUsers userRepository, LobbyManager lobbyManager, ILogService log)
         {
@@ -44,13 +49,17 @@ namespace DamasChinas_Server.Services
                 var profile = GetProfile(hostUsername);
                 var callback = GetLobbyCallback();
 
-  
+                BindChannelToUser(hostUsername);
+
                 LobbySessionManager.Add(hostUsername, callback);
 
                 _lobbyManager.CreateLobby(hostUsername, profile, request, callback);
                 return OperationResult.Ok();
             }
-            catch (Exception ex) { return HandleException(ex, "CreateLobby"); }
+            catch (Exception ex)
+            {
+                return HandleException(ex, "CreateLobby");
+            }
         }
 
         public OperationResult JoinLobby(JoinLobbyRequest request)
@@ -60,24 +69,33 @@ namespace DamasChinas_Server.Services
                 var profile = GetProfile(request.Username);
                 var callback = GetLobbyCallback();
 
-             
+                BindChannelToUser(request.Username);
+
                 LobbySessionManager.Add(request.Username, callback);
 
                 _lobbyManager.JoinLobby(request, profile, callback);
                 return OperationResult.Ok();
             }
-            catch (Exception ex) { return HandleException(ex, "JoinLobby"); }
+            catch (Exception ex)
+            {
+                return HandleException(ex, "JoinLobby");
+            }
         }
 
         public OperationResult LeaveLobby(string username)
         {
             try
             {
+                _hasLeft = true;
+
                 _lobbyManager.LeaveLobby(username);
                 LobbySessionManager.Remove(username);
                 return OperationResult.Ok();
             }
-            catch (Exception ex) { return HandleException(ex, "LeaveLobby"); }
+            catch (Exception ex)
+            {
+                return HandleException(ex, "LeaveLobby");
+            }
         }
 
         public OperationResult StartGame(string hostUsername)
@@ -119,6 +137,60 @@ namespace DamasChinas_Server.Services
             }
         }
 
+        private void BindChannelToUser(string username)
+        {
+            _username = username;
+            _hasLeft = false;
+
+            var channel = OperationContext.Current?.Channel;
+            if (channel == null)
+            {
+                return;
+            }
+
+            channel.Closed -= OnChannelClosedOrFaulted;
+            channel.Faulted -= OnChannelClosedOrFaulted;
+
+            channel.Closed += OnChannelClosedOrFaulted;
+            channel.Faulted += OnChannelClosedOrFaulted;
+        }
+
+        private void OnChannelClosedOrFaulted(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_hasLeft)
+                {
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(_username))
+                {
+                    return;
+                }
+
+                _hasLeft = true;
+
+                _log.Warn($"[LobbyService] Channel closed/faulted for user={_username}");
+
+                try
+                {
+                    _lobbyManager.HandleUnexpectedDisconnect(_username);
+                }
+                catch (Exception ex)
+                {
+                    _log.Error($"[LobbyService] HandleUnexpectedDisconnect error: {ex.Message}", ex);
+                }
+                finally
+                {
+                    LobbySessionManager.Remove(_username);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"[LobbyService.OnChannelClosedOrFaulted] {ex.Message}", ex);
+            }
+        }
 
         private PublicProfile GetProfile(string username)
         {
@@ -175,7 +247,9 @@ namespace DamasChinas_Server.Services
         private OperationResult HandleException(Exception ex, string context)
         {
             if (ex is RepositoryValidationException valEx)
+            {
                 return OperationResult.Fail(valEx.Message, valEx.Code);
+            }
 
             _log.Error($"[{context}] Critical Error: {ex.Message}", ex);
             return OperationResult.Fail(ex.Message, MessageCode.UnknownError);

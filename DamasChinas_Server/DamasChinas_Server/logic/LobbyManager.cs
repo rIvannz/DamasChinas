@@ -409,6 +409,8 @@ namespace DamasChinas_Server.Logic
                     var lobby = FindLobbyByUser(request.ReportedUsername);
                     if (lobby != null)
                     {
+                        bool wasHost = lobby.IsHost(request.ReportedUsername);
+
                         lobby.RemoveMember(request.ReportedUsername);
 
                         SafeInvokeCallback(
@@ -417,8 +419,16 @@ namespace DamasChinas_Server.Logic
                             cb => cb.OnKickedFromLobby(MessageCode.LobbyUserBanned));
 
                         LobbySessionManager.Remove(request.ReportedUsername);
+
+                        if (wasHost)
+                        {
+                            CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
+                            return;
+                        }
+
                         BroadcastSnapshot(lobby);
                     }
+
                 }
             }
             catch (RepositoryValidationException)
