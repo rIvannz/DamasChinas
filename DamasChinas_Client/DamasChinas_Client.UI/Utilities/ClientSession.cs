@@ -21,7 +21,10 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 if (_currentProfile == null)
                 {
-                    string message = MessageTranslator.GetLocalizedMessage(MessageKeys.SessionNotInitialized);
+                    string message =
+                        MessageTranslator.GetLocalizedMessage(
+                            MessageKeys.SessionNotInitialized);
+
                     throw new InvalidOperationException(message);
                 }
 
@@ -36,7 +39,10 @@ namespace DamasChinas_Client.UI.Utilities
         public static string SafeUsernameNormalized =>
             _currentProfile?.Username?.Trim()?.ToLower();
 
-   
+        // ============================================================
+        // CONTROL DE DESCONEXIÓN INTENCIONAL
+        // ============================================================
+
         public static bool IsIntentionalDisconnect { get; private set; }
 
         public static void MarkIntentionalDisconnect()
@@ -49,35 +55,60 @@ namespace DamasChinas_Client.UI.Utilities
             IsIntentionalDisconnect = false;
         }
 
-        public static void Initialize(PublicProfile profile, LoginServiceClient client, ILoginServiceCallback callback)
+        // ============================================================
+        // INICIALIZACIÓN DE SESIÓN
+        // ============================================================
+
+        public static void Initialize(
+            PublicProfile profile,
+            LoginServiceClient client,
+            ILoginServiceCallback callback)
         {
             ResetIntentionalDisconnect();
 
-            _currentProfile = profile ?? throw new ArgumentNullException(nameof(profile));
-            LoginClient = client ?? throw new ArgumentNullException(nameof(client));
-            CallbackHandler = callback ?? throw new ArgumentNullException(nameof(callback));
+            _currentProfile = profile
+                ?? throw new ArgumentNullException(nameof(profile));
+
+            LoginClient = client
+                ?? throw new ArgumentNullException(nameof(client));
+
+            CallbackHandler = callback
+                ?? throw new ArgumentNullException(nameof(callback));
         }
+
+  
+
+        public static void ResetAllConnections()
+        {
+            try { FriendNotificationManager.Reset(); } catch { }
+            try { LobbySession.Reset(); } catch { }
+            // Aquí NO hace falta ChatManager porque ChatWindow
+            // maneja su propio ciclo de vida.
+        }
+
+        // ============================================================
+        // DESCONEXIÓN CONTROLADA (LOGOUT NORMAL)
+        // ============================================================
 
         public static void DisconnectSafely()
         {
-          
             MarkIntentionalDisconnect();
 
             string username = SafeUsername;
 
             try
             {
-                if (!string.IsNullOrWhiteSpace(username) && SessionClient != null)
+                if (!string.IsNullOrWhiteSpace(username) &&
+                    SessionClient != null &&
+                    SessionClient.State == CommunicationState.Opened)
                 {
                     try
                     {
-                        if (SessionClient.State == CommunicationState.Opened)
-                        {
-                            SessionClient.Unsubscribe(username);
-                        }
+                        SessionClient.Unsubscribe(username);
                     }
                     catch
                     {
+                        
                     }
                 }
             }
@@ -90,10 +121,15 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
+        // ============================================================
+        // LIMPIEZA SUAVE (CIERRE NORMAL)
+        // ============================================================
+
         public static void Clear()
         {
-          
             MarkIntentionalDisconnect();
+
+            try { ResetAllConnections(); } catch { }
 
             CloseClientSafely(LoginClient);
             CloseClientSafely(SessionClient);
@@ -103,14 +139,18 @@ namespace DamasChinas_Client.UI.Utilities
             CallbackHandler = null;
             _currentProfile = null;
 
-         
             ResetIntentionalDisconnect();
         }
 
+        // ============================================================
+        // LIMPIEZA FORZADA (BAN / CAÍDA DE SERVER)
+        // ============================================================
+
         public static void ClearForced()
         {
-     
             MarkIntentionalDisconnect();
+
+            try { ResetAllConnections(); } catch { }
 
             AbortSafely(LoginClient);
             AbortSafely(SessionClient);
@@ -120,9 +160,9 @@ namespace DamasChinas_Client.UI.Utilities
             CallbackHandler = null;
             _currentProfile = null;
 
-       
             ResetIntentionalDisconnect();
         }
+
 
         private static void AbortSafely(ICommunicationObject client)
         {

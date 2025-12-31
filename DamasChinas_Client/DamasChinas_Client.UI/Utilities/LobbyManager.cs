@@ -1,16 +1,17 @@
 using DamasChinas_Client.UI.LobbyServiceProxy;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Linq;
 using System.ServiceModel;
-using DamasChinas_Shared.Contracts.Dtos;
 using System.Windows;
 
 namespace DamasChinas_Client.UI.Utilities
 {
-
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public sealed class LobbyManager : ILobbyServiceCallback
     {
+        private const string BindingName = "NetTcpBinding_ILobbyService";
+
         private LobbyServiceClient _client;
         private InstanceContext _context;
 
@@ -31,26 +32,99 @@ namespace DamasChinas_Client.UI.Utilities
             InitializeClient();
         }
 
+        // ============================================================
+        // CORE: INICIALIZACIÓN / KEEP-ALIVE / RESET
+        // ============================================================
+
         private void InitializeClient()
         {
+            // Si ya existe y está abierto, no recrees
             if (_client != null && _client.State == CommunicationState.Opened)
             {
                 return;
             }
 
             _context = new InstanceContext(this);
-            _client = new LobbyServiceClient(_context, "NetTcpBinding_ILobbyService");
+            _client = new LobbyServiceClient(_context, BindingName);
         }
+
+        private void EnsureClientAlive()
+        {
+            if (_client == null)
+            {
+                InitializeClient();
+                return;
+            }
+
+            if (_client.State == CommunicationState.Faulted ||
+                _client.State == CommunicationState.Closed ||
+                _client.State == CommunicationState.Closing)
+            {
+                try { _client.Abort(); } catch { }
+
+                _client = null;
+                _context = null;
+
+                InitializeClient();
+            }
+        }
+
+        /// <summary>
+        /// Reset duro para cuando el server se cae / logout / ban.
+        /// No intenta LeaveLobby ni nada: corta el canal y borra estado local.
+        /// </summary>
+        public void Reset()
+        {
+            try
+            {
+                if (_client != null)
+                {
+                    try { _client.Abort(); } catch { }
+                }
+            }
+            finally
+            {
+                _client = null;
+                _context = null;
+
+                CurrentLobbyCode = 0;
+                CurrentUsername = null;
+                HostUsername = null;
+            }
+        }
+
+        private static void SafeAbort(ICommunicationObject obj)
+        {
+            if (obj == null) return;
+            try { obj.Abort(); } catch { }
+        }
+
+        // ============================================================
+        // UI DISPATCH
+        // ============================================================
 
         private void DispatchToUi(Action action)
         {
-            Application.Current?.Dispatcher?.Invoke(action);
+            // Evita null ref si la app está cerrando / no hay dispatcher.
+            var dispatcher = Application.Current?.Dispatcher;
+
+            if (dispatcher == null)
+            {
+                action?.Invoke();
+                return;
+            }
+
+            dispatcher.Invoke(action);
         }
+
+        // ============================================================
+        // REGISTROS
+        // ============================================================
 
         public void RegisterUser(string username)
         {
             CurrentUsername = username;
-            InitializeClient();
+            EnsureClientAlive();
         }
 
         public void RegisterLobby(int code)
@@ -58,7 +132,9 @@ namespace DamasChinas_Client.UI.Utilities
             CurrentLobbyCode = code;
         }
 
-      
+        // ============================================================
+        // ACCIONES (CON EnsureClientAlive EN TODAS)
+        // ============================================================
 
         public OperationResult CreateLobby(string username, CreateLobbyRequest request)
         {
@@ -68,18 +144,15 @@ namespace DamasChinas_Client.UI.Utilities
             }
 
             RegisterUser(username);
-
-            if (_client.State == CommunicationState.Faulted)
-            {
-                InitializeClient();
-            }
+            EnsureClientAlive();
 
             try
             {
                 return _client.CreateLobby(username, request);
             }
-            catch (Exception)
+            catch
             {
+                SafeAbort(_client);
                 return new OperationResult { Success = false, Code = MessageCode.ServerUnavailable };
             }
         }
@@ -92,11 +165,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
 
             RegisterUser(username);
-
-            if (_client.State == CommunicationState.Faulted)
-            {
-                InitializeClient();
-            }
+            EnsureClientAlive();
 
             var request = new JoinLobbyRequest
             {
@@ -115,8 +184,9 @@ namespace DamasChinas_Client.UI.Utilities
 
                 return result;
             }
-            catch (Exception)
+            catch
             {
+                SafeAbort(_client);
                 return new OperationResult { Success = false, Code = MessageCode.ServerUnavailable };
             }
         }
@@ -128,10 +198,8 @@ namespace DamasChinas_Client.UI.Utilities
                 return null;
             }
 
-            if (_client.State == CommunicationState.Faulted)
-            {
-                InitializeClient();
-            }
+            RegisterUser(username);
+            EnsureClientAlive();
 
             try
             {
@@ -139,6 +207,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
+                SafeAbort(_client);
                 return null;
             }
         }
@@ -150,8 +219,11 @@ namespace DamasChinas_Client.UI.Utilities
                 return new OperationResult { Success = false };
             }
 
+            EnsureClientAlive();
+
             try
             {
+                // Si está abierto, intenta salir bien
                 if (_client.State == CommunicationState.Opened)
                 {
                     var result = _client.LeaveLobby(CurrentUsername);
@@ -161,18 +233,17 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                _client?.Abort();
+                SafeAbort(_client);
             }
 
+            // Si el server está caído, “salir” localmente está bien
+            CurrentLobbyCode = 0;
             return new OperationResult { Success = true };
         }
 
         public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode)
         {
-            if (_client.State == CommunicationState.Faulted)
-            {
-                InitializeClient();
-            }
+            EnsureClientAlive();
 
             try
             {
@@ -180,6 +251,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
+                SafeAbort(_client);
                 return new OperationResult
                 {
                     Success = false,
@@ -190,22 +262,42 @@ namespace DamasChinas_Client.UI.Utilities
 
         public void StartGame()
         {
-            if (_client.State == CommunicationState.Opened)
+            EnsureClientAlive();
+
+            try
             {
-                _client.StartGame(CurrentUsername);
+                if (_client.State == CommunicationState.Opened)
+                {
+                    _client.StartGame(CurrentUsername);
+                }
+            }
+            catch
+            {
+                SafeAbort(_client);
             }
         }
 
         public void KickPlayer(string targetUsername)
         {
-            if (_client.State == CommunicationState.Opened)
+            EnsureClientAlive();
+
+            try
             {
-                _client.KickPlayer(CurrentUsername, CurrentLobbyCode, targetUsername);
+                if (_client.State == CommunicationState.Opened)
+                {
+                    _client.KickPlayer(CurrentUsername, CurrentLobbyCode, targetUsername);
+                }
+            }
+            catch
+            {
+                SafeAbort(_client);
             }
         }
 
         public void SendChatMessage(string message)
         {
+            EnsureClientAlive();
+
             try
             {
                 if (_client.State == CommunicationState.Opened)
@@ -215,36 +307,45 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                
+                SafeAbort(_client);
             }
         }
 
         public void ReportPlayer(ReportPlayerRequest request)
         {
-            if (_client.State == CommunicationState.Opened)
+            EnsureClientAlive();
+
+            try
             {
-                _client.ReportPlayer(request);
+                if (_client.State == CommunicationState.Opened)
+                {
+                    _client.ReportPlayer(request);
+                }
+            }
+            catch
+            {
+                SafeAbort(_client);
             }
         }
 
         public LobbySummaryDto[] GetPublicLobbies()
         {
+            EnsureClientAlive();
+
             try
             {
-                if (_client.State == CommunicationState.Faulted)
-                {
-                    InitializeClient();
-                }
-
                 return _client.GetPublicLobbies();
             }
             catch
             {
+                SafeAbort(_client);
                 return Array.Empty<LobbySummaryDto>();
             }
         }
 
- 
+        // ============================================================
+        // CALLBACKS
+        // ============================================================
 
         public void OnLobbySnapshot(LobbySnapshotDto snapshot)
         {
@@ -252,7 +353,7 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 CurrentLobbyCode = snapshot.LobbyCode;
 
-                var host = snapshot.Members.FirstOrDefault(m => m.IsHost);
+                var host = snapshot.Members?.FirstOrDefault(m => m.IsHost);
                 if (host != null)
                 {
                     HostUsername = host.Username;
