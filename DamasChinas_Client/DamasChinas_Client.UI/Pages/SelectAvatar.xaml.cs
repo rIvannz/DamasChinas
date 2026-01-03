@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.AccountManagerServiceProxy;
+using DamasChinas_Client.UI.Utilities;
+using System;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using DamasChinas_Client.UI.AccountManagerServiceProxy;
-using DamasChinas_Client.UI.Utilities;
 using static DamasChinas_Client.UI.Utilities.MessageKeys;
 
 namespace DamasChinas_Client.UI.Pages
@@ -32,7 +33,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 AvatarItemsControl.ItemsSource = paths;
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[SelectAvatar.LoadAvatars] {ex}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
@@ -62,14 +63,18 @@ namespace DamasChinas_Client.UI.Pages
          
                 ClientSession.CurrentProfile.AvatarFile = _selectedAvatarFile;
 
-                
-                MenuRegisteredPlayer.ForceAvatarRefresh = true;
+
+                MenuRegisteredPlayer.SetForceAvatarRefresh(true);
 
                 MessageHelper.ShowPopup(Success, PopupType.Success);
 
                 NavigationService?.GoBack();
             }
-            catch (Exception ex)
+
+            catch (Exception ex) when (
+               ex is EndpointNotFoundException ||
+               ex is CommunicationException ||
+               ex is TimeoutException)
             {
                 Debug.WriteLine($"[SelectAvatar.OnApplyClick] {ex}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
@@ -85,7 +90,10 @@ namespace DamasChinas_Client.UI.Pages
                 else
                     MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+             ex is EndpointNotFoundException ||
+             ex is CommunicationException ||
+             ex is TimeoutException)
             {
                 Debug.WriteLine($"[SelectAvatar.OnBackClick] {ex}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);

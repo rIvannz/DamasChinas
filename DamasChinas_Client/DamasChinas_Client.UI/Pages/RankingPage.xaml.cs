@@ -73,13 +73,7 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
-                Debug.WriteLine($"[RankingPage.LoadRanking - Comm] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.RankingUnavailable, PopupType.Info);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[RankingPage.LoadRanking - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -92,7 +86,6 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[RankingPage.OnBackClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -108,10 +101,12 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+       ex is EndpointNotFoundException ||
+       ex is CommunicationException ||
+       ex is TimeoutException)
             {
-                Debug.WriteLine($"[RankingPage.OnSoundClick] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Info);
             }
         }
 
@@ -121,14 +116,13 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[RankingPage.OnLanguageClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
-        private bool IsFriend(string username)
+        private static bool IsFriend(string username)
         {
             try
             {
@@ -149,22 +143,14 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (EndpointNotFoundException ex)
             {
-                Debug.WriteLine($"[RankingPage.IsFriend - Endpoint] {ex.Message}");
                 return false;
             }
             catch (TimeoutException ex)
             {
-                Debug.WriteLine($"[RankingPage.IsFriend - Timeout] {ex.Message}");
                 return false;
             }
             catch (CommunicationException ex)
             {
-                Debug.WriteLine($"[RankingPage.IsFriend - Comm] {ex.Message}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[RankingPage.IsFriend - General] {ex.Message}");
                 return false;
             }
         }
@@ -216,26 +202,19 @@ namespace DamasChinas_Client.UI.Pages
                             vm.Loses));
                 }
             }
-            catch (EndpointNotFoundException ex)
+            catch (EndpointNotFoundException)
             {
-                Debug.WriteLine($"[RankingPage.OnViewProfileClick - Endpoint] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException )
             {
-                Debug.WriteLine($"[RankingPage.OnViewProfileClick - Timeout] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException)
             {
-                Debug.WriteLine($"[RankingPage.OnViewProfileClick - Comm] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[RankingPage.OnViewProfileClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
+
         }
 
 

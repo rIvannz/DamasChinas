@@ -14,7 +14,7 @@ namespace DamasChinas_Client.UI.Pages
         public static bool ForceAvatarRefresh = false;
 
         private readonly PublicProfile _profile;
-        private readonly int _userId;
+        private  int _userId;
 
         public MenuRegisteredPlayer(PublicProfile profile)
         {
@@ -30,12 +30,14 @@ namespace DamasChinas_Client.UI.Pages
                 if (!FriendNotificationManager.IsInitialized)
                 {
                     FriendNotificationManager.Initialize(_profile.Username);
-                    Debug.WriteLine("[MenuRegisteredPlayer] FriendService inicializado OK");
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+             ex is EndpointNotFoundException ||
+             ex is CommunicationException ||
+             ex is TimeoutException)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer] Error al iniciar FriendService: {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
 
             Loaded += OnPageLoaded;
@@ -48,7 +50,7 @@ namespace DamasChinas_Client.UI.Pages
             if (ForceAvatarRefresh)
             {
                 LoadAvatar();
-                ForceAvatarRefresh = false;
+                SetForceAvatarRefresh(false);
             }
 
             try
@@ -71,6 +73,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
+                MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
             }
         }
 
@@ -84,10 +87,14 @@ namespace DamasChinas_Client.UI.Pages
                 if (!string.IsNullOrWhiteSpace(avatar))
                     AvatarImage.Source = PathProvider.LoadAvatar(avatar);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+             ex is EndpointNotFoundException ||
+             ex is CommunicationException ||
+             ex is TimeoutException)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.LoadAvatar] {ex.Message}");
+                MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
             }
+
         }
 
         private void OnAvatarClick(object sender, RoutedEventArgs e)
@@ -109,13 +116,14 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnHowToPlayClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+             ex is EndpointNotFoundException ||
+             ex is CommunicationException ||
+             ex is TimeoutException)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnHowToPlayClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
             }
         }
 
@@ -141,7 +149,6 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[MenuRegisteredPlayer.OnStatisticsClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Error);
             }
         }
@@ -197,12 +204,12 @@ namespace DamasChinas_Client.UI.Pages
                     Visibility = LobbyVisibility.Public
                 };
 
-      
+
                 var result = lobbyManager.CreateLobby(_profile.Username, request);
 
                 if (result.Success)
                 {
-          
+
                     var snapshot = lobbyManager.GetCurrentLobby(_profile.Username);
 
                     if (snapshot == null)
@@ -211,20 +218,22 @@ namespace DamasChinas_Client.UI.Pages
                         return;
                     }
 
-        
+
                     NavigationService?.Navigate(
                         new PreLobby(snapshot, _profile.Username, _userId)
                     );
                 }
                 else
                 {
-    
+
                     MessageHelper.ShowFromResult(result);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+            ex is EndpointNotFoundException ||
+            ex is CommunicationException ||
+            ex is TimeoutException)
             {
-                Debug.WriteLine($"[OnCreateGameClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);
             }
         }
@@ -240,5 +249,11 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
             }
         }
+        public static void SetForceAvatarRefresh(bool value)
+        {
+            ForceAvatarRefresh = value;
+        }
+
     }
+
 }

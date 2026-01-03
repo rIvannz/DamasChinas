@@ -135,9 +135,7 @@ namespace DamasChinas_Client.UI.Pages
                 _ = HandleConnectionLossAsync(loading);
             };
 
-            // =========================
-            // LOGIN OK
-            // =========================
+       
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
@@ -166,9 +164,7 @@ namespace DamasChinas_Client.UI.Pages
                 }));
             };
 
-            // =========================
-            // LOGIN ERROR
-            // =========================
+       
             callback.LoginError += async code =>
             {
                 await SafeWait(loading);
@@ -180,9 +176,7 @@ namespace DamasChinas_Client.UI.Pages
                 }));
             };
 
-            // =========================
-            // LOGIN BANNED
-            // =========================
+
             callback.LoginBanned += async banInfo =>
             {
                 await SafeWait(loading);
@@ -200,11 +194,11 @@ namespace DamasChinas_Client.UI.Pages
 
                     try
                     {
-                        // Corte de raíz: evita Closed/Faulted “en cascada”
                         ClientSession.ClearForced();
                     }
                     catch
                     {
+                        MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
                     }
 
                     AppNavigator.NavigateToRoot(new MainWindow());
@@ -218,7 +212,6 @@ namespace DamasChinas_Client.UI.Pages
 
             _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                // Si ya fue intencional (logout/ban), no muestres error
                 if (ClientSession.IsIntentionalDisconnect)
                 {
                     loading?.Close();
@@ -241,7 +234,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 await loading.WaitMinimumAsync();
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[Login.SafeWait] {ex}");
             }
@@ -264,12 +257,14 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[Login.TryNavigateToMenu - InvalidOp] {ex}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
-                Debug.WriteLine($"[Login.TryNavigateToMenu - General] {ex}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+            }
+            catch (TimeoutException ex)
+            {
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
@@ -288,11 +283,7 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
-                Debug.WriteLine($"[Login.ExecuteLogin - Network] {ex}");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Login.ExecuteLogin - General] {ex}");
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 
@@ -309,9 +300,8 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
-                Debug.WriteLine($"[Login.OnBackClick] {ex}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
         }
@@ -339,13 +329,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[Login.TryNavigate - InvalidOp] {ex}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Login.TryNavigate - General] {ex}");
-                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
     }

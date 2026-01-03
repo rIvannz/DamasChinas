@@ -81,7 +81,8 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
-                try { client.Abort(); } catch { }
+                client.Abort();
+      
             }
         }
 
@@ -135,7 +136,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
- 
+
         private void OnPlayerConnected(string username)
         {
             var f = FriendsList.FirstOrDefault(x =>
@@ -143,7 +144,10 @@ namespace DamasChinas_Client.UI.Pages
 
             if (f != null)
             {
-                Dispatcher.BeginInvoke(new Action(() => f.Status = FriendStatus.Online));
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    f.Status = FriendStatus.InGame;
+                }));
             }
         }
 
@@ -152,11 +156,15 @@ namespace DamasChinas_Client.UI.Pages
             var f = FriendsList.FirstOrDefault(x =>
                 x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
-            if (f != null)
+            if (f == null)
+                return;
+
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                Dispatcher.BeginInvoke(new Action(() => f.Status = FriendStatus.Offline));
-            }
+                f.Status = FriendStatus.Offline;
+            }));
         }
+
 
         private void OnPlayerInGame(string username)
         {

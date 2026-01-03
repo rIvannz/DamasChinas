@@ -26,7 +26,6 @@ namespace DamasChinas_Client.UI.Pages
 
 
         private const int BoardRadius = 4;
-        private const int MaxCubeRadius = BoardRadius * 2;
 
         private const double HexSize = 32.0;
         private const double CenterX = 600.0;
@@ -104,9 +103,8 @@ namespace DamasChinas_Client.UI.Pages
 
                 InitializeMatchConnection();
             }
-            catch (Exception ex)
+            catch 
             {
-                System.Diagnostics.Debug.WriteLine($"[MatchRoom.OnPageLoaded] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
                 NavigateToMenu();
             }
@@ -129,7 +127,8 @@ namespace DamasChinas_Client.UI.Pages
                     }
                     catch
                     {
-                      
+                        MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+
                     }
                 }
             }
@@ -217,29 +216,19 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
-                System.Diagnostics.Debug.WriteLine($"[MatchRoom.InitializeMatchConnection] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[MatchRoom.InitializeMatchConnection] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
  
 
-        private static readonly (int X, int Y, int Z)[] ZoneDirections =
-        {
-            (1, -1, 0),
-            (-1, 1, 0),
-            (0, -1, 1),
-            (0, 1, -1),
-            (1, 0, -1),
-            (-1, 0, 1)
-        };
+     
 
-        private List<(int X, int Y, int Z)> GenerateBoardCubeCoordinates()
+        private static List<(int X, int Y, int Z)> GenerateBoardCubeCoordinates()
         {
             var cells = new List<(int X, int Y, int Z)>();
 
@@ -309,7 +298,7 @@ namespace DamasChinas_Client.UI.Pages
            
         }
 
-        private Point HexToPixel(int q, int r)
+        private static Point HexToPixel(int q, int r)
         {
             double x = HexSize * (Math.Sqrt(3) * q + (Math.Sqrt(3) / 2.0) * r);
             double y = HexSize * (1.5 * r);
@@ -496,7 +485,7 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public void HandleError(string msgKey)
+        public  void HandleError(string msgKey)
         {
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }
@@ -615,13 +604,7 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
-                System.Diagnostics.Debug.WriteLine($"[MatchRoom.SendMove] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[MatchRoom.SendMove] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -684,8 +667,12 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     _proxy?.LeaveMatch(_lobbyCode, _myUsername);
                 }
-                catch
+                catch (Exception ex) when (
+                 ex is EndpointNotFoundException ||
+                 ex is CommunicationException ||
+                 ex is TimeoutException)
                 {
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
 
                 NavigateToMenu();
@@ -790,13 +777,16 @@ namespace DamasChinas_Client.UI.Pages
             }
             finally
             {
-                // ✅ cortar canal rápido (evita freeze / bloqueos de Close)
                 try
                 {
                     _proxy?.Abort();
                 }
-                catch
+                catch (Exception ex) when (
+                 ex is EndpointNotFoundException ||
+                 ex is CommunicationException ||
+                 ex is TimeoutException)
                 {
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
 
                 NavigateToMenu();

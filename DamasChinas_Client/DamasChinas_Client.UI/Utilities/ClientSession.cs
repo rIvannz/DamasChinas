@@ -43,9 +43,6 @@ namespace DamasChinas_Client.UI.Utilities
         public static string SafeUsernameNormalized =>
             _currentProfile?.Username?.Trim()?.ToLower();
 
-        // ============================================================
-        // CONTROL DE DESCONEXIÓN INTENCIONAL
-        // ============================================================
         public static bool IsIntentionalDisconnect { get; private set; }
 
         public static void MarkIntentionalDisconnect()
@@ -58,9 +55,6 @@ namespace DamasChinas_Client.UI.Utilities
             IsIntentionalDisconnect = false;
         }
 
-        // ============================================================
-        // INICIALIZACIÓN REGISTRADO
-        // ============================================================
         public static void Initialize(
             PublicProfile profile,
             LoginServiceClient client,
@@ -80,14 +74,11 @@ namespace DamasChinas_Client.UI.Utilities
             IsGuest = false;
         }
 
-        // ============================================================
-        // SESIÓN INVITADO
-        // ============================================================
         public static void EnsureGuestSession()
         {
             if (_currentProfile != null && IsGuest)
             {
-                return; // ya existe sesión guest
+                return; 
             }
 
             string guestName = GenerateGuestUsername();
@@ -106,7 +97,6 @@ namespace DamasChinas_Client.UI.Utilities
                 Loses = 0
             };
 
-            // Invitado NO tiene login/session WCF
             LoginClient = null;
             SessionClient = null;
             CallbackHandler = null;
@@ -115,9 +105,13 @@ namespace DamasChinas_Client.UI.Utilities
 
             MarkIntentionalDisconnect();
 
-            try { ResetAllConnections(); } catch { }
+            try {
+                ResetAllConnections();
+            } catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+            }
 
-            // ya que terminaste de limpiar, vuelves a permitir notificaciones reales
             ResetIntentionalDisconnect();
 
             try
@@ -127,37 +121,42 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
             }
         }
 
         public static bool IsGuestUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return false;
-
-            // formato: Guest-#### (4 dígitos)
+            }
             if (!username.StartsWith(GuestPrefix, StringComparison.OrdinalIgnoreCase))
+            {
                 return false;
-
+            }
             string tail = username.Substring(GuestPrefix.Length);
+
             if (tail.Length != 4)
+            {
                 return false;
+            }
 
             return int.TryParse(tail, out _);
         }
 
         private static string GenerateGuestUsername()
         {
-            // 0000 - 9999 (compatible con .NET Framework 4.7.2)
             int number = GetCryptoInt(0, 10000);
             return $"{GuestPrefix}{number:0000}";
         }
 
-        // RNG criptográfico sin sesgo (rejection sampling)
         private static int GetCryptoInt(int minInclusive, int maxExclusive)
         {
             if (minInclusive >= maxExclusive)
+            {
                 throw new ArgumentOutOfRangeException(nameof(maxExclusive));
+            }
 
             long diff = (long)maxExclusive - minInclusive;
 
@@ -181,26 +180,39 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        // CONEXIONES
-        // ============================================================
         public static void ResetAllConnections()
         {
-            try { FriendNotificationManager.Reset(); } catch { }
-            try { LobbySession.Reset(); } catch { }
+            try
+            { 
+                FriendNotificationManager.Reset();
+            } catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+            }
+            try
+            {
+                LobbySession.Reset();
+            }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+            }
+            try
+            { 
+                GuestSessionNotificationManager.Reset();
+            }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
 
-            // NUEVO: canal de invitado
-            try { GuestSessionNotificationManager.Reset(); } catch { }
+            }
         }
 
-        // ============================================================
-        // LOGOUT NORMAL (solo aplica para registrados)
-        // ============================================================
+
         public static void DisconnectSafely()
         {
             MarkIntentionalDisconnect();
 
-            // Si es invitado, solo limpia y ya.
             if (IsGuest)
             {
                 Clear();
@@ -221,11 +233,15 @@ namespace DamasChinas_Client.UI.Utilities
                     }
                     catch
                     {
+                        MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+
                     }
                 }
             }
             catch
             {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+
             }
             finally
             {
@@ -233,9 +249,6 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        // LIMPIEZA SUAVE
-        // ============================================================
         public static void Clear()
         {
             MarkIntentionalDisconnect();
@@ -254,9 +267,6 @@ namespace DamasChinas_Client.UI.Utilities
             ResetIntentionalDisconnect();
         }
 
-        // ============================================================
-        // LIMPIEZA FORZADA (BAN / CAÍDA DE SERVER)
-        // ============================================================
         public static void ClearForced()
         {
             MarkIntentionalDisconnect();
@@ -288,6 +298,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
+                MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
             }
         }
 
@@ -311,7 +322,13 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                try { client.Abort(); } catch { }
+                try {
+                    client.Abort(); 
+                } 
+                catch
+                {
+                    MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+                }
             }
         }
     }

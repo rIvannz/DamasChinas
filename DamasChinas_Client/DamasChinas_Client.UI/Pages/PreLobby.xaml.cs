@@ -217,7 +217,11 @@ namespace DamasChinas_Client.UI.Pages
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                string localTime = DateTime.TryParse(serverTimeIso, out DateTime dt)
+                string localTime = DateTime.TryParse(
+                        serverTimeIso,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.None,
+                        out DateTime dt)
                     ? dt.ToLocalTime().ToString("HH:mm")
                     : DateTime.Now.ToString("HH:mm");
 
@@ -233,6 +237,7 @@ namespace DamasChinas_Client.UI.Pages
                     sv.ScrollToEnd();
             }));
         }
+
 
         private void OnChatTextChanged(object sender, TextChangedEventArgs e)
         {
