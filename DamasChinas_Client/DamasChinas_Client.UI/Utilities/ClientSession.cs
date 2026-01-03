@@ -40,7 +40,7 @@ namespace DamasChinas_Client.UI.Utilities
             _currentProfile?.Username?.Trim()?.ToLower();
 
         // ============================================================
-        // CONTROL DE DESCONEXIÓN INTENCIONAL
+        // CONTROL DE DESCONEXIÓN INTENCIONAL GIT COMMIT    
         // ============================================================
 
         public static bool IsIntentionalDisconnect { get; private set; }
