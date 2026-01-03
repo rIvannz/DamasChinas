@@ -157,17 +157,31 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="JoinLobbyGuest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="request" nillable="true" type="q14:JoinLobbyRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinLobbyGuestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" minOccurs="0" name="JoinLobbyGuestResult" nillable="true" type="q15:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="OnLobbySnapshot">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="snapshot" nillable="true" type="q14:LobbySnapshotDto" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="snapshot" nillable="true" type="q16:LobbySnapshotDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OnLobbyClosed">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" minOccurs="0" name="reason" type="q15:MessageCode" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" minOccurs="0" name="reason" type="q17:MessageCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -179,21 +193,21 @@
   <xs:element name="OnInvitationReceived">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="invitation" nillable="true" type="q16:LobbyInvitationDto" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="invitation" nillable="true" type="q18:LobbyInvitationDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OnKickedFromLobby">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" minOccurs="0" name="reason" type="q17:MessageCode" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" minOccurs="0" name="reason" type="q19:MessageCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OnBanStatusUpdated">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" minOccurs="0" name="banInfo" nillable="true" type="q18:BanInfoDto" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" minOccurs="0" name="banInfo" nillable="true" type="q20:BanInfoDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

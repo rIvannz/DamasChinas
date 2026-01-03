@@ -975,6 +975,13 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/SendLobbyMessage")]
         System.Threading.Tasks.Task SendLobbyMessageAsync(string sender, int lobbyCode, string message);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobbyGuest", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyGuestResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/JoinLobbyGuestMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult JoinLobbyGuest(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobbyGuest", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyGuestResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> JoinLobbyGuestAsync(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1116,6 +1123,14 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         public System.Threading.Tasks.Task SendLobbyMessageAsync(string sender, int lobbyCode, string message) {
             return base.Channel.SendLobbyMessageAsync(sender, lobbyCode, message);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult JoinLobbyGuest(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request) {
+            return base.Channel.JoinLobbyGuest(request);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> JoinLobbyGuestAsync(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request) {
+            return base.Channel.JoinLobbyGuestAsync(request);
         }
     }
 }

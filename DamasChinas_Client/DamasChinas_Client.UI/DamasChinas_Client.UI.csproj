@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Callbacks\FriendCallbackHandler.cs" />
+    <Compile Include="Callbacks\GuestSessionCallbackHandler.cs" />
     <Compile Include="Callbacks\LobbyCallbackHandler.cs" />
     <Compile Include="Callbacks\MatchCallbackHandler.cs" />
     <Compile Include="Callbacks\SessionCallbackHandler.cs" />
@@ -83,6 +84,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Connected Services\FriendServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\GuestSessionServiceProxy\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -183,6 +189,8 @@
     <Compile Include="Utilities\ClientSession.cs" />
     <Compile Include="Utilities\FriendNotificationManager.cs" />
     <Compile Include="Utilities\FriendStatus.cs" />
+    <Compile Include="Utilities\GuestDisconnectNotifier.cs" />
+    <Compile Include="Utilities\GuestSessionNotificationManager.cs" />
     <Compile Include="Utilities\Hasher.cs" />
     <Compile Include="Utilities\HostVisibilityConverter.cs" />
     <Compile Include="Utilities\LoaderBar.xaml.cs">
@@ -406,6 +414,13 @@
     <None Include="Connected Services\FriendServiceProxy\item39.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\GuestSessionServiceProxy\GuestSessionService.wsdl" />
+    <None Include="Connected Services\GuestSessionServiceProxy\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GuestSessionServiceProxy\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LobbyServiceProxy\DamasChinas_Client.UI.LobbyServiceProxy.LobbySnapshotDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -548,6 +563,13 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <None Include="Connected Services\GuestSessionServiceProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\GuestSessionServiceProxy\configuration.svcinfo" />
+    <None Include="Connected Services\GuestSessionServiceProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\GuestSessionServiceProxy\item.disco" />
     <None Include="Connected Services\SingInServiceProxy\item1.disco" />
     <None Include="Connected Services\RankingServiceProxy\item1.disco" />
     <None Include="Connected Services\MatchServiceProxy\item1.disco" />
@@ -678,6 +700,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AccountManagerServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\FriendServiceProxy\" />
+    <WCFMetadataStorage Include="Connected Services\GuestSessionServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LobbyServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\LogInServiceProxy\" />
     <WCFMetadataStorage Include="Connected Services\MatchServiceProxy\" />

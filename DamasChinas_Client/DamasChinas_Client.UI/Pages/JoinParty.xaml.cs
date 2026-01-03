@@ -4,6 +4,7 @@ using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,15 +16,39 @@ namespace DamasChinas_Client.UI.Pages
         private readonly string _username;
         private readonly int _userId;
 
+        // ============================================================
+        // CONSTRUCTOR: INVITADO
+        // ============================================================
+        public JoinParty()
+        {
+            InitializeComponent();
+
+            ClientSession.EnsureGuestSession();
+
+            _userId = 0;
+            _username = ClientSession.SafeUsername;
+
+            _lobbyManager = LobbySession.Manager;
+            _lobbyManager.RegisterUser(_username);
+
+            LoadPublicLobbies();
+        }
+
+        // ============================================================
+        // CONSTRUCTOR: REGISTRADO
+        // ============================================================
         public JoinParty(int userId, string username)
         {
             InitializeComponent();
+
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentNullException(nameof(username));
 
             _userId = userId;
             _username = username;
 
             _lobbyManager = LobbySession.Manager;
-            _lobbyManager.RegisterUser(username);
+            _lobbyManager.RegisterUser(_username);
 
             LoadPublicLobbies();
         }
@@ -45,12 +70,23 @@ namespace DamasChinas_Client.UI.Pages
                         : MessageTranslator.GetLocalizedMessage(MessageKeys.PublicLobby)
                 }).ToList();
             }
+            catch (Exception ex) when (
+                ex is EndpointNotFoundException ||
+                ex is CommunicationException ||
+                ex is TimeoutException)
+            {
+                Debug.WriteLine($"[JoinParty.LoadPublicLobbies] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+
+                lstPublicLobbies.ItemsSource = Array.Empty<LobbySummary>();
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[JoinParty.LoadPublicLobbies] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
+
 
         private void OnRefreshClick(object sender, RoutedEventArgs e)
         {
@@ -96,12 +132,20 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-               
-                var result = _lobbyManager.JoinLobby(lobbyCode, _username);
+                OperationResult result;
+
+                // ✅ Invitado usa endpoint especial
+                if (ClientSession.IsGuest)
+                {
+                    result = _lobbyManager.JoinLobbyGuest(lobbyCode, _username);
+                }
+                else
+                {
+                    result = _lobbyManager.JoinLobby(lobbyCode, _username);
+                }
 
                 if (result.Success)
                 {
-                   
                     var snapshot = _lobbyManager.GetCurrentLobby(_username);
 
                     if (snapshot == null)
@@ -116,7 +160,6 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-                   
                     MessageHelper.ShowFromResult(result);
                 }
             }

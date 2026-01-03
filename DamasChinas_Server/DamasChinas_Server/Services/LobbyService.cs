@@ -226,6 +226,71 @@ namespace DamasChinas_Server.Services
             }
         }
 
+        public OperationResult JoinLobbyGuest(JoinLobbyRequest request)
+        {
+            try
+            {
+                if (request == null || request.LobbyCode <= 0)
+                {
+                    return OperationResult.Fail("Invalid lobby.", MessageCode.LobbyNotFound);
+                }
+
+                if (!IsGuestUsername(request.Username))
+                {
+                    return OperationResult.Fail("Invalid guest username.", MessageCode.UsernameEmpty);
+                }
+
+                var callback = GetLobbyCallback();
+
+                BindChannelToUser(request.Username);
+                LobbySessionManager.Add(request.Username, callback);
+
+                var guestProfile = BuildGuestProfile(request.Username);
+
+                _lobbyManager.JoinLobby(request, guestProfile, callback);
+
+                return OperationResult.Ok();
+            }
+            catch (RepositoryValidationException ex)
+            {
+                return OperationResult.Fail(ex.Message, ex.Code);
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex, "JoinLobbyGuest");
+            }
+        }
+
+        private static bool IsGuestUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return false;
+
+            if (!username.StartsWith("Guest-", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            string tail = username.Substring("Guest-".Length);
+            return tail.Length == 4 && int.TryParse(tail, out _);
+        }
+
+        private static PublicProfile BuildGuestProfile(string username)
+        {
+            return new PublicProfile
+            {
+                IdUser = 0,
+                Username = username,
+                AvatarFile = "avatarIcon.png",
+                Name = string.Empty,
+                LastName = string.Empty,
+                Email = string.Empty,
+                SocialUrl = string.Empty,
+                MatchesPlayed = 0,
+                Wins = 0,
+                Loses = 0
+            };
+        }
+
+
         private OperationResult ExecuteOperation(Action action, string context)
         {
             try

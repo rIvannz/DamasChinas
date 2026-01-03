@@ -161,6 +161,7 @@
     <Compile Include="logic\FriendRepository.cs" />
     <Compile Include="IChatCallback.cs" />
     <Compile Include="Interfaces\IChatService.cs" />
+    <Compile Include="Services\GuestSessionService.cs" />
     <Compile Include="Services\LobbyService.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Services\AccountManager.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Utilities\DbContextFactory.cs" />
     <Compile Include="Utilities\Email\IEmailSender.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
+    <Compile Include="Utilities\GuestSessionCallbackManager.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>
   <ItemGroup>

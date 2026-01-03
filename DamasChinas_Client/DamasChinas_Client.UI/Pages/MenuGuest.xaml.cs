@@ -1,8 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
-
 using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI.Pages
@@ -12,25 +11,48 @@ namespace DamasChinas_Client.UI.Pages
         public MenuGuest()
         {
             InitializeComponent();
+
+            try
+            {
+                ClientSession.EnsureGuestSession();
+
+                // Mostrar el username real del invitado (Guest-####)
+                if (txtGuestUsername != null)
+                {
+                    txtGuestUsername.Text = ClientSession.SafeUsername ?? "Guest";
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuGuest.Init] {ex.Message}");
+            }
         }
 
         private void OnJoinPartyClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
-                    PopupType.Info
-                );
+                ClientSession.EnsureGuestSession();
+                NavigationService?.Navigate(new JoinParty());
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnJoinPartyClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
+        }
 
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+        private void OnAvatarClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ClientSession.EnsureGuestSession();
+                NavigationService?.Navigate(new ProfileUser(ClientSession.SafeUsername));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[MenuGuest.OnAvatarClick] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
@@ -46,11 +68,7 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnHowToPlayClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -66,11 +84,7 @@ namespace DamasChinas_Client.UI.Pages
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnStatisticsClick] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -80,23 +94,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                Debug.WriteLine($"[MenuGuest.OnSoundClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NavigationError,
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuGuest.OnSoundClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
@@ -106,23 +106,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new MainWindow());
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                Debug.WriteLine($"[MenuGuest.OnBackClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NavigationError,
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuGuest.OnBackClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
 
@@ -132,23 +118,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                Debug.WriteLine($"[MenuGuest.OnLanguageClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NavigationError,
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MenuGuest.OnLanguageClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
     }

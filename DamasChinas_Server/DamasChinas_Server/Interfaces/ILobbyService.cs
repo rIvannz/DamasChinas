@@ -53,5 +53,11 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract(IsOneWay = true)]
         void SendLobbyMessage(string sender, int lobbyCode, string message);
+
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        OperationResult JoinLobbyGuest(JoinLobbyRequest request);
+
+
     }
 }

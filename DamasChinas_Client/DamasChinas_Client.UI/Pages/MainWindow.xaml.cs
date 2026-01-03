@@ -88,27 +88,23 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
+            
+                ClientSession.EnsureGuestSession();
+
                 NavigationService?.Navigate(new MenuGuest());
             }
             catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MainWindow.OnPlayAsGuestClick - InvalidOperation] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.NavigationError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[MainWindow.OnPlayAsGuestClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
+
 
         private void OnSoundClick(object sender, RoutedEventArgs e)
         {

@@ -122,6 +122,12 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {
+            if (!ClientSession.IsLoggedIn)
+            {
+                MessageHelper.ShowPopup(MessageKeys.GuestStatsUnavailable, PopupType.Info);
+                return;
+            }
+
             try
             {
         

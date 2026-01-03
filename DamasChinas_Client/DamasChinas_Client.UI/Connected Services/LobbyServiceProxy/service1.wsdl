@@ -112,6 +112,15 @@
   <wsdl:message name="ILobbyService_SendLobbyMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendLobbyMessage" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_JoinLobbyGuest_InputMessage">
+    <wsdl:part name="parameters" element="tns:JoinLobbyGuest" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_JoinLobbyGuest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinLobbyGuestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_JoinLobbyGuest_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q11:MessageCode" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_OnLobbySnapshot_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnLobbySnapshot" />
   </wsdl:message>
@@ -186,6 +195,11 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SendLobbyMessage">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessage" message="tns:ILobbyService_SendLobbyMessage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="JoinLobbyGuest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/JoinLobbyGuest" message="tns:ILobbyService_JoinLobbyGuest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/JoinLobbyGuestResponse" message="tns:ILobbyService_JoinLobbyGuest_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/JoinLobbyGuestMessageCodeFault" name="MessageCodeFault" message="tns:ILobbyService_JoinLobbyGuest_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnLobbySnapshot">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/OnLobbySnapshot" message="tns:ILobbyService_OnLobbySnapshot_OutputCallbackMessage" />
@@ -337,6 +351,18 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="JoinLobbyGuest">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/JoinLobbyGuest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="OnLobbySnapshot">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/OnLobbySnapshot" style="document" />

@@ -154,8 +154,6 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
-
-
         private void SetupPlayersMetadata()
         {
             if (_lobbySnapshot?.Members == null)
@@ -630,6 +628,17 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
+
+            if (ClientSession.IsGuest)
+            {
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
+                    PopupType.Info
+                );
+                txtChatInput.Clear();
+                return;
+            }
+ 
             string msg = txtChatInput.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(msg))
@@ -733,6 +742,14 @@ namespace DamasChinas_Client.UI.Pages
 
         private void NavigateToMenu()
         {
+            if (ClientSession.IsGuest)
+            {
+                var target = new MenuGuest();
+                if (NavigationService != null) NavigationService.Navigate(target);
+                else Application.Current.MainWindow.Content = target;
+                return;
+            }
+
             var current = ClientSession.CurrentProfile;
 
             var menuProfile = new AccountProxy.PublicProfile
@@ -744,17 +761,11 @@ namespace DamasChinas_Client.UI.Pages
 
             var targetPage = new MenuRegisteredPlayer(menuProfile);
 
-
-            if (NavigationService != null)
-            {
-                NavigationService.Navigate(targetPage);
-            }
-            else
-            {
-
-                Application.Current.MainWindow.Content = targetPage;
-            }
+            if (NavigationService != null) NavigationService.Navigate(targetPage);
+            else Application.Current.MainWindow.Content = targetPage;
         }
+
+
         public void HandleBanStatusUpdated(BanInfoDto banInfo)
         {
             if (banInfo == null || !banInfo.IsBanned)

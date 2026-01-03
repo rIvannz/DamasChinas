@@ -33,9 +33,7 @@ namespace DamasChinas_Client.UI.Pages
             InitializeComponent();
 
             if (snapshot == null)
-            {
                 throw new ArgumentNullException(nameof(snapshot));
-            }
 
             PreLobbyPageManager.Register(this);
 
@@ -76,7 +74,6 @@ namespace DamasChinas_Client.UI.Pages
 
         public void ApplySnapshot(LobbySnapshotDto snapshot)
         {
-       
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 _snapshot = snapshot;
@@ -85,9 +82,7 @@ namespace DamasChinas_Client.UI.Pages
                     $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyCode)}: {snapshot.LobbyCode}";
 
                 if (FindName("lblPlayerCount") is TextBlock lblCount)
-                {
                     lblCount.Text = $"{snapshot.Members.Length} / {snapshot.MaxPlayers}";
-                }
 
                 MembersCollection.Clear();
 
@@ -96,10 +91,21 @@ namespace DamasChinas_Client.UI.Pages
                 foreach (var m in snapshot.Members)
                 {
                     bool isMe = m.Username == _username;
-                    string displayName = m.IsHost ? $"? {m.Username}" : m.Username;
+                    string displayName = m.IsHost ? $"?? {m.Username}" : m.Username;
 
-                    Visibility kickVis = (amIHost && !isMe) ? Visibility.Visible : Visibility.Collapsed;
-                    Visibility reportVis = !isMe ? Visibility.Visible : Visibility.Collapsed;
+                    // ? Host registrado puede kickear a cualquiera (incluyendo guests)
+                    Visibility kickVis =
+                        (amIHost && !isMe && !ClientSession.IsGuest)
+                        ? Visibility.Visible
+                        : Visibility.Collapsed;
+
+                    // ? Report NO aparece si el target es guest (y guest tampoco reporta)
+                    Visibility reportVis =
+                        (!isMe &&
+                         !ClientSession.IsGuest &&
+                         !ClientSession.IsGuestUsername(m.Username))
+                        ? Visibility.Visible
+                        : Visibility.Collapsed;
 
                     string avatarFile = string.IsNullOrWhiteSpace(m.AvatarFile)
                         ? DefaultAvatarFile
@@ -125,6 +131,13 @@ namespace DamasChinas_Client.UI.Pages
 
         private void LoadFriends()
         {
+            // ? Invitados no tienen amigos (no existen en BD)
+            if (ClientSession.IsGuest)
+            {
+                Dispatcher.BeginInvoke(new Action(() => FriendsCollection.Clear()));
+                return;
+            }
+
             try
             {
                 using (var client = new FriendServiceClient(
@@ -133,15 +146,12 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     var friends = client.GetFriends(_username);
 
-         
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
                         FriendsCollection.Clear();
 
                         if (friends == null)
-                        {
                             return;
-                        }
 
                         foreach (var f in friends)
                         {
@@ -185,12 +195,19 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
-            string text = txtChatMessage.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(text))
+            if (ClientSession.IsGuest)
             {
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
+                    PopupType.Info
+                );
+                txtChatMessage.Clear();
                 return;
             }
+
+            string text = txtChatMessage.Text.Trim();
+            if (string.IsNullOrWhiteSpace(text))
+                return;
 
             _lobbyManager.SendChatMessage(text);
             txtChatMessage.Clear();
@@ -213,9 +230,7 @@ namespace DamasChinas_Client.UI.Pages
                 });
 
                 if (chatContainer.Parent is ScrollViewer sv)
-                {
                     sv.ScrollToEnd();
-                }
             }));
         }
 
@@ -229,20 +244,33 @@ namespace DamasChinas_Client.UI.Pages
         private void OnKickMemberClick(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.DataContext is LobbyMemberViewModel vm)
-            {
                 _lobbyManager.KickPlayer(vm.Username);
-            }
         }
 
         private void OnReportMemberClick(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button btn) || !(btn.DataContext is LobbyMemberViewModel vm))
+            if (ClientSession.IsGuest)
             {
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
+                    PopupType.Info
+                );
                 return;
             }
 
+            if (!(sender is Button btn) || !(btn.DataContext is LobbyMemberViewModel vm))
+                return;
+
             if (string.Equals(vm.Username, _username, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            // ? No se reporta a invitados
+            if (ClientSession.IsGuestUsername(vm.Username))
             {
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
+                    PopupType.Info
+                );
                 return;
             }
 
@@ -269,24 +297,15 @@ namespace DamasChinas_Client.UI.Pages
         private void OnInviteFriendClick(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button btn) || !(btn.DataContext is FriendViewModel friend))
-            {
                 return;
-            }
 
             int lobbyCode = _snapshot.LobbyCode;
             string hostUsername = _username;
 
             var result = _lobbyManager.InviteFriend(hostUsername, friend.Username, lobbyCode);
 
-            if (result.Success)
-            {
-                // TODO: Invitation sent
-                // MessageHelper.ShowPopup(MessageKeys.InvitationSent, PopupType.Success);
-            }
-            else
-            {
+            if (!result.Success)
                 MessageHelper.ShowFromResult(result);
-            }
         }
 
         public void ApplyBanInfo(BanInfoDto ban)
@@ -300,7 +319,6 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnKicked(string reason)
         {
-        
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 MessageHelper.ShowPopup(MessageKeys.YouWereKicked, PopupType.Warning);
@@ -310,7 +328,6 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnLobbyClosed(string reason)
         {
-         
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 MessageHelper.ShowPopup(MessageKeys.LobbyClosed, PopupType.Info);
@@ -320,7 +337,6 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnGameStarting()
         {
-        
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 UnsubscribeEvents();
@@ -346,9 +362,7 @@ namespace DamasChinas_Client.UI.Pages
             var res = _lobbyManager.LeaveLobby();
 
             if (!res.Success)
-            {
                 ClientSession.Clear();
-            }
 
             ExitCleanly();
         }
@@ -358,10 +372,8 @@ namespace DamasChinas_Client.UI.Pages
             public int UserId { get; set; }
             public string Username { get; set; }
             public string DisplayName { get; set; }
-
             public string AvatarFile { get; set; }
             public ImageSource AvatarSource { get; set; }
-
             public bool IsHost { get; set; }
             public Visibility KickVisibility { get; set; }
             public Visibility ReportVisibility { get; set; }
@@ -372,7 +384,6 @@ namespace DamasChinas_Client.UI.Pages
         {
             public string Username { get; set; }
             public FriendStatus Status { get; set; }
-
             public string AvatarFile { get; set; }
             public ImageSource AvatarSource { get; set; }
         }

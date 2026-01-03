@@ -121,7 +121,7 @@ namespace DamasChinas_Server.Logic
 
         public BanInfoDto GetBanInfo(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
+            if (string.IsNullOrWhiteSpace(username) || IsGuest(username))
             {
                 return new BanInfoDto { IsBanned = false, TotalReports = 0 };
             }
@@ -145,6 +145,7 @@ namespace DamasChinas_Server.Logic
                 return new BanInfoDto { IsBanned = false, TotalReports = 0 };
             }
         }
+
 
         public LobbySnapshotDto CreateLobby(string hostUsername, PublicProfile hostProfile, CreateLobbyRequest request, ILobbyCallback callback)
         {
@@ -344,6 +345,12 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
+            // ✅ Invitados NO se reportan y NO reportan
+            if (IsGuest(request.ReporterUsername) || IsGuest(request.ReportedUsername))
+            {
+                return;
+            }
+
             if (string.Equals(
                 request.ReporterUsername,
                 request.ReportedUsername,
@@ -360,9 +367,6 @@ namespace DamasChinas_Server.Logic
 
                 string motivo = request.Reason ?? string.Empty;
 
-                // OJO: ahora se guarda de forma general:
-                // - si viene del lobby: CodigoLobby trae valor y IdPartida puede ser null
-                // - si viene de match: IdPartida trae valor y CodigoLobby puede ser null
                 var reportsRepo = new RepositoryReports();
 
                 int totalReports = reportsRepo.AddReportAndGetTotal(
@@ -428,7 +432,6 @@ namespace DamasChinas_Server.Logic
 
                         BroadcastSnapshot(lobby);
                     }
-
                 }
             }
             catch (RepositoryValidationException)
@@ -441,6 +444,7 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
         }
+
 
 
 
@@ -488,9 +492,11 @@ namespace DamasChinas_Server.Logic
         private void EnsureNotBanned(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
-            {
                 return;
-            }
+
+         
+            if (IsGuest(username))
+                return;
 
             var usersRepo = new RepositoryUsers();
             int userId = usersRepo.GetUserIdByUsername(username);
@@ -501,6 +507,7 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.LobbyUserBanned);
             }
         }
+
 
         private int GenerateUniqueCode()
         {
@@ -736,6 +743,19 @@ namespace DamasChinas_Server.Logic
                 };
             }
         }
+
+        private static bool IsGuest(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return false;
+
+            if (!username.StartsWith("Guest-", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            string tail = username.Substring("Guest-".Length);
+            return tail.Length == 4 && int.TryParse(tail, out _);
+        }
+
 
         private sealed class BanState
         {
