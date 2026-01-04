@@ -53,9 +53,13 @@ namespace DamasChinas_Server.Utilities
 
                 _log.Info($"[Add] Guest callback agregado: {key}");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                _log.Error($"[Add] Error al agregar guest callback: {key}", ex);
+                _log.Error($"[Add] Invalid WCF context for guest callback: {key}", ex);
+            }
+            catch (CommunicationException ex)
+            {
+                _log.Error($"[Add] Communication error while adding guest callback: {key}", ex);
             }
         }
 
@@ -70,9 +74,13 @@ namespace DamasChinas_Server.Utilities
                 _callbacks.TryRemove(key, out _);
                 _log.Info($"[Remove] Guest callback removido: {key}");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                _log.Error($"[Remove] Error al remover guest callback: {key}", ex);
+                _log.Error($"[Add] Invalid WCF context for guest callback: {key}", ex);
+            }
+            catch (CommunicationException ex)
+            {
+                _log.Error($"[Add] Communication error while adding guest callback: {key}", ex);
             }
         }
 
@@ -86,11 +94,19 @@ namespace DamasChinas_Server.Utilities
                 {
                     kv.Value.Callback.OnServerMessage(payload);
                 }
-                catch (Exception ex)
+                catch (InvalidOperationException ex)
                 {
                     _log.Warn($"[NotifyAll] Falló callback, removiendo: {kv.Key}. {ex.Message}");
                     _callbacks.TryRemove(kv.Key, out _);
+
                 }
+                catch (CommunicationException ex)
+                {
+                    _log.Warn($"[NotifyAll] Falló callback, removiendo: {kv.Key}. {ex.Message}");
+                    _callbacks.TryRemove(kv.Key, out _);
+
+                }
+                
             }
         }
 
@@ -104,13 +120,21 @@ namespace DamasChinas_Server.Utilities
                 {
                     kv.Value.Callback.OnServerMessage(payload);
                 }
-                catch { }
+                catch 
+                {
+                    _log.Warn($"[NotifyAll] ForceDisconectAll fallo para un cliente ");
+
+                }
 
                 try
                 {
                     kv.Value.Channel?.Abort();
                 }
-                catch { }
+                catch 
+                {
+                    _log.Warn($"[NotifyAll] ForceDisconectAll fallo para un cliente");
+
+                }
 
                 _callbacks.TryRemove(kv.Key, out _);
             }

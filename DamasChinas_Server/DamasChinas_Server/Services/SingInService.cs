@@ -11,8 +11,11 @@ using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
+using System.Net.Mail;
+using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace DamasChinas_Server
 {
@@ -33,9 +36,6 @@ namespace DamasChinas_Server
         private const string OperationValidateUserData = nameof(ValidateUserData);
         private const string OperationRequestVerificationCode = nameof(RequestVerificationCode);
         private const string OperationCreateUser = nameof(CreateUser);
-        private const string OperationGenerateCode = nameof(GenerateCode);
-        private const string OperationSendWelcomeEmail = nameof(SendWelcomeEmail);
-        private const string OperationRemoveStoredCode = nameof(RemoveStoredCode);
 
         public SingInService()
             : this(new RepositoryUsers(), LogFactory.Create<SingInService>())
@@ -186,9 +186,9 @@ namespace DamasChinas_Server
                 {
                     await Email.SendWelcomeAsync(user, cultureCode).ConfigureAwait(false);
                 }
-                catch
+                catch (SmtpException ex)
                 {
-                
+                    _log.Warn($"[SendWelcomeEmail] SMTP error sending welcome email to {user.Username}", ex);
                 }
             });
         }
@@ -223,29 +223,24 @@ namespace DamasChinas_Server
                 _log.Info($"[{context}] SUCCESS");
                 return result;
             }
-            catch (Exception ex)
+            catch (SqlException sqlEx)
             {
-                if (ex is SqlException sqlEx)
-                {
-                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
-                    return onError(sqlEx);
-                }
 
-                if (ex is EntityException entityEx)
-                {
-                    if (entityEx.InnerException is SqlException innerSql)
-                    {
-                        _log.Error($"[{context}] SQL ERROR {innerSql.Number}");
-                        return onError(innerSql);
-                    }
-
-                    _log.Error($"[{context}] ENTITY ERROR: {entityEx.Message}");
-                    return onError(entityEx);
-                }
-
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
-                return onError(ex);
+                _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                return onError(sqlEx);
             }
+            catch (EntityException entityEx)
+            {
+                if (entityEx.InnerException is SqlException innerSql)
+                {
+                    _log.Error($"[{context}] SQL ERROR {innerSql.Number}");
+                    return onError(innerSql);
+                }
+
+                _log.Error($"[{context}] ENTITY ERROR: {entityEx.Message}");
+                return onError(entityEx);
+            }
+
         }
         private static string NormalizeEmail(string email)
         {
