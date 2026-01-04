@@ -52,7 +52,7 @@ namespace DamasChinas_Server.Logic
             }
 
             var game = new ChineseCheckersGame(gamePlayers);
-            string host = players.First();
+            string host = players[0];
 
             _matches[lobbyCode] = new ActiveMatch(game, playerColorMap, host);
 
@@ -108,7 +108,7 @@ namespace DamasChinas_Server.Logic
 
             if (!result.Succeeded)
             {
-                throw new Exception(result.ErrorMessage);
+                throw new RepositoryValidationException(MessageCode.InvalidMove);
             }
 
             BroadcastMove(req.LobbyCode, req.Username, match, origin, dest);
@@ -185,6 +185,8 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
+                    throw new RepositoryValidationException(MessageCode.UnknownError);
+
                 }
             }
 
@@ -256,6 +258,8 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
+                    throw new RepositoryValidationException(MessageCode.UnknownError);
+
                 }
             }
 
@@ -283,7 +287,7 @@ namespace DamasChinas_Server.Logic
             return -1;
         }
 
-        private void BroadcastMove(int code, string player, ActiveMatch match,
+        private void BroadcastMove(int code,string player, ActiveMatch match,
             HexCoordinate from, HexCoordinate to)
         {
             var next = match.UserColorMap
@@ -305,11 +309,13 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
+                    _log.Info($"[MatchManager] BroadcastMovefailenon {code}");
+                    throw new RepositoryValidationException(MessageCode.UnknownError);
                 }
             }
         }
 
-        private void BroadcastGameOver(string winner, ActiveMatch match)
+        private static void BroadcastGameOver(string winner, ActiveMatch match)
         {
             foreach (var cb in match.Callbacks.Values)
             {
@@ -319,11 +325,13 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
+                    throw new RepositoryValidationException(MessageCode.UnknownError);
+
                 }
             }
         }
 
-        private class ActiveMatch
+        private sealed class ActiveMatch
         {
             public ChineseCheckersGame Game { get; }
             public Dictionary<string, PlayerColor> UserColorMap { get; }
