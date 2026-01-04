@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -34,7 +35,7 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                // No revientes la app por idioma
+                Debug.WriteLine($"[LanguageManager.fail]");
             }
         }
 
@@ -114,11 +115,12 @@ namespace DamasChinas_Client.UI.Utilities
                 if (src.IndexOf("/Resources/Lang.", StringComparison.OrdinalIgnoreCase) >= 0 ||
                     src.IndexOf("Resources/Lang.", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    return dictionary;
+                    return null;
                 }
             }
 
-            return null;
+            return new ResourceDictionary();
+            ;
         }
 
         private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)

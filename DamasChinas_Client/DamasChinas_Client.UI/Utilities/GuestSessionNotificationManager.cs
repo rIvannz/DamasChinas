@@ -19,11 +19,13 @@ namespace DamasChinas_Client.UI.Utilities
         public static void Initialize(string guestUsername)
         {
             if (!ClientSession.IsGuest)
+            {
                 return;
-
+            }
             if (string.IsNullOrWhiteSpace(guestUsername))
+            {
                 return;
-
+            }
             EnsureAlive(guestUsername);
         }
 
@@ -41,10 +43,17 @@ namespace DamasChinas_Client.UI.Utilities
                             _client.Unsubscribe(guest);
                         }
                     }
-                    catch { }
+                    catch
+                    {
+                        Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
+                    }
                 }
             }
-            catch { }
+            catch
+            {
+                Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
+            }
+
 
             try
             {
@@ -58,7 +67,13 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                try { _client?.Abort(); } catch { }
+                try {
+                    _client?.Abort(); 
+                }
+                catch 
+                {
+                    Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
+                }
             }
             finally
             {
@@ -66,7 +81,14 @@ namespace DamasChinas_Client.UI.Utilities
                 _context = null;
                 _guestNormalized = null;
 
-                try { GuestSessionCallbackHandler.ServerMessageReceived -= OnServerMessage; } catch { }
+                try 
+                {
+                    GuestSessionCallbackHandler.ServerMessageReceived -= OnServerMessage;
+                }
+                catch 
+                {
+                    Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
+                }
             }
         }
 
@@ -83,7 +105,14 @@ namespace DamasChinas_Client.UI.Utilities
 
             if (_client != null && IsDead(_client.State))
             {
-                try { _client.Abort(); } catch { }
+                try 
+                {
+                    _client.Abort(); 
+                }
+                catch 
+                {
+                    Debug.WriteLine($"[GuestSecionManager.EnsureAlive.fail]");
+                }
                 _client = null;
                 _context = null;
                 _guestNormalized = null;
@@ -116,18 +145,14 @@ namespace DamasChinas_Client.UI.Utilities
 
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
 
-                try { _client?.Abort(); } catch { }
-                _client = null;
-                _context = null;
-                _guestNormalized = null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[GuestSessionNotificationManager.Initialize] {ex.Message}");
-
-                GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
-
-                try { _client?.Abort(); } catch { }
+                try 
+                {
+                    _client?.Abort();
+                } 
+                catch
+                {
+                    Debug.WriteLine($"[GuestSecionManager.EnsureAlive.fail]");
+                }
                 _client = null;
                 _context = null;
                 _guestNormalized = null;
@@ -137,8 +162,9 @@ namespace DamasChinas_Client.UI.Utilities
         private static void AttachChannelEvents(ICommunicationObject channel)
         {
             if (channel == null)
+            {
                 return;
-
+            }
             channel.Faulted += (s, e) =>
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
 
@@ -156,11 +182,13 @@ namespace DamasChinas_Client.UI.Utilities
         private static string NormalizeToMessageKey(string code)
         {
             if (string.IsNullOrWhiteSpace(code))
+            {
                 return MessageKeys.ServerUnavailable;
-
+            }
             if (code.StartsWith("msg_", StringComparison.OrdinalIgnoreCase))
+            {
                 return code;
-
+            }
             return "msg_" + code.Trim();
         }
 

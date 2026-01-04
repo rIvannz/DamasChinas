@@ -14,8 +14,9 @@ namespace DamasChinas_Client.UI.Utilities
         public static void Save(BanInfoDto banInfo)
         {
             if (banInfo == null)
+            {
                 return;
-
+            }
             try
             {
                 string path = GetFilePath();
@@ -28,6 +29,8 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+
             }
         }
 
@@ -38,8 +41,9 @@ namespace DamasChinas_Client.UI.Utilities
                 string path = GetFilePath();
 
                 if (!File.Exists(path))
+                {
                     return null;
-
+                }
                 using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var serializer = new DataContractJsonSerializer(typeof(BanInfoDto));
@@ -59,10 +63,14 @@ namespace DamasChinas_Client.UI.Utilities
                 string path = GetFilePath();
 
                 if (File.Exists(path))
+                {
                     File.Delete(path);
+                }
             }
             catch
             {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+
             }
         }
 
@@ -72,19 +80,22 @@ namespace DamasChinas_Client.UI.Utilities
             string appFolder = Path.Combine(folder, "DamasChinas");
 
             if (!Directory.Exists(appFolder))
+            {
                 Directory.CreateDirectory(appFolder);
-
+            }
             return Path.Combine(appFolder, FileName);
         }
 
         public static string BuildBanMessage(BanInfoDto banInfo)
         {
             if (banInfo == null)
+            {
                 return string.Empty;
-
+            }
             if (banInfo.IsPermanent)
+            {
                 return MessageTranslator.GetLocalizedMessage(MessageKeys.UserBannedPermanent);
-
+            }
             if (banInfo.BanUntilUtc.HasValue)
             {
                 DateTime local = banInfo.BanUntilUtc.Value.ToLocalTime();

@@ -2,6 +2,7 @@ using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
 using System.Windows;
 
@@ -13,7 +14,6 @@ namespace DamasChinas_Client.UI.Utilities
         private const string BindingName = "NetTcpBinding_ILobbyService";
 
         private LobbyServiceClient _client;
-        private InstanceContext _context;
 
         public int CurrentLobbyCode { get; private set; }
         public string CurrentUsername { get; private set; }
@@ -41,7 +41,7 @@ namespace DamasChinas_Client.UI.Utilities
 
                 SafeAbort(_client);
 
-                _context = new InstanceContext(this);
+                var _context = new InstanceContext(this);
                 _client = new LobbyServiceClient(_context, BindingName);
 
             }
@@ -49,7 +49,6 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 SafeAbort(_client);
                 _client = null;
-                _context = null;
             }
         }
 
@@ -68,24 +67,19 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 SafeAbort(_client);
                 _client = null;
-                _context = null;
+               
 
                 InitializeClient();
             }
         }
 
-        /// <summary>
-        /// Reset duro para cuando el server se cae / logout / ban.
-        /// No intenta LeaveLobby: corta canal y borra estado local.
-        /// </summary>
+    
         public void Reset()
         {
             try { SafeAbort(_client); }
             finally
             {
                 _client = null;
-                _context = null;
-
                 CurrentLobbyCode = 0;
                 CurrentUsername = null;
                 HostUsername = null;
@@ -94,15 +88,23 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static void SafeAbort(ICommunicationObject obj)
         {
-            if (obj == null) return;
-            try { obj.Abort(); } catch { }
+            if (obj == null)
+            {
+                return;
+            };
+            try 
+            { 
+                obj.Abort();
+            }
+            catch 
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+
+            }
         }
 
-        // ============================================================
-        // UI DISPATCH
-        // ============================================================
-
-        private void DispatchToUi(Action action)
+  
+        private static void DispatchToUi(Action action)
         {
             var dispatcher = Application.Current?.Dispatcher;
 
@@ -115,9 +117,7 @@ namespace DamasChinas_Client.UI.Utilities
             dispatcher.BeginInvoke(action);
         }
 
-        // ============================================================
-        // REGISTROS
-        // ============================================================
+ 
 
         public void RegisterUser(string username)
         {
@@ -130,15 +130,13 @@ namespace DamasChinas_Client.UI.Utilities
             CurrentLobbyCode = code;
         }
 
-        // ============================================================
-        // ACCIONES
-        // ============================================================
 
         public OperationResult CreateLobby(string username, CreateLobbyRequest request)
         {
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return new OperationResult { Success = false, Code = MessageCode.UsernameEmpty };
-
+            }
             RegisterUser(username);
             EnsureClientAlive();
 
@@ -156,11 +154,13 @@ namespace DamasChinas_Client.UI.Utilities
         public OperationResult JoinLobbyGuest(int lobbyCode, string username)
         {
             if (lobbyCode <= 0)
+            {
                 return new OperationResult { Success = false, Code = MessageCode.LobbyNotFound };
-
+            }
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return new OperationResult { Success = false, Code = MessageCode.UsernameEmpty };
-
+            }
             RegisterUser(username);
             EnsureClientAlive();
 
@@ -175,8 +175,9 @@ namespace DamasChinas_Client.UI.Utilities
                 var result = _client.JoinLobbyGuest(request);
 
                 if (result.Success)
+                {
                     CurrentLobbyCode = lobbyCode;
-
+                }
                 return result;
             }
             catch
@@ -189,11 +190,13 @@ namespace DamasChinas_Client.UI.Utilities
         public OperationResult JoinLobby(int lobbyCode, string username)
         {
             if (lobbyCode <= 0)
+            {
                 return new OperationResult { Success = false, Code = MessageCode.LobbyNotFound };
-
+            }
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return new OperationResult { Success = false, Code = MessageCode.UsernameEmpty };
-
+            }
             RegisterUser(username);
             EnsureClientAlive();
 
@@ -208,8 +211,9 @@ namespace DamasChinas_Client.UI.Utilities
                 var result = _client.JoinLobby(request);
 
                 if (result.Success)
+                {
                     CurrentLobbyCode = lobbyCode;
-
+                }
                 return result;
             }
             catch
@@ -222,8 +226,9 @@ namespace DamasChinas_Client.UI.Utilities
         public LobbySnapshotDto GetCurrentLobby(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return null;
-
+            }
             RegisterUser(username);
             EnsureClientAlive();
 
@@ -241,8 +246,9 @@ namespace DamasChinas_Client.UI.Utilities
         public OperationResult LeaveLobby()
         {
             if (string.IsNullOrWhiteSpace(CurrentUsername))
+            {
                 return new OperationResult { Success = false };
-
+            }
             EnsureClientAlive();
 
             try
@@ -285,7 +291,9 @@ namespace DamasChinas_Client.UI.Utilities
             try
             {
                 if (_client.State == CommunicationState.Opened)
+                {
                     _client.StartGame(CurrentUsername);
+                }
             }
             catch
             {
@@ -300,7 +308,9 @@ namespace DamasChinas_Client.UI.Utilities
             try
             {
                 if (_client.State == CommunicationState.Opened)
+                {
                     _client.KickPlayer(CurrentUsername, CurrentLobbyCode, targetUsername);
+                }
             }
             catch
             {
@@ -315,7 +325,9 @@ namespace DamasChinas_Client.UI.Utilities
             try
             {
                 if (_client.State == CommunicationState.Opened)
+                {
                     _client.SendLobbyMessage(CurrentUsername, CurrentLobbyCode, message);
+                }
             }
             catch
             {
@@ -330,7 +342,9 @@ namespace DamasChinas_Client.UI.Utilities
             try
             {
                 if (_client.State == CommunicationState.Opened)
+                {
                     return _client.ReportPlayer(request);
+                }
             }
             catch
             {
@@ -355,9 +369,6 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        // ============================================================
-        // CALLBACKS
-        // ============================================================
 
         public void OnLobbySnapshot(LobbySnapshotDto snapshot)
         {
@@ -393,9 +404,9 @@ namespace DamasChinas_Client.UI.Utilities
             DispatchToUi(() => GameStarting?.Invoke());
         }
 
-        public void OnBanStatusUpdated(BanInfoDto ban)
+        public void OnBanStatusUpdated(BanInfoDto banInfo)
         {
-            DispatchToUi(() => BanUpdated?.Invoke(ban));
+            DispatchToUi(() => BanUpdated?.Invoke(banInfo));
         }
 
         public void OnChatMessageReceived(string sender, string message, string timestamp)

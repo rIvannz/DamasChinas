@@ -1,8 +1,10 @@
-using DamasChinas_Client.UI.PopUps;
 using DamasChinas_Client.UI.Pages;
+using DamasChinas_Client.UI.PopUps;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -19,11 +21,19 @@ namespace DamasChinas_Client.UI.Utilities
                 { MessageKeys.SessionExpired, () =>
                     {
                         if (ClientSession.IsIntentionalDisconnect)
+                        {
                             return;
-
+                        }
                         SafeUi(() =>
                         {
-                            try { ClientSession.ClearForced(); } catch { }
+                            try 
+                            {
+                                ClientSession.ClearForced(); 
+                            }
+                            catch 
+                            {
+                             ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+                            }
                             AppNavigator.NavigateToRoot(new MainWindow());
                         });
                     }
@@ -32,11 +42,19 @@ namespace DamasChinas_Client.UI.Utilities
                 { MessageKeys.ServerUnavailable, () =>
                     {
                         if (ClientSession.IsIntentionalDisconnect)
+                        {
                             return;
-
+                        }
                         SafeUi(() =>
                         {
-                            try { ClientSession.ClearForced(); } catch { }
+                            try 
+                            {
+                                ClientSession.ClearForced(); 
+                            }
+                            catch
+                            {
+                             ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+                            }
                             AppNavigator.NavigateToRoot(new MainWindow());
                         });
                     }
@@ -49,7 +67,14 @@ namespace DamasChinas_Client.UI.Utilities
 
                         SafeUi(() =>
                         {
-                            try { ClientSession.ClearForced(); } catch { }
+                            try 
+                            {
+                                ClientSession.ClearForced(); 
+                            }
+                            catch 
+                            {
+                             ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
+                            }
                             AppNavigator.NavigateToRoot(new MainWindow());
                         });
                     }
@@ -70,7 +95,11 @@ namespace DamasChinas_Client.UI.Utilities
                 {
                     action?.Invoke();
                 }
-                catch (Exception ex)
+                catch (TargetInvocationException ex)
+                {
+                    Debug.WriteLine("[MessageHelper] SpecialKeyAction failed: " + ex.InnerException?.Message);
+                }
+                catch (InvalidOperationException ex)
                 {
                     Debug.WriteLine("[MessageHelper] SpecialKeyAction failed: " + ex.Message);
                 }
@@ -146,9 +175,7 @@ namespace DamasChinas_Client.UI.Utilities
             ShowPopup(resourceKey, popupType);
         }
 
-        // ==========================
-        // Helpers
-        // ==========================
+    
         private static void SafeUi(Action uiAction)
         {
             try
@@ -168,9 +195,17 @@ namespace DamasChinas_Client.UI.Utilities
 
                 dispatcher.BeginInvoke(uiAction, DispatcherPriority.Normal);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[MessageHelper.SafeUi] {ex.Message}");
+                Debug.WriteLine($"[MessageHelper.SafeUi] Invalid operation: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                Debug.WriteLine($"[MessageHelper.SafeUi] Dispatcher canceled: {ex.Message}");
+            }
+            catch (TargetInvocationException ex)
+            {
+                Debug.WriteLine($"[MessageHelper.SafeUi] UI action failed: {ex.InnerException?.Message}");
             }
         }
     }

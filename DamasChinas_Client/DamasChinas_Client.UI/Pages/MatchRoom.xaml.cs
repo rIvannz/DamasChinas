@@ -486,7 +486,7 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public static void HandleError(string msgKey)
+        public  void HandleError(string msgKey)
         {
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }
@@ -528,7 +528,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (_selectedCoord.HasValue)
             {
-                SendMove(_selectedCoord.Value, clickedCoord);
+                _ = SendMove(_selectedCoord.Value, clickedCoord);
             }
         }
 
@@ -796,7 +796,13 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
-                try { PendingBanNotificationStore.Save(banInfo); } catch { }
+                try
+                { PendingBanNotificationStore.Save(banInfo);
+                } 
+                catch 
+                {
+                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail]");
+                }
             }
             finally
             {

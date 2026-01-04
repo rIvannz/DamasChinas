@@ -1,6 +1,7 @@
+using DamasChinas_Client.UI.Utilities;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.Windows;
-using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI
 {
@@ -49,6 +50,7 @@ namespace DamasChinas_Client.UI
             }
             catch
             {
+                Debug.WriteLine($"[App.Xaml exit fail]");
             }
 
             base.OnExit(e);

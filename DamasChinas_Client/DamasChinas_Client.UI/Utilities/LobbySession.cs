@@ -8,7 +8,14 @@ namespace DamasChinas_Client.UI
 
         public static void Reset()
         {
-            try { Manager.Reset(); } catch { }
+            try
+            {
+                Manager.Reset(); 
+            } 
+            catch 
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
         }
     }
 }

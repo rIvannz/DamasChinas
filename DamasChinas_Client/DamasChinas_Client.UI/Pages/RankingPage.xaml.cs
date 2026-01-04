@@ -73,6 +73,7 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
+                Debug.WriteLine($"[RankinPage.LoadRanking.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.RankingUnavailable, PopupType.Info);
             }
         }
@@ -84,8 +85,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.GoBack();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
+                Debug.WriteLine($"[RankinPage.OnBackClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -106,6 +108,7 @@ namespace DamasChinas_Client.UI.Pages
        ex is CommunicationException ||
        ex is TimeoutException)
             {
+                Debug.WriteLine($"[RankinPage.OnRefreshClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Info);
             }
         }
@@ -118,6 +121,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
+                Debug.WriteLine($"[RankinPage.OnLanguageClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -141,16 +145,12 @@ namespace DamasChinas_Client.UI.Pages
                         string.Equals(f.Username, username, StringComparison.OrdinalIgnoreCase));
                 }
             }
-            catch (EndpointNotFoundException ex)
+            catch (Exception ex) when (
+    ex is EndpointNotFoundException ||
+    ex is CommunicationException ||
+    ex is TimeoutException)
             {
-                return false;
-            }
-            catch (TimeoutException ex)
-            {
-                return false;
-            }
-            catch (CommunicationException ex)
-            {
+                Debug.WriteLine($"[RankinPage.IsFriend.fail] {ex.Message}");
                 return false;
             }
         }
@@ -202,16 +202,13 @@ namespace DamasChinas_Client.UI.Pages
                             vm.Loses));
                 }
             }
-            catch (EndpointNotFoundException)
+           
+            catch (Exception ex) when (
+ex is EndpointNotFoundException ||
+ex is CommunicationException ||
+ex is TimeoutException)
             {
-                MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
-            }
-            catch (TimeoutException )
-            {
-                MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
-            }
-            catch (CommunicationException)
-            {
+                Debug.WriteLine($"[RankinPage.IsFriend.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
             }
 
@@ -223,8 +220,6 @@ namespace DamasChinas_Client.UI.Pages
         private sealed class RankingItemViewModel
         {
             public int Position { get; set; }
-
-            public string PositionText => $"#{Position}";
 
             public string Username { get; set; }
 

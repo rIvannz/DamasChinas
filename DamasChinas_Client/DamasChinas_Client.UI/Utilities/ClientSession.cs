@@ -1,8 +1,9 @@
-using System;
-using System.ServiceModel;
-using System.Security.Cryptography;
 using DamasChinas_Client.UI.LogInServiceProxy;
 using DamasChinas_Client.UI.SessionServiceProxy;
+using System;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.ServiceModel;
 
 namespace DamasChinas_Client.UI.Utilities
 {
@@ -256,7 +257,12 @@ namespace DamasChinas_Client.UI.Utilities
         {
             MarkIntentionalDisconnect();
 
-            try { ResetAllConnections(); } catch { }
+            try { ResetAllConnections(); }
+            catch 
+            {
+                Debug.WriteLine($"[ClientSeccion.Clear.fail]");
+
+            }
 
             CloseClientSafely(LoginClient);
             CloseClientSafely(SessionClient);
@@ -274,7 +280,10 @@ namespace DamasChinas_Client.UI.Utilities
         {
             MarkIntentionalDisconnect();
 
-            try { ResetAllConnections(); } catch { }
+            try { ResetAllConnections(); } catch
+            {
+                Debug.WriteLine($"[ClientSeccion.ClearForced.fail]");
+            }
 
             AbortSafely(LoginClient);
             AbortSafely(SessionClient);

@@ -269,7 +269,6 @@ namespace DamasChinas_Client.UI.Pages
             if (string.Equals(vm.Username, _username, StringComparison.OrdinalIgnoreCase))
                 return;
 
-            // ? No se reporta a invitados
             if (ClientSession.IsGuestUsername(vm.Username))
             {
                 MessageHelper.ShowPopup(

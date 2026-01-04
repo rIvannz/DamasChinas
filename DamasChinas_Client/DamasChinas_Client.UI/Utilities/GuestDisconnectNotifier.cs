@@ -1,8 +1,9 @@
-﻿using System;
+﻿using DamasChinas_Client.UI.Pages;
+using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using DamasChinas_Client.UI.Pages;
 
 namespace DamasChinas_Client.UI.Utilities
 {
@@ -18,16 +19,20 @@ namespace DamasChinas_Client.UI.Utilities
         public static void TryNotifyAndGoHome(string messageKeyOrCode)
         {
             if (ClientSession.IsIntentionalDisconnect)
+            {
                 return;
-
+            }
             if (Interlocked.Exchange(ref _notified, 1) == 1)
+            {
                 return;
-
+            }
             ClientSession.MarkIntentionalDisconnect();
 
             var dispatcher = Application.Current?.Dispatcher;
             if (dispatcher == null)
+            {
                 return;
+            }
 
             dispatcher.BeginInvoke(new Action(() =>
             {
@@ -38,14 +43,17 @@ namespace DamasChinas_Client.UI.Utilities
                 }
                 catch
                 {
-                    try
-                    {
                         MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-                    }
-                    catch { }
                 }
 
-                try { ClientSession.ClearForced(); } catch { }
+                try
+                {
+                    ClientSession.ClearForced();
+                }
+                catch 
+                {
+                    Debug.WriteLine($"[GuestDisconectNotifier.BeginInvoke.fail]");
+                }
 
                 AppNavigator.NavigateToRoot(new MainWindow());
             }), DispatcherPriority.Normal);
