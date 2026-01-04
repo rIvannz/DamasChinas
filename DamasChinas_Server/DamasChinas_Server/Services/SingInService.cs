@@ -2,6 +2,7 @@ using DamasChinas_Server.Common;
 using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Logic;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilidades;
 using DamasChinas_Server.Utilities;
@@ -11,9 +12,14 @@ using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ServiceModel;
 
 namespace DamasChinas_Server
 {
+    [DbGuardBehavior]
+    [ServiceBehavior(
+        InstanceContextMode = InstanceContextMode.PerSession,
+        ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class SingInService : ISingInService
     {
         private static readonly Dictionary<string, (string Code, DateTime CreatedUtc)> _codes =

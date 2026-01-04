@@ -1,5 +1,5 @@
-﻿using System;
-using DamasChinas_Client.UI.GuestSessionServiceProxy;
+﻿using DamasChinas_Client.UI.GuestSessionServiceProxy;
+using System;
 
 namespace DamasChinas_Client.UI.Callbacks
 {

@@ -44,6 +44,8 @@ namespace DamasChinas_Client.UI.Utilities
 
 
         public const string ServerUnavailable = "msg_ServerUnavailable";
+        public const string DatabaseUnavailable = "msg_DatabaseUnavailable";
+
         public const string NetworkLatency = "msg_NetworkLatency";
         public const string UnknownError = "msg_UnknownError";
 

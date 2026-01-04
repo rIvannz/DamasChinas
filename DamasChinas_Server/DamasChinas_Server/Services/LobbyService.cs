@@ -10,6 +10,7 @@ using DamasChinas_Shared.Contracts.Dtos;
 
 namespace DamasChinas_Server.Services
 {
+    [DbGuardBehavior]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class LobbyService : ILobbyService
     {

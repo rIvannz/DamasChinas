@@ -8,6 +8,7 @@ using DamasChinas_Server.Logic;
 
 namespace DamasChinas_Server.Services
 {
+    [DbGuardBehavior]
     [ServiceBehavior(
         InstanceContextMode = InstanceContextMode.PerSession,
         ConcurrencyMode = ConcurrencyMode.Reentrant)]

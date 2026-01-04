@@ -1,16 +1,18 @@
-﻿using System;
+﻿using DamasChinas_Server.Common;
+using DamasChinas_Server.Dtos;
+using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Logic;
+using DamasChinas_Server.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.ServiceModel;
-using DamasChinas_Server.Common;
-using DamasChinas_Server.Dtos;
-using DamasChinas_Server.Interfaces;
-using DamasChinas_Server.Repositories;
 
 namespace DamasChinas_Server.Services
 {
+    [DbGuardBehavior]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     public class RankingService : IRankingService
     {

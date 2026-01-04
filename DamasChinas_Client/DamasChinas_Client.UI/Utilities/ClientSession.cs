@@ -78,7 +78,7 @@ namespace DamasChinas_Client.UI.Utilities
         {
             if (_currentProfile != null && IsGuest)
             {
-                return; 
+                return;
             }
 
             string guestName = GenerateGuestUsername();
@@ -105,9 +105,11 @@ namespace DamasChinas_Client.UI.Utilities
 
             MarkIntentionalDisconnect();
 
-            try {
+            try
+            {
                 ResetAllConnections();
-            } catch
+            }
+            catch
             {
                 MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
             }
@@ -183,9 +185,10 @@ namespace DamasChinas_Client.UI.Utilities
         public static void ResetAllConnections()
         {
             try
-            { 
+            {
                 FriendNotificationManager.Reset();
-            } catch
+            }
+            catch
             {
                 MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
             }
@@ -198,7 +201,7 @@ namespace DamasChinas_Client.UI.Utilities
                 MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);
             }
             try
-            { 
+            {
                 GuestSessionNotificationManager.Reset();
             }
             catch
@@ -322,9 +325,10 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                try {
-                    client.Abort(); 
-                } 
+                try
+                {
+                    client.Abort();
+                }
                 catch
                 {
                     MessageHelper.ShowPopup(MessageKeys.UserNotFound, PopupType.Error);

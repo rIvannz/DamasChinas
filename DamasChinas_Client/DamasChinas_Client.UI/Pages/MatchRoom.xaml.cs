@@ -579,7 +579,7 @@ namespace DamasChinas_Client.UI.Pages
             };
         }
 
-        private void SendMove(Point origin, Point dest)
+        private async void SendMove(Point origin, Point dest)
         {
             if (_proxy == null || _proxy.State != CommunicationState.Opened)
             {
@@ -590,7 +590,8 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                var result = _proxy.MovePiece(req);
+               
+                var result = await System.Threading.Tasks.Task.Run(() => _proxy.MovePiece(req));
 
                 if (!result.Success)
                 {
@@ -599,12 +600,24 @@ namespace DamasChinas_Client.UI.Pages
 
                 DeselectPiece();
             }
+            catch (FaultException)
+            {
+        
+                MessageHelper.ShowPopup(MessageKeys.DatabaseUnavailable, PopupType.Error);
+                NavigateToMenu();
+            }
             catch (Exception ex) when (
                 ex is EndpointNotFoundException ||
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                NavigateToMenu();
+            }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                NavigateToMenu();
             }
         }
 
@@ -615,7 +628,7 @@ namespace DamasChinas_Client.UI.Pages
             if (ClientSession.IsGuest)
             {
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
                     PopupType.Info
                 );
                 txtChatInput.Clear();

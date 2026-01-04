@@ -12,14 +12,12 @@ namespace DamasChinas_Client.UI.Utilities
     {
         private const PopupType DefaultType = PopupType.Info;
 
-        // OJO: aquí NO usamos Invoke (bloqueante). Todo será BeginInvoke.
-        // Además: si la desconexión fue intencional, NO dispares acciones de "ServerUnavailable".
+
         private static readonly Dictionary<string, Action> SpecialKeyActions =
             new Dictionary<string, Action>(StringComparer.OrdinalIgnoreCase)
             {
                 { MessageKeys.SessionExpired, () =>
                     {
-                        // Si fue intencional (logout/ban), no hagas redirect “como error”
                         if (ClientSession.IsIntentionalDisconnect)
                             return;
 
@@ -43,6 +41,19 @@ namespace DamasChinas_Client.UI.Utilities
                         });
                     }
                 },
+
+                { MessageKeys.DatabaseUnavailable, () =>
+                    {
+                        if (ClientSession.IsIntentionalDisconnect)
+                            return;
+
+                        SafeUi(() =>
+                        {
+                            try { ClientSession.ClearForced(); } catch { }
+                            AppNavigator.NavigateToRoot(new MainWindow());
+                        });
+                    }
+                },
             };
 
         public static void ShowPopup(string messageKey, PopupType type = DefaultType, bool autoClose = false)
@@ -52,7 +63,7 @@ namespace DamasChinas_Client.UI.Utilities
                 messageKey = MessageKeys.UnknownError;
             }
 
-            // 1) Ejecuta acciones especiales (sin bloquear UI)
+          
             if (SpecialKeyActions.TryGetValue(messageKey, out var action))
             {
                 try
@@ -65,7 +76,7 @@ namespace DamasChinas_Client.UI.Utilities
                 }
             }
 
-            // 2) Muestra el popup SIEMPRE en UI thread y sin Invoke
+          
             SafeUi(() =>
             {
                 string message = MessageTranslator.GetLocalizedMessage(messageKey);
@@ -80,8 +91,6 @@ namespace DamasChinas_Client.UI.Utilities
                     return;
                 }
 
-                // Nota: ShowDialog bloquea (es modal), pero aquí ya estás en UI thread correctamente.
-                // Si aun así te “congela” por llamadas consecutivas, se puede migrar a Show() + autoclose.
                 popup.ShowDialog();
             });
         }
@@ -100,7 +109,6 @@ namespace DamasChinas_Client.UI.Utilities
 
         public static bool ShowConfirm(string messageResourceKey)
         {
-            // Confirm necesita ser modal y retornar bool, así que sí o sí debe correrse en UI thread.
             if (Application.Current?.Dispatcher == null)
             {
                 return false;

@@ -1,6 +1,7 @@
 ﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Logic;
 using System;
 using System.Collections.Concurrent;
 using System.Data.Entity.Core;
@@ -8,10 +9,16 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.ServiceModel;
 
+
+
 namespace DamasChinas_Server
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    [DbGuardBehavior]
+    [ServiceBehavior(
+       InstanceContextMode = InstanceContextMode.PerSession,
+       ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class ChatService : IChatService
+
     {
         private static readonly ConcurrentDictionary<string, IChatCallback> Clients =
             new ConcurrentDictionary<string, IChatCallback>();

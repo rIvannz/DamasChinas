@@ -1,9 +1,11 @@
 ﻿using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Logic;
 using System;
 using System.ServiceModel;
 
 namespace DamasChinas_Server.Services
 {
+    [DbGuardBehavior]
     [ServiceBehavior(
         InstanceContextMode = InstanceContextMode.PerSession,
         ConcurrencyMode = ConcurrencyMode.Reentrant)]

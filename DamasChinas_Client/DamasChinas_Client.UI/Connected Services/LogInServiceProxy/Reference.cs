@@ -364,6 +364,9 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         RankingUnavailable = 2003,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseUnavailable = 2004,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
