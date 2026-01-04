@@ -65,11 +65,7 @@ namespace DamasChinas_Client.UI.Utilities
                 CurrentCultureCode = cultureCode;
                 UpdateCulture(cultureCode);
 
-                if (save)
-                {
-                    Properties.Settings.Default.languageCode = cultureCode;
-                    Properties.Settings.Default.Save();
-                }
+                
             }
             catch (Exception ex)
             {

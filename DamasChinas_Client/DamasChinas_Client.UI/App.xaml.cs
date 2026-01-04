@@ -11,9 +11,6 @@ namespace DamasChinas_Client.UI
         {
             base.OnStartup(e);
 
-
-            LanguageManager.ApplySavedLanguage();
-
             SoundManager.Initialize();
         }
 
