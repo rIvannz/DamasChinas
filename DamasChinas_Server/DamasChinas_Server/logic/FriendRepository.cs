@@ -98,21 +98,6 @@ namespace DamasChinas_Server
             }
         }
 
-
-        private static void EnsurePendingRequestExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
-        {
-            bool exists = db.solicitudes_amistad.Any(s =>
-                s.id_emisor == idUserSender &&
-                s.id_receptor == idUserReciever &&
-                s.estado == PendingStatus);
-
-            if (!exists)
-            {
-                throw new RepositoryValidationException(MessageCode.FriendsLoadError);
-            }
-        }
-
-
         private static bool FriendshipExists(damas_chinasEntities db, int idUserSender, int idUserReciever)
         {
 
