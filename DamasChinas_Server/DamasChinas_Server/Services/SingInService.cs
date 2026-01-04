@@ -188,7 +188,7 @@ namespace DamasChinas_Server
                 }
                 catch (SmtpException ex)
                 {
-                    _log.Warn($"[SendWelcomeEmail] SMTP error sending welcome email to {user.Username}", ex);
+                    // Intentionally ignored (fire-and-forget  task).
                 }
             });
         }

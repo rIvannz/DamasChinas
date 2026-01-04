@@ -117,7 +117,12 @@ namespace DamasChinas_Server.Services
                     {
                         action(entry.Value.Callback);
                     }
-                    catch (Exception ex)
+                    catch (CommunicationException ex)
+                    {
+                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        ActiveSessions.TryRemove(entry.Key, out _);
+                    }
+                    catch (InvalidOperationException ex)
                     {
                         _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
                         ActiveSessions.TryRemove(entry.Key, out _);
@@ -125,6 +130,32 @@ namespace DamasChinas_Server.Services
                 }
             }, OperationForEachSession);
         }
+
+        public static void ForEachSession(Action<string, ISessionCallback> action)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            ExecuteOperation(() =>
+            {
+                foreach (var kvp in ActiveSessions.ToArray())
+                {
+                    try
+                    {
+                        action(kvp.Key, kvp.Value.Callback);
+                    }
+                    catch (CommunicationException ex)
+                    {
+                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        ActiveSessions.TryRemove(kvp.Key, out _);
+                    }
+                }
+            }, OperationForEachSession);
+        }
+
+
 
 
         public static void UpdateSessionUsername(string currentUsername, string newUsername)
@@ -146,31 +177,6 @@ namespace DamasChinas_Server.Services
             }, OperationUpdateSessionUsername);
         }
 
-
-
-        public static void ForEachSession(Action<string, ISessionCallback> action)
-        {
-            if (action == null)
-            {
-                return;
-            }
-
-            ExecuteOperation(() =>
-            {
-                foreach (var kvp in ActiveSessions.ToArray())
-                {
-                    try
-                    {
-                        action(kvp.Key, kvp.Value.Callback);
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
-                        ActiveSessions.TryRemove(kvp.Key, out _);
-                    }
-                }
-            }, OperationForEachSession);
-        }
 
 
 
@@ -199,7 +205,7 @@ namespace DamasChinas_Server.Services
                     _log.Error($"[{context}] ENTITY ERROR: {ex.Message}");
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[{context}] Unexpected exception: {ex.Message}");
             }
@@ -222,7 +228,8 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        
+                        _log.Error($"[SessionManager.ForceDisconnectAll] Expulsión global no posible de ejecutar para un jugador");
+
                     }
 
                     try
@@ -231,7 +238,8 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                       
+                        _log.Error($"[SessionManager.ForceDisconnectAll] Expulsión global no posible de ejecutar para un jugador");
+
                     }
 
                     ActiveSessions.TryRemove(username, out _);
@@ -247,7 +255,6 @@ namespace DamasChinas_Server.Services
             switch (code)
             {
                 case MessageCode.DatabaseUnavailable:
-                    // usa tu key real del cliente
                     return "msg_DatabaseUnavailable";
 
                 case MessageCode.ServerUnavailable:
@@ -290,7 +297,7 @@ namespace DamasChinas_Server.Services
                 _log.Error($"[{context}] ENTITY ERROR: {ex.Message}");
                 return defaultValue;
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[{context}] Unexpected exception: {ex.Message}");
                 return defaultValue;
