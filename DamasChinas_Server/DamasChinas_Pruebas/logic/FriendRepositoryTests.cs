@@ -34,16 +34,21 @@ namespace DamasChinas_Pruebas
         [Fact]
         public void EnsureDifferentUsers_DifferentIds_DoesNotThrow()
         {
-            // Arrange
             var method = typeof(FriendRepository)
-                .GetMethod("EnsureDifferentUsers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                .GetMethod("EnsureDifferentUsers", BindingFlags.NonPublic | BindingFlags.Static);
 
-            // Act
-            var ex = Record.Exception(() => method.Invoke(null, new object[] { 1, 2 }));
+            Assert.NotNull(method);
 
-            // Assert
-            Assert.Null(ex);
+            try
+            {
+                method.Invoke(null, new object[] { 1, 2 });
+            }
+            catch (TargetInvocationException ex)
+            {
+                Assert.Null(ex.InnerException);
+            }
         }
+
 
         [Fact]
         public void EnsureUsersExist_UserMissing_ThrowsUserNotFound()
