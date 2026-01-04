@@ -349,13 +349,10 @@ namespace DamasChinas_Server.Logic
             }
             catch (RepositoryValidationException)
             {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[LobbyManager.ReportPlayer] Error: {ex.Message}", ex);
+                _log.Error($"[LobbyManager.ReportPlayer] Error");
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
+
         }
 
         private static bool IsValidReportRequest(ReportPlayerRequest request)

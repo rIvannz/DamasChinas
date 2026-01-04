@@ -14,6 +14,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Runtime.Remoting.Contexts;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -173,9 +174,14 @@ namespace DamasChinas_Server
 
         private static string GenerateCode()
         {
-            return new Random()
-                .Next(1000, 10000)
-                .ToString();
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] bytes = new byte[2];
+                rng.GetBytes(bytes);
+
+                int value = BitConverter.ToUInt16(bytes, 0) % 9000 + 1000;
+                return value.ToString();
+            }
         }
 
         private static void SendWelcomeEmail(UserInfo user, string cultureCode)

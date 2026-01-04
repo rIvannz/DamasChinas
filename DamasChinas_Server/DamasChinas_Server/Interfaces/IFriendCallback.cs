@@ -2,6 +2,7 @@
 
 namespace DamasChinas_Server.Interfaces
 {
+    [ServiceContract]
     public interface IFriendCallback
     {
         [OperationContract(IsOneWay = true)]

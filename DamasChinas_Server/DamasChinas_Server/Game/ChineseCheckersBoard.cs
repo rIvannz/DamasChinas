@@ -14,17 +14,6 @@ namespace DamasChinas_Server.Game
         private const int FirstDistance = 1;
         private const string CenterZoneName = "Center";
 
-        private static readonly IReadOnlyList<(HexCoordinate Direction, PlayerColor Zone)> ZoneDefinitions =
-            new List<(HexCoordinate, PlayerColor)>
-            {
-                (new HexCoordinate(1, -1, 0), PlayerColor.Red),
-                (new HexCoordinate(-1, 1, 0), PlayerColor.Green),
-                (new HexCoordinate(0, -1, 1), PlayerColor.Blue),
-                (new HexCoordinate(0, 1, -1), PlayerColor.Yellow),
-                (new HexCoordinate(1, 0, -1), PlayerColor.Orange),
-                (new HexCoordinate(-1, 0, 1), PlayerColor.Purple)
-            };
-
         private readonly Dictionary<HexCoordinate, HexCell> _cells;
 
         public ChineseCheckersBoard(int radius = DefaultBoardRadius)
@@ -168,77 +157,97 @@ namespace DamasChinas_Server.Game
 
         private static IEnumerable<HexCell> GenerateCompleteBoard(int radius)
         {
-         
             int centerRadius = radius;
-            int maxCoord = centerRadius * 2; 
+            int maxCoord = centerRadius * 2;
 
             var cells = new List<HexCell>();
 
+            foreach (var coord in GenerateValidCoordinates(maxCoord))
+            {
+                string zone = ResolveZone(coord, centerRadius);
+
+                if (zone == null)
+                {
+                    continue;
+                }
+
+                cells.Add(new HexCell(coord, zone));
+            }
+
+            return cells;
+        }
+
+        private static IEnumerable<HexCoordinate> GenerateValidCoordinates(int maxCoord)
+        {
             for (int x = -maxCoord; x <= maxCoord; x++)
             {
                 for (int y = -maxCoord; y <= maxCoord; y++)
                 {
                     int z = -x - y;
 
-                  
                     if (x + y + z != 0)
                     {
                         continue;
                     }
 
-                    int ax = Math.Abs(x);
-                    int ay = Math.Abs(y);
-                    int az = Math.Abs(z);
-                    int max = Math.Max(ax, Math.Max(ay, az));
+                    yield return new HexCoordinate(x, y, z);
+                }
+            }
+        }
 
-                    string zone;
+        private static string ResolveZone(HexCoordinate coord, int centerRadius)
+        {
+            int x = coord.X;
+            int y = coord.Y;
+            int z = coord.Z;
 
-                    if (max <= centerRadius)
-                    {
-                        zone = CenterZoneName; 
-                    }
-                    else
-                    {
-               
-                        int[] sorted = { ax, ay, az };
-                        Array.Sort(sorted);
+            int ax = Math.Abs(x);
+            int ay = Math.Abs(y);
+            int az = Math.Abs(z);
+            int max = Math.Max(ax, Math.Max(ay, az));
 
-                        bool isArmCell =
-                            max > centerRadius &&
-                            max <= centerRadius * 2 &&
-                            sorted[1] <= centerRadius; 
+            string zone;
 
-                        if (!isArmCell)
-                        {
-                            continue;
-                        }
+            if (max <= centerRadius)
+            {
+                zone = CenterZoneName;
+            }
+            else
+            {
+                int[] sorted = { ax, ay, az };
+                Array.Sort(sorted);
 
-                        if (az == max)
-                        {
-                            zone = (z > 0)
-                                ? PlayerColor.Red.ToString()
-                                : PlayerColor.Green.ToString();
-                        }
-                        else if (ay == max)
-                        {
-                            zone = (y > 0)
-                                ? PlayerColor.Blue.ToString()
-                                : PlayerColor.Yellow.ToString();
-                        }
-                        else 
-                        {
-                            zone = (x > 0)
-                                ? PlayerColor.Orange.ToString()
-                                : PlayerColor.Purple.ToString();
-                        }
-                    }
+                bool isArmCell =
+                    max > centerRadius &&
+                    max <= centerRadius * 2 &&
+                    sorted[1] <= centerRadius;
 
-                    cells.Add(new HexCell(new HexCoordinate(x, y, z), zone));
+                if (!isArmCell)
+                {
+                    return null;
+                }
+
+                if (az == max)
+                {
+                    zone = (z > 0)
+                        ? PlayerColor.Red.ToString()
+                        : PlayerColor.Green.ToString();
+                }
+                else if (ay == max)
+                {
+                    zone = (y > 0)
+                        ? PlayerColor.Blue.ToString()
+                        : PlayerColor.Yellow.ToString();
+                }
+                else
+                {
+                    zone = (x > 0)
+                        ? PlayerColor.Orange.ToString()
+                        : PlayerColor.Purple.ToString();
                 }
             }
 
-            return cells;
+            return zone;
         }
-
     }
-}
+ }

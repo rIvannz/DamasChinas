@@ -74,7 +74,6 @@ namespace DamasChinas_Server
         
                 SaveChangesSafely(db);
 
-                return true;
             });
         }
 
@@ -96,13 +95,13 @@ namespace DamasChinas_Server
             }
         }
 
-
-        private T ExecuteInContext<T>(Func<IApplicationDbContext, T> operation)
+        private void ExecuteInContext(Action<IApplicationDbContext> operation)
         {
             using (var db = _contextFactory())
             {
-                return operation(db);
+                operation(db);
             }
         }
+
     }
 }

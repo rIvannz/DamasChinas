@@ -186,7 +186,8 @@ namespace DamasChinas_Server.Utilidades
             {
                 Port = SmtpPort,
                 Credentials = new NetworkCredential(SenderEmail, SenderPassword),
-                EnableSsl = EnableSsl
+                EnableSsl = true
+
             })
             using (var message = new MailMessage())
             {

@@ -1,7 +1,12 @@
-﻿using DamasChinas_Server.Dtos;
-using DamasChinas_Shared.Contracts.Dtos;
+﻿using DamasChinas_Server.Common;
+using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Utilidades;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace DamasChinas_Server.GameRepositories
@@ -42,7 +47,7 @@ namespace DamasChinas_Server.GameRepositories
                 };
 
                 db.Sanciones.Add(sanction);
-                SaveChangesSafely(db);
+                SaveChangeesSafely(db);
             }
         }
 
@@ -65,7 +70,7 @@ namespace DamasChinas_Server.GameRepositories
                 if (active.fecha_fin.HasValue && active.fecha_fin.Value <= now)
                 {
                     active.activo = false;
-                    SaveChangesSafely(db);
+                    SaveChangeesSafely(db);
                     return false;
                 }
 
@@ -98,7 +103,7 @@ namespace DamasChinas_Server.GameRepositories
                 if (active.fecha_fin.HasValue && active.fecha_fin.Value <= now)
                 {
                     active.activo = false;
-                    SaveChangesSafely(db);
+                    SaveChangeesSafely(db);
 
                     return new BanInfoDto
                     {
@@ -120,11 +125,6 @@ namespace DamasChinas_Server.GameRepositories
                 };
             }
         }
-
-        /// <summary>
-        /// Aplica sanción SOLO cuando se llega EXACTAMENTE a 3/6/9 o >=12.
-        /// Si ya existe una sanción activa, no la vuelve a crear.
-        /// </summary>
         public BanInfoDto ApplyBanFromReports(int userId, int totalReports, string reason)
         {
             if (userId <= 0)
@@ -138,7 +138,6 @@ namespace DamasChinas_Server.GameRepositories
                 };
             }
 
-            // Si ya está baneado, NO reaplicar (evita resetear tiempos)
             if (HasActiveBan(userId))
             {
                 var current = GetActiveBanInfo(userId);
@@ -146,7 +145,6 @@ namespace DamasChinas_Server.GameRepositories
                 return current;
             }
 
-            // Solo sancionar en hits exactos: 3, 6, 9, 12+
             if (totalReports >= ReportsPermanentBan)
             {
                 ApplyBan(userId, true, null, reason);
@@ -202,7 +200,6 @@ namespace DamasChinas_Server.GameRepositories
                 };
             }
 
-            // No hay sanción en 1,2,4,5,7,8,10,11...
             return new BanInfoDto
             {
                 IsBanned = false,
@@ -229,15 +226,27 @@ namespace DamasChinas_Server.GameRepositories
             }
         }
 
-        private static void SaveChangesSafely(damas_chinasEntities db)
+        private static void SaveChangeesSafely(damas_chinasEntities db)
         {
             try
             {
                 db.SaveChanges();
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException)
             {
-                throw new Exception($"Sanctions repository error: unable to save changes. {ex.Message}");
+                throw new RepositoryValidationException(MessageCode.DatabaseUnavailable);
+            }
+            catch (DbUpdateException)
+            {
+                throw new RepositoryValidationException(MessageCode.DatabaseUnavailable);
+            }
+            catch (EntityException)
+            {
+                throw new RepositoryValidationException(MessageCode.DatabaseUnavailable);
+            }
+            catch (SqlException)
+            {
+                throw new RepositoryValidationException(MessageCode.DatabaseUnavailable);
             }
         }
     }

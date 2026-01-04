@@ -34,26 +34,19 @@ namespace DamasChinas_Server.Services
             {
                 return _repository.GetTop10Players();
             }
-            catch (SqlException ex)
+            catch (SqlException )
             {
-                Trace.WriteLine($"[RankingService][SQL] {ex.Message}");
                 throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
             }
-            catch (EntityException ex)
+            catch (EntityException )
             {
-                Trace.WriteLine($"[RankingService][EF] {ex.Message}");
                 throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException )
             {
-                Trace.WriteLine($"[RankingService][Timeout] {ex.Message}");
                 throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
             }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"[RankingService][Unexpected] {ex}");
-                throw new FaultException<MessageCode>(MessageCode.RankingUnavailable);
-            }
+
         }
 
     }

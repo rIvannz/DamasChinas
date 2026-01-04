@@ -27,9 +27,9 @@ namespace DamasChinas_Server.Services
                     {
                         cb.PlayerConnected(username);
                     }
-                    catch
+                    catch(CommunicationException )
                     {
-                  
+                        // Intentionally ignored.
                     }
                 }
             });
@@ -49,9 +49,9 @@ namespace DamasChinas_Server.Services
                     {
                         cb.PlayerDisconnected(username);
                     }
-                    catch
+                    catch(CommunicationException)
                     {
-                    
+                        // Intentionally ignored.
                     }
                 }
             });

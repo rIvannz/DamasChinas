@@ -24,6 +24,7 @@ namespace DamasChinas_Pruebas
             int sameId = 5;
 
             // Act
+            Assert.NotNull(method);
             var ex = Record.Exception(() => method.Invoke(null, new object[] { sameId, sameId }));
 
             // Assert
@@ -584,6 +585,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("MapToFriendDto", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             var dto = (FriendDto)method.Invoke(null, new object[] { user });
 
             // Assert
@@ -607,9 +609,11 @@ namespace DamasChinas_Pruebas
                 .GetMethod("MapToFriendDto", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             var dto = (FriendDto)method.Invoke(null, new object[] { user });
 
             // Assert
+
             Assert.Equal(55, dto.IdFriend);
             Assert.Equal("N/A", dto.Username);
             Assert.False(dto.ConnectionState);
@@ -634,10 +638,15 @@ namespace DamasChinas_Pruebas
                 .GetMethod("GetUserIds",
                     BindingFlags.NonPublic | BindingFlags.Instance);
 
+            Assert.NotNull(method);
+
             // Act
+
             var result = ((int receiverId, int senderId))method.Invoke(
                 repo, new object[] { "Receiver", "Sender" }
             );
+            Assert.NotNull(method);
+
 
             // Assert
             Assert.Equal(10, result.receiverId);
@@ -662,6 +671,7 @@ namespace DamasChinas_Pruebas
                 );
 
             // Act
+            Assert.NotNull(method);
             var ex = Assert.Throws<TargetInvocationException>(() =>
                 method.Invoke(repo, new object[] { "User", "User" })
             );
@@ -685,6 +695,8 @@ namespace DamasChinas_Pruebas
 
             var method = typeof(FriendRepository)
                 .GetMethod("ApplyBlock", BindingFlags.NonPublic | BindingFlags.Static);
+
+            Assert.NotNull(method);
 
             // Act
             var ex = Assert.Throws<TargetInvocationException>(() =>
@@ -727,6 +739,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("ApplyBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -757,6 +770,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("ApplyBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 5, 9 });
 
             // Assert
@@ -780,6 +794,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act & Assert
+            Assert.NotNull(method);
             var ex = Assert.Throws<TargetInvocationException>(() =>
                 method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
             );
@@ -804,6 +819,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -828,6 +844,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act & Assert
+            Assert.NotNull(method);
             var ex = Assert.Throws<TargetInvocationException>(() =>
                 method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
             );
@@ -853,6 +870,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -876,6 +894,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -899,6 +918,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -922,6 +942,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -946,6 +967,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -966,6 +988,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             var exception = Record.Exception(() =>
                 method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
             );
@@ -991,6 +1014,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -1014,8 +1038,9 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
-
+            
             // Assert
             Assert.Empty(requests);
         }
@@ -1037,6 +1062,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -1061,6 +1087,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert
@@ -1081,6 +1108,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             var exception = Record.Exception(() =>
                 method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
             );
@@ -1108,6 +1136,7 @@ namespace DamasChinas_Pruebas
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            Assert.NotNull(method);
             method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
             // Assert

@@ -2,13 +2,14 @@
 using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Logic;
 using DamasChinas_Server.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 using System.ServiceModel;
-using DamasChinas_Server.Logic;
 
 namespace DamasChinas_Server.Services
 {
@@ -151,8 +152,8 @@ namespace DamasChinas_Server.Services
             }
             catch (EntityException ex) when (ex.InnerException is SqlException sqlEx)
             {
-                _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
-                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+                _log.Error($"[{context}] EntitySQL ERROR {sqlEx.Number}", sqlEx);
+                return OperationResult.Fail("Entitysql error.", MessageCode.ServerUnavailable);
             }
             catch (Exception ex)
             {
@@ -177,7 +178,9 @@ namespace DamasChinas_Server.Services
                 {
                     if (!_passwordCodes.TryGetValue(normalizedEmail, out var data))
                     {
-                        return OperationResult.Fail("Code not found.", MessageCode.VerificationCodeNotFound);
+                        return OperationResult.Fail(
+                            "Code not found.",
+                            MessageCode.VerificationCodeNotFound);
                     }
 
                     storedCode = data.Code;
@@ -187,16 +190,27 @@ namespace DamasChinas_Server.Services
                 if (DateTime.UtcNow - createdUtc > TimeSpan.FromMinutes(5))
                 {
                     RemoveStoredPasswordCode(normalizedEmail);
-                    return OperationResult.Fail("Code expired.", MessageCode.VerificationCodeExpired);
+                    return OperationResult.Fail(
+                        "Code expired.",
+                        MessageCode.VerificationCodeExpired);
                 }
 
-                
+                if (!string.Equals(storedCode, code, StringComparison.Ordinal))
+                {
+                    return OperationResult.Fail(
+                        "Invalid code.",
+                        MessageCode.VerificationCodeInvalid);
+                }
+
+                RemoveStoredPasswordCode(normalizedEmail);
 
                 bool ok = _repository.ChangePasswordbyemail(normalizedEmail, newPassword);
 
                 if (!ok)
                 {
-                    return OperationResult.Fail("Failed updating password.", MessageCode.UnknownError);
+                    return OperationResult.Fail(
+                        "Failed updating password.",
+                        MessageCode.UnknownError);
                 }
 
                 return OperationResult.Ok();
@@ -204,19 +218,26 @@ namespace DamasChinas_Server.Services
             catch (SqlException ex)
             {
                 _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
-                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+                return OperationResult.Fail(
+                    "SQL error.",
+                    MessageCode.ServerUnavailable);
             }
             catch (EntityException ex) when (ex.InnerException is SqlException sqlEx)
             {
-                _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
-                return OperationResult.Fail("SQL error.", MessageCode.ServerUnavailable);
+                _log.Error($"[{context}] EntitySQL ERROR {sqlEx.Number}", sqlEx);
+                return OperationResult.Fail(
+                    "Entitysql error.",
+                    MessageCode.ServerUnavailable);
             }
             catch (Exception ex)
             {
                 _log.Error($"[{context}] Unexpected exception {ex.Message}", ex);
-                return OperationResult.Fail("Unexpected error.", MessageCode.UnknownError);
+                return OperationResult.Fail(
+                    "Unexpected error.",
+                    MessageCode.UnknownError);
             }
         }
+
 
         private static void RemoveStoredPasswordCode(string email)
         {
@@ -231,7 +252,14 @@ namespace DamasChinas_Server.Services
 
         private static string GenerateVerificationCode()
         {
-            return new Random().Next(1000, 10000).ToString();
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] bytes = new byte[2];
+                rng.GetBytes(bytes);
+
+                int value = BitConverter.ToUInt16(bytes, 0) % 9000 + 1000;
+                return value.ToString();
+            }
         }
 
         private static OperationResult ExecuteAccountOperation(
@@ -268,11 +296,11 @@ namespace DamasChinas_Server.Services
             {
                 if (ex.InnerException is SqlException sqlEx)
                 {
-                    LogStatic.Error($"[{context}] SQL ERROR {sqlEx.Number}");
+                    LogStatic.Error($"[{context}] Entitysql {sqlEx.Number}");
 
                     result.Success = false;
                     result.Code = fatalCode;
-                    result.TechnicalDetail = $"SQL error ({sqlEx.Number})";
+                    result.TechnicalDetail = $"EntitySql error ({sqlEx.Number})";
                     return result;
                 }
 

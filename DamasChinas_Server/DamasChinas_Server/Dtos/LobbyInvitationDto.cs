@@ -1,14 +1,18 @@
 ﻿using System.Runtime.Serialization;
 
-[DataContract]
-public sealed class LobbyInvitationDto
+
+namespace DamasChinas_Server.Dtos
 {
-    [DataMember]
-    public int LobbyCode { get; set; }
+    [DataContract]
+    public sealed class LobbyInvitationDto
+    {
+        [DataMember]
+        public int LobbyCode { get; set; }
 
-    [DataMember]
-    public string HostUsername { get; set; }
+        [DataMember]
+        public string HostUsername { get; set; }
 
-    [DataMember]
-    public int MaxPlayers { get; set; }
+        [DataMember]
+        public int MaxPlayers { get; set; }
+    }
 }

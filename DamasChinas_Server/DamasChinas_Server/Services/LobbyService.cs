@@ -204,7 +204,7 @@ namespace DamasChinas_Server.Services
             return OperationContext.Current.GetCallbackChannel<ILobbyCallback>();
         }
 
-        private ILobbyCallback ResolveCallbackForUser(string username)
+        private static ILobbyCallback ResolveCallbackForUser(string username)
         {
             return LobbySessionManager.Get(username);
         }
