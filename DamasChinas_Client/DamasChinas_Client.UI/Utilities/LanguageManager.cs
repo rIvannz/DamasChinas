@@ -15,9 +15,35 @@ namespace DamasChinas_Client.UI.Utilities
         private const string ThemePath = "Styles/Theme.xaml";
         private const string ButtonsPath = "Styles/Buttons.xaml";
 
-        public static string CurrentCultureCode { get; private set; } = "en-US";
+        private const string DefaultCulture = "en-US";
+
+        public static string CurrentCultureCode { get; private set; } = DefaultCulture;
+
+        public static void ApplySavedLanguage()
+        {
+            try
+            {
+                string saved = Properties.Settings.Default.languageCode;
+
+                if (string.IsNullOrWhiteSpace(saved))
+                {
+                    saved = DefaultCulture;
+                }
+
+                ChangeLanguageInternal(saved, save: false);
+            }
+            catch
+            {
+                // No revientes la app por idioma
+            }
+        }
 
         public static void ChangeLanguage(string cultureCode)
+        {
+            ChangeLanguageInternal(cultureCode, save: true);
+        }
+
+        private static void ChangeLanguageInternal(string cultureCode, bool save)
         {
             try
             {
@@ -37,14 +63,12 @@ namespace DamasChinas_Client.UI.Utilities
 
                 CurrentCultureCode = cultureCode;
                 UpdateCulture(cultureCode);
-            }
-            catch (InvalidOperationException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
-            }
-            catch (ArgumentException)
-            {
-                MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
+
+                if (save)
+                {
+                    Properties.Settings.Default.languageCode = cultureCode;
+                    Properties.Settings.Default.Save();
+                }
             }
             catch
             {
@@ -67,19 +91,13 @@ namespace DamasChinas_Client.UI.Utilities
             string code = cultureCode.Trim();
 
             if (string.Equals(code, "es-MX", StringComparison.OrdinalIgnoreCase))
-            {
                 return LangEs;
-            }
 
             if (string.Equals(code, "pt-BR", StringComparison.OrdinalIgnoreCase))
-            {
                 return LangPt;
-            }
 
             if (string.Equals(code, "fr-FR", StringComparison.OrdinalIgnoreCase))
-            {
                 return LangFr;
-            }
 
             return LangEn;
         }
@@ -89,9 +107,7 @@ namespace DamasChinas_Client.UI.Utilities
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
             {
                 if (dictionary?.Source == null)
-                {
                     continue;
-                }
 
                 string src = dictionary.Source.OriginalString;
 
@@ -105,9 +121,7 @@ namespace DamasChinas_Client.UI.Utilities
             return null;
         }
 
-        private static void ReplaceOrAddDictionary(
-            ResourceDictionary newDictionary,
-            ResourceDictionary existingDictionary)
+        private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)
         {
             if (existingDictionary == null)
             {
@@ -145,9 +159,7 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static void UpdateCulture(string cultureCode)
         {
-            CultureInfo culture = new CultureInfo(cultureCode);
-
-            CurrentCultureCode = cultureCode;
+            var culture = new CultureInfo(cultureCode);
 
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;

@@ -183,6 +183,11 @@
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\AppNavigator.cs" />
     <Compile Include="Utilities\ClientValidationException.cs" />
     <Compile Include="Utilities\FriendList.cs" />
@@ -559,7 +564,10 @@
     <None Include="Connected Services\SingInServiceProxy\SingInService1.wsdl" />
     <None Include="Properties\DataSources\DamasChinas_Client.Logic.LobbyServiceProxy.Lobby.datasource" />
     <None Include="Properties\DataSources\DamasChinas_Shared.Contracts.Dtos.BanInfoDto.datasource" />
-    <None Include="Properties\Settings.settings" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>

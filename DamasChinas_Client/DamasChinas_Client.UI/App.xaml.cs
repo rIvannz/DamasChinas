@@ -1,7 +1,6 @@
-using DamasChinas_Client.UI.SessionServiceProxy;
-using DamasChinas_Client.UI.Utilities;
 using System.ServiceModel;
 using System.Windows;
+using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI
 {
@@ -9,6 +8,11 @@ namespace DamasChinas_Client.UI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
+
+
+            LanguageManager.ApplySavedLanguage();
+
             SoundManager.Initialize();
         }
 
@@ -45,7 +49,6 @@ namespace DamasChinas_Client.UI
             }
             catch
             {
-                // Ignorar errores al cerrar
             }
 
             base.OnExit(e);
