@@ -73,10 +73,11 @@ namespace DamasChinas_Server.Logic
                 {
                     try
                     {
-                        comm.Abort(); // <- patada real
+                        comm.Abort(); 
                     }
                     catch
                     {
+                        _log.Info($"[GlobalSessionManager] Ignored exception during forced disconnect:");
                     }
                 }
 
