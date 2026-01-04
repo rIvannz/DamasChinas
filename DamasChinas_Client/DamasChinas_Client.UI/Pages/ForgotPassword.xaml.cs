@@ -111,11 +111,12 @@ namespace DamasChinas_Client.UI.Pages
 
 
                 var client = new AccountManagerClient();
-                var result = client.ConfirmPasswordChange(
-                    txtEmail.Text.Trim().ToLower(),
-                    _verificationCode,
-                     Password
+                var result = await client.ConfirmPasswordChangeAsync(
+                txtEmail.Text.Trim().ToLower(),
+                 _verificationCode,
+                 Password
                 );
+
 
                 if (!result.Success)
                 {
@@ -149,12 +150,6 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Warning);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ForgotPassword.OnChangePasswordClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 

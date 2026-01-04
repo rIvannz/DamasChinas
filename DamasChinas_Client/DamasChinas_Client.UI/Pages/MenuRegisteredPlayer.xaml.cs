@@ -11,7 +11,7 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class MenuRegisteredPlayer : Page
     {
-        public static bool ForceAvatarRefresh = false;
+        private static bool ForceAvatarRefresh = false;
 
         private readonly PublicProfile _profile;
         private  int _userId;
@@ -37,6 +37,7 @@ namespace DamasChinas_Client.UI.Pages
              ex is CommunicationException ||
              ex is TimeoutException)
             {
+                Debug.WriteLine($"[MRP.MenuRegisteredPlayer] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
             }
 
@@ -92,6 +93,7 @@ namespace DamasChinas_Client.UI.Pages
              ex is CommunicationException ||
              ex is TimeoutException)
             {
+                Debug.WriteLine($"[MRP.LoadAvatar] {ex}");
                 MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
             }
 
@@ -116,6 +118,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
+                Debug.WriteLine($"[MRP.OnHowToPlayClick.fail] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
             catch (Exception ex) when (
@@ -123,6 +126,7 @@ namespace DamasChinas_Client.UI.Pages
              ex is CommunicationException ||
              ex is TimeoutException)
             {
+                Debug.WriteLine($"[MRP.OnHowToPlayClick.fail] {ex}");
                 MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
             }
         }
@@ -147,8 +151,12 @@ namespace DamasChinas_Client.UI.Pages
 
                 NavigationService?.Navigate(new RankingPage());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+             ex is EndpointNotFoundException ||
+             ex is CommunicationException ||
+             ex is TimeoutException)
             {
+                Debug.WriteLine($"[MRP.OnstatickClick.fail] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Error);
             }
         }
@@ -234,6 +242,7 @@ namespace DamasChinas_Client.UI.Pages
             ex is CommunicationException ||
             ex is TimeoutException)
             {
+                Debug.WriteLine($"[MRP.OnCreateGameClick.fail] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);
             }
         }

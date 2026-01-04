@@ -1,19 +1,20 @@
-﻿using DamasChinas_Client.UI.LobbyServiceProxy;
+﻿using DamasChinas_Client.UI.Callbacks;
+using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.MatchServiceProxy;
-using DamasChinas_Client.UI.Callbacks;
 using DamasChinas_Client.UI.Utilities;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using DamasChinas_Shared.Contracts.Dtos;
 using System.Windows.Shapes;
-
 using AccountProxy = DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
@@ -216,11 +217,9 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
+                Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+
             }
         }
 
@@ -295,7 +294,8 @@ namespace DamasChinas_Client.UI.Pages
 
         private void DrawPlayerLabels()
         {
-           
+            Debug.WriteLine($"[MatchRoom.DrawPlayerLabels.fail]");
+
         }
 
         private static Point HexToPixel(int q, int r)
@@ -334,6 +334,7 @@ namespace DamasChinas_Client.UI.Pages
 
             if (!_holesVisuals.TryGetValue(point, out var hole))
             {
+                Debug.WriteLine($"[MatchRoom.PlaceMarbel.fail] {hole}");
                 return;
             }
 
@@ -485,7 +486,7 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public  void HandleError(string msgKey)
+        public static void HandleError(string msgKey)
         {
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }
@@ -579,7 +580,7 @@ namespace DamasChinas_Client.UI.Pages
             };
         }
 
-        private async void SendMove(Point origin, Point dest)
+        private async Task SendMove(Point origin, Point dest)
         {
             if (_proxy == null || _proxy.State != CommunicationState.Opened)
             {
@@ -612,11 +613,8 @@ namespace DamasChinas_Client.UI.Pages
                 ex is TimeoutException)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-                NavigateToMenu();
-            }
-            catch
-            {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
+
                 NavigateToMenu();
             }
         }
@@ -745,8 +743,14 @@ namespace DamasChinas_Client.UI.Pages
             if (ClientSession.IsGuest)
             {
                 var target = new MenuGuest();
-                if (NavigationService != null) NavigationService.Navigate(target);
-                else Application.Current.MainWindow.Content = target;
+                if (NavigationService != null)
+                {
+                    NavigationService.Navigate(target);
+                }
+                else
+                {
+                    Application.Current.MainWindow.Content = target;
+                }
                 return;
             }
 
@@ -761,8 +765,14 @@ namespace DamasChinas_Client.UI.Pages
 
             var targetPage = new MenuRegisteredPlayer(menuProfile);
 
-            if (NavigationService != null) NavigationService.Navigate(targetPage);
-            else Application.Current.MainWindow.Content = targetPage;
+            if (NavigationService != null)
+            {
+                NavigationService.Navigate(targetPage);
+            }
+            else
+            {
+                Application.Current.MainWindow.Content = targetPage;
+            }
         }
 
 
@@ -799,6 +809,7 @@ namespace DamasChinas_Client.UI.Pages
                  ex is CommunicationException ||
                  ex is TimeoutException)
                 {
+                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
                     MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
 

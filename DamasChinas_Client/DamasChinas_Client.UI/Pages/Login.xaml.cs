@@ -123,6 +123,8 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 _ = HandleConnectionLossAsync(loading);
+     
+                Debug.WriteLine($"[ConfigureCallback] {_}");
             };
 
             channel.Closed += (_, __) =>
@@ -141,7 +143,9 @@ namespace DamasChinas_Client.UI.Pages
                 await SafeWait(loading);
 
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+
                 {
+                    
                     loading?.Close();
 
                     ClientSession.Initialize(profile, client, callback);
@@ -155,8 +159,9 @@ namespace DamasChinas_Client.UI.Pages
                         sessionClient.Subscribe(profile.Username);
                         ClientSession.SessionClient = sessionClient;
                     }
-                    catch (Exception ex)
+                    catch (InvalidOperationException ex)
                     {
+
                         Debug.WriteLine($"[Login.ConfigureCallback] Session subscribe error: {ex.Message}");
                     }
 
@@ -258,14 +263,17 @@ namespace DamasChinas_Client.UI.Pages
             catch (InvalidOperationException ex)
             {
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+                Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
             }
             catch (CommunicationException ex)
             {
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+                Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
             }
             catch (TimeoutException ex)
             {
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+                Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
             }
         }
 
@@ -283,6 +291,7 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
+                Debug.WriteLine($"[Login.ExecuteLogin] {ex}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
@@ -300,8 +309,9 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                Debug.WriteLine($"[Login.OnBackClick] {ex}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
         }
@@ -329,6 +339,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
+                Debug.WriteLine($"[Login.TryNavigateMenu] {ex}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
         }

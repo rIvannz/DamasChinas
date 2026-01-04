@@ -35,11 +35,16 @@ namespace DamasChinas_Client.UI.Utilities
                     return;
                 }
 
+                int removed = 0;
+
                 while (nav.RemoveBackEntry() != null)
                 {
+                    removed++;
                 }
+                Debug.WriteLine($"[NavigateToRoot] Removed {removed} navigation entries");
             }
-            catch (Exception ex)
+
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[AppNavigator.NavigateToRoot] {ex.Message}");
             }
@@ -60,7 +65,7 @@ namespace DamasChinas_Client.UI.Utilities
 
                 frame?.Navigate(page);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[AppNavigator.Navigate] {ex.Message}");
             }
