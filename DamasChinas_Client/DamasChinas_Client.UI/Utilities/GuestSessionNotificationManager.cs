@@ -19,22 +19,16 @@ namespace DamasChinas_Client.UI.Utilities
         public static void Initialize(string guestUsername)
         {
             if (!ClientSession.IsGuest)
-            {
                 return;
-            }
 
             if (string.IsNullOrWhiteSpace(guestUsername))
-            {
                 return;
-            }
 
             EnsureAlive(guestUsername);
         }
 
         public static void Reset()
         {
-            try { GuestDisconnectNotifier.Reset(); } catch { }
-
             try
             {
                 if (_client != null && _client.State == CommunicationState.Opened)
@@ -98,6 +92,8 @@ namespace DamasChinas_Client.UI.Utilities
             try
             {
                 var callback = new GuestSessionCallbackHandler();
+
+          
                 GuestSessionCallbackHandler.ServerMessageReceived -= OnServerMessage;
                 GuestSessionCallbackHandler.ServerMessageReceived += OnServerMessage;
 
@@ -118,8 +114,6 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 Debug.WriteLine($"[GuestSessionNotificationManager.Initialize] {ex.Message}");
 
-                // Si aquí falla, NO es “caída mientras juega”, es “no existe el server”
-                // => avisa 1 vez y lo manda al Main.
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
 
                 try { _client?.Abort(); } catch { }
@@ -130,6 +124,7 @@ namespace DamasChinas_Client.UI.Utilities
             catch (Exception ex)
             {
                 Debug.WriteLine($"[GuestSessionNotificationManager.Initialize] {ex.Message}");
+
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
 
                 try { _client?.Abort(); } catch { }
@@ -142,9 +137,7 @@ namespace DamasChinas_Client.UI.Utilities
         private static void AttachChannelEvents(ICommunicationObject channel)
         {
             if (channel == null)
-            {
                 return;
-            }
 
             channel.Faulted += (s, e) =>
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
@@ -155,6 +148,7 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static void OnServerMessage(string code)
         {
+  
             GuestDisconnectNotifier.TryNotifyAndGoHome(code);
         }
 
@@ -167,7 +161,7 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static string Normalize(string s)
         {
-            return s?.Trim()?.ToLowerInvariant();
+            return s?.Trim().ToLowerInvariant();
         }
     }
 }

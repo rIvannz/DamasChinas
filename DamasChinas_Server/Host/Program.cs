@@ -1,4 +1,5 @@
 using DamasChinas_Server;
+using DamasChinas_Server.Common;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilities;
 using System;
@@ -8,6 +9,9 @@ namespace DamasChinasHost
 {
     internal static class Program
     {
+        private static readonly ILogService _log =
+            LogFactory.Create(typeof(Program));
+
         static void Main(string[] args)
         {
             ServiceHost[] hosts =
@@ -22,7 +26,6 @@ namespace DamasChinasHost
                 new ServiceHost(typeof(RankingService)),
                 new ServiceHost(typeof(MatchService)),
                 new ServiceHost(typeof(GuestSessionService)),
-
             };
 
             foreach (var host in hosts)
@@ -36,7 +39,13 @@ namespace DamasChinasHost
                 catch (Exception ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Error al iniciar {host.Description.ServiceType.Name}: {ex.Message}");
+                    Console.WriteLine(
+                        $"Error al iniciar {host.Description.ServiceType.Name}: {ex.Message}");
+
+                    _log.Error(
+                        $"[Program] Error iniciando {host.Description.ServiceType.Name}",
+                        ex);
+
                     host.Abort();
                 }
                 finally
@@ -48,9 +57,12 @@ namespace DamasChinasHost
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(" DAMAS");
             Console.ResetColor();
-            Console.WriteLine("detener...");
+            Console.WriteLine("Presiona ENTER para detener el servidor...");
             Console.ReadLine();
 
+            // =========================
+            // Cierre limpio de servicios
+            // =========================
             foreach (var host in hosts)
             {
                 try
@@ -58,6 +70,10 @@ namespace DamasChinasHost
                     if (host.State == CommunicationState.Opened)
                     {
                         host.Close();
+                    }
+                    else
+                    {
+                        host.Abort();
                     }
                 }
                 catch
@@ -67,9 +83,8 @@ namespace DamasChinasHost
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n Servidor detenido correctamente.");
+            Console.WriteLine("\nServidor detenido correctamente.");
             Console.ResetColor();
-
         }
     }
 }

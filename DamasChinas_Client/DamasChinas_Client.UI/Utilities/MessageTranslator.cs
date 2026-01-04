@@ -84,6 +84,8 @@ namespace DamasChinas_Client.UI.Utilities
                 { "FriendRequestAlreadyPending", MessageKeys.FriendRequestAlreadyPending },
                 { "AlreadyFriends", MessageKeys.AlreadyFriends },
                 { "UserBlocked", MessageKeys.UserBlocked },
+                { "DatabaseUnavailable", MessageKeys.DatabaseUnavailable },
+
 
             };
 

@@ -124,6 +124,10 @@
     <Compile Include="Interfaces\ISessionCallback.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="logic\ChatRepository.cs" />
+    <Compile Include="logic\DbGuard.cs" />
+    <Compile Include="logic\DbGuardBehavior.cs" />
+    <Compile Include="logic\DbOutageCoordinator.cs" />
+    <Compile Include="logic\GlobalSessionManager.cs" />
     <Compile Include="logic\LobbyManager.cs" />
     <Compile Include="logic\damas_chinasEntities.cs" />
     <Compile Include="logic\IApplicationDbContext.cs" />

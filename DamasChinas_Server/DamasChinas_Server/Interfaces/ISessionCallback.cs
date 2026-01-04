@@ -23,5 +23,9 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract(IsOneWay = true)]
         void OnBanStatusUpdated(BanInfoDto banInfo);
+
+        [OperationContract(IsOneWay = true)]
+        void OnForcedLogout(string code);
+
     }
 }

@@ -374,6 +374,10 @@ Plusieurs sauts sont autorisés en un seul tour.
 
     <!-- Backend / servidor -->
     <sys:String x:Key="msg_ServerUnavailable">Le serveur a eu une interruption, reconnectez-vous.</sys:String>
+    <sys:String x:Key="msg_DatabaseUnavailable">
+        Une erreur inattendue s&#39;est produite. Veuillez vous reconnecter.
+    </sys:String>
+
     <sys:String x:Key="msg_NetworkLatency">Une latence réseau a été détectée.</sys:String>
     <sys:String x:Key="msg_UnknownError">Une erreur inattendue s’est produite. Réessayez.</sys:String>
 

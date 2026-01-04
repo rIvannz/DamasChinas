@@ -4,13 +4,27 @@ using System;
 using System.Collections.Concurrent;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
+using System.ServiceModel;
 
 namespace DamasChinas_Server.Services
 {
     public static class SessionManager
     {
-        private static readonly ConcurrentDictionary<string, ISessionCallback> ActiveSessions =
-            new ConcurrentDictionary<string, ISessionCallback>();
+        private sealed class SessionEntry
+        {
+            public ISessionCallback Callback { get; }
+            public ICommunicationObject Channel { get; }
+
+            public SessionEntry(ISessionCallback callback, ICommunicationObject channel)
+            {
+                Callback = callback;
+                Channel = channel;
+            }
+        }
+
+        private static readonly ConcurrentDictionary<string, SessionEntry> ActiveSessions =
+            new ConcurrentDictionary<string, SessionEntry>();
+
 
         private static readonly ILogService _log = LogFactory.Create(typeof(SessionManager));
 
@@ -27,10 +41,23 @@ namespace DamasChinas_Server.Services
         {
             ExecuteOperation(() =>
             {
-                ActiveSessions[username] = callback;
+                if (string.IsNullOrWhiteSpace(username) || callback == null)
+                {
+                    return;
+                }
+
+                var channel = OperationContext.Current?.Channel;
+                if (channel == null)
+                {
+                    return;
+                }
+
+                ActiveSessions[username] = new SessionEntry(callback, channel);
+
                 _log.Info($"[{OperationAddSession}] Sesión agregada: {username}");
             }, OperationAddSession);
         }
+
 
 
         public static void RemoveSession(string nickname)
@@ -47,14 +74,20 @@ namespace DamasChinas_Server.Services
             return ExecuteOperation(
                 () =>
                 {
-                    ActiveSessions.TryGetValue(nickname, out var callback);
+                    if (string.IsNullOrWhiteSpace(nickname))
+                    {
+                        return null;
+                    }
+
+                    ActiveSessions.TryGetValue(nickname, out var entry);
                     _log.Info($"[{OperationGetSession}] Obtener sesión de: {nickname}");
-                    return callback;
+                    return entry?.Callback;
                 },
                 OperationGetSession,
                 default(ISessionCallback)
             );
         }
+
 
         public static bool IsOnline(string nickname)
         {
@@ -71,13 +104,18 @@ namespace DamasChinas_Server.Services
 
         public static void ForEachSession(Action<ISessionCallback> action)
         {
+            if (action == null)
+            {
+                return;
+            }
+
             ExecuteOperation(() =>
             {
                 foreach (var entry in ActiveSessions.ToArray())
                 {
                     try
                     {
-                        action(entry.Value);
+                        action(entry.Value.Callback);
                     }
                     catch (Exception ex)
                     {
@@ -88,24 +126,26 @@ namespace DamasChinas_Server.Services
             }, OperationForEachSession);
         }
 
+
         public static void UpdateSessionUsername(string currentUsername, string newUsername)
         {
             ExecuteOperation(() =>
             {
                 if (string.IsNullOrWhiteSpace(currentUsername) ||
                     string.IsNullOrWhiteSpace(newUsername) ||
-                    currentUsername.Equals(newUsername))
+                    currentUsername.Equals(newUsername, StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
 
-                if (ActiveSessions.TryRemove(currentUsername, out var callback))
+                if (ActiveSessions.TryRemove(currentUsername, out var entry))
                 {
-                    ActiveSessions[newUsername] = callback;
+                    ActiveSessions[newUsername] = entry;
                     _log.Info($"[{OperationUpdateSessionUsername}] {currentUsername} to {newUsername}");
                 }
             }, OperationUpdateSessionUsername);
         }
+
 
 
         public static void ForEachSession(Action<string, ISessionCallback> action)
@@ -117,12 +157,21 @@ namespace DamasChinas_Server.Services
 
             ExecuteOperation(() =>
             {
-                foreach (var kvp in ActiveSessions)
+                foreach (var kvp in ActiveSessions.ToArray())
                 {
-                    action(kvp.Key, kvp.Value);
+                    try
+                    {
+                        action(kvp.Key, kvp.Value.Callback);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        ActiveSessions.TryRemove(kvp.Key, out _);
+                    }
                 }
             }, OperationForEachSession);
         }
+
 
 
         private static void ExecuteOperation(Action action, string context)
@@ -155,6 +204,63 @@ namespace DamasChinas_Server.Services
                 _log.Error($"[{context}] Unexpected exception: {ex.Message}");
             }
         }
+
+        public static void ForceDisconnectAll(MessageCode code)
+        {
+            ExecuteOperation(() =>
+            {
+                string key = ToClientKey(code);
+
+                foreach (var kvp in ActiveSessions.ToArray())
+                {
+                    string username = kvp.Key;
+                    var entry = kvp.Value;
+
+                    try
+                    {
+                        entry.Callback?.OnForcedLogout(key);
+                    }
+                    catch
+                    {
+                        
+                    }
+
+                    try
+                    {
+                        entry.Channel?.Abort();
+                    }
+                    catch
+                    {
+                       
+                    }
+
+                    ActiveSessions.TryRemove(username, out _);
+                }
+
+                _log.Error($"[SessionManager.ForceDisconnectAll] Expulsión global ejecutada. Code={code}");
+
+            }, nameof(ForceDisconnectAll));
+        }
+
+        private static string ToClientKey(MessageCode code)
+        {
+            switch (code)
+            {
+                case MessageCode.DatabaseUnavailable:
+                    // usa tu key real del cliente
+                    return "msg_DatabaseUnavailable";
+
+                case MessageCode.ServerUnavailable:
+                    return "msg_ServerUnavailable";
+
+                default:
+                    return "msg_UnknownError";
+            }
+        }
+
+
+
+
 
         private static T ExecuteOperation<T>(Func<T> action, string context, T defaultValue)
         {

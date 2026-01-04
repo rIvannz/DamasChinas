@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.ServiceModel;
+using DamasChinas_Server.Logic;
 
 namespace DamasChinas_Server.Services
 {
+    [DbGuardBehavior]
     [ServiceBehavior(
         InstanceContextMode = InstanceContextMode.PerSession,
         ConcurrencyMode = ConcurrencyMode.Reentrant)]

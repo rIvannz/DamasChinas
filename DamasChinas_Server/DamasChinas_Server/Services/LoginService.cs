@@ -3,6 +3,7 @@ using DamasChinas_Server.Contracts;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.GameRepositories;
 using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.Logic;
 using DamasChinas_Server.Services;
 using DamasChinas_Shared.Contracts.Dtos;
 using System;
@@ -12,6 +13,7 @@ using System.ServiceModel;
 
 namespace DamasChinas_Server
 {
+    [DbGuardBehavior]
     [ServiceBehavior(
         InstanceContextMode = InstanceContextMode.PerSession,
         ConcurrencyMode = ConcurrencyMode.Reentrant)]

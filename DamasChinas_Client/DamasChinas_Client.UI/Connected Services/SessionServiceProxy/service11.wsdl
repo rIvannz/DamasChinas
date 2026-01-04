@@ -39,6 +39,9 @@
   <wsdl:message name="ISessionService_OnBanStatusUpdated_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnBanStatusUpdated" />
   </wsdl:message>
+  <wsdl:message name="ISessionService_OnForcedLogout_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnForcedLogout" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ISessionService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Subscribe">
       <wsdl:input wsaw:Action="http://tempuri.org/ISessionService/Subscribe" message="tns:ISessionService_Subscribe_InputMessage" />
@@ -63,6 +66,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnBanStatusUpdated">
       <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/OnBanStatusUpdated" message="tns:ISessionService_OnBanStatusUpdated_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnForcedLogout">
+      <wsdl:output wsaw:Action="http://tempuri.org/ISessionService/OnForcedLogout" message="tns:ISessionService_OnForcedLogout_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ISessionService" type="tns:ISessionService">
@@ -112,6 +118,12 @@
     </wsdl:operation>
     <wsdl:operation name="OnBanStatusUpdated">
       <soap12:operation soapAction="http://tempuri.org/ISessionService/OnBanStatusUpdated" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnForcedLogout">
+      <soap12:operation soapAction="http://tempuri.org/ISessionService/OnForcedLogout" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

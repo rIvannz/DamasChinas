@@ -42,6 +42,76 @@ namespace DamasChinas_Client.UI.Callbacks
             PlayerLeftGameEvent?.Invoke(nickname);
         }
 
+        public void OnForcedLogout(string code)
+        {
+            var app = Application.Current;
+            if (app?.Dispatcher == null)
+            {
+                return;
+            }
+
+            app.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                try
+                {
+                    string resourceKey = MapServerCodeToMessageKey(code);
+                    MessageHelper.ShowPopup(resourceKey, PopupType.Error);
+                }
+                catch
+                {
+                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                }
+
+                try
+                {
+                    ClientSession.ClearForced();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[SessionCallbackHandler.OnForcedLogout] ClearForced: {ex.Message}");
+                }
+
+                AppNavigator.NavigateToRoot(new Pages.MainWindow());
+            }));
+        }
+
+        private static string MapServerCodeToMessageKey(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return MessageKeys.DatabaseUnavailable;
+            }
+
+         
+            if (code.StartsWith("msg_", StringComparison.OrdinalIgnoreCase))
+            {
+                return code;
+            }
+
+      
+            if (code.Equals("DatabaseUnavailable", StringComparison.OrdinalIgnoreCase))
+            {
+                return MessageKeys.DatabaseUnavailable;
+            }
+
+            if (code.Equals("ServerUnavailable", StringComparison.OrdinalIgnoreCase))
+            {
+                return MessageKeys.ServerUnavailable;
+            }
+
+            if (code.Equals("SessionExpired", StringComparison.OrdinalIgnoreCase))
+            {
+                return MessageKeys.SessionExpired;
+            }
+
+     
+            return MessageKeys.UnknownError;
+        }
+
+
+
+
+
         public void OnBanStatusUpdated(BanInfoDto banInfo)
         {
             if (banInfo == null)
