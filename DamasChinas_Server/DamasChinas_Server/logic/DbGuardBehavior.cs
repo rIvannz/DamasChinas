@@ -17,16 +17,23 @@ namespace DamasChinas_Server.Logic
         {
         }
 
-        public void ApplyDispatchBehavior(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
+        public void ApplyDispatchBehavior(
+            ServiceDescription serviceDescription,
+             ServiceHostBase serviceHostBase)
         {
-            foreach (ChannelDispatcher channelDispatcher in serviceHostBase.ChannelDispatchers)
+            foreach (ChannelDispatcherBase dispatcherBase in serviceHostBase.ChannelDispatchers)
             {
-                foreach (EndpointDispatcher endpointDispatcher in channelDispatcher.Endpoints)
+                if (dispatcherBase is ChannelDispatcher channelDispatcher)
                 {
-                    endpointDispatcher.DispatchRuntime.MessageInspectors.Add(new DbGuardMessageInspector());
+                    foreach (EndpointDispatcher endpointDispatcher in channelDispatcher.Endpoints)
+                    {
+                        endpointDispatcher.DispatchRuntime.MessageInspectors
+                            .Add(new DbGuardMessageInspector());
+                    }
                 }
             }
         }
+
 
         public void Validate(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
@@ -61,11 +68,8 @@ namespace DamasChinas_Server.Logic
                     DbOutageCoordinator.Trip(ex);
                     throw new FaultException<MessageCode>(MessageCode.DatabaseUnavailable);
                 }
-                catch (Exception ex)
-                {
-                    DbOutageCoordinator.Trip(ex);
-                    throw new FaultException<MessageCode>(MessageCode.DatabaseUnavailable);
-                }
+
+
             }
 
 
