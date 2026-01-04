@@ -90,7 +90,12 @@ namespace DamasChinas_Server
             {
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
+            catch
+            {
+                throw new RepositoryValidationException(MessageCode.DatabaseUnavailable);
+            }
         }
+
 
         private T ExecuteInContext<T>(Func<IApplicationDbContext, T> operation)
         {

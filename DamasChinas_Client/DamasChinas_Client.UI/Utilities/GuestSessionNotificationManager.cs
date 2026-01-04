@@ -148,9 +148,22 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static void OnServerMessage(string code)
         {
-  
-            GuestDisconnectNotifier.TryNotifyAndGoHome(code);
+       
+            string key = NormalizeToMessageKey(code);
+            GuestDisconnectNotifier.TryNotifyAndGoHome(key);
         }
+
+        private static string NormalizeToMessageKey(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return MessageKeys.ServerUnavailable;
+
+            if (code.StartsWith("msg_", StringComparison.OrdinalIgnoreCase))
+                return code;
+
+            return "msg_" + code.Trim();
+        }
+
 
         private static bool IsDead(CommunicationState state)
         {
