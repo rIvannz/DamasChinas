@@ -33,9 +33,9 @@ namespace DamasChinas_Client.UI.Utilities
 
                 ChangeLanguageInternal(saved, save: false);
             }
-            catch
+            catch (Exception ex)
             {
-                Debug.WriteLine($"[LanguageManager.fail]");
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] {ex.Message}");
             }
         }
 
@@ -54,8 +54,8 @@ namespace DamasChinas_Client.UI.Utilities
                     return;
                 }
 
-                ResourceDictionary newLanguageDictionary = CreateLanguageDictionary(cultureCode);
-                ResourceDictionary existingLanguageDictionary = FindExistingLanguageDictionary();
+                var newLanguageDictionary = CreateLanguageDictionary(cultureCode);
+                var existingLanguageDictionary = FindExistingLanguageDictionary();
 
                 ReplaceOrAddDictionary(newLanguageDictionary, existingLanguageDictionary);
 
@@ -71,8 +71,9 @@ namespace DamasChinas_Client.UI.Utilities
                     Properties.Settings.Default.Save();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine($"[LanguageManager.ChangeLanguageInternal] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
             }
         }
@@ -103,6 +104,7 @@ namespace DamasChinas_Client.UI.Utilities
             return LangEn;
         }
 
+  
         private static ResourceDictionary FindExistingLanguageDictionary()
         {
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
@@ -115,31 +117,27 @@ namespace DamasChinas_Client.UI.Utilities
                 if (src.IndexOf("/Resources/Lang.", StringComparison.OrdinalIgnoreCase) >= 0 ||
                     src.IndexOf("Resources/Lang.", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    return null;
+                    return dictionary;
                 }
             }
 
-            return new ResourceDictionary();
-            ;
+            return null;
         }
+
 
         private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)
         {
-            if (existingDictionary == null)
+            if (existingDictionary != null)
             {
-                Application.Current.Resources.MergedDictionaries.Insert(0, newDictionary);
-                return;
+                int index = Application.Current.Resources.MergedDictionaries.IndexOf(existingDictionary);
+                if (index >= 0)
+                {
+                    Application.Current.Resources.MergedDictionaries[index] = newDictionary;
+                    return;
+                }
             }
 
-            int index = Application.Current.Resources.MergedDictionaries.IndexOf(existingDictionary);
-            if (index >= 0)
-            {
-                Application.Current.Resources.MergedDictionaries[index] = newDictionary;
-            }
-            else
-            {
-                Application.Current.Resources.MergedDictionaries.Insert(0, newDictionary);
-            }
+            Application.Current.Resources.MergedDictionaries.Add(newDictionary);
         }
 
         private static void EnsureDictionary(string relativePackPath)
