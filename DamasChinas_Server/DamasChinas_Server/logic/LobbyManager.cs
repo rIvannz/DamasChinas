@@ -331,100 +331,20 @@ namespace DamasChinas_Server.Logic
 
         public void ReportPlayer(ReportPlayerRequest request)
         {
-            if (request == null)
-            {
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(request.ReporterUsername) ||
-                string.IsNullOrWhiteSpace(request.ReportedUsername))
-            {
-                return;
-            }
-
-            if (IsGuest(request.ReporterUsername) || IsGuest(request.ReportedUsername))
-            {
-                return;
-            }
-
-            if (string.Equals(
-                request.ReporterUsername,
-                request.ReportedUsername,
-                StringComparison.OrdinalIgnoreCase))
+            if (!IsValidReportRequest(request))
             {
                 return;
             }
 
             try
             {
-                var usersRepo = new RepositoryUsers();
-                int reporterId = usersRepo.GetUserIdByUsername(request.ReporterUsername);
-                int reportedId = usersRepo.GetUserIdByUsername(request.ReportedUsername);
+                BanInfoDto banInfo = ProcessReport(request);
 
-                string motivo = request.Reason ?? string.Empty;
-
-                var reportsRepo = new RepositoryReports();
-
-                int totalReports = reportsRepo.AddReportAndGetTotal(
-                    reporterId,
-                    reportedId,
-                    request.IdPartida,
-                    request.CodigoLobby,
-                    motivo);
-
-                var sanctionsRepo = new RepositorySanctions();
-                BanInfoDto banInfo = sanctionsRepo.ApplyBanFromReports(
-                    reportedId,
-                    totalReports,
-                    motivo);
-
-                var sessionCb = SessionManager.GetSession(request.ReportedUsername);
-                if (sessionCb != null)
-                {
-                    try
-                    {
-                        sessionCb.OnBanStatusUpdated(banInfo);
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.Warn($"[LobbyManager.ReportPlayer] Session callback FAILED for {request.ReportedUsername}: {ex.Message}");
-                        SessionManager.RemoveSession(request.ReportedUsername);
-                    }
-                }
-
-                SafeInvokeCallback(
-                    "BanStatusUpdated",
-                    request.ReportedUsername,
-                    cb => cb.OnBanStatusUpdated(banInfo));
+                NotifyBanStatus(request.ReportedUsername, banInfo);
 
                 if (banInfo.IsBanned)
                 {
-                    MatchManager.Instance.NotifyBanAndKickIfInMatch(
-                        request.ReportedUsername,
-                        banInfo);
-
-                    var lobby = FindLobbyByUser(request.ReportedUsername);
-                    if (lobby != null)
-                    {
-                        bool wasHost = lobby.IsHost(request.ReportedUsername);
-
-                        lobby.RemoveMember(request.ReportedUsername);
-
-                        SafeInvokeCallback(
-                            "KickedFromLobby",
-                            request.ReportedUsername,
-                            cb => cb.OnKickedFromLobby(MessageCode.LobbyUserBanned));
-
-                        LobbySessionManager.Remove(request.ReportedUsername);
-
-                        if (wasHost)
-                        {
-                            CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
-                            return;
-                        }
-
-                        BroadcastSnapshot(lobby);
-                    }
+                    HandleBannedPlayer(request.ReportedUsername, banInfo);
                 }
             }
             catch (RepositoryValidationException)
@@ -437,6 +357,112 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
         }
+
+        private static bool IsValidReportRequest(ReportPlayerRequest request)
+        {
+            if (request == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(request.ReporterUsername) ||
+                string.IsNullOrWhiteSpace(request.ReportedUsername))
+            {
+                return false;
+            }
+
+            if (IsGuest(request.ReporterUsername) || IsGuest(request.ReportedUsername))
+            {
+                return false;
+            }
+
+            if (string.Equals(
+                request.ReporterUsername,
+                request.ReportedUsername,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private BanInfoDto ProcessReport(ReportPlayerRequest request)
+        {
+            var usersRepo = new RepositoryUsers();
+            int reporterId = usersRepo.GetUserIdByUsername(request.ReporterUsername);
+            int reportedId = usersRepo.GetUserIdByUsername(request.ReportedUsername);
+
+            string motivo = request.Reason ?? string.Empty;
+
+            var reportsRepo = new RepositoryReports();
+
+            int totalReports = reportsRepo.AddReportAndGetTotal(
+                reporterId,
+                reportedId,
+                request.IdPartida,
+                request.CodigoLobby,
+                motivo);
+
+            var sanctionsRepo = new RepositorySanctions();
+            return sanctionsRepo.ApplyBanFromReports(
+                reportedId,
+                totalReports,
+                motivo);
+        }
+
+        private void NotifyBanStatus(string username, BanInfoDto banInfo)
+        {
+            var sessionCb = SessionManager.GetSession(username);
+            if (sessionCb != null)
+            {
+                try
+                {
+                    sessionCb.OnBanStatusUpdated(banInfo);
+                }
+                catch (Exception ex)
+                {
+                    _log.Warn($"[LobbyManager.ReportPlayer] Session callback FAILED for {username}: {ex.Message}");
+                    SessionManager.RemoveSession(username);
+                }
+            }
+
+            SafeInvokeCallback(
+                "BanStatusUpdated",
+                username,
+                cb => cb.OnBanStatusUpdated(banInfo));
+        }
+
+        private void HandleBannedPlayer(string username, BanInfoDto banInfo)
+        {
+            MatchManager.Instance.NotifyBanAndKickIfInMatch(username, banInfo);
+
+            var lobby = FindLobbyByUser(username);
+            if (lobby == null)
+            {
+                return;
+            }
+
+            bool wasHost = lobby.IsHost(username);
+
+            lobby.RemoveMember(username);
+
+            SafeInvokeCallback(
+                "KickedFromLobby",
+                username,
+                cb => cb.OnKickedFromLobby(MessageCode.LobbyUserBanned));
+
+            LobbySessionManager.Remove(username);
+
+            if (wasHost)
+            {
+                CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
+                return;
+            }
+
+            BroadcastSnapshot(lobby);
+        }
+
 
         private static void BroadcastSnapshot(LobbyState lobby)
         {
@@ -643,6 +669,7 @@ namespace DamasChinas_Server.Logic
                 }
             }
 
+
             public void EnsureHost(string u)
             {
                 if (!IsHost(u))
@@ -728,9 +755,9 @@ namespace DamasChinas_Server.Logic
         private sealed class BanState
         {
             public bool IsBanned { get;}
-            public bool IsPermanent { get; set; }
-            public DateTime? BanUntilUtc { get; set; }
-            public int TotalReports { get; set; }
+            public bool IsPermanent { get; }
+            public DateTime? BanUntilUtc { get;}
+            public int TotalReports { get;}
 
             public BanInfoDto ToDto()
             {
