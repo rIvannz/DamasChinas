@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Utilidades
 {
-    public class Email
+    public static class Email
     {
         private static string SenderEmail;
         private static string SenderPassword;
