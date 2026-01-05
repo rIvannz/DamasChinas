@@ -7,15 +7,27 @@ namespace DamasChinas_Server.Utilidades
 {
     internal static class TelegramNotifier
     {
-        public const string DbDownHeader = "🚨 BASE DE DATOS NO DISPONIBLE";
-        public const string TimeFormat = "yyyy-MM-dd HH:mm:ss";
-        public const string DbDownTemplate = "BASE DE DATOS NO DISPONIBLE\n" + " {0}\n\n" + " {1}";
-        private const string BotToken = "8537988330:AAH9w2ufz-tcH1kMT1rFjXuCQp2sVRtLlWA";
-        private const string ChatId = "5356225517";
+        public static void NotifyDatabaseUnavailable(
+            string languageCode,
+            string technicalDetail)
+        {
+            string timestamp =
+                DateTime.Now.ToString(TelegramSettingsProvider.TimeFormat);
 
-        private static readonly TimeSpan RetryDelay = TimeSpan.FromMinutes(3);
+            string header =
+                TelegramSettingsProvider.GetDbDownHeader(languageCode);
 
-        public static void Send(string message)
+            string template =
+                TelegramSettingsProvider.GetDbDownTemplate(languageCode);
+
+            string message =
+                header + "\n\n" +
+                string.Format(template, timestamp, technicalDetail);
+
+            SendAsync(message);
+        }
+
+        private static void SendAsync(string message)
         {
             Task.Run(() => TrySendAsync(message));
         }
@@ -23,9 +35,12 @@ namespace DamasChinas_Server.Utilidades
         private static async Task TrySendAsync(string message)
         {
             if (TrySend(message))
+            {
                 return;
+            }
 
-            await Task.Delay(RetryDelay).ConfigureAwait(false);
+            await Task.Delay(TelegramSettingsProvider.RetryDelay)
+                .ConfigureAwait(false);
 
             TrySend(message);
         }
@@ -40,11 +55,11 @@ namespace DamasChinas_Server.Utilidades
                     client.Headers.Add("Content-Type", "application/json");
 
                     string url =
-                        $"https://api.telegram.org/bot{BotToken}/sendMessage";
+                        $"https://api.telegram.org/bot{TelegramSettingsProvider.BotToken}/sendMessage";
 
                     string json =
                         "{" +
-                        $"\"chat_id\":\"{ChatId}\"," +
+                        $"\"chat_id\":\"{TelegramSettingsProvider.ChatId}\"," +
                         $"\"text\":\"{Escape(message)}\"," +
                         "\"parse_mode\":\"Markdown\"" +
                         "}";
@@ -52,11 +67,11 @@ namespace DamasChinas_Server.Utilidades
                     client.UploadString(url, "POST", json);
                 }
 
-                return true; 
+                return true;
             }
             catch (WebException)
             {
-                return false; 
+                return false;
             }
             catch
             {
