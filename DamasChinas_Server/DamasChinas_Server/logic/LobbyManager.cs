@@ -4,13 +4,13 @@ using DamasChinas_Server.GameRepositories;
 using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilities;
+using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using DamasChinas_Shared.Contracts.Dtos;
+using System.Security.Cryptography;
 using System.ServiceModel;
-
 
 namespace DamasChinas_Server.Logic
 {
@@ -22,16 +22,15 @@ namespace DamasChinas_Server.Logic
             new Lazy<LobbyManager>(() => new LobbyManager());
 
         private readonly ConcurrentDictionary<int, LobbyState> _lobbies;
-        private readonly ConcurrentDictionary<string, BanState> _bans;
 
         private readonly object _codeLock = new object();
-        private readonly Random _random = new Random();
+        private static readonly RandomNumberGenerator _randomGenerator = RandomNumberGenerator.Create();
+
         private static readonly ILogService _log = LogFactory.Create(typeof(LobbyManager));
 
         private LobbyManager()
         {
             _lobbies = new ConcurrentDictionary<int, LobbyState>();
-            _bans = new ConcurrentDictionary<string, BanState>(StringComparer.OrdinalIgnoreCase);
         }
 
         public static LobbyManager Instance => _instance.Value;
@@ -64,7 +63,9 @@ namespace DamasChinas_Server.Logic
         {
             var lobby = FindLobbyByUser(username);
             if (lobby == null)
+            {
                 return;
+            }
 
             bool wasHost = lobby.IsHost(username);
 
@@ -145,8 +146,11 @@ namespace DamasChinas_Server.Logic
             }
         }
 
-
-        public LobbySnapshotDto CreateLobby(string hostUsername, PublicProfile hostProfile, CreateLobbyRequest request, ILobbyCallback callback)
+        public LobbySnapshotDto CreateLobby(
+            string hostUsername,
+            PublicProfile hostProfile,
+            CreateLobbyRequest request,
+            ILobbyCallback callback)
         {
             ValidateCreateRequest(request);
             EnsureNotBanned(hostUsername);
@@ -238,7 +242,9 @@ namespace DamasChinas_Server.Logic
         {
             var lobby = FindLobbyByUser(hostUsername);
             if (lobby == null)
+            {
                 throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
 
             lobby.EnsureHost(hostUsername);
 
@@ -293,10 +299,10 @@ namespace DamasChinas_Server.Logic
         }
 
         public void InviteFriend(
-        string hostUsername,
-        string friendUsername,
-        int lobbyCode,
-        Func<string, ILobbyCallback> callbackResolver)
+            string hostUsername,
+            string friendUsername,
+            int lobbyCode,
+            Func<string, ILobbyCallback> callbackResolver)
         {
             var lobby = GetLobbyByCode(lobbyCode);
             lobby.EnsureHost(hostUsername);
@@ -307,15 +313,17 @@ namespace DamasChinas_Server.Logic
             if (callback == null)
             {
                 SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
+                return;
             }
 
+            // Si está online, también mandamos el correo (tu lógica actual)
             SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
         }
 
         private static void SendLobbyInvitationEmail(
-        string hostUsername,
-        string friendUsername,
-        int lobbyCode)
+            string hostUsername,
+            string friendUsername,
+            int lobbyCode)
         {
             var usersRepo = new RepositoryUsers();
 
@@ -352,7 +360,6 @@ namespace DamasChinas_Server.Logic
                 _log.Error($"[LobbyManager.ReportPlayer] Error");
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
-
         }
 
         private static bool IsValidReportRequest(ReportPlayerRequest request)
@@ -384,7 +391,7 @@ namespace DamasChinas_Server.Logic
             return true;
         }
 
-        private BanInfoDto ProcessReport(ReportPlayerRequest request)
+        private static BanInfoDto ProcessReport(ReportPlayerRequest request)
         {
             var usersRepo = new RepositoryUsers();
             int reporterId = usersRepo.GetUserIdByUsername(request.ReporterUsername);
@@ -408,7 +415,7 @@ namespace DamasChinas_Server.Logic
                 motivo);
         }
 
-        private void NotifyBanStatus(string username, BanInfoDto banInfo)
+        private static void NotifyBanStatus(string username, BanInfoDto banInfo)
         {
             var sessionCb = SessionManager.GetSession(username);
             if (sessionCb != null)
@@ -460,7 +467,6 @@ namespace DamasChinas_Server.Logic
             BroadcastSnapshot(lobby);
         }
 
-
         private static void BroadcastSnapshot(LobbyState lobby)
         {
             var snapshot = lobby.ToSnapshot();
@@ -499,11 +505,14 @@ namespace DamasChinas_Server.Logic
         private static void EnsureNotBanned(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return;
+            }
 
-         
             if (IsGuest(username))
+            {
                 return;
+            }
 
             var usersRepo = new RepositoryUsers();
             int userId = usersRepo.GetUserIdByUsername(username);
@@ -515,6 +524,30 @@ namespace DamasChinas_Server.Logic
             }
         }
 
+        private static int NextSecureInt(int minInclusive, int maxExclusive)
+        {
+            if (minInclusive >= maxExclusive)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maxExclusive));
+            }
+
+            long diff = (long)maxExclusive - minInclusive;
+            byte[] buffer = new byte[4];
+
+            while (true)
+            {
+                _randomGenerator.GetBytes(buffer);
+                uint rand = BitConverter.ToUInt32(buffer, 0);
+
+                const long max = 1L + uint.MaxValue;
+                long remainder = max % diff;
+
+                if (rand < max - remainder)
+                {
+                    return (int)(minInclusive + (rand % diff));
+                }
+            }
+        }
 
         private int GenerateUniqueCode()
         {
@@ -523,7 +556,7 @@ namespace DamasChinas_Server.Logic
                 int code;
                 do
                 {
-                    code = _random.Next(100000, 999999);
+                    code = NextSecureInt(100000, 1000000);
                 }
                 while (_lobbies.ContainsKey(code));
 
@@ -666,7 +699,6 @@ namespace DamasChinas_Server.Logic
                 }
             }
 
-
             public void EnsureHost(string u)
             {
                 if (!IsHost(u))
@@ -703,8 +735,10 @@ namespace DamasChinas_Server.Logic
                     Visibility = Visibility,
                     MaxPlayers = MaxPlayers,
                     IsGameStarted = IsGameStarted,
-                    Members = _members.Values.Select(m => m.ToDto(IsHost(m.Username)))
-                                           .OrderByDescending(m => m.IsHost).ToArray()
+                    Members = _members.Values
+                        .Select(m => m.ToDto(IsHost(m.Username)))
+                        .OrderByDescending(m => m.IsHost)
+                        .ToArray()
                 };
             }
         }
@@ -739,33 +773,17 @@ namespace DamasChinas_Server.Logic
         private static bool IsGuest(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
+            {
                 return false;
+            }
 
             if (!username.StartsWith("Guest-", StringComparison.OrdinalIgnoreCase))
+            {
                 return false;
+            }
 
             string tail = username.Substring("Guest-".Length);
             return tail.Length == 4 && int.TryParse(tail, out _);
-        }
-
-
-        private sealed class BanState
-        {
-            public bool IsBanned { get;}
-            public bool IsPermanent { get; }
-            public DateTime? BanUntilUtc { get;}
-            public int TotalReports { get;}
-
-            public BanInfoDto ToDto()
-            {
-                return new BanInfoDto
-                {
-                    IsBanned = IsBanned,
-                    IsPermanent = IsPermanent,
-                    BanUntilUtc = BanUntilUtc,
-                    TotalReports = TotalReports
-                };
-            }
         }
     }
 }
