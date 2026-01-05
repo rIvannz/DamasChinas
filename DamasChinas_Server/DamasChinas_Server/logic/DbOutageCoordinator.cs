@@ -3,7 +3,7 @@ using System.Threading;
 using DamasChinas_Server.Common;
 using DamasChinas_Server.Services;
 using DamasChinas_Server.Utilities;
-using DamasChinas_Server.Utilidades; 
+using DamasChinas_Server.Utilidades;
 
 namespace DamasChinas_Server.Logic
 {
@@ -13,7 +13,6 @@ namespace DamasChinas_Server.Logic
 
         private static readonly ILogService _log =
             LogFactory.Create(typeof(DbOutageCoordinator));
-
 
         internal static Action<string, Exception> LogError =
             (msg, ex) => _log.Error(msg, ex);
@@ -36,14 +35,15 @@ namespace DamasChinas_Server.Logic
 
             try
             {
-                _log.Error("[DbOutageCoordinator] DB down detected. Forcing disconnect all.", ex);
+                LogError(
+                    "[DbOutageCoordinator] DB down detected. Forcing disconnect all.",
+                    ex
+                );
 
-         
                 TryNotifyTelegram(ex);
 
- 
-                SessionManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
-                GuestSessionCallbackManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
+                DisconnectSessions(MessageCode.DatabaseUnavailable);
+                DisconnectGuests(MessageCode.DatabaseUnavailable);
             }
             catch (Exception inner)
             {
@@ -58,16 +58,26 @@ namespace DamasChinas_Server.Logic
         {
             try
             {
-                TelegramNotifier.Send(
+                TelegramSender(
                     string.Format(
                         TelegramNotifier.DbDownTemplate,
                         DateTime.Now.ToString(TelegramNotifier.TimeFormat),
-                        ex.GetType().Name));
+                        ex.GetType().Name
+                    )
+                );
             }
             catch (Exception notifyEx)
             {
-                _log.Error("[DbOutageCoordinator] Telegram notification failed.", notifyEx);
+                LogError(
+                    "[DbOutageCoordinator] Telegram notification failed.",
+                    notifyEx
+                );
             }
+        }
+
+        internal static void ResetForTests()
+        {
+            _tripped = 0;
         }
     }
 }

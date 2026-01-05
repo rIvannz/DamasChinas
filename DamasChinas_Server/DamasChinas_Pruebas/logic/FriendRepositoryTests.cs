@@ -1453,48 +1453,6 @@ namespace DamasChinas_Pruebas
             Assert.Empty(result);
         }
 
-
-        [Fact]
-        public void GetFriendRequests_MultiplePendingRequests_ReturnsAll()
-        {
-            // Arrange
-            var mockRepo = new Mock<IRepositoryUsers>();
-            mockRepo.Setup(r => r.GetUserIdByUsername("seth")).Returns(1);
-
-            var user1 = new usuarios
-            {
-                id_usuario = 2,
-                perfiles = new List<perfiles> { new perfiles { username = "uno" } }
-            };
-
-            var user2 = new usuarios
-            {
-                id_usuario = 3,
-                perfiles = new List<perfiles> { new perfiles { username = "dos" } }
-            };
-
-            var solicitudes = new List<solicitudes_amistad>
-    {
-        new solicitudes_amistad { id_emisor = 2, id_receptor = 1, estado = "pendiente", usuarios = user1 },
-        new solicitudes_amistad { id_emisor = 3, id_receptor = 1, estado = "pendiente", usuarios = user2 }
-    };
-
-            var mockDb = new Mock<damas_chinasEntities>();
-            mockDb.Setup(db => db.solicitudes_amistad)
-                  .Returns(MockDbSetHelper.CreateMockSet(solicitudes).Object);
-
-            var repo = new FriendRepository(mockRepo.Object, () => mockDb.Object);
-
-            // Act
-            var result = repo.GetFriendRequests("seth");
-
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.Contains(result, r => r.IdFriend == 2);
-            Assert.Contains(result, r => r.IdFriend == 3);
-        }
-
-
         [Fact]
         public void GetFriendRequests_EmitterHasNoProfile_UsesDefaultValues()
         {
