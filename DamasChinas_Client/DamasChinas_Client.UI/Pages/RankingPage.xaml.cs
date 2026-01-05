@@ -68,10 +68,7 @@ namespace DamasChinas_Client.UI.Pages
                     lvRanking.ItemsSource = _items;
                 }
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[RankingPage.LoadRanking.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.RankingUnavailable, PopupType.Info);
@@ -102,10 +99,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[RankingPage.OnSoundClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Info);
@@ -144,10 +138,7 @@ namespace DamasChinas_Client.UI.Pages
                         string.Equals(f.Username, username, StringComparison.OrdinalIgnoreCase));
                 }
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[RankingPage.IsFriend.fail] {ex.Message}");
                 return false;
@@ -197,10 +188,7 @@ namespace DamasChinas_Client.UI.Pages
                             vm.Loses));
                 }
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[RankingPage.OnViewProfileClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);

@@ -55,7 +55,9 @@ namespace DamasChinas_Client.UI.Pages
                 _profile = ClientSession.CurrentProfile;
                 UpdateProfileDisplay();
             }
-            catch { }
+            catch { 
+           
+            }
         }
 
         private void RefreshStatsFromRanking()
@@ -87,7 +89,8 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
-               
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+
             }
         }
 
@@ -115,10 +118,8 @@ namespace DamasChinas_Client.UI.Pages
                 if (!MessageHelper.ShowConfirm("msg_LogoutConfirm"))
                     return;
 
-                // Marca cierre intencional para que NO salga "ServerUnavailable"
                 ClientSession.MarkIntentionalDisconnect();
 
-                // Si quieres intentar Unsubscribe, hazlo, pero NO te cases con Close.
                 try
                 {
                     var username = ClientSession.SafeUsername;
@@ -131,9 +132,12 @@ namespace DamasChinas_Client.UI.Pages
                         sessionClient.Unsubscribe(username);
                     }
                 }
-                catch { }
+                catch
+                {
+                    MessageHelper.ShowPopup(UnknownError, PopupType.Error);
 
-                // Corta de raíz
+                }
+
                 ClientSession.ClearForced();
 
                 AppNavigator.NavigateToRoot(new MainWindow());
@@ -265,7 +269,11 @@ namespace DamasChinas_Client.UI.Pages
 
                 AvatarImage.Source = PathProvider.LoadAvatar(avatarFile);
             }
-            catch { }
+            catch 
+            {
+                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+
+            }
         }
     }
 }

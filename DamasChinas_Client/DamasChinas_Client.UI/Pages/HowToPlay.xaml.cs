@@ -31,7 +31,7 @@ namespace DamasChinas_Client.UI.Pages
                     );
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[HowToPlay.OnBackClick] {ex.Message}");
 
@@ -48,7 +48,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[HowToPlay.OnSoundClick] {ex.Message}");
 
@@ -65,7 +65,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[HowToPlay.OnLanguageClick] {ex.Message}");
 

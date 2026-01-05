@@ -16,7 +16,6 @@ namespace DamasChinas_Client.UI.Callbacks
         public static event Action<string, string, string> ChatMessageReceived;
         public static event Action<MessageCode> Kicked;
 
-        // (Opcional) si no lo usas, puedes borrarlo sin problema
         public static event Action<BanInfoDto> BanStatusUpdated;
 
         public void OnLobbySnapshot(LobbySnapshotDto snapshot)

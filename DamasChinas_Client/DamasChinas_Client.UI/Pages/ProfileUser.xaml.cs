@@ -2,6 +2,7 @@ using DamasChinas_Client.UI.FriendServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -37,7 +38,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 AvatarImage.Source = PathProvider.LoadAvatar("avatarIcon.png");
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ProfileUser.LoadGuestProfile] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);

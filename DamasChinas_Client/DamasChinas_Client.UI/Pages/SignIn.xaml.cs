@@ -40,7 +40,6 @@ namespace DamasChinas_Client.UI.Pages
                 loader = ShowLoader();
                 client = new SingInServiceClient();
 
-                // Evita bloqueos infinitos si el server/DB no responde
                 client.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(8);
 
                 var userDto = GetUserFromInputs();
@@ -251,7 +250,6 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Fault<MessageCode>] {ex.Detail}");
                 await CloseLoaderSafeAsync(loader);
 
-                // Igual que en Login: resuelve el mensaje por código
                 MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
                 return false;
             }

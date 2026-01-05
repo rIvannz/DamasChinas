@@ -23,7 +23,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.GoBack();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[AddFriend.OnCancelClick] {ex.Message}");
 
@@ -67,11 +67,7 @@ namespace DamasChinas_Client.UI.Pages
     {
         MessageHelper.ShowPopup(MessageKeys.NetworkLatency, PopupType.Error);
     }
-    catch (Exception ex)
-    {
-        Debug.WriteLine($"[AddFriend.OnSendClick] {ex.Message}");
-        MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-    }
+
 }
 
     }

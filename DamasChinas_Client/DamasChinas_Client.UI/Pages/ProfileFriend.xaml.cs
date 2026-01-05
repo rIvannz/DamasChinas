@@ -96,7 +96,7 @@ namespace DamasChinas_Client.UI.Pages
                     NavigationService?.GoBack();
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ProfileFriend.OnRemoveFriendClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
@@ -141,7 +141,7 @@ namespace DamasChinas_Client.UI.Pages
                     NavigationService?.GoBack();
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ProfileFriend.OnBlockUserClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);

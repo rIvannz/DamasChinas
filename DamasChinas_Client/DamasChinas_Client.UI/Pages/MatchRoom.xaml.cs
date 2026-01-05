@@ -144,7 +144,9 @@ namespace DamasChinas_Client.UI.Pages
                     if (_proxy != null)
                     {
                         if (_proxy.State == CommunicationState.Faulted)
+                        {
                             _proxy.Abort();
+                        }
                         else
                             _proxy.Close();
                     }
@@ -251,20 +253,27 @@ namespace DamasChinas_Client.UI.Pages
                     UpdateGameState(state);
                 }
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+            catch (EndpointNotFoundException ex)
             {
                 Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-
             }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+            }
+        
         }
 
- 
 
-     
+
+
 
         private static List<(int X, int Y, int Z)> GenerateBoardCubeCoordinates()
         {
@@ -402,7 +411,6 @@ namespace DamasChinas_Client.UI.Pages
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
 
-            // “pop” al final (escala)
             var pop = new DoubleAnimationUsingKeyFrames();
             pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
             pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.15, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(120)))
@@ -585,7 +593,7 @@ namespace DamasChinas_Client.UI.Pages
                         marble.Tag = to;
                         _marblesVisuals[to] = marble;
                     }
-                    catch (Exception ex)
+                    catch (CommunicationException ex)
                     {
                         Debug.WriteLine($"[MatchRoom.HandlePlayerMoved.Animate.complete] {ex.Message}");
                  
@@ -749,22 +757,26 @@ namespace DamasChinas_Client.UI.Pages
 
                 DeselectPiece();
             }
-            catch (FaultException)
-            {
-        
-                MessageHelper.ShowPopup(MessageKeys.DatabaseUnavailable, PopupType.Error);
-                NavigateToMenu();
-            }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+
+            catch (EndpointNotFoundException ex)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
-
                 NavigateToMenu();
             }
+            catch (CommunicationException ex)
+            {
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
+                NavigateToMenu();
+            }
+            catch (TimeoutException ex)
+            {
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
+                NavigateToMenu();
+            }
+
         }
 
 
@@ -826,16 +838,22 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     _proxy?.LeaveMatch(_lobbyCode, _myUsername);
                 }
-                catch (Exception ex) when (
-                 ex is EndpointNotFoundException ||
-                 ex is CommunicationException ||
-                 ex is TimeoutException)
+                catch (EndpointNotFoundException)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                }
+                catch (CommunicationException)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                }
+                catch (TimeoutException)
                 {
                     MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
 
                 NavigateToMenu();
             }
+
         }
 
         private void OnBackToMenuClick(object sender, RoutedEventArgs e)
@@ -958,14 +976,22 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     _proxy?.Abort();
                 }
-                catch (Exception ex) when (
-                 ex is EndpointNotFoundException ||
-                 ex is CommunicationException ||
-                 ex is TimeoutException)
+                catch (EndpointNotFoundException ex)
                 {
                     Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
                     MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
+                catch (CommunicationException ex)
+                {
+                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                }
+                catch (TimeoutException ex)
+                {
+                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                }
+
 
                 NavigateToMenu();
             }
@@ -1062,7 +1088,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 catch
                 {
-               
+                    MessageHelper.ShowPopup("error al mostrar razon reporte", PopupType.Error);
                 }
 
                 window.Close();

@@ -135,10 +135,7 @@ namespace DamasChinas_Client.UI.Utilities
 
                 GuestDisconnectNotifier.Reset();
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[GuestSessionNotificationManager.Initialize] {ex.Message}");
 

@@ -16,9 +16,7 @@ namespace DamasChinas_Client.UI.Pages
         private readonly string _username;
         private readonly int _userId;
 
-        // ============================================================
-        // CONSTRUCTOR: INVITADO
-        // ============================================================
+
         public JoinParty()
         {
             InitializeComponent();
@@ -34,9 +32,7 @@ namespace DamasChinas_Client.UI.Pages
             LoadPublicLobbies();
         }
 
-        // ============================================================
-        // CONSTRUCTOR: REGISTRADO
-        // ============================================================
+     
         public JoinParty(int userId, string username)
         {
             InitializeComponent();
@@ -70,20 +66,11 @@ namespace DamasChinas_Client.UI.Pages
                         : MessageTranslator.GetLocalizedMessage(MessageKeys.PublicLobby)
                 }).ToList();
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is CommunicationException ||
-                ex is TimeoutException)
+ 
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[JoinParty.LoadPublicLobbies] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-
-                lstPublicLobbies.ItemsSource = Array.Empty<LobbySummary>();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[JoinParty.LoadPublicLobbies] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
 
@@ -134,7 +121,6 @@ namespace DamasChinas_Client.UI.Pages
             {
                 OperationResult result;
 
-                // ✅ Invitado usa endpoint especial
                 if (ClientSession.IsGuest)
                 {
                     result = _lobbyManager.JoinLobbyGuest(lobbyCode, _username);
@@ -163,7 +149,7 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowFromResult(result);
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[JoinParty.TryJoinLobby] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.JoiningLobbyError, PopupType.Error);

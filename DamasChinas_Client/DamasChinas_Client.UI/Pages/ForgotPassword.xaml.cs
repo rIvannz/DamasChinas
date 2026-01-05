@@ -75,15 +75,7 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ForgotPassword.OnSendCodeClick - General] {ex.Message}");
 
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
-            }
         }
 
         private async void OnChangePasswordClick(object sender, RoutedEventArgs e)
@@ -196,12 +188,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[ForgotPassword.OnSoundClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-            }
+ 
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
@@ -210,7 +197,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnLanguageClick] {ex.Message}");
 

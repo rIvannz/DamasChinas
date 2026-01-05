@@ -37,10 +37,8 @@ namespace DamasChinas_Client.UI.Pages
                     FriendNotificationManager.Initialize(CurrentUsername);
                 }
             }
-            catch (Exception ex) when (
-             ex is EndpointNotFoundException ||
-             ex is CommunicationException ||
-             ex is TimeoutException)
+            catch (CommunicationException ex)
+
             {
                 Debug.WriteLine($"[MRP.MenuRegisteredPlayer] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
@@ -95,10 +93,8 @@ namespace DamasChinas_Client.UI.Pages
                 if (!string.IsNullOrWhiteSpace(avatar))
                     AvatarImage.Source = PathProvider.LoadAvatar(avatar);
             }
-            catch (Exception ex) when (
-             ex is EndpointNotFoundException ||
-             ex is CommunicationException ||
-             ex is TimeoutException)
+            catch (CommunicationException ex)
+
             {
                 Debug.WriteLine($"[MRP.LoadAvatar] {ex}");
                
@@ -129,13 +125,10 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MRP.OnHowToPlayClick.fail] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex) when (
-             ex is EndpointNotFoundException ||
-             ex is CommunicationException ||
-             ex is TimeoutException)
-            {
+            catch (CommunicationException ex) 
+            { 
+
                 Debug.WriteLine($"[MRP.OnHowToPlayClick.fail] {ex}");
-                // ? CAMBIO: evitar string literal
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Warning);
             }
         }
@@ -158,15 +151,13 @@ namespace DamasChinas_Client.UI.Pages
 
                 NavigationService?.Navigate(new RankingPage());
             }
-            catch (Exception ex) when (
-             ex is EndpointNotFoundException ||
-             ex is CommunicationException ||
-             ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MRP.OnstatickClick.fail] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Error);
             }
-        }
+            }
+        
 
         private void OnFriendsClick(object sender, RoutedEventArgs e)
         {
@@ -216,7 +207,6 @@ namespace DamasChinas_Client.UI.Pages
                     Visibility = LobbyVisibility.Public
                 };
 
-                // ? CAMBIO: usar username actual (no _profile.Username)
                 string username = CurrentUsername;
 
                 var result = lobbyManager.CreateLobby(username, request);
@@ -238,10 +228,7 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowFromResult(result);
                 }
             }
-            catch (Exception ex) when (
-            ex is EndpointNotFoundException ||
-            ex is CommunicationException ||
-            ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MRP.OnCreateGameClick.fail] {ex}");
                 MessageHelper.ShowPopup(MessageKeys.MatchCreationFailed, PopupType.Error);

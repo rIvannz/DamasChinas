@@ -71,10 +71,7 @@ namespace DamasChinas_Client.UI.Pages
                 NavigationService?.GoBack();
             }
 
-            catch (Exception ex) when (
-               ex is EndpointNotFoundException ||
-               ex is CommunicationException ||
-               ex is TimeoutException)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[SelectAvatar.OnApplyClick] {ex}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
@@ -90,10 +87,7 @@ namespace DamasChinas_Client.UI.Pages
                 else
                     MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
             }
-            catch (Exception ex) when (
-             ex is EndpointNotFoundException ||
-             ex is CommunicationException ||
-             ex is TimeoutException)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[SelectAvatar.OnBackClick] {ex}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);

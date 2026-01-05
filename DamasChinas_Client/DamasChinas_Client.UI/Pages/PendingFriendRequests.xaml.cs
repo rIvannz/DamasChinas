@@ -104,7 +104,7 @@ namespace DamasChinas_Client.UI.Pages
                     });
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[PendingFriendRequests.LoadRequests] {ex.Message}");
                 MessageHelper.ShowPopup(
@@ -202,7 +202,7 @@ namespace DamasChinas_Client.UI.Pages
                         MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted),
                         PopupType.Success);
                 }
-                catch (Exception ex)
+                catch (CommunicationException ex)
                 {
                     Debug.WriteLine($"[PendingFriendRequests.Accept] {ex.Message}");
                 }
@@ -248,7 +248,7 @@ namespace DamasChinas_Client.UI.Pages
                         MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestRejected),
                         PopupType.Info);
                 }
-                catch (Exception ex)
+                catch (CommunicationException ex)
                 {
                     Debug.WriteLine($"[PendingFriendRequests.Reject] {ex.Message}");
                 }

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using DamasChinas_Client.UI.Utilities;
@@ -16,13 +17,12 @@ namespace DamasChinas_Client.UI.Pages
             {
                 ClientSession.EnsureGuestSession();
 
-                // Mostrar el username real del invitado (Guest-####)
                 if (txtGuestUsername != null)
                 {
                     txtGuestUsername.Text = ClientSession.SafeUsername ?? "Guest";
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MenuGuest.Init] {ex.Message}");
             }
@@ -35,7 +35,7 @@ namespace DamasChinas_Client.UI.Pages
                 ClientSession.EnsureGuestSession();
                 NavigationService?.Navigate(new JoinParty());
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnJoinPartyClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
@@ -49,7 +49,7 @@ namespace DamasChinas_Client.UI.Pages
                 ClientSession.EnsureGuestSession();
                 NavigationService?.Navigate(new ProfileUser(ClientSession.SafeUsername));
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnAvatarClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
@@ -65,7 +65,7 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Info
                 );
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnHowToPlayClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);

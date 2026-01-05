@@ -3,6 +3,7 @@ using DamasChinas_Client.UI.Utilities;
 using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Windows;
 
 namespace DamasChinas_Client.UI.Callbacks
@@ -65,7 +66,7 @@ namespace DamasChinas_Client.UI.Callbacks
                 {
                     ClientSession.ClearForced();
                 }
-                catch (Exception ex)
+                catch (CommunicationException ex)
                 {
                     Debug.WriteLine($"[SessionCallbackHandler.OnForcedLogout] ClearForced: {ex.Message}");
                 }

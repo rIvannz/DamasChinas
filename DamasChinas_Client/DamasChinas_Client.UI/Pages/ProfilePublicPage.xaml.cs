@@ -48,7 +48,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 AvatarImage.Source = PathProvider.LoadAvatar(avatar);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ProfilePublicPage.LoadData] {ex.Message}");
             }
@@ -60,7 +60,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.GoBack();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePublicPage.OnBackClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
@@ -82,7 +82,7 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowFromResult(result);
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ProfilePublicPage.AddFriend] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
@@ -95,7 +95,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePublicPage.OnSoundClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
@@ -108,7 +108,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfilePublicPage.OnLanguageClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);

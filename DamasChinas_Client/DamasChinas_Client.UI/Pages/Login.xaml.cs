@@ -40,7 +40,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 var client = CreateLoginClient(out var callback);
 
-                // Evita que el login se quede colgado si el server/DB no responde rápido
                 client.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(8);
 
                 ConfigureCallback(callback, loading, client);
@@ -55,7 +54,6 @@ namespace DamasChinas_Client.UI.Pages
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     loading?.Close();
-                    // Muestra el mensaje basado en tu sistema de códigos
                     MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
                 }));
             }

@@ -45,7 +45,7 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(SelectLanguageFirst, PopupType.Warning);
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[SelectLanguage.OnApplyClick] {ex.Message}");
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
@@ -78,11 +78,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[SelectLanguage.OnBackClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[SelectLanguage.OnBackClick - General] {ex.Message}");
-                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
-            }
+
         }
     }
 }

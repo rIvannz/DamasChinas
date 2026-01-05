@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.ServiceModel;
 using System.Windows.Media;
 
 namespace DamasChinas_Client.UI.Utilities
@@ -52,7 +53,7 @@ namespace DamasChinas_Client.UI.Utilities
 
                 Debug.WriteLine("[SoundManager.Initialize] Music started.");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[SoundManager.Initialize] Error: {ex.Message}");
             }
@@ -111,14 +112,15 @@ namespace DamasChinas_Client.UI.Utilities
                     }
                     catch
                     {
-                
+                        Debug.WriteLine($"[SoundManager.PlayMoveEffect] Error: {ex.Message}");
+
                     }
                 };
 
                 ActiveEffects.Add(player);
                 player.Play();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[SoundManager.PlayMoveEffect] Error: {ex.Message}");
             }

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Diagnostics;
 
 using DamasChinas_Client.UI.Utilities;
+using System.ServiceModel;
 
 namespace DamasChinas_Client.UI.Pages
 {
@@ -21,7 +22,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 Application.Current.Shutdown();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[MainWindow.OnExitClick] {ex.Message}");
 
@@ -47,15 +48,6 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MainWindow.OnGoToLoginClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
-            }
         }
 
         private void OnGoToSignInClick(object sender, RoutedEventArgs e)
@@ -70,15 +62,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 MessageHelper.ShowPopup(
                     MessageKeys.NavigationError,
-                    PopupType.Error
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MainWindow.OnGoToSignInClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
                     PopupType.Error
                 );
             }
@@ -98,7 +81,7 @@ namespace DamasChinas_Client.UI.Pages
                 Debug.WriteLine($"[MainWindow.OnPlayAsGuestClick - InvalidOperation] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
-            catch (Exception ex)
+            catch (EndpointNotFoundException ex)
             {
                 Debug.WriteLine($"[MainWindow.OnPlayAsGuestClick - General] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
@@ -121,15 +104,7 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MainWindow.OnSoundClick - General] {ex.Message}");
 
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
-            }
         }
 
         private void OnLanguageClick(object sender, RoutedEventArgs e)
@@ -147,15 +122,8 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Error
                 );
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MainWindow.OnLanguageClick - General] {ex.Message}");
-
-                MessageHelper.ShowPopup(
-                    MessageKeys.UnknownError,
-                    PopupType.Error
-                );
+        
             }
-        }
+        
     }
 }

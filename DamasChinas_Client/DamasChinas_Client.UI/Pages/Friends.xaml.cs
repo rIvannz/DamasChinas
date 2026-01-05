@@ -122,7 +122,7 @@ namespace DamasChinas_Client.UI.Pages
                     });
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[Friends.LoadFriends] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.FriendsLoadError, PopupType.Warning);
@@ -242,7 +242,7 @@ namespace DamasChinas_Client.UI.Pages
                     var profile = client.GetFriendPublicProfile(friend.Username);
                     NavigationService?.Navigate(new ProfileFriend(profile));
                 }
-                catch (Exception ex)
+                catch (CommunicationException ex)
                 {
                     Debug.WriteLine($"[Friends.OnViewProfileClick] {ex.Message}");
                 }
