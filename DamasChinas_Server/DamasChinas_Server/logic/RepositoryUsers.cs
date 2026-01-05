@@ -71,7 +71,7 @@ namespace DamasChinas_Server
                     throw new RepositoryValidationException(MessageCode.LoginInvalidCredentials);
                 }
 
-                return BuildPublicProfile(user);
+                return BuildPublicProfile(user, db);
             });
         }
 
@@ -81,7 +81,7 @@ namespace DamasChinas_Server
             return ExecuteInContext(db =>
             {
                 var user = GetUserWithProfile(db, idUsuario);
-                return BuildPublicProfile(user);
+                return BuildPublicProfile(user,db);
             });
         }
 
@@ -323,11 +323,12 @@ namespace DamasChinas_Server
                     u.perfiles.Any(p => p.username == credential));
         }
 
-        private static PublicProfile BuildPublicProfile(usuarios user)
+        private static PublicProfile BuildPublicProfile(
+    usuarios user,
+    IApplicationDbContext db)
+
         {
             var perfil = user.perfiles.FirstOrDefault();
-
-            using (var db = new damas_chinasEntities())
             {
                 int idUser = user.id_usuario;
 
