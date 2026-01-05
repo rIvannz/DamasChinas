@@ -269,13 +269,13 @@ namespace DamasChinas_Client.UI.Utilities
             return new OperationResult { Success = true };
         }
 
-        public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode)
+        public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode, string languageCode)
         {
             EnsureClientAlive();
 
             try
             {
-                return _client.InviteFriend(hostUsername, friendUsername, lobbyCode);
+                return _client.InviteFriend(hostUsername, friendUsername, lobbyCode, languageCode);
             }
             catch
             {
@@ -283,6 +283,7 @@ namespace DamasChinas_Client.UI.Utilities
                 return new OperationResult { Success = false, Code = MessageCode.ServerUnavailable };
             }
         }
+
 
         public void StartGame()
         {

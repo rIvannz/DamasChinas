@@ -49,7 +49,8 @@ namespace DamasChinas_Server.Interfaces
 
         [OperationContract]
         [FaultContract(typeof(MessageCode))]
-        OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode);
+        OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode, string languageCode);
+
 
         [OperationContract(IsOneWay = true)]
         void SendLobbyMessage(string sender, int lobbyCode, string message);

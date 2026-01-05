@@ -137,6 +137,7 @@
         <xs:element minOccurs="0" name="hostUsername" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="friendUsername" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="lobbyCode" type="xs:int" />
+        <xs:element minOccurs="0" name="languageCode" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

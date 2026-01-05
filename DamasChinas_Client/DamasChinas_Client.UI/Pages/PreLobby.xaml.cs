@@ -405,17 +405,31 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnInviteFriendClick(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button btn) || !(btn.DataContext is FriendViewModel friend))
+            if (!(sender is Button btn) || !(btn.Tag is FriendViewModel friend))
+            {
                 return;
+            }
+
+            if (_snapshot == null)
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+                return;
+            }
 
             int lobbyCode = _snapshot.LobbyCode;
             string hostUsername = _username;
 
-            var result = _lobbyManager.InviteFriend(hostUsername, friend.Username, lobbyCode);
+            string languageCode = DamasChinas_Client.UI.Properties.Settings.Default.languageCode;
+
+            var result = _lobbyManager.InviteFriend(hostUsername, friend.Username, lobbyCode, languageCode);
 
             if (!result.Success)
+            {
                 MessageHelper.ShowFromResult(result);
+            }
         }
+
+
 
         public void ApplyBanInfo(BanInfoDto ban)
         {

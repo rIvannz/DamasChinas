@@ -298,44 +298,31 @@ namespace DamasChinas_Server.Logic
             }
         }
 
-        public void InviteFriend(
-            string hostUsername,
-            string friendUsername,
-            int lobbyCode,
-            Func<string, ILobbyCallback> callbackResolver)
+        public void InviteFriend( string hostUsername,string friendUsername, int lobbyCode,string languageCode, Func<string, ILobbyCallback> callbackResolver)
         {
             var lobby = GetLobbyByCode(lobbyCode);
             lobby.EnsureHost(hostUsername);
             EnsureNotBanned(friendUsername);
 
-            var callback = callbackResolver(friendUsername);
-
-            if (callback == null)
-            {
-                SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
-                return;
-            }
-
-            // Si está online, también mandamos el correo (tu lógica actual)
-            SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode);
+            // NO importa si está online o no: siempre mandas correo
+            SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode, languageCode);
         }
 
-        private static void SendLobbyInvitationEmail(
-            string hostUsername,
-            string friendUsername,
-            int lobbyCode)
+
+        private static void SendLobbyInvitationEmail(string hostUsername, string friendUsername,int lobbyCode, string languageCode)
         {
             var usersRepo = new RepositoryUsers();
-
             string friendEmail = usersRepo.GetEmailByUsername(friendUsername);
 
             EmailSender.SendInvitationGameEmail(
                 friendEmail,
                 friendUsername,
                 hostUsername,
-                lobbyCode
+                lobbyCode,
+                languageCode
             );
         }
+
 
         public void ReportPlayer(ReportPlayerRequest request)
         {

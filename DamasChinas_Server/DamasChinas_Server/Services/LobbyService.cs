@@ -119,12 +119,13 @@ namespace DamasChinas_Server.Services
             return ExecuteRequest(() => _lobbyManager.GetBanInfo(username), "GetBanInfo");
         }
 
-        public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode)
+        public OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode, string languageCode)
         {
             return ExecuteOperation(() =>
-                _lobbyManager.InviteFriend(hostUsername, friendUsername, lobbyCode, ResolveCallbackForUser),
+                _lobbyManager.InviteFriend(hostUsername, friendUsername, lobbyCode, languageCode, ResolveCallbackForUser),
                 "InviteFriend");
         }
+
 
         public void SendLobbyMessage(string sender, int lobbyCode, string message)
         {

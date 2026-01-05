@@ -968,10 +968,10 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/InviteFriendMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
-        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode);
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode, string languageCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
-        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode);
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode, string languageCode);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyService/SendLobbyMessage")]
         void SendLobbyMessage(string sender, int lobbyCode, string message);
@@ -1112,12 +1112,12 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
             return base.Channel.GetBanInfoAsync(username);
         }
         
-        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode) {
-            return base.Channel.InviteFriend(hostUsername, friendUsername, lobbyCode);
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult InviteFriend(string hostUsername, string friendUsername, int lobbyCode, string languageCode) {
+            return base.Channel.InviteFriend(hostUsername, friendUsername, lobbyCode, languageCode);
         }
         
-        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode) {
-            return base.Channel.InviteFriendAsync(hostUsername, friendUsername, lobbyCode);
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> InviteFriendAsync(string hostUsername, string friendUsername, int lobbyCode, string languageCode) {
+            return base.Channel.InviteFriendAsync(hostUsername, friendUsername, lobbyCode, languageCode);
         }
         
         public void SendLobbyMessage(string sender, int lobbyCode, string message) {
