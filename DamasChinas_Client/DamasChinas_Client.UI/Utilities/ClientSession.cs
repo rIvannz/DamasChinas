@@ -258,7 +258,7 @@ namespace DamasChinas_Client.UI.Utilities
             MarkIntentionalDisconnect();
 
             try { ResetAllConnections(); }
-            catch 
+            catch
             {
                 Debug.WriteLine($"[ClientSeccion.Clear.fail]");
 
@@ -280,7 +280,8 @@ namespace DamasChinas_Client.UI.Utilities
         {
             MarkIntentionalDisconnect();
 
-            try { ResetAllConnections(); } catch
+            try { ResetAllConnections(); }
+            catch
             {
                 Debug.WriteLine($"[ClientSeccion.ClearForced.fail]");
             }

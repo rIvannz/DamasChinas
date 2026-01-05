@@ -123,7 +123,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 _ = HandleConnectionLossAsync(loading);
-     
+
                 Debug.WriteLine($"[ConfigureCallback] {_}");
             };
 
@@ -135,10 +135,9 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 _ = HandleConnectionLossAsync(loading);
-                Debug.WriteLine($"[ConfigureCallback] {_}");
             };
 
-       
+
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
@@ -146,7 +145,7 @@ namespace DamasChinas_Client.UI.Pages
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
 
                 {
-                    
+
                     loading?.Close();
 
                     ClientSession.Initialize(profile, client, callback);
@@ -170,7 +169,7 @@ namespace DamasChinas_Client.UI.Pages
                 }));
             };
 
-       
+
             callback.LoginError += async code =>
             {
                 await SafeWait(loading);

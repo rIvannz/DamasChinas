@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
-  <xs:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/" />
-  <xs:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
-  <xs:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
+  <xs:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
+  <xs:import schemaLocation="http://localhost:8000/LoginService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
   <xs:element name="Login">
     <xs:complexType>
       <xs:sequence>
@@ -14,7 +13,7 @@
   <xs:element name="OnLoginSuccess">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="profile" nillable="true" type="q2:PublicProfile" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" minOccurs="0" name="profile" nillable="true" type="q2:PublicProfile" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

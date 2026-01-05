@@ -83,7 +83,6 @@ namespace DamasChinas_Client.UI.Utilities
             if (string.IsNullOrWhiteSpace(username))
             {
                 string msg = MessageTranslator.GetLocalizedMessage(InvalidUsername);
-                throw new ArgumentException(msg, nameof(username));
             }
 
             string normalized = Normalize(username);

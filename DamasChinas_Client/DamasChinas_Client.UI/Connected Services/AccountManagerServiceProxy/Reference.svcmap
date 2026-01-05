@@ -23,7 +23,6 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="fac69c23-9c2e-4825-8601-4939a0286df0" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd0" />
-    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="2cfedec6-d811-474e-80f7-38abc39a1701" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd5" />
     <MetadataFile FileName="item6.xsd" MetadataType="Schema" ID="d4c98ed9-b899-4060-b999-12df93467e3c" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd1" />
     <MetadataFile FileName="item10.xsd" MetadataType="Schema" ID="f72f8a4c-1b07-4a8a-863d-7b5461f08dcb" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd4" />
     <MetadataFile FileName="item11.xsd" MetadataType="Schema" ID="f44313ec-32a8-4a17-a8be-1b87bbfb181e" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd2" />

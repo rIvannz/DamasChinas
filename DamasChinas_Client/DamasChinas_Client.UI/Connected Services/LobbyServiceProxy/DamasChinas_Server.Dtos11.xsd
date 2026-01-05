@@ -63,4 +63,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="JoinLobbyRequest" nillable="true" type="tns:JoinLobbyRequest" />
+  <xs:complexType name="LobbyInvitationDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HostUsername" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LobbyCode" type="xs:int" />
+      <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbyInvitationDto" nillable="true" type="tns:LobbyInvitationDto" />
 </xs:schema>

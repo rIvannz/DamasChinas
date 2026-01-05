@@ -14,7 +14,7 @@ namespace DamasChinas_Client.UI.Pages
         private static bool ForceAvatarRefresh = false;
 
         private readonly PublicProfile _profile;
-        private  int _userId;
+        private int _userId;
 
         public MenuRegisteredPlayer(PublicProfile profile)
         {
@@ -142,7 +142,7 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-        
+
                 if (!ClientSession.IsLoggedIn)
                 {
                     MessageHelper.ShowPopup(MessageKeys.GuestStatsUnavailable, PopupType.Info);
