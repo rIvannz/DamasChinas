@@ -229,7 +229,7 @@ namespace DamasChinas_Server.Services
                     "Entitysql error.",
                     MessageCode.ServerUnavailable);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[{context}] Unexpected exception {ex.Message}", ex);
                 return OperationResult.Fail(
