@@ -7,6 +7,8 @@ using DamasChinas_Server.Services;
 using DamasChinas_Shared.Contracts.Dtos;
 using System;
 using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.ServiceModel;
 
@@ -41,43 +43,52 @@ namespace DamasChinas_Server
                 {
                     var callback = OperationContext.Current.GetCallbackChannel<ILoginCallback>();
 
-                    _log.Info($"[{OperationLogin}] Intentando login para: {loginRequest?.Username}");
-
-                    var profile = _repository.Login(loginRequest);
-
-                    int userId = profile.IdUser;
-
-                    var sanctionsRepo = new RepositorySanctions();
-                    if (sanctionsRepo.HasActiveBan(userId))
+                    try
                     {
-                        BanInfoDto banInfo = sanctionsRepo.GetActiveBanInfo(userId);
-                        callback.OnLoginBanned(banInfo);
-                        _log.Warn($"[{OperationLogin}] Usuario baneado: {profile.Username}");
-                        return;
+                        _log.Info($"[{OperationLogin}] Intentando login para: {loginRequest?.Username}");
+
+                        var profile = _repository.Login(loginRequest);
+
+                        int userId = profile.IdUser;
+
+                        var sanctionsRepo = new RepositorySanctions();
+                        if (sanctionsRepo.HasActiveBan(userId))
+                        {
+                            BanInfoDto banInfo = sanctionsRepo.GetActiveBanInfo(userId);
+                            callback.OnLoginBanned(banInfo);
+                            _log.Warn($"[{OperationLogin}] Usuario baneado: {profile.Username}");
+                            return;
+                        }
+
+                        _log.Info($"[{OperationLogin}] Login exitoso: {profile.Username}");
+                        callback.OnLoginSuccess(profile);
                     }
-
-                    _log.Info($"[{OperationLogin}] Login exitoso: {profile.Username}");
-                    callback.OnLoginSuccess(profile);
-                },
-                OperationLogin,
-                onError: (ex) =>
-                {
-                    var callback = OperationContext.Current.GetCallbackChannel<ILoginCallback>();
-
-                    if (ex is EntityException ||
-                        ex is SqlException ||
-                        ex.InnerException is EntityException ||
-                        ex.InnerException is SqlException)
+                    catch (EntityException)
                     {
                         callback.OnLoginError(MessageCode.ServerUnavailable);
-                        return;
                     }
-
-                    _log.Warn($"[{OperationLogin}] Login fallido: {ex.Message}");
-                    callback.OnLoginError(MessageCode.LoginInvalidCredentials);
-                }
+                    catch (SqlException)
+                    {
+                        callback.OnLoginError(MessageCode.ServerUnavailable);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        callback.OnLoginError(MessageCode.ServerUnavailable);
+                    }
+                    catch (DbEntityValidationException)
+                    {
+                        callback.OnLoginError(MessageCode.ServerUnavailable);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Warn($"[{OperationLogin}] Login fallido: {ex.Message}");
+                        callback.OnLoginError(MessageCode.LoginInvalidCredentials);
+                    }
+                },
+                OperationLogin
             );
         }
+
 
 
         private void ExecuteOperation(Action action, string context, Action<Exception> onError = null)

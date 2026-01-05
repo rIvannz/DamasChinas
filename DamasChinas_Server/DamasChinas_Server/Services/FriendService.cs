@@ -223,10 +223,7 @@ namespace DamasChinas_Server
         }
 
 
-        private T ExecuteOperation<T>(
-     Func<T> func,
-     string context,
-     bool faultOnValidation = false)
+        private T ExecuteOperation<T>( Func<T> func, string context, bool faultOnValidation = false)
         {
             T ReturnFail(MessageCode code, string message = null)
             {

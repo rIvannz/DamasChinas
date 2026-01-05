@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DamasChinas_Server.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -51,9 +52,8 @@ namespace DamasChinas_Server.Game
             var coordinates = path.ToList();
             if (coordinates.Count < MinimumMoveLength)
             {
-                throw new ArgumentException(
-                    "A move must contain at least an origin and a destination.",
-                    nameof(path));
+                throw new RepositoryValidationException(MessageCode.InvalidMove);
+                
             }
 
             Player = player;

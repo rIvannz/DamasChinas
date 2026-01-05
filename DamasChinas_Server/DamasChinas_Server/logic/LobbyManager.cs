@@ -304,7 +304,6 @@ namespace DamasChinas_Server.Logic
             lobby.EnsureHost(hostUsername);
             EnsureNotBanned(friendUsername);
 
-            // NO importa si está online o no: siempre mandas correo
             SendLobbyInvitationEmail(hostUsername, friendUsername, lobbyCode, languageCode);
         }
 

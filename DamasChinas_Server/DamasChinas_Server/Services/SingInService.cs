@@ -194,7 +194,7 @@ namespace DamasChinas_Server
                 }
                 catch (SmtpException )
                 {
-                    // Intentionally ignored (fire-and-forget  task).
+                  
                 }
             });
         }

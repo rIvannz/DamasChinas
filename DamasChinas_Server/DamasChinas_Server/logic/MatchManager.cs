@@ -147,10 +147,10 @@ namespace DamasChinas_Server.Logic
                 username,
                 StringComparison.OrdinalIgnoreCase);
 
-            // ===== REGLA: si solo hay 2 jugadores, el otro gana automáticamente =====
+         
             if (match.UserColorMap.Count == 2)
             {
-                // IMPORTANTE: quitar primero al que se va, para NO intentar notificar su callback muerto.
+                
                 match.Callbacks.TryRemove(username, out _);
                 match.UserColorMap.Remove(username);
 
@@ -168,7 +168,6 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-            // ===== 4 o 6 jugadores: se sigue jugando =====
             match.Game.RemovePlayer(color);
 
             match.UserColorMap.Remove(username);
@@ -236,7 +235,7 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-            // Notifica ban (sin reventar si callback muere)
+           
             if (match.Callbacks.TryGetValue(username, out var cb))
             {
                 try
@@ -273,9 +272,7 @@ namespace DamasChinas_Server.Logic
             return -1;
         }
 
-        // =========================
-        //   BROADCASTS "SAFE"
-        // =========================
+      
 
         private void BroadcastBoardStateSafe(int lobbyCode, ActiveMatch match)
         {
@@ -321,8 +318,7 @@ namespace DamasChinas_Server.Logic
             }
             catch
             {
-                // Si por alguna razón ya no existe el jugador del turno actual (desconexión en medio)
-                // solo mandamos estado completo.
+               
                 BroadcastBoardStateSafe(lobbyCode, match);
                 return;
             }

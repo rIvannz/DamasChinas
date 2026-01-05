@@ -29,7 +29,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch(CommunicationException )
                     {
-                        // Intentionally ignored.
+                  
                     }
                 }
             });
@@ -51,7 +51,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch(CommunicationException)
                     {
-                        // Intentionally ignored.
+                        
                     }
                 }
             });
