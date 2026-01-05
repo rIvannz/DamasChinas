@@ -40,7 +40,7 @@ namespace DamasChinasHost
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(
-                        $"error on iniciar {host.Description.ServiceType.Name}: {ex.Message}");
+                        $"error at open {host.Description.ServiceType.Name}: {ex.Message}");
 
                     _log.Error(
                         $"[Program] Error at start {host.Description.ServiceType.Name}",

@@ -820,7 +820,7 @@ namespace DamasChinas_Pruebas.logic
                     System.Reflection.BindingFlags.Static);
 
                 if (method == null)
-                    throw new MissingMethodException($"Método privado '{methodName}' no encontrado.");
+                    throw new MissingMethodException($"Método private '{methodName}' dosent found.");
 
                 return method.Invoke(null, parameters);
             }

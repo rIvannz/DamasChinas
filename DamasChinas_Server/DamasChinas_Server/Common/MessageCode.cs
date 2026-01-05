@@ -109,7 +109,7 @@
         RepositoryUsernameEmpty = 4027,
         RepositoryUserNotFound = 4028,
 
-
+        ServerUnavailabless = 7070,
 
 
 

@@ -57,7 +57,7 @@ namespace DamasChinas_Server.Logic
                 {
                     DbOutageCoordinator.Trip(ex);
           
-                    throw new FaultException<MessageCode>(MessageCode.DatabaseUnavailable);
+                    throw new FaultException<MessageCode>(MessageCode.ServerUnavailabless);
                 }
                 catch (EntityException ex)
                 {

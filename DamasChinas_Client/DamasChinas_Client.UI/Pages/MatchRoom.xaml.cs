@@ -237,6 +237,9 @@ namespace DamasChinas_Client.UI.Pages
             var context = new InstanceContext(_callbackHandler);
             _proxy = new MatchServiceClient(context);
 
+            _proxy.InnerChannel.Faulted += OnConnectionLost;
+            _proxy.InnerChannel.Closed += OnConnectionLost;
+
             try
             {
                 var result = _proxy.ConnectToMatch(_lobbyCode, _myUsername);
@@ -271,6 +274,27 @@ namespace DamasChinas_Client.UI.Pages
         
         }
 
+        private void OnConnectionLost(object sender, EventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (_matchEnded)
+                    return;
+
+                _matchEnded = true;
+                ShowConnectionLostPopup();
+            }));
+        }
+
+        private void ShowConnectionLostPopup()
+        {
+            MessageHelper.ShowPopup(
+                MessageKeys.ServerUnavailable,
+                PopupType.Error
+            );
+
+            NavigateToMenu();
+        }
 
 
 

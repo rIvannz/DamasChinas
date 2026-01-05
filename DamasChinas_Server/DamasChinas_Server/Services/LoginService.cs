@@ -62,24 +62,31 @@ namespace DamasChinas_Server
 
                         _log.Info($"[{OperationLogin}] Login succes: {profile.Username}");
                         callback.OnLoginSuccess(profile);
+
                     }
-                    catch (EntityException)
+                    catch (EntityException ex)
                     {
                         callback.OnLoginError(MessageCode.ServerUnavailable);
+                        _log.Info($"[{OperationLogin}] Login succes: 1 ");
                     }
-                    catch (SqlException)
+                    catch (SqlException ex)
                     {
                         callback.OnLoginError(MessageCode.ServerUnavailable);
-                    }
-                    catch (DbUpdateException)
-                    {
-                        callback.OnLoginError(MessageCode.ServerUnavailable);
-                    }
-                    catch (DbEntityValidationException)
-                    {
-                        callback.OnLoginError(MessageCode.ServerUnavailable);
+                        _log.Info($"[{OperationLogin}] Login succes: 2");
                     }
 
+                    catch (DbEntityValidationException ex)
+                    {
+                        callback.OnLoginError(MessageCode.ServerUnavailable);
+                        _log.Info($"[{OperationLogin}] Login succes: 3 ");
+                    }
+
+                    catch (RepositoryValidationException ex)
+                    {
+
+                        callback.OnLoginError(MessageCode.LoginInvalidCredentials);
+                        _log.Info($"[{OperationLogin}] Login succes:  4 {ex}");
+                    }
                 },
                 OperationLogin
             );
