@@ -12,14 +12,15 @@ namespace DamasChinas_Server.Logic
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DbGuardBehaviorAttribute : Attribute, IServiceBehavior
     {
-        public void AddBindingParameters(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase,
-            System.Collections.ObjectModel.Collection<ServiceEndpoint> endpoints, BindingParameterCollection bindingParameters)
+        public void AddBindingParameters(
+            ServiceDescription serviceDescription,
+            ServiceHostBase serviceHostBase,
+            System.Collections.ObjectModel.Collection<ServiceEndpoint> endpoints,
+            BindingParameterCollection bindingParameters)
         {
         }
 
-        public void ApplyDispatchBehavior(
-            ServiceDescription serviceDescription,
-             ServiceHostBase serviceHostBase)
+        public void ApplyDispatchBehavior(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
             foreach (ChannelDispatcherBase dispatcherBase in serviceHostBase.ChannelDispatchers)
             {
@@ -33,7 +34,6 @@ namespace DamasChinas_Server.Logic
                 }
             }
         }
-
 
         public void Validate(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
@@ -56,7 +56,8 @@ namespace DamasChinas_Server.Logic
                 catch (SqlException ex)
                 {
                     DbOutageCoordinator.Trip(ex);
-                    throw new FaultException<MessageCode>(MessageCode.ServerUnavailable);
+          
+                    throw new FaultException<MessageCode>(MessageCode.DatabaseUnavailable);
                 }
                 catch (EntityException ex)
                 {
@@ -68,10 +69,7 @@ namespace DamasChinas_Server.Logic
                     DbOutageCoordinator.Trip(ex);
                     throw new FaultException<MessageCode>(MessageCode.DatabaseUnavailable);
                 }
-
-
             }
-
 
             public void BeforeSendReply(ref Message reply, object correlationState)
             {

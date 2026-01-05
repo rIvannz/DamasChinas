@@ -3,6 +3,7 @@ using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.MatchServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using DamasChinas_Shared.Contracts.Dtos;
+using System.Windows.Media.Animation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -88,9 +89,11 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                _matchEnded = false;
 
-          
+                _matchEnded = false;
+                SoundManager.Initialize();
+
+
                 Players.Clear();
                 _userColors.Clear();
 
@@ -305,6 +308,102 @@ namespace DamasChinas_Client.UI.Pages
             return new Point(CenterX + x, CenterY + y);
         }
 
+        private Point GetMarbleTopLeft(Point boardCoord, double width, double height)
+        {
+            Point center = HexToPixel((int)boardCoord.X, (int)boardCoord.Y);
+            return new Point(center.X - (width / 2), center.Y - (height / 2));
+        }
+
+        private static void EnsureTransforms(Ellipse marble)
+        {
+            if (marble == null)
+            {
+                return;
+            }
+
+            if (marble.RenderTransform is TransformGroup)
+            {
+                return;
+            }
+
+            var group = new TransformGroup();
+            group.Children.Add(new ScaleTransform(1, 1));
+            group.Children.Add(new TranslateTransform(0, 0));
+
+            marble.RenderTransform = group;
+            marble.RenderTransformOrigin = new Point(0.5, 0.5);
+        }
+
+        private void AnimateMarbleMove(Ellipse marble, Point toCoord, Action onCompleted)
+        {
+            if (marble == null)
+            {
+                return;
+            }
+
+            EnsureTransforms(marble);
+
+            double fromLeft = Canvas.GetLeft(marble);
+            double fromTop = Canvas.GetTop(marble);
+
+            Point toTopLeft = GetMarbleTopLeft(toCoord, marble.Width, marble.Height);
+
+            var duration = new Duration(TimeSpan.FromMilliseconds(220));
+
+            var animLeft = new DoubleAnimation
+            {
+                From = fromLeft,
+                To = toTopLeft.X,
+                Duration = duration,
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            var animTop = new DoubleAnimation
+            {
+                From = fromTop,
+                To = toTopLeft.Y,
+                Duration = duration,
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            // “pop” al final (escala)
+            var pop = new DoubleAnimationUsingKeyFrames();
+            pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
+            pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.15, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(120)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            });
+            pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(220)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+            });
+
+            var group = (TransformGroup)marble.RenderTransform;
+            var scale = (ScaleTransform)group.Children[0];
+
+            int completedCount = 0;
+            EventHandler whenDone = (s, e) =>
+            {
+                completedCount++;
+                if (completedCount < 2)
+                {
+                    return;
+                }
+
+                onCompleted?.Invoke();
+            };
+
+            animLeft.Completed += whenDone;
+            animTop.Completed += whenDone;
+
+            marble.BeginAnimation(Canvas.LeftProperty, animLeft);
+            marble.BeginAnimation(Canvas.TopProperty, animTop);
+
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty, pop);
+            scale.BeginAnimation(ScaleTransform.ScaleYProperty, pop);
+        }
+
+
         private void DrawHole(int q, int r)
         {
             Point px = HexToPixel(q, r);
@@ -438,13 +537,26 @@ namespace DamasChinas_Client.UI.Pages
 
             if (_marblesVisuals.TryGetValue(from, out var marble))
             {
-                Brush color = marble.Fill;
+          
+                SoundManager.PlayMoveEffect();
 
-                BoardCanvas.Children.Remove(marble);
                 _marblesVisuals.Remove(from);
 
-                PlaceMarble((int)to.X, (int)to.Y, color);
+                AnimateMarbleMove(marble, to, () =>
+                {
+                    try
+                    {
+                        marble.Tag = to;
+                        _marblesVisuals[to] = marble;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[MatchRoom.HandlePlayerMoved.Animate.complete] {ex.Message}");
+                 
+                    }
+                });
             }
+
 
             _currentPlayerTurn = turn.NextPlayer;
             UpdatePlayerTurnUI();

@@ -1,9 +1,9 @@
-﻿using DamasChinas_Server.Common;
-using DamasChinas_Server.Services;
-using DamasChinas_Server.Utilidades;
-using DamasChinas_Server.Utilities;
-using System;
+﻿using System;
 using System.Threading;
+using DamasChinas_Server.Common;
+using DamasChinas_Server.Services;
+using DamasChinas_Server.Utilities;
+using DamasChinas_Server.Utilidades; 
 
 namespace DamasChinas_Server.Logic
 {
@@ -15,15 +15,18 @@ namespace DamasChinas_Server.Logic
         public static void Trip(Exception ex)
         {
             if (Interlocked.CompareExchange(ref _tripped, 1, 0) != 0)
+            {
                 return;
+            }
 
             try
             {
                 _log.Error("[DbOutageCoordinator] DB down detected. Forcing disconnect all.", ex);
-                TelegramNotifier.Send(
-    string.Format(TelegramNotifier.DbDownTemplate,DateTime.Now.ToString(TelegramNotifier.TimeFormat),ex.GetType().Name
-    )
-);
+
+         
+                TryNotifyTelegram(ex);
+
+ 
                 SessionManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
                 GuestSessionCallbackManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
             }
@@ -33,5 +36,20 @@ namespace DamasChinas_Server.Logic
             }
         }
 
+        private static void TryNotifyTelegram(Exception ex)
+        {
+            try
+            {
+                TelegramNotifier.Send(
+                    string.Format(
+                        TelegramNotifier.DbDownTemplate,
+                        DateTime.Now.ToString(TelegramNotifier.TimeFormat),
+                        ex.GetType().Name));
+            }
+            catch (Exception notifyEx)
+            {
+                _log.Error("[DbOutageCoordinator] Telegram notification failed.", notifyEx);
+            }
+        }
     }
 }
