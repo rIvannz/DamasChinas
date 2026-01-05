@@ -147,7 +147,17 @@ namespace DamasChinas_Client.UI.Pages
             }
 
             txtCurrentUsername.Text = newUsername;
+
+            try
+            {
+                ClientSession.ResetAllConnections();
+            }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Warning);
+            }
         }
+
 
 
         private void OnSavePasswordClick(object sender, RoutedEventArgs e)
