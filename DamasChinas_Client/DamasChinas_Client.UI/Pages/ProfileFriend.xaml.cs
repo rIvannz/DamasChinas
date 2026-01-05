@@ -29,7 +29,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.GoBack();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ProfileFriend.OnBackClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
@@ -54,7 +54,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 AvatarImage.Source = PathProvider.LoadAvatar(avatar);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[ProfileFriend.LoadFriendData] {ex.Message}");
             }

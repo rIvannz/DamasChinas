@@ -192,7 +192,8 @@ namespace DamasChinas_Client.UI.Pages
                     if (!result.Success)
                     {
                         string msg = MessageTranslator.GetLocalizedMessage(result.Code);
-                        MessageHelper.ShowPopup(msg, PopupType.Warning);
+                        MessageTranslator.GetLocalizedMessage(MessageKeys.FriendRequestAccepted);
+
                         return;
                     }
 

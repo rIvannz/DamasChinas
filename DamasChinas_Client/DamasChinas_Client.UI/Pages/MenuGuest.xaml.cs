@@ -81,7 +81,7 @@ namespace DamasChinas_Client.UI.Pages
                     PopupType.Info
                 );
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[MenuGuest.OnStatisticsClick] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);

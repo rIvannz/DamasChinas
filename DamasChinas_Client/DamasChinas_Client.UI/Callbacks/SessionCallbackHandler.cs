@@ -145,7 +145,7 @@ namespace DamasChinas_Client.UI.Callbacks
                     {
                         ClientSession.ClearForced();
                     }
-                    catch (Exception ex)
+                    catch (CommunicationException ex)
                     {
                         Debug.WriteLine($"[SessionCallbackHandler.OnBanStatusUpdated] ClearForced: {ex.Message}");
                     }

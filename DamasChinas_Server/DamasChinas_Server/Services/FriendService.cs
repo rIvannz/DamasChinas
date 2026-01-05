@@ -223,22 +223,38 @@ namespace DamasChinas_Server
         }
 
 
-        private T ExecuteOperation<T>( Func<T> func, string context, bool faultOnValidation = false)
+        private T ExecuteOperation<T>(
+     Func<T> func,
+     string context,
+     bool faultOnValidation = false)
         {
             T ReturnFail(MessageCode code, string message = null)
             {
                 if (faultOnValidation)
+                {
                     throw new FaultException<MessageCode>(code, code.ToString());
+                }
 
-                return (T)(object)OperationResult.Fail(message ?? code.ToString(), code);
+                return (T)(object)OperationResult.Fail(
+                    message ?? code.ToString(),
+                    code);
             }
 
-            void LogSqlOrEntity(Exception ex)
+            void LogSqlException(SqlException ex)
             {
-                if (ex is SqlException sqlEx)
-                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
-                else if (ex is EntityException entityEx && entityEx.InnerException is SqlException innerSql)
+                _log.Error($"[{context}] SQL ERROR {ex.Number}", ex);
+            }
+
+            void LogEntitySqlIfAny(EntityException ex)
+            {
+                if (ex.InnerException is SqlException innerSql)
+                {
                     _log.Error($"[{context}] SQL ERROR {innerSql.Number}", innerSql);
+                }
+                else
+                {
+                    _log.Error($"[{context}] EntityException (no inner SqlException): {ex.Message}", ex);
+                }
             }
 
             try
@@ -259,11 +275,17 @@ namespace DamasChinas_Server
             {
                 throw;
             }
-            catch (EntityException ex)
+            catch (SqlException ex)
             {
-                LogSqlOrEntity(ex);
+                LogSqlException(ex);
                 return ReturnFail(MessageCode.ServerUnavailable, ex.Message);
             }
+            catch (EntityException ex)
+            {
+                LogEntitySqlIfAny(ex);
+                return ReturnFail(MessageCode.ServerUnavailable, ex.Message);
+            }
+
         }
     }
 }

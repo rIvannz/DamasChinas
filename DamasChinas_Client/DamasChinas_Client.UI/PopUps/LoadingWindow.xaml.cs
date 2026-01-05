@@ -34,7 +34,7 @@ namespace DamasChinas_Client.UI.PopUps
                     storyboard.Begin();
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[LoadingWindow.OnLoaded] {ex.Message}");
                 

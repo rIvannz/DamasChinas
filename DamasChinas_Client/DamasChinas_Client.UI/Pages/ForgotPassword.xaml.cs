@@ -168,7 +168,7 @@ namespace DamasChinas_Client.UI.Pages
                     NavigationService.GoBack();
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Debug.WriteLine($"[ForgotPassword.OnBackClick] {ex.Message}");
 

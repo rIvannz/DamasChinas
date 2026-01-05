@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 
 using DamasChinas_Client.UI.Utilities;
+using System.ServiceModel;
 
 
 
@@ -50,7 +51,7 @@ namespace DamasChinas_Client.UI.PopUps
                 DialogResult = true;
                 Close();
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[VerificationCodeWindow.OnVerifyClick] {ex.Message}");
 
