@@ -39,12 +39,12 @@ namespace DamasChinas_Server.Services
             {
                 var callback = OperationContext.Current.GetCallbackChannel<IMatchCallback>();
 
-             
+
                 _lobbyCode = lobbyCode;
                 _username = username;
                 _hasLeft = false;
 
-              
+
                 var channel = OperationContext.Current.Channel;
                 channel.Closed += OnChannelClosedOrFaulted;
                 channel.Faulted += OnChannelClosedOrFaulted;
@@ -123,6 +123,12 @@ namespace DamasChinas_Server.Services
 
                 _manager.HandlePlayerDisconnect(_lobbyCode, _username);
             }
+            catch
+            {
+                _log.Warn($"[MatchService] Channel closed/faulted for user={_username}, lobby={_lobbyCode}");
+
+            }
         }
     }
 }
+

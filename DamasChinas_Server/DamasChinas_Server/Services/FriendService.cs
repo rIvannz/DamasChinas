@@ -54,7 +54,7 @@ namespace DamasChinas_Server
 
                 _log.Info($"[{OperationSubscribeFriendEvents}] SUCCESS ({username})");
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[{OperationSubscribeFriendEvents}] Unexpected exception: {ex.Message}", ex);
             }
@@ -70,7 +70,7 @@ namespace DamasChinas_Server
 
                 _log.Info($"[{OperationUnsubscribeFriendEvents}] SUCCESS ({username})");
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[{OperationUnsubscribeFriendEvents}] Unexpected exception: {ex.Message}", ex);
             }
@@ -259,14 +259,10 @@ namespace DamasChinas_Server
             {
                 throw;
             }
-            catch (Exception ex)
+            catch (EntityException ex)
             {
                 LogSqlOrEntity(ex);
-
-                if (ex is SqlException || ex is EntityException)
-                    return ReturnFail(MessageCode.ServerUnavailable);
-
-                return ReturnFail(MessageCode.UnknownError, ex.Message);
+                return ReturnFail(MessageCode.ServerUnavailable, ex.Message);
             }
         }
     }

@@ -57,7 +57,7 @@ namespace DamasChinas_Server.Services
                 _lobbyManager.CreateLobby(hostUsername, profile, request, callback);
                 return OperationResult.Ok();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return HandleException(ex, "CreateLobby");
             }
@@ -77,7 +77,7 @@ namespace DamasChinas_Server.Services
                 _lobbyManager.JoinLobby(request, profile, callback);
                 return OperationResult.Ok();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return HandleException(ex, "JoinLobby");
             }
@@ -93,7 +93,7 @@ namespace DamasChinas_Server.Services
                 LobbySessionManager.Remove(username);
                 return OperationResult.Ok();
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 return HandleException(ex, "LeaveLobby");
             }
@@ -133,7 +133,7 @@ namespace DamasChinas_Server.Services
             {
                 _lobbyManager.BroadcastMessage(lobbyCode, sender, message);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _log.Error($"Error sending message: {ex.Message}", ex);
             }
@@ -179,7 +179,7 @@ namespace DamasChinas_Server.Services
                 {
                     _lobbyManager.HandleUnexpectedDisconnect(_username);
                 }
-                catch (Exception ex)
+                catch (CommunicationException ex)
                 {
                     _log.Error($"[LobbyService] HandleUnexpectedDisconnect error: {ex.Message}", ex);
                 }
@@ -188,7 +188,7 @@ namespace DamasChinas_Server.Services
                     LobbySessionManager.Remove(_username);
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _log.Error($"[LobbyService.OnChannelClosedOrFaulted] {ex.Message}", ex);
             }
@@ -221,7 +221,7 @@ namespace DamasChinas_Server.Services
                 _log.Warn($"[{context}] Validation Error: {ex.Code}");
                 throw new FaultException<MessageCode>(ex.Code);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _log.Error($"[{context}] Error: {ex.Message}", ex);
                 throw new FaultException<MessageCode>(MessageCode.UnknownError);
@@ -257,7 +257,7 @@ namespace DamasChinas_Server.Services
             {
                 return OperationResult.Fail(ex.Message, ex.Code);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return HandleException(ex, "JoinLobbyGuest");
             }
@@ -304,7 +304,7 @@ namespace DamasChinas_Server.Services
             {
                 return OperationResult.Fail(ex.Message, ex.Code);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _log.Error($"[{context}] Error: {ex.Message}", ex);
                 return OperationResult.Fail(ex.Message, MessageCode.UnknownError);

@@ -48,7 +48,7 @@ namespace DamasChinas_Server.Logic
             {
                 action(callback);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Warn(
                     $"[{context}] Callback FAILED → user disconnected: {username}. Error: {ex.Message}");
@@ -418,7 +418,7 @@ namespace DamasChinas_Server.Logic
                 {
                     sessionCb.OnBanStatusUpdated(banInfo);
                 }
-                catch (Exception ex)
+                catch (CommunicationException ex)
                 {
                     _log.Warn($"[LobbyManager.ReportPlayer] Session callback FAILED for {username}: {ex.Message}");
                     SessionManager.RemoveSession(username);

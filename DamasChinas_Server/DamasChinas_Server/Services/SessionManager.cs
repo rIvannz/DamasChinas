@@ -80,7 +80,7 @@ namespace DamasChinas_Server.Services
                     }
 
                     ActiveSessions.TryGetValue(nickname, out var entry);
-                    _log.Info($"[{OperationGetSession}] get secion : {nickname}");
+                    _log.Info($"[{OperationGetSession}] get sesion : {nickname}");
                     return entry?.Callback;
                 },
                 OperationGetSession,

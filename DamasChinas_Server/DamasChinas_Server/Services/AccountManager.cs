@@ -155,7 +155,7 @@ namespace DamasChinas_Server.Services
                 _log.Error($"[{context}] EntitySQL ERROR {sqlEx.Number}", sqlEx);
                 return OperationResult.Fail("Entitysql error.", MessageCode.ServerUnavailable);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[{context}] Unexpected exception {ex.Message}", ex);
                 return OperationResult.Fail("Unexpected error.", MessageCode.UnknownError);

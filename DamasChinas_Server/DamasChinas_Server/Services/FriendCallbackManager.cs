@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.ServiceModel;
 using DamasChinas_Server.Common;
 using DamasChinas_Server.Interfaces;
 
@@ -28,7 +29,7 @@ namespace DamasChinas_Server.Services
                 ActiveFriendCallbacks[key] = callback;
                 _log.Info($"[Add] Callback add: {key}");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _log.Error($"[Add] callback error on ad: {key}", ex);
             }
@@ -46,7 +47,7 @@ namespace DamasChinas_Server.Services
                 ActiveFriendCallbacks.TryRemove(key, out _);
                 _log.Info($"[Remove] Callback removed : {key}");
             }
-            catch (Exception ex)
+            catch (CommunicationException   ex)
             {
                 _log.Error($"[Remove] error on remove callback: {key}", ex);
             }
@@ -63,7 +64,7 @@ namespace DamasChinas_Server.Services
                 ActiveFriendCallbacks.TryGetValue(key, out var callback);
                 return callback;
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[Get] error on get callback: {key}", ex);
                 return null;
@@ -82,7 +83,7 @@ namespace DamasChinas_Server.Services
                 if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.FriendRemoved(removedFriendUsername);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[NotifyFriendRemoved] error on notification {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
@@ -99,7 +100,7 @@ namespace DamasChinas_Server.Services
                 if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.UserBlockedYou(blockerUsername);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[NotifyUserBlocked] Error on notify to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
@@ -116,7 +117,7 @@ namespace DamasChinas_Server.Services
                 if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.FriendRequestReceived(fromUsername);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[NotifyFriendRequestReceived] Error on notify to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
@@ -148,7 +149,7 @@ namespace DamasChinas_Server.Services
                 callback.FriendListUpdated();
                 _log.Info($"[NotifyFriendListUpdated] Send to: {key}");
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[NotifyFriendListUpdated] eroor on notifi to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
@@ -165,7 +166,7 @@ namespace DamasChinas_Server.Services
                 if (ActiveFriendCallbacks.TryGetValue(key, out var callback))
                     callback.UserUnblockedYou(byUsername);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"[NotifyUserUnblocked] Error on notify unblock to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);

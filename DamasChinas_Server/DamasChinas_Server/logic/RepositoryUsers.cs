@@ -15,7 +15,7 @@ namespace DamasChinas_Server
         private readonly Func<IApplicationDbContext> _contextFactory;
 
         private const string DefaultAvatarFile = "avatarIcon.png";
-        >
+        
         public RepositoryUsers()
             : this(() => new damas_chinasEntities())
         {

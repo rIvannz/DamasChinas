@@ -6,9 +6,7 @@ using System.Linq;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Represents a player's move request.
-    /// </summary>
+
     public class PlayerMove
     {
         private const int MinimumMoveLength = 2;
