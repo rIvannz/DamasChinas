@@ -59,7 +59,7 @@
                         Margin="0,0,10,0"
                         Click="OnCancelClick"/>
 
-                <Button Content="{DynamicResource confirm}"
+                <Button Content="{DynamicResource report}"
                         Style="{DynamicResource BaseGameButton}"
                         Width="120" Height="36"
                         Click="OnConfirmClick"/>
