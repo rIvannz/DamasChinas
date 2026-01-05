@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using DamasChinas_Server.Common;
+﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Services;
-using DamasChinas_Server.Utilities;
 using DamasChinas_Server.Utilidades;
+using DamasChinas_Server.Utilities;
+using System;
+using System.Threading;
 
 namespace DamasChinas_Server.Logic
 {
@@ -17,8 +17,9 @@ namespace DamasChinas_Server.Logic
         internal static Action<string, Exception> LogError =
             (msg, ex) => _log.Error(msg, ex);
 
+     
         internal static Action<string> TelegramSender =
-            msg => TelegramNotifier.Send(msg);
+            technicalDetail => TelegramNotifier.NotifyDatabaseUnavailable("es", technicalDetail);
 
         internal static Action<MessageCode> DisconnectSessions =
             code => SessionManager.ForceDisconnectAll(code);
@@ -58,13 +59,8 @@ namespace DamasChinas_Server.Logic
         {
             try
             {
-                TelegramSender(
-                    string.Format(
-                        TelegramNotifier.DbDownTemplate,
-                        DateTime.Now.ToString(TelegramNotifier.TimeFormat),
-                        ex.GetType().Name
-                    )
-                );
+     
+                TelegramSender(ex.GetType().Name);
             }
             catch (Exception notifyEx)
             {
