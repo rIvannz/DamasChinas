@@ -119,7 +119,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private static Task ExecuteLoginAsync(LoginServiceClient client, string username, string hashedPassword)
         {
-            // Importante: no bloquea UI thread
+          
             return Task.Run(() =>
             {
                 client.Login(new LoginRequest

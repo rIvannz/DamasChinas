@@ -562,6 +562,9 @@
   </ItemGroup>
   <!-- Archivos de recursos -->
   <ItemGroup>
+    <Content Include="Assets\Sounds\move.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Connected Services\GuestSessionServiceProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

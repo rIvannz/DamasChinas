@@ -9,7 +9,8 @@ namespace DamasChinas_Client.UI.Pages
 {
     public partial class ConfiSound : Page
     {
-        private double _pendingVolume;
+        private double _pendingMusicVolume;
+        private double _pendingEffectsVolume;
 
         public ConfiSound()
         {
@@ -17,10 +18,13 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-                _pendingVolume = SoundManager.MusicVolume;
-                MusicSlider.Value = _pendingVolume * 100;
-
+                _pendingMusicVolume = SoundManager.MusicVolume;
+                MusicSlider.Value = _pendingMusicVolume * 100;
                 MusicSlider.ValueChanged += OnMusicVolumeChanged;
+
+                _pendingEffectsVolume = SoundManager.EffectsVolume;
+                EffectsSlider.Value = _pendingEffectsVolume * 100;
+                EffectsSlider.ValueChanged += OnEffectsVolumeChanged;
             }
             catch (InvalidOperationException ex)
             {
@@ -38,9 +42,7 @@ namespace DamasChinas_Client.UI.Pages
         {
             if (volume < 0 || volume > 1)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(volume),
-                    "Volume must be between 0 and 1.");
+                throw new ArgumentOutOfRangeException(nameof(volume), "Volume must be between 0 and 1.");
             }
         }
 
@@ -48,11 +50,10 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                _pendingVolume = e.NewValue / 100;
+                _pendingMusicVolume = e.NewValue / 100;
+                ValidateVolume(_pendingMusicVolume);
 
-                ValidateVolume(_pendingVolume);
-
-                SoundManager.ApplyVolume(_pendingVolume);
+                SoundManager.ApplyMusicVolume(_pendingMusicVolume);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -71,17 +72,44 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
+        private void OnEffectsVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                _pendingEffectsVolume = e.NewValue / 100;
+                ValidateVolume(_pendingEffectsVolume);
+
+                SoundManager.ApplyEffectsVolume(_pendingEffectsVolume);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Debug.WriteLine($"[ConfiSound.OnEffectsVolumeChanged - OutOfRange] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.SoundVolumeInvalid, PopupType.Warning);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[ConfiSound.OnEffectsVolumeChanged - InvalidOperation] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
+            }
+            catch (ArgumentException ex)
+            {
+                Debug.WriteLine($"[ConfiSound.OnEffectsVolumeChanged - ArgumentException] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.SoundSettingsError, PopupType.Error);
+            }
+        }
+
         private void OnConfirmClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                ValidateVolume(_pendingVolume);
+                ValidateVolume(_pendingMusicVolume);
+                ValidateVolume(_pendingEffectsVolume);
 
-                SoundManager.ApplyVolume(_pendingVolume);
+                SoundManager.ApplyMusicVolume(_pendingMusicVolume);
+                SoundManager.ApplyEffectsVolume(_pendingEffectsVolume);
 
                 MessageHelper.ShowPopup(MessageKeys.SoundSettingsUpdated, PopupType.Success);
 
-   
                 var hostWindow = Window.GetWindow(this);
                 if (hostWindow != null && hostWindow.Owner != null)
                 {
@@ -109,14 +137,12 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-           
                 if (NavigationService?.CanGoBack == true)
                 {
                     NavigationService.GoBack();
                     return;
                 }
 
-       
                 var hostWindow = Window.GetWindow(this);
                 if (hostWindow != null && hostWindow.Owner != null)
                 {
