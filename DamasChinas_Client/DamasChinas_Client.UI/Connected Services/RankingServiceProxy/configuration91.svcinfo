@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="cx88ZDkngQgZ4sR+r/+w0SlK6j7dF0eQEFt7rH5yk58=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="dbjIRg0OR8N9yysOr2pAc+u4A9H0Llcb1CH2c+8QVC4=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IRankingService">
       <properties>
@@ -121,10 +121,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IRankingService" contract="RankingServiceProxy.IRankingService" bindingType="netTcpBinding" address="net.tcp://localhost:8757/RankingService/" bindingConfiguration="NetTcpBinding_IRankingService">
+    <endpoint name="NetTcpBinding_IRankingService" contract="RankingServiceProxy.IRankingService" bindingType="netTcpBinding" address="net.tcp://172.20.10.13:8757/RankingService/" bindingConfiguration="NetTcpBinding_IRankingService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:8757/RankingService/</serializedValue>
+          <serializedValue>net.tcp://172.20.10.13:8757/RankingService/</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

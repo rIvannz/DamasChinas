@@ -19,16 +19,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8004/FriendService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://172.20.10.13:8004/FriendService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item12.disco" MetadataType="Disco" ID="70df77d2-28b3-43cc-998e-a4b131a9d31c" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?disco" />
-    <MetadataFile FileName="item33.xsd" MetadataType="Schema" ID="9957253d-6a28-4e36-88fe-f37542bb8a82" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd4" />
-    <MetadataFile FileName="item34.xsd" MetadataType="Schema" ID="887e2fae-8c11-42d4-bfae-ad37372c10ef" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd2" />
-    <MetadataFile FileName="item38.xsd" MetadataType="Schema" ID="e10b5983-467b-4990-a317-bee20b72c31c" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd3" />
-    <MetadataFile FileName="item39.xsd" MetadataType="Schema" ID="79b051a3-6428-4a8e-b50d-a5a1557fa95e" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd0" />
-    <MetadataFile FileName="item310.xsd" MetadataType="Schema" ID="804356a1-679c-4bc2-a215-849fbad1ddfa" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?xsd=xsd1" />
-    <MetadataFile FileName="FriendService1.wsdl" MetadataType="Wsdl" ID="297b5ef1-38a1-460d-9555-f3614f1cc332" SourceId="1" SourceUrl="http://localhost:8004/FriendService/?wsdl" />
+    <MetadataFile FileName="FriendService1.wsdl" MetadataType="Wsdl" ID="7970b3fb-3784-48e2-953d-d922bc0b855b" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?wsdl" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="23177728-4355-4150-a85a-dfe67c326038" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?xsd=xsd3" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="3c98e8b5-e2e0-48b2-8ac0-a14957a8954c" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?xsd=xsd0" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="b5e30dd9-827a-4b1b-bc98-06ff85b04626" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?xsd=xsd2" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="c493cdb6-f6b1-4cc8-8d38-057038f18869" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?xsd=xsd1" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="bd4ba2fe-c7ef-40a3-98be-5a38a0589479" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?disco" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="44901518-fef8-4b33-995c-5b759dc83e56" SourceId="1" SourceUrl="http://172.20.10.13:8004/FriendService/?xsd=xsd4" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

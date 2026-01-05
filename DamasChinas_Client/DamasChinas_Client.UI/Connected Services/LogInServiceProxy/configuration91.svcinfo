@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="cM7+ZS3RQ7j5AGgZ4SzjsApl171zvr3/QT8lnXSBGMs=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="4bBGw5Wd/SzYeSgKTPgrmVa3l9lSkOl9yKb23p7zuZk=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_ILoginService">
       <properties>
@@ -121,10 +121,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_ILoginService" contract="LogInServiceProxy.ILoginService" bindingType="netTcpBinding" address="net.tcp://localhost:8733/LoginService/" bindingConfiguration="NetTcpBinding_ILoginService">
+    <endpoint name="NetTcpBinding_ILoginService" contract="LogInServiceProxy.ILoginService" bindingType="netTcpBinding" address="net.tcp://172.20.10.13:8733/LoginService/" bindingConfiguration="NetTcpBinding_ILoginService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:8733/LoginService/</serializedValue>
+          <serializedValue>net.tcp://172.20.10.13:8733/LoginService/</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

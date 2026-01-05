@@ -57,7 +57,7 @@ namespace DamasChinas_Server.Utilities
                 channel.Closed += closedHandler;
                 channel.Faulted += faultedHandler;
 
-                _log.Info($"[Add] Guest callback agregado: {key}");
+                _log.Info($"[Add] Guest callback add: {key}");
             }
             catch (InvalidOperationException ex)
             {
@@ -75,7 +75,7 @@ namespace DamasChinas_Server.Utilities
             try
             {
                 _callbacks.TryRemove(key, out _);
-                _log.Info($"[Remove] Guest callback removido: {key}");
+                _log.Info($"[Remove] Guest callback removed: {key}");
             }
             catch (InvalidOperationException ex)
             {
@@ -99,13 +99,13 @@ namespace DamasChinas_Server.Utilities
                 }
                 catch (InvalidOperationException ex)
                 {
-                    _log.Warn($"[NotifyAll] Falló callback, removiendo: {kv.Key}. {ex.Message}");
+                    _log.Warn($"[NotifyAll] fall callback, removed: {kv.Key}. {ex.Message}");
                     _callbacks.TryRemove(kv.Key, out _);
 
                 }
                 catch (CommunicationException ex)
                 {
-                    _log.Warn($"[NotifyAll] Falló callback, removiendo: {kv.Key}. {ex.Message}");
+                    _log.Warn($"[NotifyAll] fall callback, removed: {kv.Key}. {ex.Message}");
                     _callbacks.TryRemove(kv.Key, out _);
 
                 }
@@ -125,7 +125,7 @@ namespace DamasChinas_Server.Utilities
                 }
                 catch 
                 {
-                    _log.Warn($"[NotifyAll] ForceDisconectAll fallo para un cliente ");
+                    _log.Warn($"[NotifyAll] ForceDisconectAll fall for a client ");
 
                 }
 
@@ -135,7 +135,7 @@ namespace DamasChinas_Server.Utilities
                 }
                 catch 
                 {
-                    _log.Warn($"[NotifyAll] ForceDisconectAll fallo para un cliente");
+                    _log.Warn($"[NotifyAll] ForceDisconectAll ffall for a client ");
 
                 }
 

@@ -26,11 +26,11 @@ namespace DamasChinas_Server.Services
             try
             {
                 ActiveFriendCallbacks[key] = callback;
-                _log.Info($"[Add] Callback agregado: {key}");
+                _log.Info($"[Add] Callback add: {key}");
             }
             catch (Exception ex)
             {
-                _log.Error($"[Add] Error al agregar callback: {key}", ex);
+                _log.Error($"[Add] callback error on ad: {key}", ex);
             }
         }
 
@@ -44,11 +44,11 @@ namespace DamasChinas_Server.Services
             try
             {
                 ActiveFriendCallbacks.TryRemove(key, out _);
-                _log.Info($"[Remove] Callback removido: {key}");
+                _log.Info($"[Remove] Callback removed : {key}");
             }
             catch (Exception ex)
             {
-                _log.Error($"[Remove] Error al remover callback: {key}", ex);
+                _log.Error($"[Remove] error on remove callback: {key}", ex);
             }
         }
 
@@ -65,7 +65,7 @@ namespace DamasChinas_Server.Services
             }
             catch (Exception ex)
             {
-                _log.Error($"[Get] Error obteniendo callback: {key}", ex);
+                _log.Error($"[Get] error on get callback: {key}", ex);
                 return null;
             }
         }
@@ -84,7 +84,7 @@ namespace DamasChinas_Server.Services
             }
             catch (Exception ex)
             {
-                _log.Error($"[NotifyFriendRemoved] Error notificando a {key}", ex);
+                _log.Error($"[NotifyFriendRemoved] error on notification {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
@@ -101,7 +101,7 @@ namespace DamasChinas_Server.Services
             }
             catch (Exception ex)
             {
-                _log.Error($"[NotifyUserBlocked] Error notificando bloqueo a {key}", ex);
+                _log.Error($"[NotifyUserBlocked] Error on notify to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
@@ -118,7 +118,7 @@ namespace DamasChinas_Server.Services
             }
             catch (Exception ex)
             {
-                _log.Error($"[NotifyFriendRequestReceived] Error notificando a {key}", ex);
+                _log.Error($"[NotifyFriendRequestReceived] Error on notify to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
@@ -141,16 +141,16 @@ namespace DamasChinas_Server.Services
             {
                 if (!ActiveFriendCallbacks.TryGetValue(key, out var callback))
                 {
-                    _log.Warn($"[NotifyFriendListUpdated] No existe callback para {key}");
+                    _log.Warn($"[NotifyFriendListUpdated] Wasent notify {key}");
                     return;
                 }
 
                 callback.FriendListUpdated();
-                _log.Info($"[NotifyFriendListUpdated] Enviado a: {key}");
+                _log.Info($"[NotifyFriendListUpdated] Send to: {key}");
             }
             catch (Exception ex)
             {
-                _log.Error($"[NotifyFriendListUpdated] Error notificando a {key}", ex);
+                _log.Error($"[NotifyFriendListUpdated] eroor on notifi to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }
@@ -167,7 +167,7 @@ namespace DamasChinas_Server.Services
             }
             catch (Exception ex)
             {
-                _log.Error($"[NotifyUserUnblocked] Error notificando desbloqueo a {key}", ex);
+                _log.Error($"[NotifyUserUnblocked] Error on notify unblock to {key}", ex);
                 ActiveFriendCallbacks.TryRemove(key, out _);
             }
         }

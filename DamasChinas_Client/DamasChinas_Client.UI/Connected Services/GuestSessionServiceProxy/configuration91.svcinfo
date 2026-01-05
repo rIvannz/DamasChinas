@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="WzZKml7jsdHBAv/ac4wvs5Wks4SojlybMsmIwd3rvP4=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="p3oc3Qc3CEUPDNc1QKymzhiWDeMBx0oGbWPVFXxP8RA=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IGuestSessionService">
       <properties>
@@ -121,10 +121,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IGuestSessionService" contract="GuestSessionServiceProxy.IGuestSessionService" bindingType="netTcpBinding" address="net.tcp://localhost:8759/GuestSessionService/" bindingConfiguration="NetTcpBinding_IGuestSessionService">
+    <endpoint name="NetTcpBinding_IGuestSessionService" contract="GuestSessionServiceProxy.IGuestSessionService" bindingType="netTcpBinding" address="net.tcp://172.20.10.13:8759/GuestSessionService/" bindingConfiguration="NetTcpBinding_IGuestSessionService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:8759/GuestSessionService/</serializedValue>
+          <serializedValue>net.tcp://172.20.10.13:8759/GuestSessionService/</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

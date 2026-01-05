@@ -10,8 +10,8 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:8009/GuestSessionService/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8009/GuestSessionService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://172.20.10.13:8009/GuestSessionService/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://172.20.10.13:8009/GuestSessionService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IGuestSessionService_Subscribe_InputMessage">
@@ -72,9 +72,9 @@
   </wsdl:binding>
   <wsdl:service name="GuestSessionService">
     <wsdl:port name="NetTcpBinding_IGuestSessionService" binding="tns:NetTcpBinding_IGuestSessionService">
-      <soap12:address location="net.tcp://localhost:8759/GuestSessionService/" />
+      <soap12:address location="net.tcp://172.20.10.13:8759/GuestSessionService/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8759/GuestSessionService/</wsa10:Address>
+        <wsa10:Address>net.tcp://172.20.10.13:8759/GuestSessionService/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

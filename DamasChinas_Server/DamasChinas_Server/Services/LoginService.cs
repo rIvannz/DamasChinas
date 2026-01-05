@@ -45,7 +45,7 @@ namespace DamasChinas_Server
 
                     try
                     {
-                        _log.Info($"[{OperationLogin}] Intentando login para: {loginRequest?.Username}");
+                        _log.Info($"[{OperationLogin}] try login to: {loginRequest?.Username}");
 
                         var profile = _repository.Login(loginRequest);
 
@@ -56,11 +56,11 @@ namespace DamasChinas_Server
                         {
                             BanInfoDto banInfo = sanctionsRepo.GetActiveBanInfo(userId);
                             callback.OnLoginBanned(banInfo);
-                            _log.Warn($"[{OperationLogin}] Usuario baneado: {profile.Username}");
+                            _log.Warn($"[{OperationLogin}] user banned: {profile.Username}");
                             return;
                         }
 
-                        _log.Info($"[{OperationLogin}] Login exitoso: {profile.Username}");
+                        _log.Info($"[{OperationLogin}] Login succes: {profile.Username}");
                         callback.OnLoginSuccess(profile);
                     }
                     catch (EntityException)
@@ -79,11 +79,7 @@ namespace DamasChinas_Server
                     {
                         callback.OnLoginError(MessageCode.ServerUnavailable);
                     }
-                    catch (Exception ex)
-                    {
-                        _log.Warn($"[{OperationLogin}] Login fallido: {ex.Message}");
-                        callback.OnLoginError(MessageCode.LoginInvalidCredentials);
-                    }
+
                 },
                 OperationLogin
             );
@@ -117,11 +113,7 @@ namespace DamasChinas_Server
                     onError?.Invoke(ex);
                 }
             }
-            catch (Exception ex)
-            {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
-                onError?.Invoke(ex);
-            }
+
         }
     }
 }

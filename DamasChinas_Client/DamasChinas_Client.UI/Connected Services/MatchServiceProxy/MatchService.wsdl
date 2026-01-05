@@ -10,13 +10,13 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://localhost:8008/MatchService/?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Contracts" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://172.20.10.13:8008/MatchService/?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Shared.Contracts.Dtos" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMatchService_ConnectToMatch_InputMessage">
@@ -191,9 +191,9 @@
   </wsdl:binding>
   <wsdl:service name="MatchService">
     <wsdl:port name="NetTcpBinding_IMatchService" binding="tns:NetTcpBinding_IMatchService">
-      <soap12:address location="net.tcp://localhost:8758/MatchService/" />
+      <soap12:address location="net.tcp://172.20.10.13:8758/MatchService/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8758/MatchService/</wsa10:Address>
+        <wsa10:Address>net.tcp://172.20.10.13:8758/MatchService/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

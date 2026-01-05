@@ -54,7 +54,7 @@ namespace DamasChinas_Server.Services
 
                 ActiveSessions[username] = new SessionEntry(callback, channel);
 
-                _log.Info($"[{OperationAddSession}] Sesión agregada: {username}");
+                _log.Info($"[{OperationAddSession}] Sesión add: {username}");
             }, OperationAddSession);
         }
 
@@ -65,7 +65,7 @@ namespace DamasChinas_Server.Services
             ExecuteOperation(() =>
             {
                 ActiveSessions.TryRemove(nickname, out _);
-                _log.Info($"[{OperationRemoveSession}] Sesión removida: {nickname}");
+                _log.Info($"[{OperationRemoveSession}] Sesión removed: {nickname}");
             }, OperationRemoveSession);
         }
 
@@ -80,7 +80,7 @@ namespace DamasChinas_Server.Services
                     }
 
                     ActiveSessions.TryGetValue(nickname, out var entry);
-                    _log.Info($"[{OperationGetSession}] Obtener sesión de: {nickname}");
+                    _log.Info($"[{OperationGetSession}] get secion : {nickname}");
                     return entry?.Callback;
                 },
                 OperationGetSession,
@@ -119,12 +119,12 @@ namespace DamasChinas_Server.Services
                     }
                     catch (CommunicationException ex)
                     {
-                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        _log.Error($"[{OperationForEachSession}] Callback fall, disconecting session", ex);
                         ActiveSessions.TryRemove(entry.Key, out _);
                     }
                     catch (InvalidOperationException ex)
                     {
-                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        _log.Error($"[{OperationForEachSession}] Callback fall, disconecting session", ex);
                         ActiveSessions.TryRemove(entry.Key, out _);
                     }
                 }
@@ -148,7 +148,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch (CommunicationException ex)
                     {
-                        _log.Error($"[{OperationForEachSession}] Callback falló, limpiando sesión zombi.", ex);
+                        _log.Error($"[{OperationForEachSession}] Callback fall, disconecting session", ex);
                         ActiveSessions.TryRemove(kvp.Key, out _);
                     }
                 }
@@ -197,7 +197,7 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        _log.Error($"[SessionManager.ForceDisconnectAll] Expulsión global no posible de ejecutar para un jugador");
+                        _log.Error($"[SessionManager.ForceDisconnectAll] global disconect ");
 
                     }
 
@@ -207,14 +207,14 @@ namespace DamasChinas_Server.Services
                     }
                     catch
                     {
-                        _log.Error($"[SessionManager.ForceDisconnectAll] Expulsión global no posible de ejecutar para un jugador");
+                        _log.Error($"[SessionManager.ForceDisconnectAll] global disconect wasnt succesful");
 
                     }
 
                     ActiveSessions.TryRemove(username, out _);
                 }
 
-                _log.Error($"[SessionManager.ForceDisconnectAll] Expulsión global ejecutada. Code={code}");
+                _log.Error($"[SessionManager.ForceDisconnectAll] global disconect wasnt succesful. Code={code}");
 
             }, nameof(ForceDisconnectAll));
         }

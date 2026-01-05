@@ -52,7 +52,7 @@ namespace DamasChinas_Server
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
-                    _log.Warn($"[{OperationRegistrateClient}] Username vacío o nulo.");
+                    _log.Warn($"[{OperationRegistrateClient}] null username.");
                     return;
                 }
 
@@ -61,7 +61,7 @@ namespace DamasChinas_Server
 
                 Clients[key] = callback;
 
-                _log.Info($"[{OperationRegistrateClient}] Registrado: {key}");
+                _log.Info($"[{OperationRegistrateClient}] Register: {key}");
             }, OperationRegistrateClient);
         }
 
@@ -71,7 +71,7 @@ namespace DamasChinas_Server
             {
                 if (message == null)
                 {
-                    _log.Warn($"[{OperationSendMessage}] Se intentó enviar un mensaje nulo.");
+                    _log.Warn($"[{OperationSendMessage}] Try to send a nule message.");
                     return;
                 }
 
@@ -81,7 +81,7 @@ namespace DamasChinas_Server
 
                 if (string.IsNullOrWhiteSpace(destinationKey))
                 {
-                    _log.Warn($"[{OperationSendMessage}] DestinationUsername vacío o nulo.");
+                    _log.Warn($"[{OperationSendMessage}] DestinationUsername null");
                     return;
                 }
 
@@ -101,7 +101,7 @@ namespace DamasChinas_Server
                     ExecuteOperation(
                         () =>
                         {
-                            _log.Info($"[{OperationSendMessage_DeliverToClient}] Enviando mensaje a {destinationKey}");
+                            _log.Info($"[{OperationSendMessage_DeliverToClient}] Sent mesage to {destinationKey}");
                             callback.ReceiveMessage(message);
                         },
                         OperationSendMessage_DeliverToClient
@@ -109,7 +109,7 @@ namespace DamasChinas_Server
                 }
                 else
                 {
-                    _log.Warn($"[{OperationSendMessage}] Cliente '{destinationKey}' no conectado.");
+                    _log.Warn($"[{OperationSendMessage}] client '{destinationKey}' wasnt conected.");
                 }
 
             }, OperationSendMessage);
@@ -164,10 +164,7 @@ namespace DamasChinas_Server
             {
                 _log.Warn($"[{context}] CommunicationException: {ex.Message}");
             }
-            catch (Exception ex)
-            {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
-            }
+  
         }
 
 
@@ -206,10 +203,6 @@ namespace DamasChinas_Server
             catch (CommunicationException ex)
             {
                 _log.Warn($"[{context}] CommunicationException: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}", ex);
             }
 
             return defaultValue;

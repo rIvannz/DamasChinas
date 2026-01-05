@@ -13,7 +13,7 @@ namespace DamasChinas_Tests.Utilities
         [Fact]
         public void Trip_FirstCall_ExecutesAllActions()
         {
-            // Arrange
+             
             DbOutageCoordinator.ResetForTests();
 
             bool logCalled = false;
@@ -26,10 +26,10 @@ namespace DamasChinas_Tests.Utilities
             DbOutageCoordinator.DisconnectSessions = _ => sessionsCalled = true;
             DbOutageCoordinator.DisconnectGuests = _ => guestsCalled = true;
 
-            // Act
+             
             DbOutageCoordinator.Trip(new Exception("DB down"));
 
-            // Assert
+             
             Assert.True(logCalled);
             Assert.True(telegramCalled);
             Assert.True(sessionsCalled);
@@ -39,7 +39,7 @@ namespace DamasChinas_Tests.Utilities
         [Fact]
         public void Trip_CalledTwice_OnlyExecutesOnce()
         {
-            // Arrange
+             
             DbOutageCoordinator.ResetForTests();
 
             int telegramCalls = 0;
@@ -49,18 +49,18 @@ namespace DamasChinas_Tests.Utilities
             DbOutageCoordinator.DisconnectSessions = _ => { };
             DbOutageCoordinator.DisconnectGuests = _ => { };
 
-            // Act
+             
             DbOutageCoordinator.Trip(new Exception("DB down"));
             DbOutageCoordinator.Trip(new Exception("DB down again"));
 
-            // Assert
+             
             Assert.Equal(1, telegramCalls);
         }
 
         [Fact]
         public void Trip_WhenTelegramThrows_DoesNotThrow()
         {
-            // Arrange
+             
             DbOutageCoordinator.ResetForTests();
 
             DbOutageCoordinator.TelegramSender =
@@ -70,19 +70,19 @@ namespace DamasChinas_Tests.Utilities
             DbOutageCoordinator.DisconnectSessions = _ => { };
             DbOutageCoordinator.DisconnectGuests = _ => { };
 
-            // Act
+             
             var ex = Record.Exception(() =>
                 DbOutageCoordinator.Trip(new Exception("DB down"))
             );
 
-            // Assert
+             
             Assert.Null(ex);
         }
 
         [Fact]
         public void Trip_WhenDisconnectSessionsThrows_DoesNotThrow()
         {
-            // Arrange
+             
             DbOutageCoordinator.ResetForTests();
 
             DbOutageCoordinator.DisconnectSessions =
@@ -92,19 +92,19 @@ namespace DamasChinas_Tests.Utilities
             DbOutageCoordinator.DisconnectGuests = _ => { };
             DbOutageCoordinator.LogError = (_, __) => { };
 
-            // Act
+             
             var ex = Record.Exception(() =>
                 DbOutageCoordinator.Trip(new Exception("DB down"))
             );
 
-            // Assert
+             
             Assert.Null(ex);
         }
 
         [Fact]
         public void Trip_WhenInnerExceptionOccurs_LogsError()
         {
-            // Arrange
+             
             DbOutageCoordinator.ResetForTests();
 
             bool errorLogged = false;
@@ -116,10 +116,10 @@ namespace DamasChinas_Tests.Utilities
             DbOutageCoordinator.DisconnectSessions = _ => { };
             DbOutageCoordinator.DisconnectGuests = _ => { };
 
-            // Act
+             
             DbOutageCoordinator.Trip(new Exception("DB down"));
 
-            // Assert
+             
             Assert.True(errorLogged);
         }
 

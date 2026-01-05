@@ -19,15 +19,15 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8007/RankingService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://172.20.10.13:8007/RankingService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="a135d8f8-1cc5-44b3-bfd6-1a22f51ac71e" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd1" />
-    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="2fb9e91e-82b3-4849-9dac-8df0fcb000a0" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?disco" />
-    <MetadataFile FileName="item41.xsd" MetadataType="Schema" ID="594b1ee3-94be-40c4-95bd-cc74e577bda6" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd0" />
-    <MetadataFile FileName="RankingService1.wsdl" MetadataType="Wsdl" ID="cf131a63-46a7-4eea-9ab7-fe4b3b998b44" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?wsdl" />
-    <MetadataFile FileName="item42.xsd" MetadataType="Schema" ID="3f02c521-53ad-432f-a1f7-7a5f41c6746f" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd3" />
-    <MetadataFile FileName="item43.xsd" MetadataType="Schema" ID="9b3b8fa6-fe27-4f81-8d3e-90bff0422d90" SourceId="1" SourceUrl="http://localhost:8007/RankingService/?xsd=xsd2" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="bd74d4ec-0d0e-42c6-bdeb-2a0a01f7718a" SourceId="1" SourceUrl="http://172.20.10.13:8007/RankingService/?xsd=xsd0" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="19702ca3-b6cb-40a9-bdb6-c4996c19c382" SourceId="1" SourceUrl="http://172.20.10.13:8007/RankingService/?xsd=xsd1" />
+    <MetadataFile FileName="RankingService.wsdl" MetadataType="Wsdl" ID="0829c175-c16e-45c0-be10-46bbcaea9a79" SourceId="1" SourceUrl="http://172.20.10.13:8007/RankingService/?wsdl" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="5763375c-caa6-4cba-a09d-f2f86bd75991" SourceId="1" SourceUrl="http://172.20.10.13:8007/RankingService/?disco" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="d93c65d7-0525-459d-aa20-2b7233fb292d" SourceId="1" SourceUrl="http://172.20.10.13:8007/RankingService/?xsd=xsd2" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="4fc65319-ed2c-4217-98ad-3bdf82953d0d" SourceId="1" SourceUrl="http://172.20.10.13:8007/RankingService/?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -92,9 +92,9 @@
   </wsdl:binding>
   <wsdl:service name="ChatService">
     <wsdl:port name="NetTcpBinding_IChatService" binding="tns:NetTcpBinding_IChatService">
-      <soap12:address location="net.tcp://localhost:8755/ChatService/" />
+      <soap12:address location="net.tcp://172.20.10.13:8755/ChatService/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8755/ChatService/</wsa10:Address>
+        <wsa10:Address>net.tcp://172.20.10.13:8755/ChatService/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

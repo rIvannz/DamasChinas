@@ -19,7 +19,7 @@ namespace DamasChinas_Tests.logic
         [Fact]
         public void ApplyBan_PermanentBan_AddsSanctionCorrectly()
         {
-            // Arrange
+             
             var sancionesList = new List<Sanciones>();
             var mockSet = MockDbSetHelper.CreateMockSet(sancionesList);
 
@@ -30,10 +30,10 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act
+             
             repo.ApplyBan(10, permanent: true, untilUtc: null, reason: "Toxicity");
 
-            // Assert
+             
             Assert.Single(sancionesList);
             var s = sancionesList.First();
             Assert.Equal(10, s.id_usuario);
@@ -47,7 +47,7 @@ namespace DamasChinas_Tests.logic
         [Fact]
         public void ApplyBan_TemporaryBan_AssignsCorrectEndDate()
         {
-            // Arrange
+             
             var sancionesList = new List<Sanciones>();
             var mockSet = MockDbSetHelper.CreateMockSet(sancionesList);
 
@@ -59,10 +59,10 @@ namespace DamasChinas_Tests.logic
 
             DateTime until = DateTime.UtcNow.AddDays(3);
 
-            // Act
+             
             repo.ApplyBan(20, permanent: false, untilUtc: until, reason: "AFK");
 
-            // Assert
+             
             Assert.Single(sancionesList);
             var s = sancionesList.First();
             Assert.Equal("temporal", s.tipo_sancion);
@@ -74,7 +74,7 @@ namespace DamasChinas_Tests.logic
         [Fact]
         public void ApplyBan_SaveChangesFails_ThrowsException()
         {
-            // Arrange
+             
             var sancionesList = new List<Sanciones>();
             var mockSet = MockDbSetHelper.CreateMockSet(sancionesList);
 
@@ -86,7 +86,7 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act + Assert
+               
             Assert.Throws<Exception>(() =>
                 repo.ApplyBan(1, false, null, "Error test")
             );
@@ -98,7 +98,7 @@ namespace DamasChinas_Tests.logic
         [Fact]
         public void HasActiveBan_NoSanctions_ReturnsFalse()
         {
-            // Arrange
+             
             var sancionesList = new List<Sanciones>();
             var mockSet = MockDbSetHelper.CreateMockSet(sancionesList);
 
@@ -107,17 +107,17 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act
+             
             bool result = repo.HasActiveBan(5);
 
-            // Assert
+             
             Assert.False(result);
         }
 
         [Fact]
         public void HasActiveBan_UserHasInactiveSanction_ReturnsFalse()
         {
-            // Arrange
+             
             var list = new List<Sanciones>
         {
             new Sanciones
@@ -135,24 +135,24 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act
+             
             bool result = repo.HasActiveBan(5);
 
-            // Assert
+             
             Assert.False(result);
         }
 
         [Fact]
         public void HasActiveBan_UserHasExpiredSanction_ReturnsFalse()
         {
-            // Arrange
+             
             var list = new List<Sanciones>
         {
             new Sanciones
             {
                 id_usuario = 7,
                 activo = true,
-                fecha_fin = DateTime.UtcNow.AddMinutes(-5) // expiró
+                fecha_fin = DateTime.UtcNow.AddMinutes(-5) 
             }
         };
 
@@ -163,17 +163,17 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act
+             
             bool result = repo.HasActiveBan(7);
 
-            // Assert
+             
             Assert.False(result);
         }
 
         [Fact]
         public void HasActiveBan_UserHasPermanentActiveBan_ReturnsTrue()
         {
-            // Arrange
+             
             var list = new List<Sanciones>
         {
             new Sanciones
@@ -191,17 +191,17 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act
+             
             bool result = repo.HasActiveBan(3);
 
-            // Assert
+             
             Assert.True(result);
         }
 
         [Fact]
         public void HasActiveBan_TemporaryBanNotExpired_ReturnsTrue()
         {
-            // Arrange
+             
             var list = new List<Sanciones>
         {
             new Sanciones
@@ -219,10 +219,10 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-            // Act
+             
             bool result = repo.HasActiveBan(8);
 
-            // Assert
+             
             Assert.True(result);
         }
     }

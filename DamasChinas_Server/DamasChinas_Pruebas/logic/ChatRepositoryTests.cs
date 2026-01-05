@@ -13,7 +13,6 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void SaveMessage_ValidMessage_AddsMessage()
         {
-            // Arrange
             var usuarios = new List<usuarios>
     {
         new usuarios { id_usuario = 5, perfiles = new List<perfiles>{ new perfiles { username = "seth" } } }
@@ -28,10 +27,10 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+            
             repo.Object.SaveMessage("seth", 99, "Hola mundo");
 
-            // Assert
+             
             Assert.Single(mensajes);
             Assert.Equal(5, mensajes[0].id_usuario_remitente);
             Assert.Equal(99, mensajes[0].id_usuario_destino);
@@ -41,7 +40,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void SaveMessage_ValidMessage_CallsSaveChangesOnce()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios { id_usuario = 10, perfiles = new List<perfiles>{ new perfiles { username = "seth" } } }
@@ -58,17 +57,17 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             repo.Object.SaveMessage("seth", 3, "mensaje");
 
-            // Assert
+             
             mockDb.Verify(db => db.SaveChanges(), Times.Once);
         }
 
         [Fact]
         public void SaveMessage_EmptyUsername_ThrowsArgumentException()
         {
-            // Arrange
+             
             var repo = new ChatRepository(() =>
             {
                 var mockDb = new Mock<damas_chinasEntities>();
@@ -77,7 +76,7 @@ namespace DamasChinas_Pruebas.logic
                 return mockDb.Object;
             });
 
-            // Act & Assert
+               
             Assert.Throws<ArgumentException>(() =>
                 repo.SaveMessage("", 2, "Hola")
             );
@@ -87,7 +86,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void SaveMessage_UserNotFound_ThrowsInvalidOperationException()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>(); // vacío → usuario no existe
 
             var mockDb = new Mock<damas_chinasEntities>();
@@ -96,7 +95,7 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act & Assert
+               
             Assert.Throws<InvalidOperationException>(() =>
                 repo.Object.SaveMessage("ghost", 2, "hola")
             );
@@ -105,10 +104,10 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetChatByUsername_EmptySender_ThrowsArgumentException()
         {
-            // Arrange
+             
             var repo = new Mock<ChatRepository> { CallBase = true };
 
-            // Act & Assert
+               
             Assert.Throws<ArgumentException>(() =>
                 repo.Object.GetChatByUsername("", "dest")
             );
@@ -136,7 +135,7 @@ namespace DamasChinas_Pruebas.logic
             var mockRepo = new Mock<ChatRepository> { CallBase = true };
             mockRepo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act & Assert
+               
             Assert.Throws<ArgumentException>(() =>
                 mockRepo.Object.GetChatByUsername("sender", "")
             );
@@ -147,8 +146,8 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetChatByUsername_SenderNotFound_ThrowsInvalidOperationException()
         {
-            // Arrange
-            var usuarios = new List<usuarios>(); // no existe sender
+             
+            var usuarios = new List<usuarios>(); 
 
             var mockDb = new Mock<damas_chinasEntities>();
             mockDb.Setup(db => db.usuarios)
@@ -157,7 +156,7 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act & Assert
+               
             Assert.Throws<InvalidOperationException>(() =>
                 repo.Object.GetChatByUsername("ghost", "dest")
             );
@@ -166,7 +165,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetChatByUsername_RecipientNotFound_ThrowsInvalidOperationException()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios
@@ -183,7 +182,7 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act & Assert
+               
             Assert.Throws<InvalidOperationException>(() =>
                 repo.Object.GetChatByUsername("sender", "noExiste")
             );
@@ -192,7 +191,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetChatByUsername_NoMessages_ReturnsEmptyList()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios { id_usuario = 1, perfiles = new List<perfiles> { new perfiles { username = "sender" } }},
@@ -209,17 +208,17 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             var result = repo.Object.GetChatByUsername("sender", "dest");
 
-            // Assert
+             
             Assert.Empty(result);
         }
 
         [Fact]
         public void GetChatByUsername_ReturnsMessagesOrderedAndMappedCorrectly()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios { id_usuario = 1, perfiles = new List<perfiles> { new perfiles { username = "sender" }}},
@@ -254,10 +253,10 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             var result = repo.Object.GetChatByUsername("sender", "dest");
 
-            // Assert
+             
             Assert.Equal(2, result.Count);
 
             Assert.Equal("Hola", result[0].Text);
@@ -271,10 +270,10 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetIdByUsername_NullUsername_ThrowsArgumentException()
         {
-            // Arrange
+             
             var repo = new Mock<ChatRepository> { CallBase = true };
 
-            // Act & Assert
+               
             Assert.Throws<ArgumentException>(() =>
                 repo.Object.GetIdByUsername(null)
             );
@@ -283,8 +282,8 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetIdByUsername_UserNotFound_ThrowsInvalidOperationException()
         {
-            // Arrange
-            var usuarios = new List<usuarios>(); // vacío → no existe nadie
+             
+            var usuarios = new List<usuarios>(); 
 
             var mockDb = new Mock<damas_chinasEntities>();
             mockDb.Setup(db => db.usuarios)
@@ -293,7 +292,7 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act & Assert
+               
             Assert.Throws<InvalidOperationException>(() =>
                 repo.Object.GetIdByUsername("ghost")
             );
@@ -302,7 +301,7 @@ namespace DamasChinas_Pruebas.logic
         [Fact]
         public void GetIdByUsername_ExactMatch_ReturnsUserId()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios
@@ -319,17 +318,17 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             int id = repo.Object.GetIdByUsername("seth");
 
-            // Assert
+             
             Assert.Equal(10, id);
         }
 
     [Fact]
         public void GetIdByUsername_CaseInsensitiveMatch_ReturnsUserId()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios
@@ -349,17 +348,17 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             int id = repo.Object.GetIdByUsername("playerone");
 
-            // Assert
+             
             Assert.Equal(20, id);
         }
 
         [Fact]
         public void GetIdByUsername_UserHasMultipleProfiles_ReturnsMatchingUserId()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios
@@ -368,7 +367,7 @@ namespace DamasChinas_Pruebas.logic
             perfiles = new List<perfiles>
             {
                 new perfiles { username = "otro" },
-                new perfiles { username = "seth" }  // ← este coincide
+                new perfiles { username = "seth" }  
             }
         }
     };
@@ -380,17 +379,17 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             int id = repo.Object.GetIdByUsername("seth");
 
-            // Assert
+             
             Assert.Equal(33, id);
         }
 
         [Fact]
         public void GetIdByUsername_OnlyOneUserMatches_ReturnsCorrectId()
         {
-            // Arrange
+             
             var usuarios = new List<usuarios>
     {
         new usuarios
@@ -412,10 +411,10 @@ namespace DamasChinas_Pruebas.logic
             var repo = new Mock<ChatRepository> { CallBase = true };
             repo.Setup(r => r.CreateDb()).Returns(mockDb.Object);
 
-            // Act
+             
             int id = repo.Object.GetIdByUsername("seth");
 
-            // Assert
+             
             Assert.Equal(55, id);
         }
 

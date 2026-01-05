@@ -1,10 +1,6 @@
 ﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.Logic;
-using DamasChinas_Shared.Contracts.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Xunit;
 
@@ -12,7 +8,6 @@ namespace DamasChinas_Tests.logic;
 
 public class LobbyManagerTests
 {
-    // ========= Helpers =========
 
     private static MethodInfo GetPrivateStatic(string name)
     {
@@ -34,7 +29,6 @@ public class LobbyManagerTests
             .First(t => t.Name == "LobbyState");
     }
 
-    // ========= TC-LM-01 =========
     [Fact]
     public void ValidateCreateRequest_NullRequest_ThrowsException()
     {
@@ -51,7 +45,6 @@ public class LobbyManagerTests
         );
     }
 
-    // ========= TC-LM-02 =========
     [Fact]
     public void ValidateCreateRequest_InvalidMaxPlayers_ThrowsException()
     {
@@ -70,7 +63,6 @@ public class LobbyManagerTests
         );
     }
 
-    // ========= TC-LM-03 =========
     [Fact]
     public void ValidateJoinRequest_NullRequest_ThrowsException()
     {
@@ -87,7 +79,6 @@ public class LobbyManagerTests
         );
     }
 
-    // ========= TC-LM-04 =========
     [Fact]
     public void ValidateJoinRequest_EmptyUsername_ThrowsException()
     {
@@ -110,7 +101,6 @@ public class LobbyManagerTests
         );
     }
 
-    // ========= TC-LM-05 =========
     [Fact]
     public void IsGuest_ValidGuestUsername_ReturnsTrue()
     {
@@ -121,7 +111,6 @@ public class LobbyManagerTests
         Assert.True(result);
     }
 
-    // ========= TC-LM-06 =========
     [Fact]
     public void IsGuest_InvalidGuestFormat_ReturnsFalse()
     {
@@ -132,7 +121,6 @@ public class LobbyManagerTests
         Assert.False(result);
     }
 
-    // ========= TC-LM-07 =========
     [Fact]
     public void LobbyState_AddAndRemoveMember_UpdatesCountCorrectly()
     {
@@ -168,7 +156,6 @@ public class LobbyManagerTests
         Assert.Equal(0, countMethod.Invoke(lobby, null));
     }
 
-    // ========= TC-LM-08 =========
     [Fact]
     public void LobbyState_AssignNewHost_AssignsOldestMember()
     {
@@ -201,7 +188,6 @@ public class LobbyManagerTests
         Assert.Equal("Ana", hostProp.GetValue(lobby));
     }
 
-    // ========= TC-LM-09 =========
     [Fact]
     public void LobbyState_ThrowIfFull_WhenMaxPlayersReached_ThrowsException()
     {
@@ -234,7 +220,6 @@ public class LobbyManagerTests
         );
     }
 
-    // ========= TC-LM-10 =========
     [Fact]
     public void LobbyState_ThrowIfGameStarted_ThrowsException()
     {

@@ -19,7 +19,7 @@ namespace DamasChinas_Server.Services
                 return;
 
             _activeLobbySessions[username] = callback;
-            _log.Info($"[LobbySessionManager] Callback agregado: {username}");
+            _log.Info($"[LobbySessionManager] Callback add: {username}");
         }
 
         public static void Remove(string username)
@@ -28,7 +28,7 @@ namespace DamasChinas_Server.Services
                 return;
 
             _activeLobbySessions.TryRemove(username, out _);
-            _log.Info($"[LobbySessionManager] Callback removido: {username}");
+            _log.Info($"[LobbySessionManager] Callback removed: {username}");
         }
 
         public static ILobbyCallback Get(string username)

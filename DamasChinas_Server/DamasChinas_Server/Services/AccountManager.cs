@@ -329,15 +329,6 @@ namespace DamasChinas_Server.Services
                 result.TechnicalDetail = "Invalid operation.";
                 return result;
             }
-            catch (Exception ex)
-            {
-                LogStatic.Error($"[{context}] Unexpected exception: {ex.Message}");
-
-                result.Success = false;
-                result.Code = failureCode;
-                result.TechnicalDetail = "Unexpected error.";
-                return result;
-            }
         }
     }
 

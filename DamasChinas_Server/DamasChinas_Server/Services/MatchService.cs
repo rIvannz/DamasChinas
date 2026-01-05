@@ -56,7 +56,7 @@ namespace DamasChinas_Server.Services
             {
                 return OperationResult.Fail(ex.Message, ex.Code);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"Error connecting to match {lobbyCode}: {ex.Message}", ex);
                 return OperationResult.Fail("Connection error.", MessageCode.UnknownError);
@@ -82,7 +82,7 @@ namespace DamasChinas_Server.Services
                 _manager.ApplyMove(move);
                 return OperationResult.Ok();
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Warn($"Invalid move by {move.Username}: {ex.Message}");
                 return OperationResult.Fail(ex.Message, MessageCode.InvalidMove);
@@ -96,7 +96,7 @@ namespace DamasChinas_Server.Services
                 _hasLeft = true;
                 _manager.RemovePlayer(lobbyCode, username);
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
                 _log.Error($"LeaveMatch error: {ex.Message}", ex);
             }
@@ -109,7 +109,7 @@ namespace DamasChinas_Server.Services
             {
                 if (_hasLeft)
                 {
-                   
+
                     return;
                 }
 
@@ -122,10 +122,6 @@ namespace DamasChinas_Server.Services
                 _log.Warn($"[MatchService] Channel closed/faulted for user={_username}, lobby={_lobbyCode}");
 
                 _manager.HandlePlayerDisconnect(_lobbyCode, _username);
-            }
-            catch (Exception ex)
-            {
-                _log.Error($"[MatchService.OnChannelClosedOrFaulted] {ex.Message}", ex);
             }
         }
     }
