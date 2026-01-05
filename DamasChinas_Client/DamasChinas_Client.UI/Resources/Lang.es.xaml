@@ -377,7 +377,7 @@ Se permiten múltiples saltos en un solo turno.
     <!-- Backend / servidor -->
     <sys:String x:Key="msg_ServerUnavailable">El servidor tuvo una interrupción, inicia sesión de nuevo.</sys:String>
     <sys:String x:Key="msg_DatabaseUnavailable">
-        An unexpected error occurred. Please log in again.
+        Ocurrio un error inesperado, Por favor inicia sesión de nuevo.
     </sys:String>
 
     <sys:String x:Key="msg_NetworkLatency">Se detectó latencia de red.</sys:String>

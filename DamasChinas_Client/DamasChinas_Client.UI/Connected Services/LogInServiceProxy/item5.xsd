@@ -10,6 +10,11 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="LoginResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="OnLoginSuccess">
     <xs:complexType>
       <xs:sequence>
