@@ -42,7 +42,16 @@
         ServerUnavailable = 2001,
         InvalidMove = 2002,
         RankingUnavailable = 2003,
+
         DatabaseUnavailable = 2004,
+        DatabaseValidationFailed = 2005,
+        DatabaseUpdateFailed = 2006,
+        DatabaseConnectionLost = 2007,
+        DatabaseSqlTimeout = 2008,
+        DatabaseConfigurationMissing = 2009,
+        DatabaseAuthenticationFailed = 2010,
+
+
 
         NetworkLatency = 2100,
         UnknownError = 9999,
@@ -108,8 +117,8 @@
         PlayerNameRequired = 4024,
         RepositoryUsernameEmpty = 4027,
         RepositoryUserNotFound = 4028,
-
         ServerUnavailabless = 7070,
+
 
 
 
