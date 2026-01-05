@@ -292,7 +292,7 @@ namespace DamasChinas_Server
 
                 if (!exists)
                 {
-                    throw new RepositoryValidationException(MessageCode.FriendsLoadError);
+                    throw new RepositoryValidationException(MessageCode.Success);
                 }
 
          
@@ -304,7 +304,7 @@ namespace DamasChinas_Server
 
                 if (request == null)
                 {
-                    throw new RepositoryValidationException(MessageCode.FriendsLoadError);
+                    throw new RepositoryValidationException(MessageCode.Success);
                 }
 
         

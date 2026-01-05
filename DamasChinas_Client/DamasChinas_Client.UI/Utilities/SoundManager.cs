@@ -112,7 +112,7 @@ namespace DamasChinas_Client.UI.Utilities
                     }
                     catch
                     {
-                        Debug.WriteLine($"[SoundManager.PlayMoveEffect] Error: {ex.Message}");
+                        Debug.WriteLine($"[SoundManager.PlayMoveEffect] Error");
 
                     }
                 };
