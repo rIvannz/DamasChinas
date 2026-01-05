@@ -73,6 +73,7 @@ Se permiten múltiples saltos en un solo turno.
         Los jugadores juegan por turnos en sentido horario. Solo se puede mover una pieza por turno.
     </sys:String>
 
+    
     <sys:String x:Key="howToPlayWinTitle">Cómo ganar</sys:String>
     <sys:String x:Key="howToPlayWinText">
         Ganas cuando todas tus piezas ocupan el triángulo objetivo en el lado opuesto del tablero.
@@ -155,6 +156,8 @@ Se permiten múltiples saltos en un solo turno.
     <!-- ========================================================= -->
     <!--  MAIN MENU / CONFIGURATION                                -->
     <!-- ========================================================= -->
+    
+    
     <sys:String x:Key="gameTitle">DAMAS CHINAS</sys:String>
     <sys:String x:Key="sound">Sonido</sys:String>
     <sys:String x:Key="language">Idioma</sys:String>
@@ -386,9 +389,8 @@ Se permiten múltiples saltos en un solo turno.
 
 
     <!-- Backend / servidor -->
-    <sys:String x:Key="msg_ServerUnavailable">El servidor tuvo una interrupción, inicia sesión de nuevo.</sys:String>
-    <sys:String x:Key="msg_DatabaseUnavailable">
-        Ocurrio un error inesperado, Por favor inicia sesión de nuevo.
+    <sys:String x:Key="msg_ServerUnavailable">El servidor tuvo una interrupción.</sys:String>
+    <sys:String x:Key="msg_DatabaseUnavailable">El servidor tuvo una interrupción.
     </sys:String>
 
     <sys:String x:Key="msg_NetworkLatency">Se detectó latencia de red.</sys:String>

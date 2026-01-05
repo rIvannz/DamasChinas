@@ -392,9 +392,9 @@ Saltos múltiplos são permitidos em um único turno.
     <sys:String x:Key="msg_LobbyClosed">A partida foi encerrada pelo anfitrião.</sys:String>
 
     <!-- Backend / servidor -->
-    <sys:String x:Key="msg_ServerUnavailable">O servidor sofreu uma interrupção, faça login novamente.</sys:String>
+    <sys:String x:Key="msg_ServerUnavailable">O servidor sofreu uma interrupção.</sys:String>
     <sys:String x:Key="msg_NetworkLatency">Latência de rede detectada.</sys:String>
-    <sys:String x:Key="msg_UnknownError">Ocorreu um erro inesperado. Tente novamente.</sys:String>
+    <sys:String x:Key="msg_UnknownError">Ocorreu um erro inesperado.</sys:String>
 
     <!-- Recuperação / mudanças -->
     <sys:String x:Key="msg_PasswordUpdated">Senha atualizada com sucesso.</sys:String>

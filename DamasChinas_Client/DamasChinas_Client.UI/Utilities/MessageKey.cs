@@ -149,7 +149,7 @@ namespace DamasChinas_Client.UI.Utilities
 
 
 
-
+        public const string ServerUnavalibleByDatabase = "msg_ServerDb";
 
 
 

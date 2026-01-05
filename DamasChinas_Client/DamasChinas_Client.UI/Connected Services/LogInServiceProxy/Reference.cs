@@ -80,7 +80,10 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Success = 0,
-        
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ServerUnavailabless = 7070,
+
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateSuccess = 5002,
         
@@ -366,6 +369,7 @@ namespace DamasChinas_Client.UI.LogInServiceProxy {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
+
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LosesField;

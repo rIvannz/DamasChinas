@@ -46,29 +46,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 await ExecuteLoginAsync(client, username, hashedPassword);
             }
-            catch (FaultException<MessageCode> ex)
-            {
-                Debug.WriteLine($"[Login.OnLoginClick - Fault<MessageCode>] {ex.Detail}");
-                await SafeWait(loading);
 
-                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    loading?.Close();
-                    MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
-                }));
-            }
-            catch (FaultException)
-            {
-                // Fallback: si por alguna razón llega un fault no tipado
-                Debug.WriteLine("[Login.OnLoginClick - Fault] FaultException received.");
-                await SafeWait(loading);
-
-                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    loading?.Close();
-                    MessageHelper.ShowPopup(MessageKeys.DatabaseUnavailable, PopupType.Error);
-                }));
-            }
             catch (EndpointNotFoundException ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - EndpointNotFound] {ex}");
@@ -80,17 +58,7 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
                 }));
             }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[Login.OnLoginClick - Timeout] {ex}");
-                await SafeWait(loading);
 
-                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    loading?.Close();
-                    MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
-                }));
-            }
             catch (CommunicationException ex)
             {
                 Debug.WriteLine($"[Login.OnLoginClick - Communication] {ex}");
@@ -99,18 +67,7 @@ namespace DamasChinas_Client.UI.Pages
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     loading?.Close();
-                    MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
-                }));
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[Login.OnLoginClick - InvalidOperation] {ex}");
-                await SafeWait(loading);
-
-                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    loading?.Close();
-                    MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+                    MessageHelper.ShowPopup(DatabaseUnavailable, PopupType.Error);
                 }));
             }
         }
@@ -126,6 +83,7 @@ namespace DamasChinas_Client.UI.Pages
                     Password = hashedPassword
                 });
             });
+
         }
 
         private (string username, string password) GetCredentials()
@@ -320,17 +278,17 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                MessageHelper.ShowPopup(NavigationError, PopupType.Error);
+                MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
                 Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
             }
             catch (CommunicationException ex)
             {
-                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+                MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
                 Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
             }
             catch (TimeoutException ex)
             {
-                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
+                MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
                 Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
             }
         }
