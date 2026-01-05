@@ -33,35 +33,6 @@ namespace DamasChinas_Server.Utilities
 
         }
 
-        public static void SendInvitationEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode)
-        {
-
-                string subject = EmailConfig.InvitationSubjectValue;
-                string body = string.Format(
-                    EmailConfig.InvitationBodyValue,
-                    friendUsername,
-                    hostUsername,
-                    lobbyCode
-                );
-
-                EmailConfig.SendAsync(friendEmail, subject, body, html: true)
-                    .GetAwaiter()
-                    .GetResult();
-
-        }
-
-        public static void SendInvitationEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode, string cultureCode)
-        {
- 
-                string subject = EmailConfig.GetInvitationSubject(cultureCode);
-                string bodyTemplate = EmailConfig.GetInvitationBody(cultureCode);
-                string body = string.Format(bodyTemplate, friendUsername, hostUsername, lobbyCode);
-
-                EmailConfig.SendAsync(friendEmail, subject, body, html: true)
-                    .GetAwaiter()
-                    .GetResult();
-
-        }
 
         public static void SendInvitationGameEmail(string friendEmail, string friendUsername, string hostUsername, int lobbyCode)
         {

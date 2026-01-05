@@ -16,6 +16,35 @@ namespace DamasChinas_Server.Game
 
         private readonly Dictionary<HexCoordinate, HexCell> _cells;
 
+        internal sealed class ZoneResolutionContext
+        {
+            public int X { get; }
+            public int Y { get; }
+            public int Z { get; }
+
+            public int AX { get; }
+            public int AY { get; }
+            public int AZ { get; }
+
+            public int Max { get; }
+            public int CenterRadius { get; }
+
+            public ZoneResolutionContext(HexCoordinate coord, int centerRadius)
+            {
+                X = coord.X;
+                Y = coord.Y;
+                Z = coord.Z;
+
+                AX = Math.Abs(X);
+                AY = Math.Abs(Y);
+                AZ = Math.Abs(Z);
+
+                Max = Math.Max(AX, Math.Max(AY, AZ));
+                CenterRadius = centerRadius;
+            }
+        }
+
+
         public ChineseCheckersBoard(int radius = DefaultBoardRadius)
         {
             if (radius < MinimumRadius)
@@ -196,76 +225,63 @@ namespace DamasChinas_Server.Game
         }
         private static string ResolveZone(HexCoordinate coord, int centerRadius)
         {
-            int x = coord.X;
-            int y = coord.Y;
-            int z = coord.Z;
-
-            int ax = Math.Abs(x);
-            int ay = Math.Abs(y);
-            int az = Math.Abs(z);
-            int max = Math.Max(ax, Math.Max(ay, az));
-
-            return ResolveZoneInternal(
-                x, y, z,
-                ax, ay, az,
-                max,
-                centerRadius
-            );
+            var context = new ZoneResolutionContext(coord, centerRadius);
+            return ResolveZoneInternal(context);
         }
 
-        private static string ResolveZoneInternal(
-    int x,
-    int y,
-    int z,
-    int ax,
-    int ay,
-    int az,
-    int max,
-    int centerRadius)
+
+
+        private static string ResolveZoneInternal(ZoneResolutionContext ctx)
         {
-            string zone;
-
-            if (max <= centerRadius)
+            if (ctx.Max <= ctx.CenterRadius)
             {
-                zone = CenterZoneName;
-            }
-            else
-            {
-                int[] sorted = { ax, ay, az };
-                Array.Sort(sorted);
-
-                bool isArmCell =
-                    max > centerRadius &&
-                    max <= centerRadius * 2 &&
-                    sorted[1] <= centerRadius;
-
-                if (!isArmCell)
-                {
-                    return null;
-                }
-
-                if (az == max)
-                {
-                    zone = (z > 0)
-                        ? PlayerColor.Red.ToString()
-                        : PlayerColor.Green.ToString();
-                }
-                else if (ay == max)
-                {
-                    zone = (y > 0)
-                        ? PlayerColor.Blue.ToString()
-                        : PlayerColor.Yellow.ToString();
-                }
-                else
-                {
-                    zone = (x > 0)
-                        ? PlayerColor.Orange.ToString()
-                        : PlayerColor.Purple.ToString();
-                }
+                return CenterZoneName;
             }
 
-            return zone;
+            if (!IsArmCell(ctx))
+            {
+                return null;
+            }
+
+            return ResolveArmZone(ctx);
         }
+
+
+        private static bool IsArmCell(ZoneResolutionContext ctx)
+        {
+            if (ctx.Max <= ctx.CenterRadius || ctx.Max > ctx.CenterRadius * 2)
+            {
+                return false;
+            }
+
+            int[] sorted = { ctx.AX, ctx.AY, ctx.AZ };
+            Array.Sort(sorted);
+
+            return sorted[1] <= ctx.CenterRadius;
+        }
+
+
+        private static string ResolveArmZone(ZoneResolutionContext ctx)
+        {
+            if (ctx.AZ == ctx.Max)
+            {
+                return ctx.Z > 0
+                    ? PlayerColor.Red.ToString()
+                    : PlayerColor.Green.ToString();
+            }
+
+            if (ctx.AY == ctx.Max)
+            {
+                return ctx.Y > 0
+                    ? PlayerColor.Blue.ToString()
+                    : PlayerColor.Yellow.ToString();
+            }
+
+            return ctx.X > 0
+                ? PlayerColor.Orange.ToString()
+                : PlayerColor.Purple.ToString();
+        }
+
 
 
     }

@@ -71,6 +71,8 @@ namespace DamasChinas_Server.Logic
                 }
                 catch
                 {
+                    _log.Info($"Error on BroadcastBoardState  {lobbyCode}");
+
                 }
             }
         }
@@ -132,12 +134,16 @@ namespace DamasChinas_Server.Logic
                 _repoMatches.SaveMatchResult(match.UserColorMap, winner);
                 _log.Info($"Match result saved. Winner={winner}");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
+            {
+                _log.Error("Error saving match result: " + ex.Message, ex);
+            }
+            catch (CommunicationException ex)
             {
                 _log.Error("Error saving match result: " + ex.Message, ex);
             }
         }
-
+            
         public void HandlePlayerDisconnect(int lobbyCode, string username)
         {
             RemovePlayer(lobbyCode, username);
