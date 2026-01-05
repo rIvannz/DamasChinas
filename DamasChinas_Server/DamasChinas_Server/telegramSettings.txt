@@ -1,0 +1,17 @@
+﻿
+TelegramBotToken=TU_TOKEN_REAL
+TelegramChatId=TU_CHAT_ID_REAL
+TelegramRetryMinutes=3
+TelegramTimeFormat=yyyy-MM-dd HH:mm:ss
+
+DbDownHeader_es=🚨 BASE DE DATOS NO DISPONIBLE
+DbDownTemplate_es=BASE DE DATOS NO DISPONIBLE\n{0}\n\n{1}
+
+DbDownHeader_en=🚨 DATABASE UNAVAILABLE
+DbDownTemplate_en=DATABASE UNAVAILABLE\n{0}\n\n{1}
+
+DbDownHeader_pt=🚨 BANCO DE DADOS INDISPONÍVEL
+DbDownTemplate_pt=BANCO DE DADOS INDISPONÍVEL\n{0}\n\n{1}
+
+DbDownHeader_fr=🚨 BASE DE DONNÉES INDISPONIBLE
+DbDownTemplate_fr=BASE DE DONNÉES INDISPONIBLE\n{0}\n\n{1}

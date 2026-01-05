@@ -207,10 +207,13 @@
     <Compile Include="Utilities\Email\IEmailSender.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="Utilities\GuestSessionCallbackManager.cs" />
+    <Compile Include="Utilities\KeyValueFileLoader.cs" />
     <Compile Include="Utilities\TelegramNotifier.cs" />
+    <Compile Include="Utilities\TelegramSettingsProvider.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="telegramSettings.txt" />
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
