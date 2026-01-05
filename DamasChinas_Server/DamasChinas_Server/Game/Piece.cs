@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace DamasChinas_Server.Game
 {
-    /// <summary>
-    /// Represents a piece controlled by a player.
-    /// </summary>
+
     public class Piece
     {
         public PlayerColor Color { get; }
