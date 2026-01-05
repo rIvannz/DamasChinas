@@ -180,37 +180,6 @@ namespace DamasChinas_Server.Services
 
 
 
-        private static void ExecuteOperation(Action action, string context)
-        {
-            try
-            {
-                _log.Info($"[{context}] START");
-
-                action();
-
-                _log.Info($"[{context}] SUCCESS");
-            }
-            catch (SqlException ex)
-            {
-                _log.Error($"[{context}] SQL ERROR {ex.Number}");
-            }
-            catch (EntityException ex)
-            {
-                if (ex.InnerException is SqlException sqlEx)
-                {
-                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
-                }
-                else
-                {
-                    _log.Error($"[{context}] ENTITY ERROR: {ex.Message}");
-                }
-            }
-            catch (CommunicationException ex)
-            {
-                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
-            }
-        }
-
         public static void ForceDisconnectAll(MessageCode code)
         {
             ExecuteOperation(() =>
@@ -303,5 +272,38 @@ namespace DamasChinas_Server.Services
                 return defaultValue;
             }
         }
+
+
+        private static void ExecuteOperation(Action action, string context)
+        {
+            try
+            {
+                _log.Info($"[{context}] START");
+
+                action();
+
+                _log.Info($"[{context}] SUCCESS");
+            }
+            catch (SqlException ex)
+            {
+                _log.Error($"[{context}] SQL ERROR {ex.Number}");
+            }
+            catch (EntityException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    _log.Error($"[{context}] SQL ERROR {sqlEx.Number}", sqlEx);
+                }
+                else
+                {
+                    _log.Error($"[{context}] ENTITY ERROR: {ex.Message}");
+                }
+            }
+            catch (CommunicationException ex)
+            {
+                _log.Error($"[{context}] Unexpected exception: {ex.Message}");
+            }
+        }
+
     }
 }

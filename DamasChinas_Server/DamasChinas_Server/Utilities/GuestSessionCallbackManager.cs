@@ -45,11 +45,17 @@ namespace DamasChinas_Server.Utilities
 
                 _callbacks[key] = new GuestEntry(callback, channel);
 
-   
-                channel.Closed -= (_, __) => Remove(key);
-                channel.Faulted -= (_, __) => Remove(key);
-                channel.Closed += (_, __) => Remove(key);
-                channel.Faulted += (_, __) => Remove(key);
+                EventHandler closedHandler = null;
+                EventHandler faultedHandler = null;
+
+                closedHandler = (_, __) => Remove(key);
+                faultedHandler = (_, __) => Remove(key);
+
+                channel.Closed -= closedHandler;
+                channel.Faulted -= faultedHandler;
+
+                channel.Closed += closedHandler;
+                channel.Faulted += faultedHandler;
 
                 _log.Info($"[Add] Guest callback agregado: {key}");
             }
@@ -57,11 +63,8 @@ namespace DamasChinas_Server.Utilities
             {
                 _log.Error($"[Add] Invalid WCF context for guest callback: {key}", ex);
             }
-            catch (CommunicationException ex)
-            {
-                _log.Error($"[Add] Communication error while adding guest callback: {key}", ex);
-            }
         }
+
 
         public static void Remove(string guestUsername)
         {

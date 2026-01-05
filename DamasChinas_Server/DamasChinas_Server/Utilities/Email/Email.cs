@@ -90,6 +90,10 @@ namespace DamasChinas_Server.Utilidades
             {
                 throw new KeyNotFoundException($"Missing required email setting: {key}");
             }
+            if (EnableSsl)
+            {
+             return value;
+            }
 
             return value;
         }

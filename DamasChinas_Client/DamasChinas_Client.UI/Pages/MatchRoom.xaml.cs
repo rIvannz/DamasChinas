@@ -486,7 +486,7 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public static void HandleError(string msgKey)
+        public  void HandleError(string msgKey)
         {
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }

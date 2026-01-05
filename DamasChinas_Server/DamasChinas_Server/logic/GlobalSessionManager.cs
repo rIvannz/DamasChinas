@@ -66,6 +66,7 @@ namespace DamasChinas_Server.Logic
                     }
                     catch
                     {
+                        _log.Info($"[GlobalSessionManager] Ignoered exception during forced disconnect:");
                     }
                 }
 

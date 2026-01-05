@@ -192,7 +192,7 @@ namespace DamasChinas_Server
                 {
                     await Email.SendWelcomeAsync(user, cultureCode).ConfigureAwait(false);
                 }
-                catch (SmtpException ex)
+                catch (SmtpException )
                 {
                     // Intentionally ignored (fire-and-forget  task).
                 }
