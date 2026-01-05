@@ -409,11 +409,19 @@ namespace DamasChinas_Server.Logic
                 motivo);
 
             var sanctionsRepo = new RepositorySanctions();
-            return sanctionsRepo.ApplyBanFromReports(
+
+            BanInfoDto banInfo = sanctionsRepo.ApplyBanFromReports(
                 reportedId,
                 totalReports,
                 motivo);
+
+        
+            banInfo.TotalReports = totalReports;
+            banInfo.LastReportReason = motivo;
+
+            return banInfo;
         }
+
 
         private static void NotifyBanStatus(string username, BanInfoDto banInfo)
         {

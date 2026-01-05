@@ -170,28 +170,64 @@ namespace DamasChinas_Client.UI.Pages
 
             for (int i = 0; i < sortedMembers.Count; i++)
             {
-                var member = sortedMembers[i];
-                Brush color = _availableColors[i % _availableColors.Count];
-
-                _userColors[member.Username] = color;
-
-                string displayName = member.IsHost
-                    ? $"★ {member.Username}"
-                    : member.Username;
-
-                Players.Add(new PlayerViewModel
-                {
-                    Username = member.Username,
-                    DisplayName = displayName,
-                    ColorBrush = color,
-                    AvatarPath = PathProvider.LoadAvatar(member.AvatarFile),
-                    IsTurnVisible = Visibility.Collapsed,
-                    StatusText = MessageTranslator.GetLocalizedMessage(MessageKeys.StatusWaiting)
-                });
+                AddPlayer(sortedMembers[i], i);
             }
         }
 
- 
+        private void AddPlayer(LobbyMemberDto member, int index)
+        {
+            Brush color = GetPlayerColor(index);
+
+            _userColors[member.Username] = color;
+
+            Players.Add(new PlayerViewModel
+            {
+                Username = member.Username,
+                DisplayName = BuildDisplayName(member),
+                ColorBrush = color,
+                AvatarPath = PathProvider.LoadAvatar(member.AvatarFile),
+                IsTurnVisible = Visibility.Collapsed,
+                StatusText = MessageTranslator.GetLocalizedMessage(MessageKeys.StatusWaiting),
+                ReportVisibility = CanReportPlayer(member.Username)
+                    ? Visibility.Visible
+                    : Visibility.Collapsed
+            });
+        }
+
+        private Brush GetPlayerColor(int index)
+        {
+            return _availableColors[index % _availableColors.Count];
+        }
+
+        private static string BuildDisplayName(LobbyMemberDto member)
+        {
+            return member.IsHost
+                ? $"★ {member.Username}"
+                : member.Username;
+        }
+
+        private bool CanReportPlayer(string username)
+        {
+            if (ClientSession.IsGuest)
+            {
+                return false;
+            }
+
+            if (string.Equals(username, _myUsername, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (ClientSession.IsGuestUsername(username))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+
 
         private void InitializeMatchConnection()
         {
@@ -936,6 +972,113 @@ namespace DamasChinas_Client.UI.Pages
         }
 
 
+        private void OnReportPlayerInMatchClick(object sender, RoutedEventArgs e)
+        {
+            if (!TryBuildReportRequestFromMatch(sender, out ReportPlayerRequest req))
+            {
+                return;
+            }
+
+            try
+            {
+                LobbySession.Manager.ReportPlayer(req);
+                MessageHelper.ShowPopup(MessageKeys.PlayerReported, PopupType.Success);
+            }
+            catch
+            {
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
+            }
+        }
+
+        private bool TryBuildReportRequestFromMatch(object sender, out ReportPlayerRequest request)
+        {
+            request = null;
+
+            if (ClientSession.IsGuest)
+            {
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
+                    PopupType.Info);
+                return false;
+            }
+
+            if (!(sender is Button btn) || !(btn.Tag is PlayerViewModel vm))
+            {
+                return false;
+            }
+
+            if (ClientSession.IsGuestUsername(vm.Username) ||
+                string.Equals(vm.Username, _myUsername, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageHelper.ShowPopup(
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
+                    PopupType.Info);
+                return false;
+            }
+
+            string reasonKey = ShowReportReasonDialogAndGetKey();
+            if (string.IsNullOrWhiteSpace(reasonKey))
+            {
+                return false;
+            }
+
+            request = new ReportPlayerRequest
+            {
+                CodigoLobby = _lobbyCode,
+                IdPartida = null,
+                ReporterUsername = _myUsername,
+                ReportedUsername = vm.Username,
+                Reason = reasonKey
+            };
+
+            return true;
+        }
+
+        private string ShowReportReasonDialogAndGetKey()
+        {
+            var main = Application.Current.MainWindow;
+
+            var popup = new DamasChinas_Client.UI.Popups.ReportReasonPopup();
+
+            var window = new Window
+            {
+                Owner = main,
+                Content = popup,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Width = 520,
+                Height = 360,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.None,
+                Background = Brushes.Transparent,
+                AllowsTransparency = true
+            };
+
+            popup.RequestClose += () =>
+            {
+                try
+                {
+                    window.DialogResult = popup.IsConfirmed;
+                }
+                catch
+                {
+               
+                }
+
+                window.Close();
+            };
+
+            bool? dialog = window.ShowDialog();
+
+            if (dialog != true || !popup.IsConfirmed)
+            {
+                return null;
+            }
+
+            return popup.SelectedReasonKey;
+        }
+
+
 
 
 
@@ -949,6 +1092,8 @@ namespace DamasChinas_Client.UI.Pages
             public ImageSource AvatarPath { get; set; }
             public Brush ColorBrush { get; set; }
             public Visibility IsTurnVisible { get; set; }
+            public Visibility ReportVisibility { get; set; }
         }
+
     }
 }

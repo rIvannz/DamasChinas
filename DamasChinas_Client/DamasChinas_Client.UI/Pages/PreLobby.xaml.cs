@@ -295,37 +295,98 @@ namespace DamasChinas_Client.UI.Pages
 
         private void OnReportMemberClick(object sender, RoutedEventArgs e)
         {
+            if (!TryGetValidReportedUser(sender, out LobbyMemberViewModel vm))
+            {
+                return;
+            }
+
+            string reasonKey = ShowReportReasonPopup();
+            if (string.IsNullOrWhiteSpace(reasonKey))
+            {
+                return;
+            }
+
+            SendReport(vm.Username, reasonKey);
+        }
+
+        private bool TryGetValidReportedUser(object sender, out LobbyMemberViewModel vm)
+        {
+            vm = null;
+
             if (ClientSession.IsGuest)
             {
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
-                    PopupType.Info
-                );
-                return;
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
+                    PopupType.Info);
+                return false;
             }
 
-            if (!(sender is Button btn) || !(btn.DataContext is LobbyMemberViewModel vm))
-                return;
+            if (!(sender is Button btn) || !(btn.DataContext is LobbyMemberViewModel member))
+            {
+                return false;
+            }
 
-            if (string.Equals(vm.Username, _username, StringComparison.OrdinalIgnoreCase))
-                return;
+            if (string.Equals(member.Username, _username, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
 
-            if (ClientSession.IsGuestUsername(vm.Username))
+            if (ClientSession.IsGuestUsername(member.Username))
             {
                 MessageHelper.ShowPopup(
-                    MessageTranslator.GetLocalizedMessage("msg_GuestFeatureOnly"),
-                    PopupType.Info
-                );
-                return;
+                    MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
+                    PopupType.Info);
+                return false;
             }
 
+            vm = member;
+            return true;
+        }
+
+        private string ShowReportReasonPopup()
+        {
+            var main = Application.Current.MainWindow;
+            var popup = new DamasChinas_Client.UI.Popups.ReportReasonPopup();
+
+            var window = new Window
+            {
+                Owner = main,
+                Content = popup,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Width = 520,
+                Height = 360,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.None,
+                Background = System.Windows.Media.Brushes.Transparent,
+                AllowsTransparency = true
+            };
+
+            popup.RequestClose += () =>
+            {
+                window.DialogResult = popup.IsConfirmed;
+                window.Close();
+            };
+
+            bool? dialog = window.ShowDialog();
+
+            if (dialog != true || !popup.IsConfirmed)
+            {
+                return null;
+            }
+
+            return popup.SelectedReasonKey;
+        }
+
+        private void SendReport(string reportedUsername, string reasonKey)
+        {
             var req = new ReportPlayerRequest
             {
                 CodigoLobby = _snapshot?.LobbyCode,
                 IdPartida = null,
                 ReporterUsername = _username,
-                ReportedUsername = vm.Username,
-                Reason = "Reported from lobby"
+                ReportedUsername = reportedUsername,
+                Reason = reasonKey
             };
 
             try
@@ -338,6 +399,9 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
             }
         }
+
+
+
 
         private void OnInviteFriendClick(object sender, RoutedEventArgs e)
         {

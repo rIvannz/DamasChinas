@@ -27,6 +27,16 @@ including one uppercase letter, one number,
 and one special character (*, $, #).
     </sys:String>
 
+    <sys:String x:Key="reportReason_SpamChat">Spam in chat</sys:String>
+    <sys:String x:Key="reportReason_OffensiveLanguage">Offensive language</sys:String>
+    <sys:String x:Key="reportReason_Cheating">Cheating</sys:String>
+    <sys:String x:Key="reportReason_InappropriateBehavior">Inappropriate behavior</sys:String>
+
+    <sys:String x:Key="msg_YouWereReported">You were reported.</sys:String>
+    <sys:String x:Key="msg_ReportReasonLabel">Reason</sys:String>
+    <sys:String x:Key="msg_ReportReasonUnknown">Unknown</sys:String>
+
+
     <!-- HOW TO PLAY -->
     <sys:String x:Key="howToPlayTitle">How to Play Chinese Checkers</sys:String>
 

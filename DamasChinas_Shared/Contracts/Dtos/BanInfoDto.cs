@@ -17,5 +17,9 @@ namespace DamasChinas_Shared.Contracts.Dtos
 
         [DataMember]
         public int TotalReports { get; set; }
+
+        [DataMember]
+        public string LastReportReason { get; set; }
+
     }
 }

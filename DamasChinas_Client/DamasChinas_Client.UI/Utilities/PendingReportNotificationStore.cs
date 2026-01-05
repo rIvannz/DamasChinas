@@ -84,19 +84,24 @@ namespace DamasChinas_Client.UI.Utilities
             return Path.Combine(appFolder, FileName);
         }
 
-        public static string BuildMessage(BanInfoDto info)
+        public static string BuildMessage(BanInfoDto banInfo)
         {
-            if (info == null)
+            if (banInfo == null)
             {
-                return string.Empty;
+                return MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError);
             }
-            string baseMsg = MessageTranslator.GetLocalizedMessage(MessageKeys.PlayerReported);
 
-            if (info.TotalReports > 0)
-            {
-                return $"{baseMsg} ({info.TotalReports})";
-            }
-            return baseMsg;
+            string baseMsg = MessageTranslator.GetLocalizedMessage("msg_YouWereReported");
+            string label = MessageTranslator.GetLocalizedMessage("msg_ReportReasonLabel");
+
+            string reasonKey = banInfo.LastReportReason;
+
+            string reasonText = string.IsNullOrWhiteSpace(reasonKey)
+                ? MessageTranslator.GetLocalizedMessage("msg_ReportReasonUnknown")
+                : MessageTranslator.GetLocalizedMessage(reasonKey);
+
+            return $"{baseMsg}\n{label}: {reasonText}";
         }
+
     }
 }

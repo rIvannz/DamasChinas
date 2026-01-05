@@ -28,6 +28,15 @@ inclure une lettre majuscule, un chiffre
 et un caractère spécial (*, $, #).
     </sys:String>
 
+    <sys:String x:Key="reportReason_SpamChat">Spam dans le chat</sys:String>
+    <sys:String x:Key="reportReason_OffensiveLanguage">Langage offensant</sys:String>
+    <sys:String x:Key="reportReason_Cheating">Tricherie</sys:String>
+    <sys:String x:Key="reportReason_InappropriateBehavior">Comportement inapproprié</sys:String>
+
+    <sys:String x:Key="msg_YouWereReported">Vous avez été signalé.</sys:String>
+    <sys:String x:Key="msg_ReportReasonLabel">Raison</sys:String>
+    <sys:String x:Key="msg_ReportReasonUnknown">Inconnue</sys:String>
+
     <!-- HOW TO PLAY -->
     <sys:String x:Key="howToPlayTitle">Comment jouer aux Dames Chinoises</sys:String>
 

@@ -179,6 +179,9 @@
     <Compile Include="PopUps\MessagePopupWindow.xaml.cs">
       <DependentUpon>MessagePopupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PopUps\ReportReasonPopup.xaml.cs">
+      <DependentUpon>ReportReasonPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PopUps\VerificationCodeWindow.xaml.cs">
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
@@ -333,6 +336,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PopUps\MessagePopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PopUps\ReportReasonPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
