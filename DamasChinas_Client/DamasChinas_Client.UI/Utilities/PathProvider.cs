@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -70,7 +71,6 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
-      
                 string avatarsPath = AvatarsFolder.Replace(
                     '/',
                     Path.DirectorySeparatorChar);
@@ -94,9 +94,28 @@ namespace DamasChinas_Client.UI.Utilities
 
                 return files;
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
-                Debug.WriteLine($"[PathProvider.GetAvailableAvatarFiles] {ex.Message}");
+                Debug.WriteLine(
+                    $"[PathProvider.GetAvailableAvatarFiles] Access denied: {ex.Message}");
+                return new[] { DefaultAvatarFile };
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                Debug.WriteLine(
+                    $"[PathProvider.GetAvailableAvatarFiles] Directory not found: {ex.Message}");
+                return new[] { DefaultAvatarFile };
+            }
+            catch (PathTooLongException ex)
+            {
+                Debug.WriteLine(
+                    $"[PathProvider.GetAvailableAvatarFiles] Path too long: {ex.Message}");
+                return new[] { DefaultAvatarFile };
+            }
+            catch (IOException ex)
+            {
+                Debug.WriteLine(
+                    $"[PathProvider.GetAvailableAvatarFiles] IO error: {ex.Message}");
                 return new[] { DefaultAvatarFile };
             }
         }

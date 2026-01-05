@@ -34,16 +34,16 @@ namespace DamasChinasHost
                 {
                     host.Open();
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($" {host.Description.ServiceType.Name} activo.");
+                    Console.WriteLine($" {host.Description.ServiceType.Name} active.");
                 }
-                catch (Exception ex)
+                catch (AddressAlreadyInUseException ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(
-                        $"Error al iniciar {host.Description.ServiceType.Name}: {ex.Message}");
+                        $"error on iniciar {host.Description.ServiceType.Name}: {ex.Message}");
 
                     _log.Error(
-                        $"[Program] Error iniciando {host.Description.ServiceType.Name}",
+                        $"[Program] Error at start {host.Description.ServiceType.Name}",
                         ex);
 
                     host.Abort();
@@ -57,12 +57,10 @@ namespace DamasChinasHost
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(" DAMAS");
             Console.ResetColor();
-            Console.WriteLine("Presiona ENTER para detener el servidor...");
+            Console.WriteLine("Press enter to shutdown te server...");
             Console.ReadLine();
 
-            // =========================
-            // Cierre limpio de servicios
-            // =========================
+          
             foreach (var host in hosts)
             {
                 try
@@ -83,7 +81,7 @@ namespace DamasChinasHost
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nServidor detenido correctamente.");
+            Console.WriteLine("\nserver stoped succes.");
             Console.ResetColor();
         }
     }
