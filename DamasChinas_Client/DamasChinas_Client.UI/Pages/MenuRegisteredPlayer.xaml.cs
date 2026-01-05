@@ -16,6 +16,9 @@ namespace DamasChinas_Client.UI.Pages
         private readonly PublicProfile _profile;
         private int _userId;
 
+       
+        private string CurrentUsername => ClientSession.SafeUsername;
+
         public MenuRegisteredPlayer(PublicProfile profile)
         {
             InitializeComponent();
@@ -23,13 +26,15 @@ namespace DamasChinas_Client.UI.Pages
             _profile = profile ?? throw new ArgumentNullException(nameof(profile));
             _userId = profile.IdUser;
 
-            txtUsername.Text = _profile.Username;
+          
+            txtUsername.Text = CurrentUsername;
 
             try
             {
                 if (!FriendNotificationManager.IsInitialized)
                 {
-                    FriendNotificationManager.Initialize(_profile.Username);
+              
+                    FriendNotificationManager.Initialize(CurrentUsername);
                 }
             }
             catch (Exception ex) when (
@@ -45,9 +50,11 @@ namespace DamasChinas_Client.UI.Pages
             LoadAvatar();
         }
 
-
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
+         
+            txtUsername.Text = CurrentUsername;
+
             if (ForceAvatarRefresh)
             {
                 LoadAvatar();
@@ -74,10 +81,10 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch
             {
-                MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
+              
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Warning);
             }
         }
-
 
         private void LoadAvatar()
         {
@@ -94,9 +101,9 @@ namespace DamasChinas_Client.UI.Pages
              ex is TimeoutException)
             {
                 Debug.WriteLine($"[MRP.LoadAvatar] {ex}");
-                MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
+               
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Warning);
             }
-
         }
 
         private void OnAvatarClick(object sender, RoutedEventArgs e)
@@ -110,6 +117,7 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
+
         private void OnHowToPlayClick(object sender, RoutedEventArgs e)
         {
             try
@@ -127,10 +135,10 @@ namespace DamasChinas_Client.UI.Pages
              ex is TimeoutException)
             {
                 Debug.WriteLine($"[MRP.OnHowToPlayClick.fail] {ex}");
-                MessageHelper.ShowPopup("error desconocido", PopupType.Warning);
+                // ? CAMBIO: evitar string literal
+                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Warning);
             }
         }
-
 
         private void OnStatisticsClick(object sender, RoutedEventArgs e)
         {
@@ -142,7 +150,6 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-
                 if (!ClientSession.IsLoggedIn)
                 {
                     MessageHelper.ShowPopup(MessageKeys.GuestStatsUnavailable, PopupType.Info);
@@ -160,7 +167,6 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(MessageKeys.StatsUnavailable, PopupType.Error);
             }
         }
-
 
         private void OnFriendsClick(object sender, RoutedEventArgs e)
         {
@@ -198,8 +204,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
-
         private void OnCreateGameClick(object sender, RoutedEventArgs e)
         {
             try
@@ -212,13 +216,14 @@ namespace DamasChinas_Client.UI.Pages
                     Visibility = LobbyVisibility.Public
                 };
 
+                // ? CAMBIO: usar username actual (no _profile.Username)
+                string username = CurrentUsername;
 
-                var result = lobbyManager.CreateLobby(_profile.Username, request);
+                var result = lobbyManager.CreateLobby(username, request);
 
                 if (result.Success)
                 {
-
-                    var snapshot = lobbyManager.GetCurrentLobby(_profile.Username);
+                    var snapshot = lobbyManager.GetCurrentLobby(username);
 
                     if (snapshot == null)
                     {
@@ -226,14 +231,10 @@ namespace DamasChinas_Client.UI.Pages
                         return;
                     }
 
-
-                    NavigationService?.Navigate(
-                        new PreLobby(snapshot, _profile.Username, _userId)
-                    );
+                    NavigationService?.Navigate(new PreLobby(snapshot, username, _userId));
                 }
                 else
                 {
-
                     MessageHelper.ShowFromResult(result);
                 }
             }
@@ -251,18 +252,18 @@ namespace DamasChinas_Client.UI.Pages
         {
             try
             {
-                NavigationService?.Navigate(new JoinParty(_userId, _profile.Username));
+    
+                NavigationService?.Navigate(new JoinParty(_userId, CurrentUsername));
             }
             catch
             {
                 MessageHelper.ShowPopup(MessageKeys.JoinPartyOpenError, PopupType.Error);
             }
         }
+
         public static void SetForceAvatarRefresh(bool value)
         {
             ForceAvatarRefresh = value;
         }
-
     }
-
 }
