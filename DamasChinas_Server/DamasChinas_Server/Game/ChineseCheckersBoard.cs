@@ -194,7 +194,6 @@ namespace DamasChinas_Server.Game
                 }
             }
         }
-
         private static string ResolveZone(HexCoordinate coord, int centerRadius)
         {
             int x = coord.X;
@@ -206,6 +205,24 @@ namespace DamasChinas_Server.Game
             int az = Math.Abs(z);
             int max = Math.Max(ax, Math.Max(ay, az));
 
+            return ResolveZoneInternal(
+                x, y, z,
+                ax, ay, az,
+                max,
+                centerRadius
+            );
+        }
+
+        private static string ResolveZoneInternal(
+    int x,
+    int y,
+    int z,
+    int ax,
+    int ay,
+    int az,
+    int max,
+    int centerRadius)
+        {
             string zone;
 
             if (max <= centerRadius)
@@ -249,5 +266,7 @@ namespace DamasChinas_Server.Game
 
             return zone;
         }
+
+
     }
- }
+}
