@@ -32,7 +32,6 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-            
                 if (!ValidateLocalInputs())
                 {
                     return;
@@ -40,6 +39,10 @@ namespace DamasChinas_Client.UI.Pages
 
                 loader = ShowLoader();
                 client = new SingInServiceClient();
+
+                // Evita bloqueos infinitos si el server/DB no responde
+                client.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(8);
+
                 var userDto = GetUserFromInputs();
 
                 bool isValid = await ValidateWithServerAsync(client, userDto, loader);
@@ -50,14 +53,12 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-         
                 bool codeRequested = await RequestVerificationCodeAsync(client, userDto);
                 if (!codeRequested)
                 {
                     return;
                 }
 
-              
                 string codeValue = ShowVerificationCodeWindow();
                 if (string.IsNullOrWhiteSpace(codeValue))
                 {
@@ -66,7 +67,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 loader = ShowLoader();
 
-
                 bool userCreated = await CreateUserAsync(client, userDto, codeValue, loader);
                 loader = null;
 
@@ -74,7 +74,6 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     return;
                 }
-
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage("msg_AccountCreated"),
@@ -92,7 +91,6 @@ namespace DamasChinas_Client.UI.Pages
                 }
             }
         }
-
 
         private bool ValidateLocalInputs()
         {
@@ -113,14 +111,12 @@ namespace DamasChinas_Client.UI.Pages
                 return false;
             }
 
-
             if (txtPassword.Password.Length < 8)
             {
                 ShowWarning(MessageKeys.InvalidPasswordLength);
                 return false;
             }
 
-      
             if (!ValidatePassword())
             {
                 return false;
@@ -161,7 +157,6 @@ namespace DamasChinas_Client.UI.Pages
             MessageHelper.ShowPopup(message, PopupType.Error);
         }
 
-
         private LoadingWindow ShowLoader()
         {
             var loader = new LoadingWindow
@@ -189,12 +184,19 @@ namespace DamasChinas_Client.UI.Pages
                     loader.Close();
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException ex)
             {
-                Debug.WriteLine($"[SignIn.CloseLoaderSafeAsync] {ex.Message}");
+                Debug.WriteLine($"[SignIn.CloseLoaderSafeAsync - Communication] {ex.Message}");
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[SignIn.CloseLoaderSafeAsync - Timeout] {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[SignIn.CloseLoaderSafeAsync - InvalidOperation] {ex.Message}");
             }
         }
-
 
         private string ShowVerificationCodeWindow()
         {
@@ -205,7 +207,6 @@ namespace DamasChinas_Client.UI.Pages
 
             return popup.ShowDialog() == true ? popup.CodeValue : null;
         }
-
 
         private UserDto GetUserFromInputs()
         {
@@ -218,7 +219,6 @@ namespace DamasChinas_Client.UI.Pages
                 Password = Hasher.HashPassword(txtPassword.Password.Trim())
             };
         }
-
 
         private static async Task<bool> ValidateWithServerAsync(
             SingInServiceClient client,
@@ -246,6 +246,22 @@ namespace DamasChinas_Client.UI.Pages
 
                 return true;
             }
+            catch (FaultException<MessageCode> ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Fault<MessageCode>] {ex.Detail}");
+                await CloseLoaderSafeAsync(loader);
+
+                // Igual que en Login: resuelve el mensaje por código
+                MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
+                return false;
+            }
+            catch (FaultException ex)
+            {
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Fault] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.DatabaseUnavailable);
+                return false;
+            }
             catch (EndpointNotFoundException ex)
             {
                 Debug.WriteLine($"[SignIn.ValidateWithServerAsync - EndpointNotFound] {ex.Message}");
@@ -267,15 +283,14 @@ namespace DamasChinas_Client.UI.Pages
                 ShowErrorByKey(MessageKeys.NetworkLatency);
                 return false;
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - Unknown] {ex.Message}");
+                Debug.WriteLine($"[SignIn.ValidateWithServerAsync - InvalidOperation] {ex.Message}");
                 await CloseLoaderSafeAsync(loader);
                 ShowErrorByKey(MessageKeys.UnknownError);
                 return false;
             }
         }
-
 
         private static async Task<bool> RequestVerificationCodeAsync(
             SingInServiceClient client,
@@ -284,8 +299,8 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 string cultureCode = LanguageManager.CurrentCultureCode;
-                var result = await Task.Run(() => client.RequestVerificationCode(dto.Email, cultureCode));
 
+                var result = await Task.Run(() => client.RequestVerificationCode(dto.Email, cultureCode));
 
                 if (result == null)
                 {
@@ -306,6 +321,18 @@ namespace DamasChinas_Client.UI.Pages
 
                 return true;
             }
+            catch (FaultException<MessageCode> ex)
+            {
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - Fault<MessageCode>] {ex.Detail}");
+                MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
+                return false;
+            }
+            catch (FaultException ex)
+            {
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - Fault] {ex.Message}");
+                ShowErrorByKey(MessageKeys.DatabaseUnavailable);
+                return false;
+            }
             catch (EndpointNotFoundException ex)
             {
                 Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - EndpointNotFound] {ex.Message}");
@@ -324,14 +351,13 @@ namespace DamasChinas_Client.UI.Pages
                 ShowErrorByKey(MessageKeys.NetworkLatency);
                 return false;
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - Unknown] {ex.Message}");
+                Debug.WriteLine($"[SignIn.RequestVerificationCodeAsync - InvalidOperation] {ex.Message}");
                 ShowErrorByKey(MessageKeys.UnknownError);
                 return false;
             }
         }
-
 
         private static async Task<bool> CreateUserAsync(
             SingInServiceClient client,
@@ -344,7 +370,6 @@ namespace DamasChinas_Client.UI.Pages
                 string cultureCode = LanguageManager.CurrentCultureCode;
                 var result = await client.CreateUserAsync(dto, code, cultureCode);
 
-
                 await CloseLoaderSafeAsync(loader);
 
                 if (result == null)
@@ -356,12 +381,25 @@ namespace DamasChinas_Client.UI.Pages
                 if (!result.Success)
                 {
                     Debug.WriteLine($"[DEBUG] RESULT: Success={result?.Success}, Code={result?.Code}, Technical={result?.TechnicalDetail}");
-
                     HandleCodeCreationError(result);
                     return false;
                 }
 
                 return true;
+            }
+            catch (FaultException<MessageCode> ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Fault<MessageCode>] {ex.Detail}");
+                await CloseLoaderSafeAsync(loader);
+                MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
+                return false;
+            }
+            catch (FaultException ex)
+            {
+                Debug.WriteLine($"[SignIn.CreateUserAsync - Fault] {ex.Message}");
+                await CloseLoaderSafeAsync(loader);
+                ShowErrorByKey(MessageKeys.DatabaseUnavailable);
+                return false;
             }
             catch (EndpointNotFoundException ex)
             {
@@ -384,9 +422,9 @@ namespace DamasChinas_Client.UI.Pages
                 ShowErrorByKey(MessageKeys.NetworkLatency);
                 return false;
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[SignIn.CreateUserAsync - Unknown] {ex.Message}");
+                Debug.WriteLine($"[SignIn.CreateUserAsync - InvalidOperation] {ex.Message}");
                 await CloseLoaderSafeAsync(loader);
                 ShowErrorByKey(MessageKeys.UnknownError);
                 return false;
@@ -427,9 +465,9 @@ namespace DamasChinas_Client.UI.Pages
                         PopupType.Warning);
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[SignIn.OnBackClick] {ex.Message}");
+                Debug.WriteLine($"[SignIn.OnBackClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),
@@ -443,9 +481,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new ConfiSound());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[SignIn.OnSoundClick] {ex.Message}");
+                Debug.WriteLine($"[SignIn.OnSoundClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.NavigationError),
@@ -459,9 +497,9 @@ namespace DamasChinas_Client.UI.Pages
             {
                 NavigationService?.Navigate(new SelectLanguage());
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[SignIn.OnLanguageClick] {ex.Message}");
+                Debug.WriteLine($"[SignIn.OnLanguageClick - InvalidOperation] {ex.Message}");
 
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.UnknownError),

@@ -39,16 +39,41 @@ namespace DamasChinas_Client.UI.Pages
                 loading = ShowLoading();
 
                 var client = CreateLoginClient(out var callback);
+
+                // Evita que el login se quede colgado si el server/DB no responde rápido
+                client.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(8);
+
                 ConfigureCallback(callback, loading, client);
 
-                ExecuteLogin(client, username, hashedPassword);
+                await ExecuteLoginAsync(client, username, hashedPassword);
             }
-            catch (Exception ex) when (
-                ex is EndpointNotFoundException ||
-                ex is TimeoutException ||
-                ex is CommunicationException)
+            catch (FaultException<MessageCode> ex)
             {
-                Debug.WriteLine($"[Login.OnLoginClick - Network] {ex}");
+                Debug.WriteLine($"[Login.OnLoginClick - Fault<MessageCode>] {ex.Detail}");
+                await SafeWait(loading);
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    loading?.Close();
+                    // Muestra el mensaje basado en tu sistema de códigos
+                    MessageHelper.ShowFromCode(ex.Detail, PopupType.Error);
+                }));
+            }
+            catch (FaultException)
+            {
+                // Fallback: si por alguna razón llega un fault no tipado
+                Debug.WriteLine("[Login.OnLoginClick - Fault] FaultException received.");
+                await SafeWait(loading);
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    loading?.Close();
+                    MessageHelper.ShowPopup(MessageKeys.DatabaseUnavailable, PopupType.Error);
+                }));
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[Login.OnLoginClick - EndpointNotFound] {ex}");
                 await SafeWait(loading);
 
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
@@ -57,9 +82,31 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
                 }));
             }
-            catch (Exception ex)
+            catch (TimeoutException ex)
             {
-                Debug.WriteLine($"[Login.OnLoginClick - General] {ex}");
+                Debug.WriteLine($"[Login.OnLoginClick - Timeout] {ex}");
+                await SafeWait(loading);
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    loading?.Close();
+                    MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
+                }));
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[Login.OnLoginClick - Communication] {ex}");
+                await SafeWait(loading);
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    loading?.Close();
+                    MessageHelper.ShowPopup(ServerUnavailable, PopupType.Error);
+                }));
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[Login.OnLoginClick - InvalidOperation] {ex}");
                 await SafeWait(loading);
 
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
@@ -68,6 +115,19 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowPopup(UnknownError, PopupType.Error);
                 }));
             }
+        }
+
+        private static Task ExecuteLoginAsync(LoginServiceClient client, string username, string hashedPassword)
+        {
+            // Importante: no bloquea UI thread
+            return Task.Run(() =>
+            {
+                client.Login(new LoginRequest
+                {
+                    Username = username,
+                    Password = hashedPassword
+                });
+            });
         }
 
         private (string username, string password) GetCredentials()
@@ -123,8 +183,6 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 _ = HandleConnectionLossAsync(loading);
-
-                Debug.WriteLine($"[ConfigureCallback] {_}");
             };
 
             channel.Closed += (_, __) =>
@@ -137,15 +195,12 @@ namespace DamasChinas_Client.UI.Pages
                 _ = HandleConnectionLossAsync(loading);
             };
 
-
             callback.LoginSuccess += async profile =>
             {
                 await SafeWait(loading);
 
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-
                 {
-
                     loading?.Close();
 
                     ClientSession.Initialize(profile, client, callback);
@@ -161,14 +216,12 @@ namespace DamasChinas_Client.UI.Pages
                     }
                     catch (InvalidOperationException ex)
                     {
-
                         Debug.WriteLine($"[Login.ConfigureCallback] Session subscribe error: {ex.Message}");
                     }
 
                     TryNavigateToMenu(profile);
                 }));
             };
-
 
             callback.LoginError += async code =>
             {
@@ -180,7 +233,6 @@ namespace DamasChinas_Client.UI.Pages
                     MessageHelper.ShowFromCode(code, PopupType.Warning);
                 }));
             };
-
 
             callback.LoginBanned += async banInfo =>
             {
@@ -243,6 +295,14 @@ namespace DamasChinas_Client.UI.Pages
             {
                 Debug.WriteLine($"[Login.SafeWait] {ex}");
             }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[Login.SafeWait] {ex}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[Login.SafeWait] {ex}");
+            }
         }
 
         private void TryNavigateToMenu(PublicProfile profile)
@@ -274,25 +334,6 @@ namespace DamasChinas_Client.UI.Pages
             {
                 MessageHelper.ShowPopup(UnknownError, PopupType.Error);
                 Debug.WriteLine($"[Login.trynavigatemenu] {ex}");
-            }
-        }
-
-        private void ExecuteLogin(LoginServiceClient client, string username, string hashedPassword)
-        {
-            try
-            {
-                client.Login(new LoginRequest
-                {
-                    Username = username,
-                    Password = hashedPassword
-                });
-            }
-            catch (Exception ex) when (
-                ex is CommunicationException ||
-                ex is TimeoutException)
-            {
-                Debug.WriteLine($"[Login.ExecuteLogin] {ex}");
-                MessageHelper.ShowPopup(UnknownError, PopupType.Error);
             }
         }
 

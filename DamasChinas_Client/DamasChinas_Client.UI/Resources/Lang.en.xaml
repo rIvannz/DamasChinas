@@ -377,7 +377,7 @@ Multiple jumps are allowed in a single turn.
     <!-- Backend / servidor -->
     <sys:String x:Key="msg_ServerUnavailable">The server had an interruption, log in agains.</sys:String>
     <sys:String x:Key="msg_DatabaseUnavailable">
-        Ocurrio un error inesperado, Por favor inicia sesión de nuevo.
+        An unexpected error occurred. Please log in again.
     </sys:String>
 
     <sys:String x:Key="msg_NetworkLatency">Network latency detected.</sys:String>
