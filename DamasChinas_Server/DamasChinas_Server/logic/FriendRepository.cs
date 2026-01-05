@@ -127,8 +127,9 @@ namespace DamasChinas_Server
         {
             var profile = user.perfiles.FirstOrDefault();
             string username = profile?.username ?? "N/A";
+
             bool isOnline = !string.IsNullOrWhiteSpace(username) &&
-                            SessionManager.IsOnline(username);
+                            IsOnlineResolver(username);
 
             return new FriendDto
             {
@@ -138,6 +139,9 @@ namespace DamasChinas_Server
                 Avatar = profile?.imagen_perfil ?? "default.png"
             };
         }
+
+
+        public static Func<string, bool> IsOnlineResolver = username => SessionManager.IsOnline(username);
 
         private (int senderId, int receiverId) GetUserIds(string senderUsername, string receiverUsername)
         {

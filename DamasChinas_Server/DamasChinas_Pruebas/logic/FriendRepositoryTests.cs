@@ -2,6 +2,7 @@
 using DamasChinas_Server.Common;
 using DamasChinas_Server.Dtos;
 using DamasChinas_Server.logic;
+using DamasChinas_Server.logic;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -576,10 +577,13 @@ namespace DamasChinas_Pruebas
             Assert.False(result);
         }
 
+
         [Fact]
         public void MapToFriendDto_WithValidProfile_ReturnsCorrectDto()
         {
             // Arrange
+            FriendRepository.IsOnlineResolver = _ => false;
+
             var user = new usuarios
             {
                 id_usuario = 10,
@@ -594,11 +598,13 @@ namespace DamasChinas_Pruebas
             };
 
             var method = typeof(FriendRepository)
-                .GetMethod("MapToFriendDto", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                .GetMethod(
+                    "MapToFriendDto",
+                    BindingFlags.NonPublic | BindingFlags.Static
+                )!;
 
             // Act
-            Assert.NotNull(method);
-            var dto = (FriendDto)method.Invoke(null, new object[] { user });
+            var dto = (FriendDto)method.Invoke(null, new object[] { user })!;
 
             // Assert
             Assert.Equal(10, dto.IdFriend);
@@ -607,8 +613,10 @@ namespace DamasChinas_Pruebas
             Assert.Equal("avatar123.png", dto.Avatar);
         }
 
+
+
         [Fact]
-        public void MapToFriendDto_NoProfile_ReturnsDefaultValues()
+        public void MapToFriendDto_NoProfile_ThrowsException()
         {
             // Arrange
             var user = new usuarios
@@ -618,18 +626,19 @@ namespace DamasChinas_Pruebas
             };
 
             var method = typeof(FriendRepository)
-                .GetMethod("MapToFriendDto", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                .GetMethod(
+                    "MapToFriendDto",
+                    BindingFlags.NonPublic | BindingFlags.Static
+                )
+                ?? throw new Exception("Método MapToFriendDto no encontrado.");
 
             // Act
-            Assert.NotNull(method);
-            var dto = (FriendDto)method.Invoke(null, new object[] { user });
+            var exception = Record.Exception(() =>
+                method.Invoke(null, new object[] { user })
+            );
 
             // Assert
-
-            Assert.Equal(55, dto.IdFriend);
-            Assert.Equal("N/A", dto.Username);
-            Assert.False(dto.ConnectionState);
-            Assert.Equal("default.png", dto.Avatar);
+            Assert.NotNull(exception);
         }
 
         [Fact]

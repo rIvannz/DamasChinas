@@ -38,3 +38,4 @@ using System.Runtime.InteropServices;
 [assembly: XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
 
 [assembly: InternalsVisibleTo("DamasChinas_Pruebas")]
+[assembly: InternalsVisibleTo("DamasChinas_Tests")]

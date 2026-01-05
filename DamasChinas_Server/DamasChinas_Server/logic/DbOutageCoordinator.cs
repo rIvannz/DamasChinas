@@ -10,7 +10,22 @@ namespace DamasChinas_Server.Logic
     public static class DbOutageCoordinator
     {
         private static int _tripped;
-        private static readonly ILogService _log = LogFactory.Create(typeof(DbOutageCoordinator));
+
+        private static readonly ILogService _log =
+            LogFactory.Create(typeof(DbOutageCoordinator));
+
+
+        internal static Action<string, Exception> LogError =
+            (msg, ex) => _log.Error(msg, ex);
+
+        internal static Action<string> TelegramSender =
+            msg => TelegramNotifier.Send(msg);
+
+        internal static Action<MessageCode> DisconnectSessions =
+            code => SessionManager.ForceDisconnectAll(code);
+
+        internal static Action<MessageCode> DisconnectGuests =
+            code => GuestSessionCallbackManager.ForceDisconnectAll(code);
 
         public static void Trip(Exception ex)
         {
@@ -19,19 +34,34 @@ namespace DamasChinas_Server.Logic
 
             try
             {
-                _log.Error("[DbOutageCoordinator] DB down detected. Forcing disconnect all.", ex);
-                TelegramNotifier.Send(
-    string.Format(TelegramNotifier.DbDownTemplate,DateTime.Now.ToString(TelegramNotifier.TimeFormat),ex.GetType().Name
-    )
-);
-                SessionManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
-                GuestSessionCallbackManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
+                LogError(
+                    "[DbOutageCoordinator] DB down detected. Forcing disconnect all.",
+                    ex
+                );
+
+                TelegramSender(
+                    string.Format(
+                        TelegramNotifier.DbDownTemplate,
+                        DateTime.Now.ToString(TelegramNotifier.TimeFormat),
+                        ex.GetType().Name
+                    )
+                );
+
+                DisconnectSessions(MessageCode.DatabaseUnavailable);
+                DisconnectGuests(MessageCode.DatabaseUnavailable);
             }
             catch (Exception inner)
             {
-                _log.Error("[DbOutageCoordinator] Error forcing disconnect all.", inner);
+                LogError(
+                    "[DbOutageCoordinator] Error forcing disconnect all.",
+                    inner
+                );
             }
         }
 
+        internal static void ResetForTests()
+        {
+            _tripped = 0;
+        }
     }
 }
