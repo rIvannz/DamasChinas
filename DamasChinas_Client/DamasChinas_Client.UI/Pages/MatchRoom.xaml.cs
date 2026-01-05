@@ -486,14 +486,14 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public  void HandleError(string msgKey)
+        public static void HandleError(string msgKey)
         {
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }
 
 
 
-  
+
 
         private void OnBoardClick(object sender, MouseButtonEventArgs e)
         {

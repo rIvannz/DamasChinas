@@ -52,14 +52,14 @@ namespace DamasChinas_Server
             }
         }
 
-        private static void EnsureNotFriends(damas_chinasEntities db, int idUserSender, int idUserReciever)
+        private static void EnsureNotFriends(damas_chinasEntities db,int idUserSender, int idUserReciever)
         {
             if (FriendshipExists(db, idUserSender, idUserReciever))
             {
-               
                 throw new RepositoryValidationException(MessageCode.AlreadyFriends);
             }
         }
+
 
 
         private static void EnsureFriends(damas_chinasEntities db, int idUserSender, int idUserReciever)

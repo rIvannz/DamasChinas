@@ -14,7 +14,6 @@ namespace DamasChinas_Client.UI.Callbacks
         public static event Action SessionExpiredEvent;
         public static event Action<string> PlayerInGameEvent;
         public static event Action<string> PlayerLeftGameEvent;
-
         public static event Action<BanInfoDto> BanStatusUpdatedEvent;
 
         public void PlayerConnected(string nickname)
@@ -82,13 +81,11 @@ namespace DamasChinas_Client.UI.Callbacks
                 return MessageKeys.DatabaseUnavailable;
             }
 
-         
             if (code.StartsWith("msg_", StringComparison.OrdinalIgnoreCase))
             {
                 return code;
             }
 
-      
             if (code.Equals("DatabaseUnavailable", StringComparison.OrdinalIgnoreCase))
             {
                 return MessageKeys.DatabaseUnavailable;
@@ -104,13 +101,8 @@ namespace DamasChinas_Client.UI.Callbacks
                 return MessageKeys.SessionExpired;
             }
 
-     
             return MessageKeys.UnknownError;
         }
-
-
-
-
 
         public void OnBanStatusUpdated(BanInfoDto banInfo)
         {
