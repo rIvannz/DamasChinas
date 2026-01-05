@@ -93,13 +93,11 @@ namespace DamasChinas_Client.UI.Pages
                     bool isMe = m.Username == _username;
                     string displayName = m.IsHost ? $"?? {m.Username}" : m.Username;
 
-                    // ? Host registrado puede kickear a cualquiera (incluyendo guests)
                     Visibility kickVis =
                         (amIHost && !isMe && !ClientSession.IsGuest)
                         ? Visibility.Visible
                         : Visibility.Collapsed;
 
-                    // ? Report NO aparece si el target es guest (y guest tampoco reporta)
                     Visibility reportVis =
                         (!isMe &&
                          !ClientSession.IsGuest &&
@@ -131,7 +129,6 @@ namespace DamasChinas_Client.UI.Pages
 
         private void LoadFriends()
         {
-            // ? Invitados no tienen amigos (no existen en BD)
             if (ClientSession.IsGuest)
             {
                 Dispatcher.BeginInvoke(new Action(() => FriendsCollection.Clear()));
@@ -151,8 +148,9 @@ namespace DamasChinas_Client.UI.Pages
                         FriendsCollection.Clear();
 
                         if (friends == null)
+                        {
                             return;
-
+                        }
                         foreach (var f in friends)
                         {
                             var status = f.ConnectionState
@@ -174,9 +172,9 @@ namespace DamasChinas_Client.UI.Pages
                     }));
                 }
             }
-            catch (Exception ex)
+            catch (CommunicationException)
             {
-                Console.WriteLine($"[PreLobby.LoadFriends] {ex.Message}");
+                Console.WriteLine($"[PreLobby.LoadFriends.fail] {_userId}");
             }
         }
 

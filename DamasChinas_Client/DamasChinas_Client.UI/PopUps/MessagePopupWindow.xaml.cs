@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using DamasChinas_Client.UI.Utilities;
 
 namespace DamasChinas_Client.UI.PopUps
@@ -27,17 +18,13 @@ namespace DamasChinas_Client.UI.PopUps
 
         public MessagePopupWindow(string message, string type = "info", bool autoClose = false)
         {
-            if (_openedInstance != null &&
-                _lastMessage == message &&
-                (_lastType?.ToLower() ?? "") == (type?.ToLower() ?? ""))
+            if (IsDuplicateMessage(message, type))
             {
                 IsDuplicate = true;
                 return;
             }
 
-            _openedInstance = this;
-            _lastMessage = message;
-            _lastType = type;
+            RegisterOpenedInstance(this, message, type);
 
             InitializeComponent();
 
@@ -45,6 +32,23 @@ namespace DamasChinas_Client.UI.PopUps
             _autoClose = autoClose;
 
             ConfigureVisuals(type);
+        }
+
+        private static bool IsDuplicateMessage(string message, string type)
+        {
+            return _openedInstance != null &&
+                   _lastMessage == message &&
+                   (_lastType?.ToLower() ?? "") == (type?.ToLower() ?? "");
+        }
+
+        private static void RegisterOpenedInstance(
+            MessagePopupWindow instance,
+            string message,
+            string type)
+        {
+            _openedInstance = instance;
+            _lastMessage = message;
+            _lastType = type;
         }
 
         private void ConfigureVisuals(string type)
@@ -104,14 +108,18 @@ namespace DamasChinas_Client.UI.PopUps
 
         protected override void OnClosed(EventArgs e)
         {
-            if (_openedInstance == this)
+            ClearStaticStateIfCurrent(this);
+            base.OnClosed(e);
+        }
+
+        private static void ClearStaticStateIfCurrent(MessagePopupWindow instance)
+        {
+            if (_openedInstance == instance)
             {
                 _openedInstance = null;
                 _lastMessage = null;
                 _lastType = null;
             }
-
-            base.OnClosed(e);
         }
     }
 }

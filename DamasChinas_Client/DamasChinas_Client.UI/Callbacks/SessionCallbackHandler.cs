@@ -17,14 +17,14 @@ namespace DamasChinas_Client.UI.Callbacks
 
         public static event Action<BanInfoDto> BanStatusUpdatedEvent;
 
-        public void PlayerConnected(string nickname)
+        public void PlayerConnected(string username)
         {
-            PlayerConnectedEvent?.Invoke(nickname);
+            PlayerConnectedEvent?.Invoke(username);
         }
 
-        public void PlayerDisconnected(string nickname)
+        public void PlayerDisconnected(string username)
         {
-            PlayerDisconnectedEvent?.Invoke(nickname);
+            PlayerDisconnectedEvent?.Invoke(username);
         }
 
         public void SessionExpired()
@@ -32,14 +32,14 @@ namespace DamasChinas_Client.UI.Callbacks
             SessionExpiredEvent?.Invoke();
         }
 
-        public void PlayerInGame(string nickname)
+        public void PlayerInGame(string username)
         {
-            PlayerInGameEvent?.Invoke(nickname);
+            PlayerInGameEvent?.Invoke(username);
         }
 
-        public void PlayerLeftGame(string nickname)
+        public void PlayerLeftGame(string username)
         {
-            PlayerLeftGameEvent?.Invoke(nickname);
+            PlayerLeftGameEvent?.Invoke(username);
         }
 
         public void OnForcedLogout(string code)

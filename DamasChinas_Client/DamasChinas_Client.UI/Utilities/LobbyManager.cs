@@ -91,7 +91,7 @@ namespace DamasChinas_Client.UI.Utilities
             if (obj == null)
             {
                 return;
-            };
+            }
             try 
             { 
                 obj.Abort();

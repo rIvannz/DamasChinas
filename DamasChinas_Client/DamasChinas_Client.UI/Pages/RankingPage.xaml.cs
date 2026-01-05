@@ -231,6 +231,8 @@ ex is TimeoutException)
 
             public int Loses { get; set; }
 
+
+            // Used by XAML binding to display user avatar
             public ImageSource AvatarSource
             {
                 get

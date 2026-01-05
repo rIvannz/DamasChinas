@@ -33,9 +33,17 @@ namespace DamasChinas_Client.UI.Utilities
 
                 ChangeLanguageInternal(saved, save: false);
             }
-            catch (Exception ex)
+            catch (CultureNotFoundException ex)
             {
-                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] {ex.Message}");
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Invalid culture: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Invalid state: {ex.Message}");
+            }
+            catch (ArgumentException ex)
+            {
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Argument error: {ex.Message}");
             }
         }
 
@@ -55,7 +63,7 @@ namespace DamasChinas_Client.UI.Utilities
                 }
 
                 var newLanguageDictionary = CreateLanguageDictionary(cultureCode);
-                var existingLanguageDictionary = FindExistingLanguageDictionary();
+                var existingLanguageDictionary = TryFindExistingLanguageDictionary();
 
                 ReplaceOrAddDictionary(newLanguageDictionary, existingLanguageDictionary);
 
@@ -65,12 +73,19 @@ namespace DamasChinas_Client.UI.Utilities
                 CurrentCultureCode = cultureCode;
                 UpdateCulture(cultureCode);
 
-                
+
             }
-            catch (Exception ex)
+            catch (CultureNotFoundException )
             {
-                Debug.WriteLine($"[LanguageManager.ChangeLanguageInternal] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.LanguageChangeError, PopupType.Error);
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Invalid culture: {save}");
+            }
+            catch (InvalidOperationException )
+            {
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Invalid state: {save}");
+            }
+            catch (ArgumentException )
+            {
+                Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Argument error: {save}");
             }
         }
 
@@ -101,7 +116,7 @@ namespace DamasChinas_Client.UI.Utilities
         }
 
   
-        private static ResourceDictionary FindExistingLanguageDictionary()
+        private static ResourceDictionary TryFindExistingLanguageDictionary()
         {
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
             {

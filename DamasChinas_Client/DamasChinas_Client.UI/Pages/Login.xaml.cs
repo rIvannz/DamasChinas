@@ -135,6 +135,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
 
                 _ = HandleConnectionLossAsync(loading);
+                Debug.WriteLine($"[ConfigureCallback] {_}");
             };
 
        

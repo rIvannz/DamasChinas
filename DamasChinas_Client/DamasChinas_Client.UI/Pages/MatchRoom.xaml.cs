@@ -292,7 +292,7 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-        private void DrawPlayerLabels()
+        private static void DrawPlayerLabels()
         {
             Debug.WriteLine($"[MatchRoom.DrawPlayerLabels.fail]");
 
@@ -486,7 +486,7 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public  void HandleError(string msgKey)
+        public static void HandleError(string msgKey)
         {
             MessageHelper.ShowPopup(msgKey, PopupType.Warning);
         }
