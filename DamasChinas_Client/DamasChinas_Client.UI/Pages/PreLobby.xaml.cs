@@ -78,54 +78,97 @@ namespace DamasChinas_Client.UI.Pages
             {
                 _snapshot = snapshot;
 
-                lblLobbyCode.Text =
-                    $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyCode)}: {snapshot.LobbyCode}";
-
-                if (FindName("lblPlayerCount") is TextBlock lblCount)
-                    lblCount.Text = $"{snapshot.Members.Length} / {snapshot.MaxPlayers}";
+                UpdateLobbyHeader(snapshot);
+                UpdatePlayerCount(snapshot);
 
                 MembersCollection.Clear();
 
-                bool amIHost = snapshot.Members.Any(m => m.Username == _username && m.IsHost);
+                bool amIHost = IsCurrentUserHost(snapshot);
 
-                foreach (var m in snapshot.Members)
+                foreach (var member in snapshot.Members)
                 {
-                    bool isMe = m.Username == _username;
-                    string displayName = m.IsHost ? $"?? {m.Username}" : m.Username;
-
-                    Visibility kickVis =
-                        (amIHost && !isMe && !ClientSession.IsGuest)
-                        ? Visibility.Visible
-                        : Visibility.Collapsed;
-
-                    Visibility reportVis =
-                        (!isMe &&
-                         !ClientSession.IsGuest &&
-                         !ClientSession.IsGuestUsername(m.Username))
-                        ? Visibility.Visible
-                        : Visibility.Collapsed;
-
-                    string avatarFile = string.IsNullOrWhiteSpace(m.AvatarFile)
-                        ? DefaultAvatarFile
-                        : m.AvatarFile;
-
-                    MembersCollection.Add(new LobbyMemberViewModel
-                    {
-                        UserId = m.UserId,
-                        Username = m.Username,
-                        DisplayName = displayName,
-                        AvatarFile = avatarFile,
-                        AvatarSource = PathProvider.LoadAvatar(avatarFile),
-                        IsHost = m.IsHost,
-                        KickVisibility = kickVis,
-                        ReportVisibility = reportVis,
-                        OriginalDto = m
-                    });
+                    MembersCollection.Add(BuildMemberViewModel(member, amIHost));
                 }
 
                 UpdateStartButtonState(amIHost, snapshot.Members.Length);
             }));
         }
+
+        private void UpdateLobbyHeader(LobbySnapshotDto snapshot)
+        {
+            lblLobbyCode.Text =
+                $"{MessageTranslator.GetLocalizedMessage(MessageKeys.LobbyCode)}: {snapshot.LobbyCode}";
+        }
+
+        private void UpdatePlayerCount(LobbySnapshotDto snapshot)
+        {
+            if (FindName("lblPlayerCount") is TextBlock lblCount)
+            {
+                lblCount.Text = $"{snapshot.Members.Length} / {snapshot.MaxPlayers}";
+            }
+        }
+
+        private bool IsCurrentUserHost(LobbySnapshotDto snapshot)
+        {
+            return snapshot.Members.Any(m => m.Username == _username && m.IsHost);
+        }
+
+        private LobbyMemberViewModel BuildMemberViewModel(LobbyMemberDto member, bool amIHost)
+        {
+            bool isMe = IsMe(member.Username);
+            string displayName = BuildDisplayName(member);
+            string avatarFile = ResolveAvatarFile(member.AvatarFile);
+
+            return new LobbyMemberViewModel
+            {
+                UserId = member.UserId,
+                Username = member.Username,
+                DisplayName = displayName,
+                AvatarFile = avatarFile,
+                AvatarSource = PathProvider.LoadAvatar(avatarFile),
+                IsHost = member.IsHost,
+                KickVisibility = GetKickVisibility(amIHost, isMe),
+                ReportVisibility = GetReportVisibility(isMe, member.Username),
+                OriginalDto = member
+            };
+        }
+
+        private bool IsMe(string username)
+        {
+            return username == _username;
+        }
+
+        private string BuildDisplayName(LobbyMemberDto member)
+        {
+        
+            return member.IsHost ? $"?? {member.Username}" : member.Username;
+        }
+
+        private string ResolveAvatarFile(string avatarFile)
+        {
+            return string.IsNullOrWhiteSpace(avatarFile) ? DefaultAvatarFile : avatarFile;
+        }
+
+        private Visibility GetKickVisibility(bool amIHost, bool isMe)
+        {
+            if (!amIHost || isMe || ClientSession.IsGuest)
+            {
+                return Visibility.Collapsed;
+            }
+
+            return Visibility.Visible;
+        }
+
+        private Visibility GetReportVisibility(bool isMe, string username)
+        {
+            if (isMe || ClientSession.IsGuest || ClientSession.IsGuestUsername(username))
+            {
+                return Visibility.Collapsed;
+            }
+
+            return Visibility.Visible;
+        }
+
 
         private void LoadFriends()
         {

@@ -24,13 +24,10 @@ namespace DamasChinas_Client.UI.Pages
             Loaded += OnPageLoaded;
         }
 
-
-
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             LoadRanking();
         }
-
 
         private void LoadRanking()
         {
@@ -48,13 +45,16 @@ namespace DamasChinas_Client.UI.Pages
 
                         foreach (var entry in data)
                         {
+                            string avatarFile = string.IsNullOrWhiteSpace(entry.AvatarFile)
+                                ? DefaultAvatarFile
+                                : entry.AvatarFile;
+
                             _items.Add(new RankingItemViewModel
                             {
                                 Position = position,
                                 Username = entry.Username,
-                                AvatarFile = string.IsNullOrWhiteSpace(entry.AvatarFile)
-                                    ? DefaultAvatarFile
-                                    : entry.AvatarFile,
+                                AvatarFile = avatarFile,
+                                AvatarSource = PathProvider.LoadAvatar(avatarFile),
                                 MatchesPlayed = entry.MatchesPlayed,
                                 Wins = entry.Wins,
                                 Loses = entry.Loses
@@ -73,12 +73,11 @@ namespace DamasChinas_Client.UI.Pages
                 ex is CommunicationException ||
                 ex is TimeoutException)
             {
-                Debug.WriteLine($"[RankinPage.LoadRanking.fail] {ex.Message}");
+                Debug.WriteLine($"[RankingPage.LoadRanking.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.RankingUnavailable, PopupType.Info);
             }
         }
 
-  
         private void OnBackClick(object sender, RoutedEventArgs e)
         {
             try
@@ -87,7 +86,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[RankinPage.OnBackClick.fail] {ex.Message}");
+                Debug.WriteLine($"[RankingPage.OnBackClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -104,11 +103,11 @@ namespace DamasChinas_Client.UI.Pages
                 NavigationService?.Navigate(new ConfiSound());
             }
             catch (Exception ex) when (
-       ex is EndpointNotFoundException ||
-       ex is CommunicationException ||
-       ex is TimeoutException)
+                ex is EndpointNotFoundException ||
+                ex is CommunicationException ||
+                ex is TimeoutException)
             {
-                Debug.WriteLine($"[RankinPage.OnRefreshClick.fail] {ex.Message}");
+                Debug.WriteLine($"[RankingPage.OnSoundClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Info);
             }
         }
@@ -121,7 +120,7 @@ namespace DamasChinas_Client.UI.Pages
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"[RankinPage.OnLanguageClick.fail] {ex.Message}");
+                Debug.WriteLine($"[RankingPage.OnLanguageClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.NavigationError, PopupType.Error);
             }
         }
@@ -146,15 +145,14 @@ namespace DamasChinas_Client.UI.Pages
                 }
             }
             catch (Exception ex) when (
-    ex is EndpointNotFoundException ||
-    ex is CommunicationException ||
-    ex is TimeoutException)
+                ex is EndpointNotFoundException ||
+                ex is CommunicationException ||
+                ex is TimeoutException)
             {
-                Debug.WriteLine($"[RankinPage.IsFriend.fail] {ex.Message}");
+                Debug.WriteLine($"[RankingPage.IsFriend.fail] {ex.Message}");
                 return false;
             }
         }
-
 
         private void OnViewProfileClick(object sender, RoutedEventArgs e)
         {
@@ -165,14 +163,12 @@ namespace DamasChinas_Client.UI.Pages
                     return;
                 }
 
-               
                 if (string.Equals(vm.Username, ClientSession.CurrentProfile.Username, StringComparison.OrdinalIgnoreCase))
                 {
                     NavigationService?.Navigate(new ProfilePlayer());
                     return;
                 }
 
-             
                 if (IsFriend(vm.Username))
                 {
                     using (var client = new FriendServiceClient(
@@ -192,7 +188,6 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 else
                 {
-         
                     NavigationService?.Navigate(
                         new ProfilePublicPage(
                             vm.Username,
@@ -202,20 +197,15 @@ namespace DamasChinas_Client.UI.Pages
                             vm.Loses));
                 }
             }
-           
             catch (Exception ex) when (
-ex is EndpointNotFoundException ||
-ex is CommunicationException ||
-ex is TimeoutException)
+                ex is EndpointNotFoundException ||
+                ex is CommunicationException ||
+                ex is TimeoutException)
             {
-                Debug.WriteLine($"[RankinPage.IsFriend.fail] {ex.Message}");
+                Debug.WriteLine($"[RankingPage.OnViewProfileClick.fail] {ex.Message}");
                 MessageHelper.ShowPopup(MessageKeys.ProfileOpenError, PopupType.Error);
             }
-
         }
-
-
-
 
         private sealed class RankingItemViewModel
         {
@@ -225,27 +215,13 @@ ex is TimeoutException)
 
             public string AvatarFile { get; set; }
 
+            public ImageSource AvatarSource { get; set; }
+
             public int MatchesPlayed { get; set; }
 
             public int Wins { get; set; }
 
             public int Loses { get; set; }
-
-
-            // Used by XAML binding to display user avatar
-            public ImageSource AvatarSource
-            {
-                get
-                {
-                    string file = string.IsNullOrWhiteSpace(AvatarFile)
-                        ? "avatarIcon.png"
-                        : AvatarFile;
-
-                    return PathProvider.LoadAvatar(file);
-                }
-            }
         }
-
-
     }
 }

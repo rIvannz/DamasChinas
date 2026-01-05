@@ -11,7 +11,6 @@ namespace DamasChinas_Client.UI.Utilities
         private const string BindingName = "NetTcpBinding_IGuestSessionService";
 
         private static GuestSessionServiceClient _client;
-        private static InstanceContext _context;
         private static string _guestNormalized;
 
         public static bool IsInitialized => _client != null;
@@ -22,10 +21,12 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(guestUsername))
             {
                 return;
             }
+
             EnsureAlive(guestUsername);
         }
 
@@ -54,7 +55,6 @@ namespace DamasChinas_Client.UI.Utilities
                 Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
             }
 
-
             try
             {
                 if (_client != null)
@@ -67,10 +67,11 @@ namespace DamasChinas_Client.UI.Utilities
             }
             catch
             {
-                try {
-                    _client?.Abort(); 
+                try
+                {
+                    _client?.Abort();
                 }
-                catch 
+                catch
                 {
                     Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
                 }
@@ -78,14 +79,13 @@ namespace DamasChinas_Client.UI.Utilities
             finally
             {
                 _client = null;
-                _context = null;
                 _guestNormalized = null;
 
-                try 
+                try
                 {
                     GuestSessionCallbackHandler.ServerMessageReceived -= OnServerMessage;
                 }
-                catch 
+                catch
                 {
                     Debug.WriteLine($"[GuestSecionManager.Reset.fail]");
                 }
@@ -105,16 +105,16 @@ namespace DamasChinas_Client.UI.Utilities
 
             if (_client != null && IsDead(_client.State))
             {
-                try 
+                try
                 {
-                    _client.Abort(); 
+                    _client.Abort();
                 }
-                catch 
+                catch
                 {
                     Debug.WriteLine($"[GuestSecionManager.EnsureAlive.fail]");
                 }
+
                 _client = null;
-                _context = null;
                 _guestNormalized = null;
             }
 
@@ -122,12 +122,11 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 var callback = new GuestSessionCallbackHandler();
 
-          
                 GuestSessionCallbackHandler.ServerMessageReceived -= OnServerMessage;
                 GuestSessionCallbackHandler.ServerMessageReceived += OnServerMessage;
 
-                _context = new InstanceContext(callback);
-                _client = new GuestSessionServiceClient(_context, BindingName);
+                InstanceContext context = new InstanceContext(callback);
+                _client = new GuestSessionServiceClient(context, BindingName);
 
                 AttachChannelEvents(_client);
 
@@ -145,16 +144,16 @@ namespace DamasChinas_Client.UI.Utilities
 
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
 
-                try 
+                try
                 {
                     _client?.Abort();
-                } 
+                }
                 catch
                 {
                     Debug.WriteLine($"[GuestSecionManager.EnsureAlive.fail]");
                 }
+
                 _client = null;
-                _context = null;
                 _guestNormalized = null;
             }
         }
@@ -165,6 +164,7 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 return;
             }
+
             channel.Faulted += (s, e) =>
                 GuestDisconnectNotifier.TryNotifyAndGoHome(MessageKeys.ServerUnavailable);
 
@@ -174,7 +174,6 @@ namespace DamasChinas_Client.UI.Utilities
 
         private static void OnServerMessage(string code)
         {
-       
             string key = NormalizeToMessageKey(code);
             GuestDisconnectNotifier.TryNotifyAndGoHome(key);
         }
@@ -185,13 +184,14 @@ namespace DamasChinas_Client.UI.Utilities
             {
                 return MessageKeys.ServerUnavailable;
             }
+
             if (code.StartsWith("msg_", StringComparison.OrdinalIgnoreCase))
             {
                 return code;
             }
+
             return "msg_" + code.Trim();
         }
-
 
         private static bool IsDead(CommunicationState state)
         {

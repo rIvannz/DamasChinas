@@ -31,14 +31,16 @@ namespace DamasChinas_Client.UI.Callbacks
             SessionExpiredEvent?.Invoke();
         }
 
-        public void PlayerInGame(string nickname)
+        // FIX Sonar: nickname -> username (match interface)
+        public void PlayerInGame(string username)
         {
-            PlayerInGameEvent?.Invoke(nickname);
+            PlayerInGameEvent?.Invoke(username);
         }
 
-        public void PlayerLeftGame(string nickname)
+        // FIX Sonar: nickname -> username (match interface)
+        public void PlayerLeftGame(string username)
         {
-            PlayerLeftGameEvent?.Invoke(nickname);
+            PlayerLeftGameEvent?.Invoke(username);
         }
 
         public void OnForcedLogout(string code)

@@ -115,13 +115,15 @@ namespace DamasChinas_Client.UI.Utilities
             return LangEn;
         }
 
-  
+
         private static ResourceDictionary TryFindExistingLanguageDictionary()
         {
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
             {
                 if (dictionary?.Source == null)
+                {
                     continue;
+                }
 
                 string src = dictionary.Source.OriginalString;
 
@@ -132,9 +134,9 @@ namespace DamasChinas_Client.UI.Utilities
                 }
             }
 
-            return null;
+           
+            return new ResourceDictionary();
         }
-
 
         private static void ReplaceOrAddDictionary(ResourceDictionary newDictionary, ResourceDictionary existingDictionary)
         {
@@ -150,6 +152,7 @@ namespace DamasChinas_Client.UI.Utilities
 
             Application.Current.Resources.MergedDictionaries.Add(newDictionary);
         }
+
 
         private static void EnsureDictionary(string relativePackPath)
         {
