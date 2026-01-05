@@ -1,8 +1,9 @@
-﻿using System;
-using System.Threading;
-using DamasChinas_Server.Common;
+﻿using DamasChinas_Server.Common;
 using DamasChinas_Server.Services;
+using DamasChinas_Server.Utilidades;
 using DamasChinas_Server.Utilities;
+using System;
+using System.Threading;
 
 namespace DamasChinas_Server.Logic
 {
@@ -19,7 +20,10 @@ namespace DamasChinas_Server.Logic
             try
             {
                 _log.Error("[DbOutageCoordinator] DB down detected. Forcing disconnect all.", ex);
-
+                TelegramNotifier.Send(
+    string.Format(TelegramNotifier.DbDownTemplate,DateTime.Now.ToString(TelegramNotifier.TimeFormat),ex.GetType().Name
+    )
+);
                 SessionManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
                 GuestSessionCallbackManager.ForceDisconnectAll(MessageCode.DatabaseUnavailable);
             }

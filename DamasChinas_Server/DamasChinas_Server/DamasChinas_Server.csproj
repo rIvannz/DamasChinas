@@ -207,6 +207,7 @@
     <Compile Include="Utilities\Email\IEmailSender.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="Utilities\GuestSessionCallbackManager.cs" />
+    <Compile Include="Utilities\TelegramNotifier.cs" />
     <Compile Include="Utilities\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
