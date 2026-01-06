@@ -55,9 +55,10 @@ namespace DamasChinas_Server.Logic
 
                 LobbySessionManager.Remove(username);
 
-                LobbyManager.Instance.HandleUnexpectedDisconnect(username);
+
             }
         }
+
 
         public void HandleUnexpectedDisconnect(string username)
         {
@@ -77,7 +78,7 @@ namespace DamasChinas_Server.Logic
                 "Server",
                 $"{username} has been disconnected.");
 
-            if (lobby.IsEmpty || wasHost)
+            if (!lobby.IsGameStarted && (lobby.IsEmpty || wasHost))
             {
                 CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
                 return;
@@ -90,6 +91,7 @@ namespace DamasChinas_Server.Logic
 
             BroadcastSnapshot(lobby);
         }
+
 
         public List<LobbySummaryDto> GetPublicLobbies()
         {
@@ -204,7 +206,8 @@ namespace DamasChinas_Server.Logic
             lobby.RemoveMember(username);
             LobbySessionManager.Remove(username);
 
-            if (lobby.IsEmpty || wasHost)
+          
+            if (!lobby.IsGameStarted && (lobby.IsEmpty || wasHost))
             {
                 CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
                 return;
@@ -217,6 +220,7 @@ namespace DamasChinas_Server.Logic
 
             BroadcastSnapshot(lobby);
         }
+
 
         public void KickPlayer(string hostUsername, int lobbyCode, string targetUsername)
         {
