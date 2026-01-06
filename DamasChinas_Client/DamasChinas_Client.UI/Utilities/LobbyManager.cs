@@ -118,12 +118,15 @@ namespace DamasChinas_Client.UI.Utilities
                 EnsureClientAlive();
 
                 if (string.IsNullOrWhiteSpace(CurrentUsername) || CurrentLobbyCode <= 0)
+                {
                     return false;
+                }
 
                 if (_client == null)
+                {
                     return false;
+                }
 
-        
                 if (_client.State == CommunicationState.Faulted)
                 {
                     SafeAbort(_client);
@@ -132,22 +135,31 @@ namespace DamasChinas_Client.UI.Utilities
                     InitializeClient();
 
                     if (_client == null)
+                    {
                         return false;
+                    }
                 }
 
-  
                 var result = _client.ReconnectToLobby(CurrentUsername, CurrentLobbyCode);
                 return result != null && result.Success;
             }
             catch
             {
-                try { SafeAbort(_client); } catch { }
+                try
+                {
+                    SafeAbort(_client);
+                }
+                catch
+                {
+                }
+
                 _client = null;
                 return false;
             }
         }
 
-       
+
+
 
 
 

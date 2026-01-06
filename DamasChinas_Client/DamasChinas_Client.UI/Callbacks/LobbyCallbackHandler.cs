@@ -37,16 +37,24 @@ namespace DamasChinas_Client.UI.Callbacks
         public void OnBanStatusUpdated(BanInfoDto banInfo)
         {
             if (banInfo == null)
+            {
                 return;
+            }
 
             BanStatusUpdated?.Invoke(banInfo);
 
             var app = Application.Current;
             if (app?.Dispatcher == null)
             {
-  
-                if (banInfo.IsBanned) PendingBanNotificationStore.Save(banInfo);
-                else if (banInfo.TotalReports > 0) PendingReportNotificationStore.Save(banInfo);
+                if (banInfo.IsBanned)
+                {
+                    PendingBanNotificationStore.Save(banInfo);
+                }
+                else if (banInfo.TotalReports > 0)
+                {
+                    PendingReportNotificationStore.Save(banInfo);
+                }
+
                 return;
             }
 
@@ -73,8 +81,8 @@ namespace DamasChinas_Client.UI.Callbacks
                     PendingReportNotificationStore.Clear();
                 }
             }));
-
         }
+
 
         public void OnChatMessageReceived(string sender, string message, string timestamp)
             => ChatMessageReceived?.Invoke(sender, message, timestamp);

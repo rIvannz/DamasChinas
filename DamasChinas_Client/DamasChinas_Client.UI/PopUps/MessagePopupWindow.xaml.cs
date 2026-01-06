@@ -16,7 +16,40 @@ namespace DamasChinas_Client.UI.PopUps
 
         public bool IsDuplicate { get; private set; }
 
-        public MessagePopupWindow(string message, string type = "info", bool autoClose = false)
+        private const string TypeSuccess = "success";
+        private const string TypeError = "error";
+        private const string TypeWarning = "warning";
+        private const string TypeInfo = "info";
+
+        private const string TitleSuccessKey = "title_Success";
+        private const string TitleErrorKey = "title_Error";
+        private const string TitleWarningKey = "title_Warning";
+        private const string TitleInfoKey = "title_Information";
+
+        private const string GlyphSuccess = "✓";
+        private const string GlyphError = "✕";
+        private const string GlyphWarning = "!";
+        private const string GlyphInfo = "i";
+
+        private const byte SuccessR = 0;
+        private const byte SuccessG = 160;
+        private const byte SuccessB = 60;
+
+        private const byte ErrorR = 200;
+        private const byte ErrorG = 30;
+        private const byte ErrorB = 30;
+
+        private const byte WarningR = 230;
+        private const byte WarningG = 160;
+        private const byte WarningB = 0;
+
+        private const byte InfoR = 0;
+        private const byte InfoG = 122;
+        private const byte InfoB = 204;
+
+        private const int AutoCloseDelayMs = 2500;
+
+        public MessagePopupWindow(string message, string type = TypeInfo, bool autoClose = false)
         {
             if (IsDuplicateMessage(message, type))
             {
@@ -53,49 +86,49 @@ namespace DamasChinas_Client.UI.PopUps
 
         private void ConfigureVisuals(string type)
         {
-            type = type?.ToLower() ?? "info";
+            type = type?.ToLower() ?? TypeInfo;
 
             string titleKey;
 
-            if (type == "success")
+            if (type == TypeSuccess)
             {
-                titleKey = "title_Success";
+                titleKey = TitleSuccessKey;
             }
-            else if (type == "error")
+            else if (type == TypeError)
             {
-                titleKey = "title_Error";
+                titleKey = TitleErrorKey;
             }
-            else if (type == "warning")
+            else if (type == TypeWarning)
             {
-                titleKey = "title_Warning";
+                titleKey = TitleWarningKey;
             }
             else
             {
-                titleKey = "title_Information";
+                titleKey = TitleInfoKey;
             }
 
             TitleText.Text = MessageTranslator.GetLocalizedMessage(titleKey);
 
             switch (type)
             {
-                case "success":
-                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(0, 160, 60));
-                    IconGlyph.Text = "✓";
+                case TypeSuccess:
+                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(SuccessR, SuccessG, SuccessB));
+                    IconGlyph.Text = GlyphSuccess;
                     break;
 
-                case "error":
-                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(200, 30, 30));
-                    IconGlyph.Text = "✕";
+                case TypeError:
+                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(ErrorR, ErrorG, ErrorB));
+                    IconGlyph.Text = GlyphError;
                     break;
 
-                case "warning":
-                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(230, 160, 0));
-                    IconGlyph.Text = "!";
+                case TypeWarning:
+                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(WarningR, WarningG, WarningB));
+                    IconGlyph.Text = GlyphWarning;
                     break;
 
                 default:
-                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(0, 122, 204));
-                    IconGlyph.Text = "i";
+                    IconCircle.Background = new SolidColorBrush(Color.FromRgb(InfoR, InfoG, InfoB));
+                    IconGlyph.Text = GlyphInfo;
                     break;
             }
         }
@@ -104,7 +137,7 @@ namespace DamasChinas_Client.UI.PopUps
         {
             if (_autoClose)
             {
-                await Task.Delay(2500);
+                await Task.Delay(AutoCloseDelayMs);
                 Close();
             }
         }

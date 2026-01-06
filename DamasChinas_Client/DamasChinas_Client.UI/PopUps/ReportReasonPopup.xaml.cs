@@ -39,10 +39,25 @@ namespace DamasChinas_Client.UI.Popups
 
         private string GetSelectedReasonKey()
         {
-            if (rbSpam.IsChecked == true) return "reportReason_SpamChat";
-            if (rbOffensive.IsChecked == true) return "reportReason_OffensiveLanguage";
-            if (rbCheat.IsChecked == true) return "reportReason_Cheating";
-            if (rbBadBehavior.IsChecked == true) return "reportReason_InappropriateBehavior";
+            if (rbSpam.IsChecked == true)
+            {
+                return "reportReason_SpamChat";
+            }
+
+            if (rbOffensive.IsChecked == true)
+            {
+                return "reportReason_OffensiveLanguage";
+            }
+
+            if (rbCheat.IsChecked == true)
+            {
+                return "reportReason_Cheating";
+            }
+
+            if (rbBadBehavior.IsChecked == true)
+            {
+                return "reportReason_InappropriateBehavior";
+            }
 
             return null;
         }

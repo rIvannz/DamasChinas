@@ -72,18 +72,16 @@ namespace DamasChinas_Client.UI.Utilities
 
                 CurrentCultureCode = cultureCode;
                 UpdateCulture(cultureCode);
-
-
             }
-            catch (CultureNotFoundException )
+            catch (CultureNotFoundException)
             {
                 Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Invalid culture: {save}");
             }
-            catch (InvalidOperationException )
+            catch (InvalidOperationException)
             {
                 Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Invalid state: {save}");
             }
-            catch (ArgumentException )
+            catch (ArgumentException)
             {
                 Debug.WriteLine($"[LanguageManager.ApplySavedLanguage] Argument error: {save}");
             }
@@ -104,17 +102,22 @@ namespace DamasChinas_Client.UI.Utilities
             string code = cultureCode.Trim();
 
             if (string.Equals(code, "es-MX", StringComparison.OrdinalIgnoreCase))
+            {
                 return LangEs;
+            }
 
             if (string.Equals(code, "pt-BR", StringComparison.OrdinalIgnoreCase))
+            {
                 return LangPt;
+            }
 
             if (string.Equals(code, "fr-FR", StringComparison.OrdinalIgnoreCase))
+            {
                 return LangFr;
+            }
 
             return LangEn;
         }
-
 
         private static ResourceDictionary TryFindExistingLanguageDictionary()
         {
@@ -134,7 +137,6 @@ namespace DamasChinas_Client.UI.Utilities
                 }
             }
 
-           
             return new ResourceDictionary();
         }
 
@@ -152,7 +154,6 @@ namespace DamasChinas_Client.UI.Utilities
 
             Application.Current.Resources.MergedDictionaries.Add(newDictionary);
         }
-
 
         private static void EnsureDictionary(string relativePackPath)
         {

@@ -60,7 +60,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 await UpdateAvatarOnServerAsync(_selectedAvatarFile);
 
-         
+
                 ClientSession.CurrentProfile.AvatarFile = _selectedAvatarFile;
 
 
@@ -83,9 +83,13 @@ namespace DamasChinas_Client.UI.Pages
             try
             {
                 if (NavigationService?.CanGoBack == true)
+                {
                     NavigationService.GoBack();
+                }
                 else
+                {
                     MessageHelper.ShowPopup(NavigationError, PopupType.Warning);
+                }
             }
             catch (InvalidOperationException ex)
             {
@@ -102,7 +106,7 @@ namespace DamasChinas_Client.UI.Pages
             {
                 client = new AccountManagerClient();
 
-             
+
                 int idUser = ClientSession.CurrentProfile.IdUser;
 
                 await client.ChangeAvatarAsync(idUser, avatarFile);
@@ -114,9 +118,13 @@ namespace DamasChinas_Client.UI.Pages
                     try
                     {
                         if (client.State != System.ServiceModel.CommunicationState.Faulted)
+                        {
                             client.Close();
+                        }
                         else
+                        {
                             client.Abort();
+                        }
                     }
                     catch
                     {
