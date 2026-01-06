@@ -10,7 +10,7 @@ namespace DamasChinas_Tests.Utilities
     public class EmailLanguageMapperTests
     {
         [Fact]
-        public void FromCultureCode_Null_ReturnsEnglish()
+        public void FromCultureCodeNullReturnsEnglish()
         {
             var result = EmailLanguageMapper.FromCultureCode(null);
 
@@ -18,7 +18,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void FromCultureCode_Empty_ReturnsEnglish()
+        public void FromCultureCodeEmptyReturnsEnglish()
         {
             var result = EmailLanguageMapper.FromCultureCode("");
 
@@ -26,7 +26,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void FromCultureCode_Whitespace_ReturnsEnglish()
+        public void FromCultureCodeWhitespaceReturnsEnglish()
         {
             var result = EmailLanguageMapper.FromCultureCode("   ");
 
@@ -34,7 +34,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void FromCultureCode_SpanishCulture_ReturnsSpanish()
+        public void FromCultureCodeSpanishCultureReturnsSpanish()
         {
             var result = EmailLanguageMapper.FromCultureCode("es-MX");
 
@@ -42,7 +42,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void FromCultureCode_PortugueseCulture_ReturnsPortuguese()
+        public void FromCultureCodePortugueseCultureReturnsPortuguese()
         {
             var result = EmailLanguageMapper.FromCultureCode("pt-BR");
 
@@ -50,7 +50,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void FromCultureCode_FrenchCulture_ReturnsFrench()
+        public void FromCultureCodeFrenchCultureReturnsFrench()
         {
             var result = EmailLanguageMapper.FromCultureCode("fr-FR");
 
@@ -58,7 +58,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void FromCultureCode_UnknownCulture_ReturnsEnglish()
+        public void FromCultureCodeUnknownCultureReturnsEnglish()
         {
             var result = EmailLanguageMapper.FromCultureCode("de-DE");
 

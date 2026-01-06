@@ -17,7 +17,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void ApplyBan_PermanentBan_AddsSanctionCorrectly()
+        public void ApplyBanPermanentBanAddsSanctionCorrectly()
         {
 
             var sancionesList = new List<Sanciones>();
@@ -51,7 +51,7 @@ namespace DamasChinas_Tests.logic
         }
 
             [Fact]
-        public void ApplyBan_TemporaryBan_AssignsCorrectEndDate()
+        public void ApplyBanTemporaryBanAssignsCorrectEndDate()
         {
              
             var sancionesList = new List<Sanciones>();
@@ -85,7 +85,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void ApplyBan_SaveChangesFails_ThrowsException()
+        public void ApplyBanSaveChangesFailsThrowsException()
         {
              
             var sancionesList = new List<Sanciones>();
@@ -109,7 +109,7 @@ namespace DamasChinas_Tests.logic
 
 
         [Fact]
-        public void HasActiveBan_NoSanctions_ReturnsFalse()
+        public void HasActiveBanNoSanctionsReturnsFalse()
         {
              
             var sancionesList = new List<Sanciones>();
@@ -128,7 +128,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void HasActiveBan_UserHasInactiveSanction_ReturnsFalse()
+        public void HasActiveBanUserHasInactiveSanctionReturnsFalse()
         {
              
             var list = new List<Sanciones>
@@ -156,7 +156,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void HasActiveBan_UserHasExpiredSanction_ReturnsFalse()
+        public void HasActiveBanUserHasExpiredSanctionReturnsFalse()
         {
              
             var list = new List<Sanciones>
@@ -184,7 +184,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void HasActiveBan_UserHasPermanentActiveBan_ReturnsTrue()
+        public void HasActiveBanUserHasPermanentActiveBanReturnsTrue()
         {
              
             var list = new List<Sanciones>
@@ -212,7 +212,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void HasActiveBan_TemporaryBanNotExpired_ReturnsTrue()
+        public void HasActiveBanTemporaryBanNotExpiredReturnsTrue()
         {
              
             var list = new List<Sanciones>

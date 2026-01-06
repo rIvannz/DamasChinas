@@ -11,7 +11,7 @@ namespace DamasChinas_Tests.Utilities
     public class DbOutageCoordinatorTests
     {
         [Fact]
-        public void Trip_FirstCall_ExecutesAllActions()
+        public void TripFirstCallExecutesAllActions()
         {
              
             DbOutageCoordinator.ResetForTests();
@@ -40,7 +40,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void Trip_CalledTwice_OnlyExecutesOnce()
+        public void TripCalledTwiceOnlyExecutesOnce()
         {
              
             DbOutageCoordinator.ResetForTests();
@@ -61,7 +61,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void Trip_WhenTelegramThrows_DoesNotThrow()
+        public void TripWhenTelegramThrowsDoesNotThrow()
         {
              
             DbOutageCoordinator.ResetForTests();
@@ -83,7 +83,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void Trip_WhenDisconnectSessionsThrows_DoesNotThrow()
+        public void TripWhenDisconnectSessionsThrowsDoesNotThrow()
         {
              
             DbOutageCoordinator.ResetForTests();
@@ -105,7 +105,7 @@ namespace DamasChinas_Tests.Utilities
         }
 
         [Fact]
-        public void Trip_WhenInnerExceptionOccurs_LogsError()
+        public void TripWhenInnerExceptionOccursLogsError()
         {
              
             DbOutageCoordinator.ResetForTests();

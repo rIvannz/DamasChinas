@@ -12,7 +12,7 @@ namespace DamasChinas_Pruebas.logic
     {
 
         [Fact]
-        public void ValidateCreateUser_Throws_WhenEmailExists()
+        public void ValidateCreateUserThrowsWhenEmailExists()
         {
              
             var usuariosList = new List<usuarios>
@@ -44,7 +44,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void ValidateCreateUser_Throws_WhenUsernameExists()
+        public void ValidateCreateUserThrowsWhenUsernameExists()
         {
              
             var usuariosList = new List<usuarios>();
@@ -76,7 +76,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void ValidateCreateUser_NoConflicts_DoesNotThrow()
+        public void ValidateCreateUserNoConflictsDoesNotThrow()
         {
               
             var usuariosList = new List<usuarios>();
@@ -116,7 +116,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void CreateUser_ValidUser_AddsUserAndProfile()
+        public void CreateUserValidUserAddsUserAndProfile()
         {
             
             var usuariosData = new List<usuarios>();
@@ -133,10 +133,14 @@ namespace DamasChinas_Pruebas.logic
             mockDb.Setup(db => db.SaveChanges()).Callback(() =>
             {
                 if (usuariosData.Count > 0 && usuariosData[0].id_usuario == 0)
-                    usuariosData[0].id_usuario = 10; 
+                {
+                    usuariosData[0].id_usuario = 10;
+                }
 
                 if (perfilesData.Count > 0 && perfilesData[0].id_usuario == 0)
+                {
                     perfilesData[0].id_usuario = usuariosData[0].id_usuario;
+                }
             });
 
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -165,7 +169,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void CreateUser_ReturnsUserWithProfileLoaded()
+        public void CreateUserReturnsUserWithProfileLoaded()
         {
             
             var usuariosData = new List<usuarios>();
@@ -182,7 +186,9 @@ namespace DamasChinas_Pruebas.logic
             mockDb.Setup(db => db.SaveChanges()).Callback(() =>
             {
                 if (usuariosData.Count > 0 && usuariosData[0].id_usuario == 0)
+                {
                     usuariosData[0].id_usuario = 50;
+                }
             });
 
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -205,7 +211,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void CreateUser_CallsSaveChangesTwice()
+        public void CreateUserCallsSaveChangesTwice()
         {
             
             var usuariosSet = MockDbSetHelper.CreateMockSet(new List<usuarios>());
@@ -239,7 +245,7 @@ namespace DamasChinas_Pruebas.logic
 
       
         [Fact]
-        public void CreateUser_AssignsCorrectFields()
+        public void CreateUserAssignsCorrectFields()
         {
             var usuariosData = new List<usuarios>();
             var perfilesData = new List<perfiles>();
@@ -276,7 +282,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void Login_ValidCredentials_ThrowsException_DueToDbAccess()
+        public void LoginValidCredentialsThrowsExceptionDueToDbAccess()
         {
              
             var usuariosData = new List<usuarios>
@@ -321,7 +327,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void Login_UserNotFound_ThrowsException()
+        public void LoginUserNotFoundThrowsException()
         {
              
             var mockDb = new Mock<IApplicationDbContext>();
@@ -344,7 +350,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void Login_IncorrectPassword_ThrowsException()
+        public void LoginIncorrectPasswordThrowsException()
         {
              
             var usuariosData = new List<usuarios>
@@ -385,7 +391,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void Login_InvalidRequest_ThrowsValidationException()
+        public void LoginInvalidRequestThrowsValidationException()
         {
             var mockDb = new Mock<IApplicationDbContext>();
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -401,7 +407,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetPublicProfile_UserExists_ThrowsException_DueToDbAccess()
+        public void GetPublicProfileUserExistsThrowsExceptionDueToDbAccess()
         {
              
             var usuariosData = new List<usuarios>
@@ -439,7 +445,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetPublicProfile_UserNotFound_ThrowsException()
+        public void GetPublicProfileUserNotFoundThrowsException()
         {
              
             var mockDb = new Mock<IApplicationDbContext>();
@@ -462,7 +468,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetPublicProfile_UserExistsButHasNoProfile_ThrowsException()
+        public void GetPublicProfileUserExistsButHasNoProfileThrowsException()
         {
              
             var usuariosData = new List<usuarios>
@@ -490,7 +496,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetFriendPublicProfile_ValidUsername_ReturnsProfile()
+        public void GetFriendPublicProfileValidUsernameReturnsProfile()
         {
              
             var perfilesData = new List<perfiles>
@@ -553,7 +559,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetFriendPublicProfile_EmptyUsername_ThrowsUsernameEmpty()
+        public void GetFriendPublicProfileEmptyUsernameThrowsUsernameEmpty()
         {
              
             var repo = new RepositoryUsers(() => new Mock<IApplicationDbContext>().Object);
@@ -563,7 +569,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetFriendPublicProfile_UserNotFound_ThrowsUserProfileNotFound()
+        public void GetFriendPublicProfileUserNotFoundThrowsUserProfileNotFound()
         {
              
             var mockDb = new Mock<IApplicationDbContext>();
@@ -582,14 +588,14 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void ChangeUsername_EmptyCurrent_ThrowsUsernameEmpty()
+        public void ChangeUsernameEmptyCurrentThrowsUsernameEmpty()
         {
             var repo = new RepositoryUsers(() => Mock.Of<IApplicationDbContext>());
             Assert.Throws<RepositoryValidationException>(() => repo.ChangeUsername("   ", "Nuevo"));
         }
 
         [Fact]
-        public void ChangeUsername_NewUsernameAlreadyExists_ThrowsUsernameExists()
+        public void ChangeUsernameNewUsernameAlreadyExistsThrowsUsernameExists()
         {
             var perfilesData = new List<perfiles>
         {
@@ -610,7 +616,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangeUsername_CurrentUserNotFound_ThrowsUserProfileNotFound()
+        public void ChangeUsernameCurrentUserNotFoundThrowsUserProfileNotFound()
         {
             var perfilesData = new List<perfiles>(); 
 
@@ -628,7 +634,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangeUsername_ValidChange_ReturnsTrue()
+        public void ChangeUsernameValidChangeReturnsTrue()
         {
             var perfilesData = new List<perfiles>
         {
@@ -652,7 +658,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangePassword_InvalidPassword_ThrowsValidationError()
+        public void ChangePasswordInvalidPasswordThrowsValidationError()
         {
             var repo = new RepositoryUsers(() => Mock.Of<IApplicationDbContext>());
 
@@ -661,7 +667,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangePassword_UserNotFound_ThrowsUserNotFound()
+        public void ChangePasswordUserNotFoundThrowsUserNotFound()
         {
             var usuarios = new List<usuarios>();
             var perfiles = new List<perfiles>(); 
@@ -677,7 +683,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangePassword_ValidChange_ReturnsTrue()
+        public void ChangePasswordValidChangeReturnsTrue()
         {
             var usuarios = new List<usuarios>
     {
@@ -708,7 +714,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetUserIdByUsername_EmptyUsername_ThrowsUsernameEmpty()
+        public void GetUserIdByUsernameEmptyUsernameThrowsUsernameEmpty()
         {
             var mockDb = new Mock<IApplicationDbContext>();
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -717,7 +723,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetUserIdByUsername_ProfileNotFound_ThrowsUserProfileNotFound()
+        public void GetUserIdByUsernameProfileNotFoundThrowsUserProfileNotFound()
         {
             var perfiles = new List<perfiles>();
 
@@ -732,7 +738,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetUserIdByUsername_ProfileExists_ReturnsId()
+        public void GetUserIdByUsernameProfileExistsReturnsId()
         {
             var perfiles = new List<perfiles>
     {
@@ -751,7 +757,7 @@ namespace DamasChinas_Pruebas.logic
             Assert.Equal(10, result);
         }
         [Fact]
-        public void ChangeAvatar_InvalidId_ThrowsUserNotFound()
+        public void ChangeAvatarInvalidIdThrowsUserNotFound()
         {
             var mockDb = new Mock<IApplicationDbContext>();
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -760,7 +766,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangeAvatar_EmptyAvatar_ThrowsAvatarUpdateFailed()
+        public void ChangeAvatarEmptyAvatarThrowsAvatarUpdateFailed()
         {
             var mockDb = new Mock<IApplicationDbContext>();
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -769,7 +775,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangeAvatar_ProfileNotFound_ThrowsUserProfileNotFound()
+        public void ChangeAvatarProfileNotFoundThrowsUserProfileNotFound()
         {
             var perfiles = new List<perfiles>();
 
@@ -784,7 +790,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void ChangeAvatar_ValidUpdate_ReturnsTrue()
+        public void ChangeAvatarValidUpdateReturnsTrue()
         {
             var perfiles = new List<perfiles>
     {
@@ -820,14 +826,16 @@ namespace DamasChinas_Pruebas.logic
                     System.Reflection.BindingFlags.Static);
 
                 if (method == null)
+                {
                     throw new MissingMethodException($"Método private '{methodName}' dosent found.");
+                }
 
                 return method.Invoke(null, parameters);
             }
         }
 
         [Fact]
-        public void CreateUsuario_CreatesAndAddsUser()
+        public void CreateUsuarioCreatesAndAddsUser()
         {
             var list = new List<usuarios>();
             var mock = new Mock<IApplicationDbContext>();
@@ -843,7 +851,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void CreateUsuario_CallsSaveChanges()
+        public void CreateUsuarioCallsSaveChanges()
         {
             var mock = new Mock<IApplicationDbContext>();
             mock.Setup(db => db.usuarios).Returns(MockDbSetHelper.CreateMockSet(new List<usuarios>()).Object);
@@ -857,7 +865,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void CreatePerfil_AddsProfile()
+        public void CreatePerfilAddsProfile()
         {
             var list = new List<perfiles>();
             var mock = new Mock<IApplicationDbContext>();
@@ -872,7 +880,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void CreatePerfil_CallsSaveChanges()
+        public void CreatePerfilCallsSaveChanges()
         {
             var mock = new Mock<IApplicationDbContext>();
             mock.Setup(db => db.perfiles).Returns(MockDbSetHelper.CreateMockSet(new List<perfiles>()).Object);
@@ -886,7 +894,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetUserWithProfile_ReturnsCorrectUser()
+        public void GetUserWithProfileReturnsCorrectUser()
         {
             var list = new List<usuarios>
             {
@@ -904,7 +912,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetPerfilByUsername_Found_ReturnsPerfil()
+        public void GetPerfilByUsernameFoundReturnsPerfil()
         {
             var list = new List<perfiles> { new perfiles { username = "Seth" } };
 
@@ -920,7 +928,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void FindUserForLogin_ByEmail_ReturnsUser()
+        public void FindUserForLoginByEmailReturnsUser()
         {
             var list = new List<usuarios>
             {
@@ -937,7 +945,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void FindUserForLogin_ByUsername_ReturnsUser()
+        public void FindUserForLoginByUsernameReturnsUser()
         {
             var list = new List<usuarios>
             {
@@ -961,7 +969,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SendFriendRequest_ValidRequest_AddsRequestAndReturnsTrue()
+        public void SendFriendRequestValidRequestAddsRequestAndReturnsTrue()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1000,7 +1008,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SendFriendRequest_UserDoesNotExist_ThrowsUserNotFound()
+        public void SendFriendRequestUserDoesNotExistThrowsUserNotFound()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1025,7 +1033,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SendFriendRequest_AlreadyFriends_ThrowsFriendsLoadError()
+        public void SendFriendRequestAlreadyFriendsThrowsFriendsLoadError()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1056,7 +1064,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SendFriendRequest_ReceiverHasBlockedSender_ThrowsFriendsLoadError()
+        public void SendFriendRequestReceiverHasBlockedSenderThrowsFriendsLoadError()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1097,7 +1105,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SendFriendRequest_PendingRequestExists_ThrowsFriendsLoadError()
+        public void SendFriendRequestPendingRequestExistsThrowsFriendsLoadError()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1141,7 +1149,7 @@ namespace DamasChinas_Pruebas.logic
             );
         }
         [Fact]
-        public void UpdateFriendRequestStatus_NoPendingRequest_ThrowsException()
+        public void UpdateFriendRequestStatusNoPendingRequestThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1162,7 +1170,7 @@ namespace DamasChinas_Pruebas.logic
             );
         }
         [Fact]
-        public void UpdateFriendRequestStatus_RequestNotPending_ThrowsException()
+        public void UpdateFriendRequestStatusRequestNotPendingThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1187,7 +1195,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void UpdateFriendRequestStatus_Accepted_AddsFriendship()
+        public void UpdateFriendRequestStatusAcceptedAddsFriendship()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1221,7 +1229,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void UpdateFriendRequestStatus_Accepted_AlreadyFriends_DoesNotDuplicate()
+        public void UpdateFriendRequestStatusAcceptedAlreadyFriendsDoesNotDuplicate()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1259,7 +1267,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void UpdateFriendRequestStatus_AcceptBlocked_ThrowsException()
+        public void UpdateFriendRequestStatusAcceptBlockedThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1294,7 +1302,7 @@ namespace DamasChinas_Pruebas.logic
             );
         }
         [Fact]
-        public void UpdateFriendRequestStatus_Rejected_ChangesState()
+        public void UpdateFriendRequestStatusRejectedChangesState()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();

@@ -11,7 +11,7 @@ namespace DamasChinas_Pruebas.logic
     public class ChatRepositoryTests
     {
         [Fact]
-        public void SaveMessage_ValidMessage_AddsMessage()
+        public void SaveMessageValidMessageAddsMessage()
         {
             var usuarios = new List<usuarios>
     {
@@ -38,7 +38,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SaveMessage_ValidMessage_CallsSaveChangesOnce()
+        public void SaveMessageValidMessageCallsSaveChangesOnce()
         {
              
             var usuarios = new List<usuarios>
@@ -65,7 +65,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void SaveMessage_EmptyUsername_ThrowsArgumentException()
+        public void SaveMessageEmptyUsernameThrowsArgumentException()
         {
              
             var repo = new ChatRepository(() =>
@@ -84,7 +84,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void SaveMessage_UserNotFound_ThrowsInvalidOperationException()
+        public void SaveMessageUserNotFoundThrowsInvalidOperationException()
         {
              
             var usuarios = new List<usuarios>(); 
@@ -102,7 +102,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetChatByUsername_EmptySender_ThrowsArgumentException()
+        public void GetChatByUsernameEmptySenderThrowsArgumentException()
         {
              
             var repo = new Mock<ChatRepository> { CallBase = true };
@@ -114,7 +114,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetChatByUsername_EmptyRecipient_ThrowsArgumentException()
+        public void GetChatByUsernameEmptyRecipientThrowsArgumentException()
         {
             var usuarios = new List<usuarios>
     {
@@ -144,7 +144,7 @@ namespace DamasChinas_Pruebas.logic
 
 
         [Fact]
-        public void GetChatByUsername_SenderNotFound_ThrowsInvalidOperationException()
+        public void GetChatByUsernameSenderNotFoundThrowsInvalidOperationException()
         {
              
             var usuarios = new List<usuarios>(); 
@@ -163,7 +163,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetChatByUsername_RecipientNotFound_ThrowsInvalidOperationException()
+        public void GetChatByUsernameRecipientNotFoundThrowsInvalidOperationException()
         {
              
             var usuarios = new List<usuarios>
@@ -189,7 +189,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetChatByUsername_NoMessages_ReturnsEmptyList()
+        public void GetChatByUsernameNoMessagesReturnsEmptyList()
         {
              
             var usuarios = new List<usuarios>
@@ -216,7 +216,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetChatByUsername_ReturnsMessagesOrderedAndMappedCorrectly()
+        public void GetChatByUsernameReturnsMessagesOrderedAndMappedCorrectly()
         {
              
             var usuarios = new List<usuarios>
@@ -271,7 +271,7 @@ namespace DamasChinas_Pruebas.logic
 
         }
         [Fact]
-        public void GetIdByUsername_NullUsername_ThrowsArgumentException()
+        public void GetIdByUsernameNullUsernameThrowsArgumentException()
         {
              
             var repo = new Mock<ChatRepository> { CallBase = true };
@@ -283,7 +283,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetIdByUsername_UserNotFound_ThrowsInvalidOperationException()
+        public void GetIdByUsernameUserNotFoundThrowsInvalidOperationException()
         {
              
             var usuarios = new List<usuarios>(); 
@@ -302,7 +302,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetIdByUsername_ExactMatch_ReturnsUserId()
+        public void GetIdByUsernameExactMatchReturnsUserId()
         {
              
             var usuarios = new List<usuarios>
@@ -329,7 +329,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
     [Fact]
-        public void GetIdByUsername_CaseInsensitiveMatch_ReturnsUserId()
+        public void GetIdByUsernameCaseInsensitiveMatchReturnsUserId()
         {
              
             var usuarios = new List<usuarios>
@@ -359,7 +359,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetIdByUsername_UserHasMultipleProfiles_ReturnsMatchingUserId()
+        public void GetIdByUsernameUserHasMultipleProfilesReturnsMatchingUserId()
         {
              
             var usuarios = new List<usuarios>
@@ -390,7 +390,7 @@ namespace DamasChinas_Pruebas.logic
         }
 
         [Fact]
-        public void GetIdByUsername_OnlyOneUserMatches_ReturnsCorrectId()
+        public void GetIdByUsernameOnlyOneUserMatchesReturnsCorrectId()
         {
              
             var usuarios = new List<usuarios>
