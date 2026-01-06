@@ -65,12 +65,15 @@ namespace DamasChinas_Server.Logic
             var lobby = FindLobbyByUser(username);
             if (lobby == null)
             {
+                LobbySessionManager.Remove(username);
                 return;
             }
 
             bool wasHost = lobby.IsHost(username);
 
             lobby.RemoveMember(username);
+
+            LobbySessionManager.Remove(username);
 
             _log.Warn($"[LobbyManager] User disconnected unexpectedly: {username}");
 
@@ -91,6 +94,7 @@ namespace DamasChinas_Server.Logic
 
             BroadcastSnapshot(lobby);
         }
+
 
 
         public List<LobbySummaryDto> GetPublicLobbies()
@@ -352,6 +356,39 @@ namespace DamasChinas_Server.Logic
             }
         }
 
+        public void ReconnectToLobby(string username,int lobbyCode,ILobbyCallback callback, PublicProfile profile)
+        {
+            if (!_lobbies.TryGetValue(lobbyCode, out var lobby))
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
+
+            lobby.ThrowIfKicked(username);
+
+            LobbySessionManager.Add(username, callback);
+
+            if (lobby.ContainsPlayer(username))
+            {
+                BroadcastSnapshot(lobby);
+                return;
+            }
+
+            var member = new LobbyMemberDto
+            {
+                Username = username,
+                AvatarFile = profile?.AvatarFile ?? "avatarIcon.png",
+                UserId = profile?.IdUser ?? 0,
+                IsHost = lobby.IsHost(username)
+            };
+
+            lobby.AddOrUpdateMember(member);
+
+            BroadcastSnapshot(lobby);
+        }
+
+
+
+
         private static bool IsValidReportRequest(ReportPlayerRequest request)
         {
             if (request == null)
@@ -574,6 +611,7 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.LobbyInvalidMaxPlayers);
             }
         }
+
 
         private static void ValidateJoinRequest(JoinLobbyRequest req)
         {

@@ -53,8 +53,11 @@ namespace DamasChinas_Pruebas.Utilities
 
             var ctx = DbContextFactory.Create();
 
-            Assert.NotNull(ctx);
-            Assert.False(customCalled);
+            Assert.True(
+    ctx is not null &&
+    !customCalled
+);
+
         }
 
         [Fact]

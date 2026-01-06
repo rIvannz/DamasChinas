@@ -380,7 +380,7 @@ namespace DamasChinas_Client.UI.Pages
                 AttachProxyEventsSafely(newProxy);
 
                 var result = await Task.Run(() => newProxy.ConnectToMatch(_lobbyCode, _myUsername))
-                                      .ConfigureAwait(false);
+                                       .ConfigureAwait(false);
 
                 if (result == null || !result.Success || _wasRemovedByServer)
                 {
@@ -398,6 +398,19 @@ namespace DamasChinas_Client.UI.Pages
 
                 _proxy = newProxy;
 
+                try
+                {
+                    LobbySession.Manager.RegisterLobby(_lobbyCode);
+                    LobbySession.Manager.RegisterUser(_myUsername);
+
+                    bool lobbyOk = LobbySession.Manager.TryReconnectLobbyChannel();
+                    Debug.WriteLine($"[MatchRoom.TryReconnectOnce] Lobby reconnect={lobbyOk}");
+                }
+                catch
+                {
+                    Debug.WriteLine("[MatchRoom.TryReconnectOnce] Lobby reconnect failed");
+                }
+
                 await Dispatcher.InvokeAsync(HideReconnectingOverlay);
 
                 return true;
@@ -408,6 +421,8 @@ namespace DamasChinas_Client.UI.Pages
                 return false;
             }
         }
+
+
 
 
         private void AttachProxyEventsSafely(MatchServiceClient proxy)

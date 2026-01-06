@@ -19,7 +19,7 @@ namespace DamasChinas_Tests.logic
         [Fact]
         public void ApplyBan_PermanentBan_AddsSanctionCorrectly()
         {
-             
+
             var sancionesList = new List<Sanciones>();
             var mockSet = MockDbSetHelper.CreateMockSet(sancionesList);
 
@@ -30,21 +30,27 @@ namespace DamasChinas_Tests.logic
 
             var repo = CreateRepo(mockDb);
 
-             
+
             repo.ApplyBan(10, permanent: true, untilUtc: null, reason: "Toxicity");
 
-             
-            Assert.Single(sancionesList);
-            var s = sancionesList.First();
-            Assert.Equal(10, s.id_usuario);
-            Assert.Equal("permanente", s.tipo_sancion);
-            Assert.True(s.activo);
-            Assert.Null(s.fecha_fin);
-            Assert.Equal("Toxicity", s.motivo_acumulado);
-            mockDb.Verify(db => db.SaveChanges(), Times.Once);
+            Assert.True(
+    Record.Exception(() =>
+    {
+        Assert.Single(sancionesList);
+
+        var s = sancionesList.First();
+        Assert.Equal(10, s.id_usuario);
+        Assert.Equal("permanente", s.tipo_sancion);
+        Assert.True(s.activo);
+        Assert.Null(s.fecha_fin);
+        Assert.Equal("Toxicity", s.motivo_acumulado);
+
+        mockDb.Verify(db => db.SaveChanges(), Times.Once);
+    }) == null
+);
         }
 
-        [Fact]
+            [Fact]
         public void ApplyBan_TemporaryBan_AssignsCorrectEndDate()
         {
              
@@ -62,13 +68,20 @@ namespace DamasChinas_Tests.logic
              
             repo.ApplyBan(20, permanent: false, untilUtc: until, reason: "AFK");
 
-             
-            Assert.Single(sancionesList);
-            var s = sancionesList.First();
-            Assert.Equal("temporal", s.tipo_sancion);
-            Assert.Equal(until, s.fecha_fin);
-            Assert.Equal("AFK", s.motivo_acumulado);
-            Assert.True(s.activo);
+
+            Assert.True(
+         Record.Exception(() =>
+         {
+             Assert.Single(sancionesList);
+
+             var s = sancionesList.First();
+             Assert.Equal("temporal", s.tipo_sancion);
+             Assert.Equal(until, s.fecha_fin);
+             Assert.Equal("AFK", s.motivo_acumulado);
+             Assert.True(s.activo);
+         }) == null
+     );
+
         }
 
         [Fact]

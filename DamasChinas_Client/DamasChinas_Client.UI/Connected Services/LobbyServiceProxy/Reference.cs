@@ -1015,6 +1015,13 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/JoinLobbyGuest", ReplyAction="http://tempuri.org/ILobbyService/JoinLobbyGuestResponse")]
         System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> JoinLobbyGuestAsync(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/ReconnectToLobby", ReplyAction="http://tempuri.org/ILobbyService/ReconnectToLobbyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DamasChinas_Client.UI.LobbyServiceProxy.MessageCode), Action="http://tempuri.org/ILobbyService/ReconnectToLobbyMessageCodeFault", Name="MessageCode", Namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common")]
+        DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReconnectToLobby(string username, int lobbyCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/ReconnectToLobby", ReplyAction="http://tempuri.org/ILobbyService/ReconnectToLobbyResponse")]
+        System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReconnectToLobbyAsync(string username, int lobbyCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1164,6 +1171,14 @@ namespace DamasChinas_Client.UI.LobbyServiceProxy {
         
         public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> JoinLobbyGuestAsync(DamasChinas_Client.UI.LobbyServiceProxy.JoinLobbyRequest request) {
             return base.Channel.JoinLobbyGuestAsync(request);
+        }
+        
+        public DamasChinas_Client.UI.LobbyServiceProxy.OperationResult ReconnectToLobby(string username, int lobbyCode) {
+            return base.Channel.ReconnectToLobby(username, lobbyCode);
+        }
+        
+        public System.Threading.Tasks.Task<DamasChinas_Client.UI.LobbyServiceProxy.OperationResult> ReconnectToLobbyAsync(string username, int lobbyCode) {
+            return base.Channel.ReconnectToLobbyAsync(username, lobbyCode);
         }
     }
 }

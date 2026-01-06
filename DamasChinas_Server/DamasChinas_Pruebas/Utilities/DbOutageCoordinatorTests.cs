@@ -29,11 +29,14 @@ namespace DamasChinas_Tests.Utilities
              
             DbOutageCoordinator.Trip(new Exception("DB down"));
 
-             
-            Assert.True(logCalled);
-            Assert.True(telegramCalled);
-            Assert.True(sessionsCalled);
-            Assert.True(guestsCalled);
+
+            Assert.True(
+              logCalled &&
+              telegramCalled &&
+              sessionsCalled &&
+              guestsCalled
+          );
+
         }
 
         [Fact]
