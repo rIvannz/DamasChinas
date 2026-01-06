@@ -14,7 +14,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void Configure_ReplacesFactory()
+        public void ConfigureReplacesFactory()
         {
             bool called = false;
 
@@ -31,7 +31,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void Configure_Throws_WhenNull()
+        public void ConfigureThrowsWhenNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 DbContextFactory.Configure(null)
@@ -39,7 +39,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void Reset_RestoresDefaultFactory()
+        public void ResetRestoresDefaultFactory()
         {
             bool customCalled = false;
 
@@ -61,7 +61,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void Create_UsesConfiguredFactory()
+        public void CreateUsesConfiguredFactory()
         {
             int counter = 0;
 

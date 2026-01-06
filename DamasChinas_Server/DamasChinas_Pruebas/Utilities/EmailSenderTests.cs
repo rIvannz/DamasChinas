@@ -17,7 +17,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void Configure_SetsEmailService()
+        public void ConfigureSetsEmailService()
         {
             var mock = new Mock<IEmailSender>();
 
@@ -27,7 +27,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void SendVerificationEmail_Throws_WhenNotConfigured()
+        public void SendVerificationEmailThrowsWhenNotConfigured()
         {
             typeof(EmailSender)
                 .GetField("_emailService", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
@@ -39,7 +39,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void SendVerificationEmail_CallsEmailService_WithCorrectParameters()
+        public void SendVerificationEmailCallsEmailServiceWithCorrectParameters()
         {
             var mock = new Mock<IEmailSender>();
 
@@ -71,7 +71,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void SendVerificationEmail_Throws_WhenSenderThrows()
+        public void SendVerificationEmailThrowsWhenSenderThrows()
         {
             var mock = new Mock<IEmailSender>();
 

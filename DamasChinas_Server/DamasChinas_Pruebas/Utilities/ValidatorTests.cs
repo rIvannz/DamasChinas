@@ -9,7 +9,7 @@ namespace DamasChinas_Pruebas.Utilities
     {
  
         [Fact]
-        public void ValidateName_Empty_ThrowsException()
+        public void ValidateNameEmptyThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateName("")
@@ -17,7 +17,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateName_TooShort_ThrowsException()
+        public void ValidateNameTooShortThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateName("A")
@@ -25,7 +25,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateName_InvalidCharacters_ThrowsException()
+        public void ValidateNameInvalidCharactersThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateName("Mar!o")
@@ -33,14 +33,14 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateName_Valid_DoesNotThrow()
+        public void ValidateNameValidDoesNotThrow()
         {
             DamasChinas_Server.Utilidades.Validator.ValidateName("Seth");
         }
 
 
         [Fact]
-        public void ValidateUsername_Empty_ThrowsException()
+        public void ValidateUsernameEmptyThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateUsername("")
@@ -48,7 +48,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateUsername_TooShort_ThrowsException()
+        public void ValidateUsernameTooShortThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateUsername("a")
@@ -56,7 +56,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateUsername_InvalidCharacters_ThrowsException()
+        public void ValidateUsernameInvalidCharactersThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateUsername("seth!!")
@@ -64,14 +64,14 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateUsername_Valid_DoesNotThrow()
+        public void ValidateUsernameValidDoesNotThrow()
         {
             DamasChinas_Server.Utilidades.Validator.ValidateUsername("sethMR");
         }
 
 
         [Fact]
-        public void ValidatePassword_Empty_ThrowsException()
+        public void ValidatePasswordEmptyThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidatePassword("")
@@ -79,7 +79,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidatePassword_NoUppercase_ThrowsException()
+        public void ValidatePasswordNoUppercaseThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidatePassword("hola123!")
@@ -87,7 +87,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidatePassword_NoLowercase_ThrowsException()
+        public void ValidatePasswordNoLowercaseThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidatePassword("HOLA123!")
@@ -95,7 +95,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidatePassword_NoDigit_ThrowsException()
+        public void ValidatePasswordNoDigitThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidatePassword("HolaMundo!")
@@ -103,7 +103,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidatePassword_NoSpecial_ThrowsException()
+        public void ValidatePasswordNoSpecialThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidatePassword("Hola1234")
@@ -111,7 +111,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidatePassword_Valid_DoesNotThrow()
+        public void ValidatePasswordValidDoesNotThrow()
         {
             DamasChinas_Server.Utilidades.Validator.ValidatePassword("Hola123!");
         }
@@ -119,7 +119,7 @@ namespace DamasChinas_Pruebas.Utilities
 
  
         [Fact]
-        public void ValidateEmail_Empty_ThrowsException()
+        public void ValidateEmailEmptyThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateEmail("")
@@ -127,7 +127,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateEmail_TooLong_ThrowsException()
+        public void ValidateEmailTooLongThrowsException()
         {
             var email = new string('a', UserValidationRules.EmailMaxLength + 1) + "@test.com";
 
@@ -137,7 +137,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateEmail_InvalidFormat_ThrowsException()
+        public void ValidateEmailInvalidFormatThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateEmail("seth@@@com")
@@ -145,14 +145,14 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateEmail_Valid_DoesNotThrow()
+        public void ValidateEmailValidDoesNotThrow()
         {
             DamasChinas_Server.Utilidades.Validator.ValidateEmail("seth@gmail.com");
         }
 
 
         [Fact]
-        public void ValidateUserDto_Null_ThrowsException()
+        public void ValidateUserDtoNullThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateUserDto(null)
@@ -160,7 +160,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateUserDto_InvalidName_ThrowsException()
+        public void ValidateUserDtoInvalidNameThrowsException()
         {
             var dto = new UserDto
             {
@@ -176,7 +176,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateUserDto_Valid_DoesNotThrow()
+        public void ValidateUserDtoValidDoesNotThrow()
         {
             var dto = new UserDto
             {
@@ -190,7 +190,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateLoginRequest_Null_ThrowsException()
+        public void ValidateLoginRequestNullThrowsException()
         {
             Assert.Throws<RepositoryValidationException>(
                 () => DamasChinas_Server.Utilidades.Validator.ValidateLoginRequest(null)
@@ -198,7 +198,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateLoginRequest_EmptyUsername_ThrowsException()
+        public void ValidateLoginRequestEmptyUsernameThrowsException()
         {
             var req = new LoginRequest { Username = "", Password = "123" };
 
@@ -208,7 +208,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateLoginRequest_BadEmail_ThrowsException()
+        public void ValidateLoginRequestBadEmailThrowsException()
         {
             var req = new LoginRequest { Username = "bademail@", Password = "123" };
 
@@ -218,7 +218,7 @@ namespace DamasChinas_Pruebas.Utilities
         }
 
         [Fact]
-        public void ValidateLoginRequest_Valid_DoesNotThrow()
+        public void ValidateLoginRequestValidDoesNotThrow()
         {
             var req = new LoginRequest { Username = "sethMR", Password = "Abc123!" };
 

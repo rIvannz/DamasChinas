@@ -29,7 +29,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void ValidateCreateRequest_NullRequest_ThrowsException()
+    public void ValidateCreateRequestNullRequestThrowsException()
     {
         var method = GetPrivateStatic("ValidateCreateRequest");
 
@@ -42,7 +42,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void ValidateCreateRequest_InvalidMaxPlayers_ThrowsException()
+    public void ValidateCreateRequestInvalidMaxPlayersThrowsException()
     {
         var method = GetPrivateStatic("ValidateCreateRequest");
 
@@ -57,7 +57,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void ValidateJoinRequest_NullRequest_ThrowsException()
+    public void ValidateJoinRequestNullRequestThrowsException()
     {
         var method = GetPrivateStatic("ValidateJoinRequest");
 
@@ -70,7 +70,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void ValidateJoinRequest_EmptyUsername_ThrowsException()
+    public void ValidateJoinRequestEmptyUsernameThrowsException()
     {
         var method = GetPrivateStatic("ValidateJoinRequest");
 
@@ -89,7 +89,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void IsGuest_ValidGuestUsername_ReturnsTrue()
+    public void IsGuestValidGuestUsernameReturnsTrue()
     {
         var method = GetPrivateStatic("IsGuest");
 
@@ -99,7 +99,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void IsGuest_InvalidGuestFormat_ReturnsFalse()
+    public void IsGuestInvalidGuestFormatReturnsFalse()
     {
         var method = GetPrivateStatic("IsGuest");
 
@@ -109,7 +109,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void LobbyState_AddAndRemoveMember_UpdatesCountCorrectly()
+    public void LobbyStateAddAndRemoveMemberUpdatesCountCorrectly()
     {
         var lobbyType = GetLobbyStateType();
 
@@ -166,7 +166,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void LobbyState_AssignNewHost_AssignsOldestMember()
+    public void LobbyStateAssignNewHostAssignsOldestMember()
     {
         var lobbyType = GetLobbyStateType();
 
@@ -198,7 +198,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void LobbyState_ThrowIfFull_WhenMaxPlayersReached_ThrowsException()
+    public void LobbyStateThrowIfFullWhenMaxPlayersReachedThrowsException()
     {
         var lobbyType = GetLobbyStateType();
 
@@ -227,7 +227,7 @@ public class LobbyManagerTests
     }
 
     [Fact]
-    public void LobbyState_ThrowIfGameStarted_ThrowsException()
+    public void LobbyStateThrowIfGameStartedThrowsException()
     {
         var lobbyType = GetLobbyStateType();
 

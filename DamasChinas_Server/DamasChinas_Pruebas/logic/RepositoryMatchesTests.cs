@@ -14,7 +14,7 @@ namespace DamasChinas_Tests.logic
     public class RepositoryMatchesTests
     {
         [Fact]
-        public void SaveMatchResult_UserColorMapNull_ThrowsArgumentException()
+        public void SaveMatchResultUserColorMapNullThrowsArgumentException()
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
@@ -26,7 +26,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_UserColorMapEmpty_ThrowsArgumentException()
+        public void SaveMatchResultUserColorMapEmptyThrowsArgumentException()
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
@@ -38,7 +38,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_WinnerUsernameNull_ThrowsArgumentException()
+        public void SaveMatchResultWinnerUsernameNullThrowsArgumentException()
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
@@ -53,7 +53,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_WinnerUsernameEmpty_ThrowsArgumentException()
+        public void SaveMatchResultWinnerUsernameEmptyThrowsArgumentException()
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
@@ -68,7 +68,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_ProfileNotFound_ThrowsUserProfileNotFound()
+        public void SaveMatchResultProfileNotFoundThrowsUserProfileNotFound()
         {
             var mockDb = new Mock<IApplicationDbContext>();
 
@@ -94,7 +94,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_ValidInput_CreatesMatchAndParticipants()
+        public void SaveMatchResultValidInputCreatesMatchAndParticipants()
         {
             var perfiles = new List<perfiles>
             {
@@ -131,7 +131,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_WinnerAssignedPositionOne()
+        public void SaveMatchResultWinnerAssignedPositionOne()
         {
             var perfiles = new List<perfiles>
             {
@@ -169,7 +169,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_FirstSaveChangesFails_ThrowsDatabaseUnavailable()
+        public void SaveMatchResultFirstSaveChangesFailsThrowsDatabaseUnavailable()
         {
             var mockDb = new Mock<IApplicationDbContext>();
 
@@ -192,7 +192,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_SecondSaveChangesFails_ThrowsDatabaseUnavailable()
+        public void SaveMatchResultSecondSaveChangesFailsThrowsDatabaseUnavailable()
         {
             var perfiles = new List<perfiles>
             {
@@ -235,7 +235,7 @@ namespace DamasChinas_Tests.logic
         }
 
         [Fact]
-        public void SaveMatchResult_SaveChangesValidationFails_ThrowsUnknownError()
+        public void SaveMatchResultSaveChangesValidationFailsThrowsUnknownError()
         {
             var mockDb = new Mock<IApplicationDbContext>();
 

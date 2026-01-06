@@ -16,7 +16,7 @@ namespace DamasChinas_Pruebas
     public class FriendRepositoryTests
     {
         [Fact]
-        public void EnsureDifferentUsers_SameIds_ThrowsUserValidationError()
+        public void EnsureDifferentUsersSameIdsThrowsUserValidationError()
         {
              
             var method = typeof(FriendRepository)
@@ -37,7 +37,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureDifferentUsers_DifferentIds_DoesNotThrow()
+        public void EnsureDifferentUsersDifferentIdsDoesNotThrow()
         {
             var method = typeof(FriendRepository)
                 .GetMethod("EnsureDifferentUsers", BindingFlags.NonPublic | BindingFlags.Static);
@@ -56,7 +56,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void EnsureUsersExist_UserMissing_ThrowsUserNotFound()
+        public void EnsureUsersExistUserMissingThrowsUserNotFound()
         {
              
             var method = typeof(FriendRepository)
@@ -89,7 +89,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void EnsureUsersExist_BothExist_DoesNotThrow()
+        public void EnsureUsersExistBothExistDoesNotThrow()
         {
              
             var method = typeof(FriendRepository)
@@ -115,7 +115,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNotFriends_AlreadyFriends_ThrowsAlreadyFriends()
+        public void EnsureNotFriendsAlreadyFriendsThrowsAlreadyFriends()
         {
              
             var method = typeof(FriendRepository)
@@ -145,7 +145,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNotFriends_NoFriendship_DoesNotThrow()
+        public void EnsureNotFriendsNoFriendshipDoesNotThrow()
         {
              
             var method = typeof(FriendRepository)
@@ -167,7 +167,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureFriends_NoFriendship_ThrowsFriendsLoadError()
+        public void EnsureFriendsNoFriendshipThrowsFriendsLoadError()
         {
              
             var method = typeof(FriendRepository)
@@ -195,7 +195,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureFriends_FriendshipExists_DoesNotThrow()
+        public void EnsureFriendsFriendshipExistsDoesNotThrow()
         {
              
             var method = typeof(FriendRepository)
@@ -221,7 +221,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNotBlocked_IsBlocked_ThrowsFriendsLoadError()
+        public void EnsureNotBlockedIsBlockedThrowsFriendsLoadError()
         {
              
             var method = typeof(FriendRepository)
@@ -252,7 +252,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNotBlocked_NoBlock_DoesNotThrow()
+        public void EnsureNotBlockedNoBlockDoesNotThrow()
         {
              
             var method = typeof(FriendRepository)
@@ -275,7 +275,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNotBlockedSelf_SameUser_ThrowsUserValidationError()
+        public void EnsureNotBlockedSelfSameUserThrowsUserValidationError()
         {
              
             var method = typeof(FriendRepository)
@@ -297,7 +297,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNotBlockedSelf_DifferentUsers_DoesNotThrow()
+        public void EnsureNotBlockedSelfDifferentUsersDoesNotThrow()
         {
              
             var method = typeof(FriendRepository)
@@ -314,7 +314,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void EnsureNoPendingRequest_PendingRequestExists_ThrowsFriendRequestAlreadyPending()
+        public void EnsureNoPendingRequestPendingRequestExistsThrowsFriendRequestAlreadyPending()
         {
              
             var solicitudes = new List<solicitudes_amistad>
@@ -352,7 +352,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void EnsureNoPendingRequest_NoPendingRequest_DoesNotThrow()
+        public void EnsureNoPendingRequestNoPendingRequestDoesNotThrow()
         {
              
             var solicitudes = new List<solicitudes_amistad>(); 
@@ -375,7 +375,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void PendingRequestExists_NoPendingRequest_ReturnsFalse()
+        public void PendingRequestExistsNoPendingRequestReturnsFalse()
         {
              
             var solicitudes = new List<solicitudes_amistad>();
@@ -403,7 +403,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void PendingRequestExists_PendingRequestExists_ReturnsTrue()
+        public void PendingRequestExistsPendingRequestExistsReturnsTrue()
         {
              
             var solicitudes = new List<solicitudes_amistad>
@@ -439,7 +439,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void FriendshipExists_WhenFriendshipExists_ReturnsTrue()
+        public void FriendshipExistsWhenFriendshipExistsReturnsTrue()
         {
              
             var amistades = new List<amistades>
@@ -463,7 +463,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void FriendshipExists_WhenFriendshipDoesNotExist_ReturnsFalse()
+        public void FriendshipExistsWhenFriendshipDoesNotExistReturnsFalse()
         {
              
             var amistades = new List<amistades>(); 
@@ -484,7 +484,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void IsBlocked_WhenUserIsBlocked_ReturnsTrue()
+        public void IsBlockedWhenUserIsBlockedReturnsTrue()
         {
              
             var bloqueos = new List<bloqueos>
@@ -508,7 +508,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void IsBlocked_WhenUserIsNotBlocked_ReturnsFalse()
+        public void IsBlockedWhenUserIsNotBlockedReturnsFalse()
         {
              
             var bloqueos = new List<bloqueos>(); 
@@ -529,7 +529,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void PendingRequestExists_WhenPendingRequestExists_ReturnsTrue()
+        public void PendingRequestExistsWhenPendingRequestExistsReturnsTrue()
         {
              
             var solicitudes = new List<solicitudes_amistad>
@@ -558,7 +558,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void PendingRequestExists_WhenNoPendingRequest_ReturnsFalse()
+        public void PendingRequestExistsWhenNoPendingRequestReturnsFalse()
         {
              
             var solicitudes = new List<solicitudes_amistad>(); 
@@ -580,7 +580,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void MapToFriendDto_WithValidProfile_ReturnsCorrectDto()
+        public void MapToFriendDtoWithValidProfileReturnsCorrectDto()
         {
 
             FriendRepository.IsOnlineResolver = _ => false;
@@ -617,7 +617,7 @@ namespace DamasChinas_Pruebas
         }
 
             [Fact]
-        public void MapToFriendDto_NoProfile_ThrowsException()
+        public void MapToFriendDtoNoProfileThrowsException()
         {
              
             var user = new usuarios
@@ -643,7 +643,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetUserIds_ValidDifferentUsers_ReturnsCorrectTuple()
+        public void GetUserIdsValidDifferentUsersReturnsCorrectTuple()
         {
 
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -674,7 +674,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetUserIds_SameUser_ThrowsUserValidationError()
+        public void GetUserIdsSameUserThrowsUserValidationError()
         {
 
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -700,7 +700,7 @@ namespace DamasChinas_Pruebas
 
 
             [Fact]
-        public void ApplyBlock_AlreadyBlocked_ThrowsException()
+        public void ApplyBlockAlreadyBlockedThrowsException()
         {
              
             var bloqueos = new List<bloqueos>
@@ -726,7 +726,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void ApplyBlock_RemovesFriendshipAndPendingRequests()
+        public void ApplyBlockRemovesFriendshipAndPendingRequests()
         {
 
             var amistades = new List<amistades>
@@ -767,7 +767,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void ApplyBlock_AddsNewBlockEntry()
+        public void ApplyBlockAddsNewBlockEntry()
         {
 
             var amistades = new List<amistades>();
@@ -801,7 +801,7 @@ namespace DamasChinas_Pruebas
         }
 
             [Fact]
-        public void RemoveBlock_BlockNotFound_ThrowsException()
+        public void RemoveBlockBlockNotFoundThrowsException()
         {
              
             var bloqueos = new List<bloqueos>();
@@ -823,7 +823,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveBlock_ExistingBlock_RemovesEntry()
+        public void RemoveBlockExistingBlockRemovesEntry()
         {
 
             var bloqueos = new List<bloqueos>
@@ -850,7 +850,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveBlock_NoMatchingBlock_ThrowsException()
+        public void RemoveBlockNoMatchingBlockThrowsException()
         {
              
             var bloqueos = new List<bloqueos>
@@ -877,7 +877,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveBlock_MultipleMatchingBlocks_RemovesOnlyFirst()
+        public void RemoveBlockMultipleMatchingBlocksRemovesOnlyFirst()
         {
              
             var bloqueos = new List<bloqueos>
@@ -904,7 +904,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveFriendshipIfExists_FriendshipFound_RemovesEntry()
+        public void RemoveFriendshipIfExistsFriendshipFoundRemovesEntry()
         {
              
             var amistades = new List<amistades>
@@ -931,7 +931,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveFriendshipIfExists_FriendshipFound_ReversedIds_RemovesEntry()
+        public void RemoveFriendshipIfExistsFriendshipFoundReversedIdsRemovesEntry()
         {
              
             var amistades = new List<amistades>
@@ -958,7 +958,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveFriendshipIfExists_NoFriendship_NoChanges()
+        public void RemoveFriendshipIfExistsNoFriendshipNoChanges()
         {
              
             var amistades = new List<amistades>
@@ -985,7 +985,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveFriendshipIfExists_MultipleFriendships_RemovesOnlyFirstMatch()
+        public void RemoveFriendshipIfExistsMultipleFriendshipsRemovesOnlyFirstMatch()
         {
              
             var amistades = new List<amistades>
@@ -1013,7 +1013,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemoveFriendshipIfExists_EmptyList_NoException()
+        public void RemoveFriendshipIfExistsEmptyListNoException()
         {
              
             var amistades = new List<amistades>();
@@ -1036,7 +1036,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemovePendingRequests_ExactMatch_RemovesRequest()
+        public void RemovePendingRequestsExactMatchRemovesRequest()
         {
              
             var requests = new List<solicitudes_amistad>
@@ -1063,7 +1063,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemovePendingRequests_ReversedMatch_RemovesRequest()
+        public void RemovePendingRequestsReversedMatchRemovesRequest()
         {
              
             var requests = new List<solicitudes_amistad>
@@ -1089,7 +1089,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemovePendingRequests_NoMatchingRequests_NoChanges()
+        public void RemovePendingRequestsNoMatchingRequestsNoChanges()
         {
              
             var requests = new List<solicitudes_amistad>
@@ -1116,7 +1116,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemovePendingRequests_MultipleMatches_RemovesAllMatches()
+        public void RemovePendingRequestsMultipleMatchesRemovesAllMatches()
         {
              
             var requests = new List<solicitudes_amistad>
@@ -1144,7 +1144,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemovePendingRequests_EmptyList_NoException()
+        public void RemovePendingRequestsEmptyListNoException()
         {
              
             var requests = new List<solicitudes_amistad>();
@@ -1167,7 +1167,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void RemovePendingRequests_MixedRequests_RemovesOnlyThoseMatchingUsers()
+        public void RemovePendingRequestsMixedRequestsRemovesOnlyThoseMatchingUsers()
         {
              
             var requests = new List<solicitudes_amistad>
@@ -1198,7 +1198,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriends_NoFriendships_ReturnsEmptyList()
+        public void GetFriendsNoFriendshipsReturnsEmptyList()
         {
              
             var friendships = new List<amistades>();
@@ -1221,7 +1221,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetFriends_OneFriendshipWhereUserIsUser1_ReturnsFriendDto()
+        public void GetFriendsOneFriendshipWhereUserIsUser1ReturnsFriendDto()
         {
              
             var friendUser = new usuarios
@@ -1262,7 +1262,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetFriends_OneFriendshipWhereUserIsUser2_ReturnsFriendDto()
+        public void GetFriendsOneFriendshipWhereUserIsUser2ReturnsFriendDto()
         {
              
             var friendUser = new usuarios
@@ -1303,7 +1303,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriends_MultipleFriendships_ReturnsAllFriends()
+        public void GetFriendsMultipleFriendshipsReturnsAllFriends()
         {
              
             var friend1 = new usuarios
@@ -1346,7 +1346,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetFriends_FriendWithoutProfile_UsesDefaultValues()
+        public void GetFriendsFriendWithoutProfileUsesDefaultValues()
         {
              
             var friendUser = new usuarios
@@ -1387,7 +1387,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetFriendRequests_NoRequests_ReturnsEmptyList()
+        public void GetFriendRequestsNoRequestsReturnsEmptyList()
         {
             var mockRepo = new Mock<IRepositoryUsers>();
             mockRepo.Setup(r => r.GetUserIdByUsername("seth")).Returns(1);
@@ -1405,7 +1405,7 @@ namespace DamasChinas_Pruebas
             Assert.Empty(result);
         }
         [Fact]
-        public void GetFriendRequests_OnePendingRequest_ReturnsFriendDto()
+        public void GetFriendRequestsOnePendingRequestReturnsFriendDto()
         {
             var mockRepo = new Mock<IRepositoryUsers>();
             mockRepo.Setup(r => r.GetUserIdByUsername("seth")).Returns(1);
@@ -1445,7 +1445,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetFriendRequests_IgnoresNonPendingRequests()
+        public void GetFriendRequestsIgnoresNonPendingRequests()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1472,7 +1472,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void GetFriendRequests_IgnoresRequestsForOtherUsers()
+        public void GetFriendRequestsIgnoresRequestsForOtherUsers()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1497,7 +1497,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriendRequests_EmitterHasNoProfile_UsesDefaultValues()
+        public void GetFriendRequestsEmitterHasNoProfileUsesDefaultValues()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1537,7 +1537,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void UpdateBlockStatus_BlockSelf_ThrowsUserValidationError()
+        public void UpdateBlockStatusBlockSelfThrowsUserValidationError()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1554,7 +1554,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void UpdateBlockStatus_Block_AddsBlockEntry()
+        public void UpdateBlockStatusBlockAddsBlockEntry()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1587,7 +1587,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void UpdateBlockStatus_BlockAlreadyBlocked_ThrowsException()
+        public void UpdateBlockStatusBlockAlreadyBlockedThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1618,7 +1618,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void UpdateBlockStatus_Unblock_RemovesEntry()
+        public void UpdateBlockStatusUnblockRemovesEntry()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1654,7 +1654,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void UpdateBlockStatus_UnblockMissing_ThrowsException()
+        public void UpdateBlockStatusUnblockMissingThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1676,7 +1676,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriend_ValidFriendship_RemovesFriendAndReturnsTrue()
+        public void DeleteFriendValidFriendshipRemovesFriendAndReturnsTrue()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1713,7 +1713,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriend_NoFriendship_ThrowsFriendsLoadError()
+        public void DeleteFriendNoFriendshipThrowsFriendsLoadError()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1743,7 +1743,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriend_UserDoesNotExist_ThrowsException()
+        public void DeleteFriendUserDoesNotExistThrowsException()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1768,7 +1768,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriend_FriendshipReverseOrder_RemovesCorrectEntry()
+        public void DeleteFriendFriendshipReverseOrderRemovesCorrectEntry()
         {
              
             var mockUserRepo = new Mock<IRepositoryUsers>();
@@ -1802,7 +1802,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriend_SaveChanges_IsCalled()
+        public void DeleteFriendSaveChangesIsCalled()
         {
             var mockUserRepo = new Mock<IRepositoryUsers>();
             mockUserRepo.Setup(r => r.GetUserIdByUsername("A")).Returns(1);
@@ -1838,7 +1838,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriendPublicProfile_ValidUserWithProfile_ReturnsCorrectData()
+        public void GetFriendPublicProfileValidUserWithProfileReturnsCorrectData()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1885,7 +1885,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriendPublicProfile_UserWithoutProfile_UsesDefaultValues()
+        public void GetFriendPublicProfileUserWithoutProfileUsesDefaultValues()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1920,7 +1920,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriendPublicProfile_UserNotFound_ThrowsException()
+        public void GetFriendPublicProfileUserNotFoundThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1939,7 +1939,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriendPublicProfile_NoMatches_ShouldReturnZeroStats()
+        public void GetFriendPublicProfileNoMatchesShouldReturnZeroStats()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -1976,7 +1976,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void GetFriendPublicProfile_NullAvatar_UsesDefaultAvatar()
+        public void GetFriendPublicProfileNullAvatarUsesDefaultAvatar()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -2009,7 +2009,7 @@ namespace DamasChinas_Pruebas
 
 
         [Fact]
-        public void DeleteFriendAndBlock_AlreadyBlocked_ThrowsException()
+        public void DeleteFriendAndBlockAlreadyBlockedThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -2042,7 +2042,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriendAndBlock_SameUser_ThrowsException()
+        public void DeleteFriendAndBlockSameUserThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
@@ -2065,7 +2065,7 @@ namespace DamasChinas_Pruebas
         }
 
         [Fact]
-        public void DeleteFriendAndBlock_UserNotFound_ThrowsException()
+        public void DeleteFriendAndBlockUserNotFoundThrowsException()
         {
              
             var mockRepo = new Mock<IRepositoryUsers>();
