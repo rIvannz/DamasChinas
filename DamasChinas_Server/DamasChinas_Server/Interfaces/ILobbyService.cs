@@ -59,6 +59,11 @@ namespace DamasChinas_Server.Interfaces
         [FaultContract(typeof(MessageCode))]
         OperationResult JoinLobbyGuest(JoinLobbyRequest request);
 
+        [OperationContract]
+        [FaultContract(typeof(MessageCode))]
+        OperationResult ReconnectToLobby(string username, int lobbyCode);
+
+
 
     }
 }

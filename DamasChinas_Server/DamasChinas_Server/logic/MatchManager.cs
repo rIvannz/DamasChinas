@@ -64,24 +64,33 @@ namespace DamasChinas_Server.Logic
         public void RegisterPlayerSession(int lobbyCode, string username, IMatchCallback callback)
         {
             if (!_matches.TryGetValue(lobbyCode, out var match))
-            {
                 throw new RepositoryValidationException(MessageCode.LobbyNotFound);
-            }
 
             if (!match.UserColorMap.ContainsKey(username))
-            {
                 throw new RepositoryValidationException(MessageCode.UserNotFound);
-            }
+
+           
+            bool hadCallback = match.Callbacks.ContainsKey(username);
+
+     
+            bool wasDisconnected = match.DisconnectedUsers.TryRemove(username, out _);
 
             match.Callbacks[username] = callback;
 
-            match.DisconnectedUsers.TryRemove(username, out _);
-
+           
+            bool hadPendingRemoval = match.PendingRemovals.ContainsKey(username);
             CancelPendingRemoval(match, username);
 
-            _log.Info($"[MatchManager] {MessageCode.PlayerReconnected} user={username} lobby={lobbyCode}");
-            BroadcastPlayerReconnectedSafe(username, match);
+            bool isReconnect = wasDisconnected || hadCallback || hadPendingRemoval;
+
+            if (isReconnect)
+            {
+                _log.Info($"[MatchManager] {MessageCode.PlayerReconnected} user={username} lobby={lobbyCode}");
+                BroadcastPlayerReconnectedSafe(username, match);
+            }
+            
         }
+
 
         public void ApplyMove(MoveRequestDto req)
         {

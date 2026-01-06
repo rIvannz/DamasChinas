@@ -1,6 +1,7 @@
 using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Shared.Contracts.Dtos;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
@@ -86,24 +87,71 @@ namespace DamasChinas_Client.UI.Utilities
             }
         }
 
-        private static void SafeAbort(ICommunicationObject obj)
+        private static void SafeAbort(ICommunicationObject communicationObject)
         {
-            if (obj == null)
-            {
+            if (communicationObject == null)
                 return;
-            }
-            try 
-            { 
-                obj.Abort();
-            }
-            catch 
-            {
-                MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
 
+            try
+            {
+                communicationObject.Abort();
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[LobbyManager.SafeAbort] CommunicationException: {ex.Message}");
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[LobbyManager.SafeAbort] TimeoutException: {ex.Message}");
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Debug.WriteLine($"[LobbyManager.SafeAbort] ObjectDisposedException: {ex.Message}");
             }
         }
 
+
+        public bool TryReconnectLobbyChannel()
+        {
+            try
+            {
+                EnsureClientAlive();
+
+                if (string.IsNullOrWhiteSpace(CurrentUsername) || CurrentLobbyCode <= 0)
+                    return false;
+
+                if (_client == null)
+                    return false;
+
+        
+                if (_client.State == CommunicationState.Faulted)
+                {
+                    SafeAbort(_client);
+                    _client = null;
+
+                    InitializeClient();
+
+                    if (_client == null)
+                        return false;
+                }
+
   
+                var result = _client.ReconnectToLobby(CurrentUsername, CurrentLobbyCode);
+                return result != null && result.Success;
+            }
+            catch
+            {
+                try { SafeAbort(_client); } catch { }
+                _client = null;
+                return false;
+            }
+        }
+
+       
+
+
+
+
         private static void DispatchToUi(Action action)
         {
             var dispatcher = Application.Current?.Dispatcher;

@@ -33,6 +33,11 @@ and one special character (*, $, #).
     <sys:String x:Key="reportReason_Cheating">Cheating</sys:String>
     <sys:String x:Key="reportReason_InappropriateBehavior">Inappropriate behavior</sys:String>
 
+
+
+    <sys:String x:Key="msg_PlayerReconnected">has reconnected.</sys:String>
+
+
     <sys:String x:Key="msg_YouWereReported">You were reported.</sys:String>
     <sys:String x:Key="msg_ReportReasonLabel">Reason</sys:String>
     <sys:String x:Key="msg_ReportReasonUnknown">Unknown</sys:String>

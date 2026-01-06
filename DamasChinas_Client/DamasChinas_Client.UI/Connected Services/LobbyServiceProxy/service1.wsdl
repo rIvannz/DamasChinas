@@ -120,6 +120,15 @@
   <wsdl:message name="ILobbyService_JoinLobbyGuest_MessageCodeFault_FaultMessage">
     <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q11:MessageCode" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_ReconnectToLobby_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReconnectToLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReconnectToLobby_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReconnectToLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReconnectToLobby_MessageCodeFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" name="detail" element="q12:MessageCode" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_OnLobbySnapshot_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnLobbySnapshot" />
   </wsdl:message>
@@ -199,6 +208,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/JoinLobbyGuest" message="tns:ILobbyService_JoinLobbyGuest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/JoinLobbyGuestResponse" message="tns:ILobbyService_JoinLobbyGuest_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/JoinLobbyGuestMessageCodeFault" name="MessageCodeFault" message="tns:ILobbyService_JoinLobbyGuest_MessageCodeFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReconnectToLobby">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/ReconnectToLobby" message="tns:ILobbyService_ReconnectToLobby_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/ReconnectToLobbyResponse" message="tns:ILobbyService_ReconnectToLobby_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/ReconnectToLobbyMessageCodeFault" name="MessageCodeFault" message="tns:ILobbyService_ReconnectToLobby_MessageCodeFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnLobbySnapshot">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/OnLobbySnapshot" message="tns:ILobbyService_OnLobbySnapshot_OutputCallbackMessage" />
@@ -353,6 +367,18 @@
     </wsdl:operation>
     <wsdl:operation name="JoinLobbyGuest">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/JoinLobbyGuest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MessageCodeFault">
+        <soap12:fault use="literal" name="MessageCodeFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ReconnectToLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/ReconnectToLobby" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -52,14 +52,12 @@ namespace DamasChinas_Server.Services
 
                 BindChannelToUser(hostUsername);
 
-                LobbySessionManager.Add(hostUsername, callback);
-
                 _lobbyManager.CreateLobby(hostUsername, profile, request, callback);
                 return OperationResult.Ok();
             }
             catch (InvalidOperationException ex)
             {
-                return HandleException(ex, "CreateLobby");
+                return HandleException(ex, nameof(CreateLobby));
             }
         }
 
@@ -72,16 +70,15 @@ namespace DamasChinas_Server.Services
 
                 BindChannelToUser(request.Username);
 
-                LobbySessionManager.Add(request.Username, callback);
-
                 _lobbyManager.JoinLobby(request, profile, callback);
                 return OperationResult.Ok();
             }
             catch (InvalidOperationException ex)
             {
-                return HandleException(ex, "JoinLobby");
+                return HandleException(ex, nameof(JoinLobby));
             }
         }
+
 
         public OperationResult LeaveLobby(string username)
         {
@@ -90,7 +87,7 @@ namespace DamasChinas_Server.Services
                 _hasLeft = true;
 
                 _lobbyManager.LeaveLobby(username);
-                LobbySessionManager.Remove(username);
+
                 return OperationResult.Ok();
             }
             catch (CommunicationException ex)
@@ -98,6 +95,7 @@ namespace DamasChinas_Server.Services
                 return HandleException(ex, "LeaveLobby");
             }
         }
+
 
         public OperationResult StartGame(string hostUsername)
         {
@@ -183,16 +181,60 @@ namespace DamasChinas_Server.Services
                 {
                     _log.Error($"[LobbyService] HandleUnexpectedDisconnect error: {ex.Message}", ex);
                 }
-                finally
-                {
-                    LobbySessionManager.Remove(_username);
-                }
+                
             }
             catch (InvalidOperationException ex)
             {
                 _log.Error($"[LobbyService.OnChannelClosedOrFaulted] {ex.Message}", ex);
             }
         }
+
+        public OperationResult ReconnectToLobby(string username, int lobbyCode)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    return OperationResult.Fail(
+                        MessageCode.UsernameEmpty.ToString(),
+                        MessageCode.UsernameEmpty);
+                }
+
+                if (lobbyCode <= 0)
+                {
+                    return OperationResult.Fail(
+                        MessageCode.LobbyNotFound.ToString(),
+                        MessageCode.LobbyNotFound);
+                }
+
+                var callback = GetLobbyCallback();
+
+                BindChannelToUser(username);
+
+                PublicProfile profile = null;
+
+                if (!IsGuestUsername(username))
+                {
+                    profile = GetProfile(username);
+                }
+
+                _lobbyManager.ReconnectToLobby(username, lobbyCode, callback, profile);
+
+                return OperationResult.Ok();
+            }
+            catch (RepositoryValidationException ex)
+            {
+                return OperationResult.Fail(ex.Message, ex.Code);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return HandleException(ex, nameof(ReconnectToLobby));
+            }
+        }
+
+
+
+
 
         private PublicProfile GetProfile(string username)
         {
@@ -234,18 +276,21 @@ namespace DamasChinas_Server.Services
             {
                 if (request == null || request.LobbyCode <= 0)
                 {
-                    return OperationResult.Fail("Invalid lobby.", MessageCode.LobbyNotFound);
+                    return OperationResult.Fail(
+                        MessageCode.LobbyNotFound.ToString(),
+                        MessageCode.LobbyNotFound);
                 }
 
                 if (!IsGuestUsername(request.Username))
                 {
-                    return OperationResult.Fail("Invalid guest username.", MessageCode.UsernameEmpty);
+                    return OperationResult.Fail(
+                        MessageCode.UsernameEmpty.ToString(),
+                        MessageCode.UsernameEmpty);
                 }
 
                 var callback = GetLobbyCallback();
 
                 BindChannelToUser(request.Username);
-                LobbySessionManager.Add(request.Username, callback);
 
                 var guestProfile = BuildGuestProfile(request.Username);
 
@@ -259,7 +304,7 @@ namespace DamasChinas_Server.Services
             }
             catch (InvalidOperationException ex)
             {
-                return HandleException(ex, "JoinLobbyGuest");
+                return HandleException(ex, nameof(JoinLobbyGuest));
             }
         }
 

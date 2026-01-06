@@ -28,9 +28,14 @@ namespace DamasChinas_Server.Logic
 
         private static readonly ILogService _log = LogFactory.Create(typeof(LobbyManager));
 
+        private readonly ConcurrentDictionary<string, DateTime> _disconnected =
+    new ConcurrentDictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
+
         private LobbyManager()
         {
             _lobbies = new ConcurrentDictionary<int, LobbyState>();
+
+
         }
 
         public static LobbyManager Instance => _instance.Value;
@@ -55,8 +60,26 @@ namespace DamasChinas_Server.Logic
 
                 LobbySessionManager.Remove(username);
 
-                LobbyManager.Instance.HandleUnexpectedDisconnect(username);
+
             }
+        }
+
+
+        public void MarkDisconnected(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username)) return;
+            _disconnected[username] = DateTime.UtcNow;
+        }
+
+        public void MarkReconnected(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username)) return;
+            _disconnected.TryRemove(username, out _);
+        }
+
+        public bool IsDisconnected(string username)
+        {
+            return !string.IsNullOrWhiteSpace(username) && _disconnected.ContainsKey(username);
         }
 
         public void HandleUnexpectedDisconnect(string username)
@@ -64,32 +87,51 @@ namespace DamasChinas_Server.Logic
             var lobby = FindLobbyByUser(username);
             if (lobby == null)
             {
+                LobbySessionManager.Remove(username);
                 return;
             }
 
             bool wasHost = lobby.IsHost(username);
 
-            lobby.RemoveMember(username);
-
-            _log.Warn($"[LobbyManager] User disconnected unexpectedly: {username}");
-
-            lobby.BroadcastMessage(
-                "Server",
-                $"{username} has been disconnected.");
-
-            if (lobby.IsEmpty || wasHost)
+  
+            if (!lobby.IsGameStarted)
             {
-                CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
+                lobby.RemoveMember(username);
+                LobbySessionManager.Remove(username);
+
+                _log.Warn($"[LobbyManager] User disconnected in PRELOBBY: {username}");
+
+                lobby.BroadcastMessage("Server", $"{username} has been disconnected.");
+
+                if (lobby.IsEmpty || wasHost)
+                {
+                    CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
+                    return;
+                }
+
+                if (wasHost)
+                    lobby.AssignNewHostIfNeeded();
+
+                BroadcastSnapshot(lobby);
                 return;
             }
 
+ 
+            MarkDisconnected(username);
+            LobbySessionManager.Remove(username);
+
+            _log.Warn($"[LobbyManager] User disconnected in MATCH: {username}");
+
+            lobby.BroadcastMessage("Server", $"{username} has been disconnected.");
+
             if (wasHost)
-            {
                 lobby.AssignNewHostIfNeeded();
-            }
 
             BroadcastSnapshot(lobby);
         }
+
+
+
 
         public List<LobbySummaryDto> GetPublicLobbies()
         {
@@ -204,7 +246,8 @@ namespace DamasChinas_Server.Logic
             lobby.RemoveMember(username);
             LobbySessionManager.Remove(username);
 
-            if (lobby.IsEmpty || wasHost)
+          
+            if (!lobby.IsGameStarted && (lobby.IsEmpty || wasHost))
             {
                 CloseLobbyInternal(lobby, MessageCode.LobbyClosed);
                 return;
@@ -217,6 +260,7 @@ namespace DamasChinas_Server.Logic
 
             BroadcastSnapshot(lobby);
         }
+
 
         public void KickPlayer(string hostUsername, int lobbyCode, string targetUsername)
         {
@@ -347,6 +391,48 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.UnknownError);
             }
         }
+
+        public void ReconnectToLobby(string username,int lobbyCode,ILobbyCallback callback,PublicProfile profile)
+        {
+            if (!_lobbies.TryGetValue(lobbyCode, out var lobby))
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
+
+            lobby.ThrowIfKicked(username);
+
+            if (!lobby.IsGameStarted && !lobby.ContainsPlayer(username))
+            {
+                throw new RepositoryValidationException(MessageCode.LobbyNotFound);
+            }
+
+            LobbySessionManager.Add(username, callback);
+
+
+            MarkReconnected(username);
+
+            if (lobby.ContainsPlayer(username))
+            {
+                BroadcastSnapshot(lobby);
+                return;
+            }
+
+            var member = new LobbyMemberDto
+            {
+                Username = username,
+                AvatarFile = profile?.AvatarFile ?? "avatarIcon.png",
+                UserId = profile?.IdUser ?? 0,
+                IsHost = lobby.IsHost(username)
+            };
+
+            lobby.AddOrUpdateMember(member);
+
+            BroadcastSnapshot(lobby);
+        }
+
+
+
+
 
         private static bool IsValidReportRequest(ReportPlayerRequest request)
         {
@@ -570,6 +656,7 @@ namespace DamasChinas_Server.Logic
                 throw new RepositoryValidationException(MessageCode.LobbyInvalidMaxPlayers);
             }
         }
+
 
         private static void ValidateJoinRequest(JoinLobbyRequest req)
         {

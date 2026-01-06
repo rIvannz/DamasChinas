@@ -33,9 +33,6 @@ y un carácter especial (*, $, #).
     <sys:String x:Key="msg_MatchRemovedAfterDisconnect">
         Fuiste removido de la partida por desconectarte demasiado tiempo.
     </sys:String>
-
-
-
     <sys:String x:Key="reconnectingText">Esperando conexión...</sys:String>
     <sys:String x:Key="reconnectingTitle">Reconectando...</sys:String>
     <sys:String x:Key="msg_PlayerReconnected">Juagdor Reconectado</sys:String>
