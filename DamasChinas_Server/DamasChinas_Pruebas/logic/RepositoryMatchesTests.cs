@@ -19,11 +19,12 @@ namespace DamasChinas_Tests.logic
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
-            var ex = Assert.Throws<ArgumentException>(() =>
-                repo.SaveMatchResult(null, "Seth")
-            );
+            Assert.True(
+           Assert.Throws<ArgumentException>(() =>
+               repo.SaveMatchResult(null, "Seth")
+           ).ParamName == "userColorMap"
+       );
 
-            Assert.Equal("userColorMap", ex.ParamName);
         }
 
         [Fact]
@@ -31,11 +32,12 @@ namespace DamasChinas_Tests.logic
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
-            var ex = Assert.Throws<ArgumentException>(() =>
-                repo.SaveMatchResult(new Dictionary<string, PlayerColor>(), "Seth")
-            );
+            Assert.True(
+       Assert.Throws<ArgumentException>(() =>
+           repo.SaveMatchResult(new Dictionary<string, PlayerColor>(), "Seth")
+       ).ParamName == "userColorMap"
+   );
 
-            Assert.Equal("userColorMap", ex.ParamName);
         }
 
         [Fact]
@@ -43,14 +45,15 @@ namespace DamasChinas_Tests.logic
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
-            var ex = Assert.Throws<ArgumentException>(() =>
-                repo.SaveMatchResult(
-                    new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                    null
-                )
+            Assert.True(
+                Assert.Throws<ArgumentException>(() =>
+                    repo.SaveMatchResult(
+                        new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                        null
+                    )
+                ).ParamName == "winnerUsername"
             );
 
-            Assert.Equal("winnerUsername", ex.ParamName);
         }
 
         [Fact]
@@ -58,14 +61,15 @@ namespace DamasChinas_Tests.logic
         {
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
-            var ex = Assert.Throws<ArgumentException>(() =>
-                repo.SaveMatchResult(
-                    new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                    ""
-                )
+            Assert.True(
+                Assert.Throws<ArgumentException>(() =>
+                    repo.SaveMatchResult(
+                        new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                        ""
+                    )
+                ).ParamName == "winnerUsername"
             );
 
-            Assert.Equal("winnerUsername", ex.ParamName);
         }
 
         [Fact]
@@ -84,14 +88,15 @@ namespace DamasChinas_Tests.logic
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
-            var ex = Assert.Throws<RepositoryValidationException>(() =>
-                repo.SaveMatchResult(
-                    new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                    "Seth"
-                )
-            );
+            Assert.True(
+     Assert.Throws<RepositoryValidationException>(() =>
+         repo.SaveMatchResult(
+             new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+             "Seth"
+         )
+     ).Code == MessageCode.UserProfileNotFound
+ );
 
-            Assert.Equal(MessageCode.UserProfileNotFound, ex.Code);
         }
 
         [Fact]
@@ -165,6 +170,8 @@ namespace DamasChinas_Tests.logic
             );
 
             var winner = participantes.First(p => p.id_jugador == 1);
+
+
             Assert.Equal(1, winner.posicion_final);
         }
 
@@ -181,14 +188,15 @@ namespace DamasChinas_Tests.logic
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
-            var ex = Assert.Throws<RepositoryValidationException>(() =>
-                repo.SaveMatchResult(
-                    new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                    "Seth"
-                )
-            );
+            Assert.True(
+    Assert.Throws<RepositoryValidationException>(() =>
+        repo.SaveMatchResult(
+            new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+            "Seth"
+        )
+    ).Code == MessageCode.DatabaseUnavailable
+);
 
-            Assert.Equal(MessageCode.DatabaseUnavailable, ex.Code);
         }
 
         [Fact]
@@ -222,14 +230,15 @@ namespace DamasChinas_Tests.logic
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
-            var ex = Assert.Throws<RepositoryValidationException>(() =>
-                repo.SaveMatchResult(
-                    new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                    "Seth"
-                )
-            );
+            Assert.True(
+               Assert.Throws<RepositoryValidationException>(() =>
+                   repo.SaveMatchResult(
+                       new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                       "Seth"
+                   )
+               ).Code == MessageCode.DatabaseUnavailable
+           );
 
-            Assert.Equal(MessageCode.DatabaseUnavailable, ex.Code);
         }
 
         [Fact]
@@ -244,17 +253,14 @@ namespace DamasChinas_Tests.logic
                   .Throws(new DbEntityValidationException());
 
             var repo = new RepositoryMatches(() => mockDb.Object);
-
-            var ex = Assert.Throws<RepositoryValidationException>(() =>
-                repo.SaveMatchResult(
-                    new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                    "Seth"
-                )
+            Assert.True(
+                Assert.Throws<RepositoryValidationException>(() =>
+                    repo.SaveMatchResult(
+                        new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                        "Seth"
+                    )
+                ).Code == MessageCode.UnknownError
             );
-
-            Assert.Equal(MessageCode.UnknownError, ex.Code);
         }
-
-
+        }
     }
-}

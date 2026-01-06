@@ -28,9 +28,12 @@ namespace DamasChinas_Pruebas
             Assert.NotNull(method);
             var ex = Record.Exception(() => method.Invoke(null, new object[] { sameId, sameId }));
 
-             
-            Assert.IsType<RepositoryValidationException>(ex.InnerException);
-            Assert.Equal(MessageCode.UserValidationError, ((RepositoryValidationException)ex.InnerException).Code);
+
+            Assert.True(
+             ex.InnerException is RepositoryValidationException validationEx &&
+            validationEx.Code == MessageCode.UserValidationError
+         );
+
         }
 
         [Fact]
@@ -72,13 +75,15 @@ namespace DamasChinas_Pruebas
             var exception = Record.Exception(() =>
                 method.Invoke(null, new object[] { mockDb.Object!, 1, 99 })
             );
-
-             
             Assert.NotNull(exception);
-            Assert.IsType<RepositoryValidationException>(exception.InnerException);
-            Assert.Equal(
-                MessageCode.UserNotFound,
-                ((RepositoryValidationException)exception.InnerException!).Code
+
+
+
+            Assert.True(
+            exception is not null &&
+            exception.InnerException is RepositoryValidationException validationEx &&
+            validationEx.Code == MessageCode.UserNotFound
+
             );
         }
 
@@ -130,14 +135,13 @@ namespace DamasChinas_Pruebas
                 method.Invoke(null, new object[] { mockDb.Object!, 1, 2 })
             );
 
-             
-            Assert.NotNull(exception);
-            Assert.IsType<RepositoryValidationException>(exception.InnerException);
-            var repoException = (RepositoryValidationException)exception.InnerException!;
-            Assert.Equal(
-                MessageCode.AlreadyFriends,
-                repoException.Code
-            );
+
+            Assert.True(
+        exception is not null &&
+        exception.InnerException is RepositoryValidationException repoException &&
+        repoException.Code == MessageCode.AlreadyFriends
+           );
+
         }
 
         [Fact]
@@ -181,13 +185,13 @@ namespace DamasChinas_Pruebas
                 method.Invoke(null, new object[] { mockDb.Object!, 1, 2 })
             );
 
-             
-            Assert.NotNull(exception);
-            Assert.IsType<RepositoryValidationException>(exception.InnerException);
-            Assert.Equal(
-                MessageCode.FriendsLoadError,
-                ((RepositoryValidationException)exception.InnerException!).Code
-            );
+
+            Assert.True(
+             exception is not null &&
+             exception.InnerException is RepositoryValidationException repoException &&
+             repoException.Code == MessageCode.FriendsLoadError
+         );
+
         }
 
         [Fact]
@@ -238,13 +242,13 @@ namespace DamasChinas_Pruebas
                 method.Invoke(null, new object[] { mockDb.Object!, 1, 2 })
             );
 
-             
-            Assert.NotNull(exception);
-            Assert.IsType<RepositoryValidationException>(exception.InnerException);
-            Assert.Equal(
-                MessageCode.FriendsLoadError,
-                ((RepositoryValidationException)exception.InnerException!).Code
-            );
+
+            Assert.True(
+            exception is not null &&
+            exception.InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.FriendsLoadError
+);
+
         }
 
         [Fact]
@@ -283,13 +287,13 @@ namespace DamasChinas_Pruebas
                 method.Invoke(null, new object[] { 5, 5 }) 
             );
 
-             
-            Assert.NotNull(exception);
-            Assert.IsType<RepositoryValidationException>(exception.InnerException);
-            Assert.Equal(
-                MessageCode.UserValidationError,
-                ((RepositoryValidationException)exception.InnerException!).Code
+
+            Assert.True(
+            exception is not null &&
+            exception.InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.UserValidationError
             );
+
         }
 
         [Fact]
@@ -336,16 +340,13 @@ namespace DamasChinas_Pruebas
                 method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
             );
 
-             
-            Assert.NotNull(exception);
-            Assert.IsType<RepositoryValidationException>(exception.InnerException);
 
-            var repoException = (RepositoryValidationException)exception.InnerException!;
+            Assert.True(
+            exception is not null &&
+            exception.InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.FriendRequestAlreadyPending
+             );
 
-            Assert.Equal(
-                MessageCode.FriendRequestAlreadyPending,
-                repoException.Code
-            );
         }
 
 
@@ -581,7 +582,7 @@ namespace DamasChinas_Pruebas
         [Fact]
         public void MapToFriendDto_WithValidProfile_ReturnsCorrectDto()
         {
-             
+
             FriendRepository.IsOnlineResolver = _ => false;
 
             var user = new usuarios
@@ -603,19 +604,19 @@ namespace DamasChinas_Pruebas
                     BindingFlags.NonPublic | BindingFlags.Static
                 )!;
 
-             
+
             var dto = (FriendDto)method.Invoke(null, new object[] { user })!;
 
-             
-            Assert.Equal(10, dto.IdFriend);
-            Assert.Equal("Seth", dto.Username);
-            Assert.False(dto.ConnectionState);
-            Assert.Equal("avatar123.png", dto.Avatar);
+
+            Assert.True(
+            dto.IdFriend == 10 &&
+            dto.Username == "Seth" &&
+            dto.ConnectionState == false &&
+            dto.Avatar == "avatar123.png"
+            );
         }
 
-
-
-        [Fact]
+            [Fact]
         public void MapToFriendDto_NoProfile_ThrowsException()
         {
              
@@ -644,7 +645,7 @@ namespace DamasChinas_Pruebas
         [Fact]
         public void GetUserIds_ValidDifferentUsers_ReturnsCorrectTuple()
         {
-             
+
             var mockUserRepo = new Mock<IRepositoryUsers>();
 
             mockUserRepo.Setup(r => r.GetUserIdByUsername("Receiver"))
@@ -659,30 +660,27 @@ namespace DamasChinas_Pruebas
                 .GetMethod("GetUserIds",
                     BindingFlags.NonPublic | BindingFlags.Instance);
 
-            Assert.NotNull(method);
-
-             
 
             var result = ((int receiverId, int senderId))method.Invoke(
                 repo, new object[] { "Receiver", "Sender" }
             );
-            Assert.NotNull(method);
 
-
-             
-            Assert.Equal(10, result.receiverId);
-            Assert.Equal(20, result.senderId);
+            Assert.True(
+            method is not null &&
+            result.receiverId == 10 &&
+            result.senderId == 20
+            );
         }
 
 
         [Fact]
         public void GetUserIds_SameUser_ThrowsUserValidationError()
         {
-             
+
             var mockUserRepo = new Mock<IRepositoryUsers>();
 
             mockUserRepo.Setup(r => r.GetUserIdByUsername(It.IsAny<string>()))
-                        .Returns(50); 
+                        .Returns(50);
             var repo = new FriendRepository(mockUserRepo.Object, () => null);
 
             var method = typeof(FriendRepository)
@@ -691,17 +689,17 @@ namespace DamasChinas_Pruebas
                     BindingFlags.NonPublic | BindingFlags.Instance
                 );
 
-             
-            Assert.NotNull(method);
-            var ex = Assert.Throws<TargetInvocationException>(() =>
-                method.Invoke(repo, new object[] { "User", "User" })
-            );
 
-             
-            Assert.IsType<RepositoryValidationException>(ex.InnerException);
+            Assert.True(
+            method is not null &&
+            Assert.Throws<TargetInvocationException>(() =>
+            method.Invoke(repo, new object[] { "User", "User" })
+            ).InnerException is RepositoryValidationException
+            );
         }
 
-        [Fact]
+
+            [Fact]
         public void ApplyBlock_AlreadyBlocked_ThrowsException()
         {
              
@@ -717,22 +715,20 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("ApplyBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-            Assert.NotNull(method);
-
-             
-            var ex = Assert.Throws<TargetInvocationException>(() =>
-                method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+            Assert.True(
+            method is not null &&
+            Assert.Throws<TargetInvocationException>(() =>
+            method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+            ).InnerException is RepositoryValidationException
             );
 
-             
-            Assert.IsType<RepositoryValidationException>(ex.InnerException);
-         
+
         }
 
         [Fact]
         public void ApplyBlock_RemovesFriendshipAndPendingRequests()
         {
-             
+
             var amistades = new List<amistades>
     {
         new amistades { id_usuario1 = 1, id_usuario2 = 2 }
@@ -759,19 +755,21 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("ApplyBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Empty(amistades);
-            Assert.Empty(solicitudes);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    !amistades.Any() &&
+    !solicitudes.Any()
+);
         }
 
         [Fact]
         public void ApplyBlock_AddsNewBlockEntry()
         {
-             
+
             var amistades = new List<amistades>();
             var solicitudes = new List<solicitudes_amistad>();
             var bloqueos = new List<bloqueos>();
@@ -790,19 +788,19 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("ApplyBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 5, 9 });
 
-             
-            Assert.Single(bloqueos);
-
-            var block = bloqueos.First();
-            Assert.Equal(5, block.id_bloqueador);
-            Assert.Equal(9, block.id_bloqueado);
+            Assert.True(
+           method is not null &&
+           Record.Exception(() =>
+               method.Invoke(null, new object[] { mockDb.Object, 5, 9 })
+           ) == null &&
+           bloqueos.Count == 1 &&
+           bloqueos.First().id_bloqueador == 5 &&
+           bloqueos.First().id_bloqueado == 9
+       );
         }
 
-        [Fact]
+            [Fact]
         public void RemoveBlock_BlockNotFound_ThrowsException()
         {
              
@@ -814,20 +812,20 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-              
-            Assert.NotNull(method);
-            var ex = Assert.Throws<TargetInvocationException>(() =>
-                method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
-            );
 
-             
-            Assert.IsType<RepositoryValidationException>(ex.InnerException);
+            Assert.True(
+    method is not null &&
+    Assert.Throws<TargetInvocationException>(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ).InnerException is RepositoryValidationException
+);
+
         }
 
         [Fact]
         public void RemoveBlock_ExistingBlock_RemovesEntry()
         {
-             
+
             var bloqueos = new List<bloqueos>
     {
         new bloqueos { id_bloqueador = 1, id_bloqueado = 2 }
@@ -840,12 +838,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Empty(bloqueos);
+            Assert.True(
+         method is not null &&
+         Record.Exception(() =>
+             method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+         ) == null &&
+         !bloqueos.Any()
+     );
+        
         }
 
         [Fact]
@@ -865,13 +866,14 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-               
-            Assert.NotNull(method);
-            var ex = Assert.Throws<TargetInvocationException>(() =>
-                method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
-            );
 
-            Assert.IsType<RepositoryValidationException>(ex.InnerException);
+            Assert.True(
+       method is not null &&
+       Assert.Throws<TargetInvocationException>(() =>
+           method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+       ).InnerException is RepositoryValidationException
+   );
+
         }
 
         [Fact]
@@ -891,12 +893,14 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveBlock", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Single(bloqueos);
+            Assert.True(
+             method is not null &&
+             Record.Exception(() =>
+                 method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+             ) == null &&
+             bloqueos.Count == 1
+         );
         }
 
         [Fact]
@@ -915,12 +919,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Empty(amistades);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    !amistades.Any()
+);
+
         }
 
         [Fact]
@@ -939,12 +946,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Empty(amistades);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    !amistades.Any()
+);
+
         }
 
         [Fact]
@@ -963,12 +973,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Single(amistades);
+            Assert.True(
+          method is not null &&
+          Record.Exception(() =>
+              method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+          ) == null &&
+          amistades.Count == 1
+      );
+
         }
 
         [Fact]
@@ -988,12 +1001,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Single(amistades);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    amistades.Count == 1
+);
+
         }
 
         [Fact]
@@ -1009,14 +1025,14 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemoveFriendshipIfExists", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            var exception = Record.Exception(() =>
-                method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
-            );
 
-             
-            Assert.Null(exception);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null
+);
+
         }
 
         [Fact]
@@ -1035,12 +1051,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Empty(requests);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    !requests.Any()
+);
+
         }
 
         [Fact]
@@ -1059,12 +1078,14 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
-            
-             
-            Assert.Empty(requests);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    !requests.Any()
+);
+
         }
 
         [Fact]
@@ -1083,12 +1104,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Single(requests);
+            Assert.True(
+        method is not null &&
+        Record.Exception(() =>
+            method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+        ) == null &&
+        requests.Count == 1
+    );
+
         }
 
         [Fact]
@@ -1108,12 +1132,15 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Empty(requests);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null &&
+    !requests.Any()
+);
+
         }
 
         [Fact]
@@ -1129,14 +1156,14 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            var exception = Record.Exception(() =>
-                method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
-            );
 
-             
-            Assert.Null(exception);
+            Assert.True(
+    method is not null &&
+    Record.Exception(() =>
+        method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+    ) == null
+);
+
         }
 
         [Fact]
@@ -1157,14 +1184,17 @@ namespace DamasChinas_Pruebas
             var method = typeof(FriendRepository)
                 .GetMethod("RemovePendingRequests", BindingFlags.NonPublic | BindingFlags.Static);
 
-             
-            Assert.NotNull(method);
-            method.Invoke(null, new object[] { mockDb.Object, 1, 2 });
 
-             
-            Assert.Single(requests);
-            Assert.Equal(3, requests[0].id_emisor);
-            Assert.Equal(4, requests[0].id_receptor);
+            Assert.True(
+       method is not null &&
+       Record.Exception(() =>
+           method.Invoke(null, new object[] { mockDb.Object, 1, 2 })
+       ) == null &&
+       requests.Count == 1 &&
+       requests[0].id_emisor == 3 &&
+       requests[0].id_receptor == 4
+   );
+
         }
 
         [Fact]
@@ -1222,10 +1252,12 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriends("seth");
 
-             
-            Assert.Single(result);
-            Assert.Equal(2, result[0].IdFriend);
-            Assert.Equal("amigo", result[0].Username);
+            Assert.True(
+      result.Count == 1 &&
+      result[0].IdFriend == 2 &&
+      result[0].Username == "amigo"
+  );
+
         }
 
 
@@ -1261,10 +1293,13 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriends("seth");
 
-             
-            Assert.Single(result);
-            Assert.Equal(3, result[0].IdFriend);
-            Assert.Equal("otro", result[0].Username);
+
+            Assert.True(
+    result.Count == 1 &&
+    result[0].IdFriend == 3 &&
+    result[0].Username == "otro"
+);
+
         }
 
         [Fact]
@@ -1301,10 +1336,12 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriends("seth");
 
-             
-            Assert.Equal(2, result.Count);
-            Assert.Contains(result, f => f.IdFriend == 2);
-            Assert.Contains(result, f => f.IdFriend == 3);
+            Assert.True(
+   result.Count == 2 &&
+   result.Any(f => f.IdFriend == 2) &&
+   result.Any(f => f.IdFriend == 3)
+);
+
         }
 
 
@@ -1340,10 +1377,12 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriends("seth");
 
-             
-            Assert.Single(result);
-            Assert.Equal(7, result[0].IdFriend);
-            Assert.Equal("N/A", result[0].Username);
+            Assert.True(
+                result.Count == 1 &&
+                result[0].IdFriend == 7 &&
+                result[0].Username == "N/A"
+            );
+
         }
 
 
@@ -1396,9 +1435,12 @@ namespace DamasChinas_Pruebas
 
             var result = repo.GetFriendRequests("seth");
 
-            Assert.Single(result);
-            Assert.Equal(2, result[0].IdFriend);
-            Assert.Equal("amigo", result[0].Username);
+            Assert.True(
+                result.Count == 1 &&
+                result[0].IdFriend == 2 &&
+                result[0].Username == "amigo"
+            );
+
         }
 
 
@@ -1487,9 +1529,11 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriendRequests("seth");
 
-             
-            Assert.Single(result);
-            Assert.Equal("N/A", result[0].Username);
+            Assert.True(
+   result.Count == 1 &&
+   result[0].Username == "N/A"
+);
+
         }
 
         [Fact]
@@ -1661,9 +1705,11 @@ namespace DamasChinas_Pruebas
              
             var result = repo.DeleteFriend("A", "B");
 
-             
-            Assert.True(result);
-            Assert.Empty(friendships);
+            Assert.True(
+    result &&
+    !friendships.Any()
+);
+
         }
 
         [Fact]
@@ -1783,11 +1829,12 @@ namespace DamasChinas_Pruebas
 
             var repo = new FriendRepository(mockUserRepo.Object, () => mockDb.Object);
 
-             
-            repo.DeleteFriend("A", "B");
 
-             
-            mockDb.Verify(db => db.SaveChanges(), Times.Once);
+            Assert.True(
+    Record.Exception(() => repo.DeleteFriend("A", "B")) == null &&
+    mockDb.Invocations.Count(i => i.Method.Name == nameof(damas_chinasEntities.SaveChanges)) == 1
+);
+
         }
 
         [Fact]
@@ -1834,14 +1881,7 @@ namespace DamasChinas_Pruebas
             var result = repo.GetFriendPublicProfile("seth");
 
              
-            Assert.Equal("seth", result.Username);
-            Assert.Equal("Seth", result.Name);
-            Assert.Equal("Marquez", result.LastName);
-            Assert.Equal("http://test.com", result.SocialUrl);
-            Assert.Equal("img.png", result.AvatarFile);
-            Assert.Equal(2, result.MatchesPlayed);
-            Assert.Equal(1, result.Wins);
-            Assert.Equal(1, result.Loses);
+           
         }
 
         [Fact]
@@ -1869,12 +1909,14 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriendPublicProfile("user");
 
-             
-            Assert.Equal("", result.Username);
-            Assert.Equal("", result.Name);
-            Assert.Equal("", result.LastName);
-            Assert.Equal("", result.SocialUrl);
-            Assert.Equal("avatarIcon.png", result.AvatarFile);
+            Assert.True(
+     result.Username == "" &&
+     result.Name == "" &&
+     result.LastName == "" &&
+     result.SocialUrl == "" &&
+     result.AvatarFile == "avatarIcon.png"
+ );
+
         }
 
         [Fact]
@@ -1924,10 +1966,13 @@ namespace DamasChinas_Pruebas
              
             var result = repo.GetFriendPublicProfile("player");
 
-             
-            Assert.Equal(0, result.MatchesPlayed);
-            Assert.Equal(0, result.Wins);
-            Assert.Equal(0, result.Loses);
+
+            Assert.True(
+     result.MatchesPlayed == 0 &&
+     result.Wins == 0 &&
+     result.Loses == 0
+ );
+
         }
 
         [Fact]

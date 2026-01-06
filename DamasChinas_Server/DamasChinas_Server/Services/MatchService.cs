@@ -86,11 +86,6 @@ namespace DamasChinas_Server.Services
             {
                 return OperationResult.Fail(ex.Code.ToString(), ex.Code);
             }
-            catch (Exception ex)
-            {
-                _log.Error("[MatchService.MovePiece] unexpected error", ex);
-                return OperationResult.Fail(MessageCode.UnknownError.ToString(), MessageCode.UnknownError);
-            }
         }
 
         public void LeaveMatch(int lobbyCode, string username)

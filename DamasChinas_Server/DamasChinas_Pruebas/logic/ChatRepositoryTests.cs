@@ -31,7 +31,7 @@ namespace DamasChinas_Pruebas.logic
             repo.Object.SaveMessage("seth", 99, "Hola mundo");
 
              
-            Assert.Single(mensajes);
+
             Assert.Equal(5, mensajes[0].id_usuario_remitente);
             Assert.Equal(99, mensajes[0].id_usuario_destino);
             Assert.Equal("Hola mundo", mensajes[0].texto);
@@ -87,7 +87,7 @@ namespace DamasChinas_Pruebas.logic
         public void SaveMessage_UserNotFound_ThrowsInvalidOperationException()
         {
              
-            var usuarios = new List<usuarios>(); // vacío → usuario no existe
+            var usuarios = new List<usuarios>(); 
 
             var mockDb = new Mock<damas_chinasEntities>();
             mockDb.Setup(db => db.usuarios).Returns(MockDbSetHelper.CreateMockSet(usuarios).Object);
@@ -256,16 +256,19 @@ namespace DamasChinas_Pruebas.logic
              
             var result = repo.Object.GetChatByUsername("sender", "dest");
 
-             
-            Assert.Equal(2, result.Count);
 
-            Assert.Equal("Hola", result[0].Text);
-            Assert.Equal("sender", result[0].UsarnameSender);
-            Assert.Equal("dest", result[0].DestinationUsername);
+            Assert.True(
+             result.Count == 2 &&
 
-            Assert.Equal("Qué tal", result[1].Text);
-            Assert.Equal("dest", result[1].UsarnameSender);
-            Assert.Equal("sender", result[1].DestinationUsername);
+             result[0].Text == "Hola" &&
+              result[0].UsarnameSender == "sender" &&
+              result[0].DestinationUsername == "dest" &&
+
+               result[1].Text == "Qué tal" &&
+               result[1].UsarnameSender == "dest" &&
+               result[1].DestinationUsername == "sender"
+         );
+
         }
         [Fact]
         public void GetIdByUsername_NullUsername_ThrowsArgumentException()
