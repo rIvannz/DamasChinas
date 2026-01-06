@@ -26,7 +26,9 @@ public static class MockDbSetHelper
             .Callback<IEnumerable<T>>(entities =>
             {
                 foreach (var e in entities.ToList())
+                {
                     data.Remove(e);
+                }
             });
 
         return mockSet;

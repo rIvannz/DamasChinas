@@ -133,10 +133,14 @@ namespace DamasChinas_Pruebas.logic
             mockDb.Setup(db => db.SaveChanges()).Callback(() =>
             {
                 if (usuariosData.Count > 0 && usuariosData[0].id_usuario == 0)
-                    usuariosData[0].id_usuario = 10; 
+                {
+                    usuariosData[0].id_usuario = 10;
+                }
 
                 if (perfilesData.Count > 0 && perfilesData[0].id_usuario == 0)
+                {
                     perfilesData[0].id_usuario = usuariosData[0].id_usuario;
+                }
             });
 
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -182,7 +186,9 @@ namespace DamasChinas_Pruebas.logic
             mockDb.Setup(db => db.SaveChanges()).Callback(() =>
             {
                 if (usuariosData.Count > 0 && usuariosData[0].id_usuario == 0)
+                {
                     usuariosData[0].id_usuario = 50;
+                }
             });
 
             var repo = new RepositoryUsers(() => mockDb.Object);
@@ -820,7 +826,9 @@ namespace DamasChinas_Pruebas.logic
                     System.Reflection.BindingFlags.Static);
 
                 if (method == null)
+                {
                     throw new MissingMethodException($"Método private '{methodName}' dosent found.");
+                }
 
                 return method.Invoke(null, parameters);
             }

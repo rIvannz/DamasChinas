@@ -8,7 +8,6 @@ namespace DamasChinas_Tests.logic;
 
 public class LobbyManagerTests
 {
-
     private static MethodInfo GetPrivateStatic(string name)
     {
         return typeof(LobbyManager)
@@ -35,13 +34,11 @@ public class LobbyManagerTests
         var method = GetPrivateStatic("ValidateCreateRequest");
 
         Assert.True(
-         Assert.Throws<TargetInvocationException>(() =>
-             method.Invoke(null, new object[] { null })
-         ).InnerException is RepositoryValidationException repoException &&
-         repoException.Code == MessageCode.MatchCreationFailed
-     );
-
-
+            Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { null })
+            ).InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.MatchCreationFailed
+        );
     }
 
     [Fact]
@@ -52,13 +49,11 @@ public class LobbyManagerTests
         var req = new CreateLobbyRequest { MaxPlayers = 3 };
 
         Assert.True(
-      Assert.Throws<TargetInvocationException>(() =>
-          method.Invoke(null, new object[] { req })
-      ).InnerException is RepositoryValidationException repoException &&
-      repoException.Code == MessageCode.LobbyInvalidMaxPlayers
-  );
-
-
+            Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { req })
+            ).InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.LobbyInvalidMaxPlayers
+        );
     }
 
     [Fact]
@@ -67,13 +62,11 @@ public class LobbyManagerTests
         var method = GetPrivateStatic("ValidateJoinRequest");
 
         Assert.True(
-       Assert.Throws<TargetInvocationException>(() =>
-           method.Invoke(null, new object[] { null })
-       ).InnerException is RepositoryValidationException repoException &&
-       repoException.Code == MessageCode.LobbyNotFound
-   );
-
-
+            Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { null })
+            ).InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.LobbyNotFound
+        );
     }
 
     [Fact]
@@ -88,13 +81,11 @@ public class LobbyManagerTests
         };
 
         Assert.True(
-       Assert.Throws<TargetInvocationException>(() =>
-           method.Invoke(null, new object[] { req })
-       ).InnerException is RepositoryValidationException repoException &&
-       repoException.Code == MessageCode.UsernameEmpty
-   );
-
-
+            Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { req })
+            ).InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.UsernameEmpty
+        );
     }
 
     [Fact]
@@ -146,31 +137,32 @@ public class LobbyManagerTests
         });
 
         Assert.True(
-      Record.Exception(() =>
-      {
-          addMethod.Invoke(lobby, new object[]
-          {
-            new LobbyMemberDto
+            Record.Exception(() =>
             {
-                Username = "Seth",
-                UserId = 1,
-                AvatarFile = "a.png",
-                IsHost = false
-            }
-          });
+                addMethod.Invoke(lobby, new object[]
+                {
+                    new LobbyMemberDto
+                    {
+                        Username = "Seth",
+                        UserId = 1,
+                        AvatarFile = "a.png",
+                        IsHost = false
+                    }
+                });
 
-          if ((int)countMethod.Invoke(lobby, null) != 1)
-              return;
+                if ((int)countMethod.Invoke(lobby, null) != 1)
+                {
+                    return;
+                }
 
-          removeMethod.Invoke(lobby, new object[] { "Seth" });
+                removeMethod.Invoke(lobby, new object[] { "Seth" });
 
-          if ((int)countMethod.Invoke(lobby, null) != 0)
-              throw new Exception("Count incorrect");
-      }) == null
-  );
-
-
-
+                if ((int)countMethod.Invoke(lobby, null) != 0)
+                {
+                    throw new Exception("Count incorrect");
+                }
+            }) == null
+        );
     }
 
     [Fact]
@@ -227,13 +219,11 @@ public class LobbyManagerTests
         });
 
         Assert.True(
-     Assert.Throws<TargetInvocationException>(() =>
-         throwIfFull.Invoke(lobby, null)
-     ).InnerException is RepositoryValidationException repoException &&
-     repoException.Code == MessageCode.LobbyFull
- );
-
-
+            Assert.Throws<TargetInvocationException>(() =>
+                throwIfFull.Invoke(lobby, null)
+            ).InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.LobbyFull
+        );
     }
 
     [Fact]
@@ -255,11 +245,10 @@ public class LobbyManagerTests
         markStarted.Invoke(lobby, null);
 
         Assert.True(
-    Assert.Throws<TargetInvocationException>(() =>
-        throwStarted.Invoke(lobby, null)
-    ).InnerException is RepositoryValidationException repoException &&
-    repoException.Code == MessageCode.LobbyGameAlreadyStarted
-);
-
+            Assert.Throws<TargetInvocationException>(() =>
+                throwStarted.Invoke(lobby, null)
+            ).InnerException is RepositoryValidationException repoException &&
+            repoException.Code == MessageCode.LobbyGameAlreadyStarted
+        );
     }
 }

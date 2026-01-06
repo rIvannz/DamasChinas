@@ -4,11 +4,10 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using DamasChinas_Server;
 using DamasChinas_Server.Common;
-using DamasChinas_Server.Interfaces;
 using DamasChinas_Server.Game;
+using DamasChinas_Server.Interfaces;
 using Moq;
 using Xunit;
-
 
 namespace DamasChinas_Tests.logic
 {
@@ -20,11 +19,10 @@ namespace DamasChinas_Tests.logic
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
             Assert.True(
-           Assert.Throws<ArgumentException>(() =>
-               repo.SaveMatchResult(null, "Seth")
-           ).ParamName == "userColorMap"
-       );
-
+                Assert.Throws<ArgumentException>(() =>
+                    repo.SaveMatchResult(null, "Seth")
+                ).ParamName == "userColorMap"
+            );
         }
 
         [Fact]
@@ -33,11 +31,10 @@ namespace DamasChinas_Tests.logic
             var repo = new RepositoryMatches(() => Mock.Of<IApplicationDbContext>());
 
             Assert.True(
-       Assert.Throws<ArgumentException>(() =>
-           repo.SaveMatchResult(new Dictionary<string, PlayerColor>(), "Seth")
-       ).ParamName == "userColorMap"
-   );
-
+                Assert.Throws<ArgumentException>(() =>
+                    repo.SaveMatchResult(new Dictionary<string, PlayerColor>(), "Seth")
+                ).ParamName == "userColorMap"
+            );
         }
 
         [Fact]
@@ -53,7 +50,6 @@ namespace DamasChinas_Tests.logic
                     )
                 ).ParamName == "winnerUsername"
             );
-
         }
 
         [Fact]
@@ -69,7 +65,6 @@ namespace DamasChinas_Tests.logic
                     )
                 ).ParamName == "winnerUsername"
             );
-
         }
 
         [Fact]
@@ -78,35 +73,34 @@ namespace DamasChinas_Tests.logic
             var mockDb = new Mock<IApplicationDbContext>();
 
             mockDb.Setup(db => db.partidas)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
 
             mockDb.Setup(db => db.participantes_partida)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<participantes_partida>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<participantes_partida>()).Object);
 
             mockDb.Setup(db => db.perfiles)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<perfiles>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<perfiles>()).Object);
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
             Assert.True(
-     Assert.Throws<RepositoryValidationException>(() =>
-         repo.SaveMatchResult(
-             new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-             "Seth"
-         )
-     ).Code == MessageCode.UserProfileNotFound
- );
-
+                Assert.Throws<RepositoryValidationException>(() =>
+                    repo.SaveMatchResult(
+                        new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                        "Seth"
+                    )
+                ).Code == MessageCode.UserProfileNotFound
+            );
         }
 
         [Fact]
         public void SaveMatchResult_ValidInput_CreatesMatchAndParticipants()
         {
             var perfiles = new List<perfiles>
-    {
-        new perfiles { id_usuario = 1, username = "Seth" },
-        new perfiles { id_usuario = 2, username = "Ana" }
-    };
+            {
+                new perfiles { id_usuario = 1, username = "Seth" },
+                new perfiles { id_usuario = 2, username = "Ana" }
+            };
 
             var partidas = new List<partidas>();
             var participantes = new List<participantes_partida>();
@@ -114,21 +108,21 @@ namespace DamasChinas_Tests.logic
             var mockDb = new Mock<IApplicationDbContext>();
 
             mockDb.Setup(db => db.partidas)
-                  .Returns(MockDbSetHelper.CreateMockSet(partidas).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(partidas).Object);
 
             mockDb.Setup(db => db.participantes_partida)
-                  .Returns(MockDbSetHelper.CreateMockSet(participantes).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(participantes).Object);
 
             mockDb.Setup(db => db.perfiles)
-                  .Returns(MockDbSetHelper.CreateMockSet(perfiles).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(perfiles).Object);
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
             repo.SaveMatchResult(
                 new Dictionary<string, PlayerColor>
                 {
-            { "Seth", PlayerColor.Red },
-            { "Ana", PlayerColor.Blue }
+                    { "Seth", PlayerColor.Red },
+                    { "Ana", PlayerColor.Blue }
                 },
                 "Seth"
             );
@@ -140,37 +134,36 @@ namespace DamasChinas_Tests.logic
         public void SaveMatchResult_WinnerAssignedPositionOne()
         {
             var perfiles = new List<perfiles>
-    {
-        new perfiles { id_usuario = 1, username = "Seth" },
-        new perfiles { id_usuario = 2, username = "Ana" }
-    };
+            {
+                new perfiles { id_usuario = 1, username = "Seth" },
+                new perfiles { id_usuario = 2, username = "Ana" }
+            };
 
             var participantes = new List<participantes_partida>();
 
             var mockDb = new Mock<IApplicationDbContext>();
 
             mockDb.Setup(db => db.partidas)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
 
             mockDb.Setup(db => db.participantes_partida)
-                  .Returns(MockDbSetHelper.CreateMockSet(participantes).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(participantes).Object);
 
             mockDb.Setup(db => db.perfiles)
-                  .Returns(MockDbSetHelper.CreateMockSet(perfiles).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(perfiles).Object);
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
             repo.SaveMatchResult(
                 new Dictionary<string, PlayerColor>
                 {
-            { "Ana", PlayerColor.Blue },
-            { "Seth", PlayerColor.Red }
+                    { "Ana", PlayerColor.Blue },
+                    { "Seth", PlayerColor.Red }
                 },
                 "Seth"
             );
 
             var winner = participantes.First(p => p.id_jugador == 1);
-
 
             Assert.Equal(1, winner.posicion_final);
         }
@@ -181,64 +174,64 @@ namespace DamasChinas_Tests.logic
             var mockDb = new Mock<IApplicationDbContext>();
 
             mockDb.Setup(db => db.partidas)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
 
             mockDb.Setup(db => db.SaveChanges())
-                  .Throws(new Exception("DB down"));
+                .Throws(new Exception("DB down"));
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
             Assert.True(
-    Assert.Throws<RepositoryValidationException>(() =>
-        repo.SaveMatchResult(
-            new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-            "Seth"
-        )
-    ).Code == MessageCode.DatabaseUnavailable
-);
-
+                Assert.Throws<RepositoryValidationException>(() =>
+                    repo.SaveMatchResult(
+                        new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                        "Seth"
+                    )
+                ).Code == MessageCode.DatabaseUnavailable
+            );
         }
 
         [Fact]
         public void SaveMatchResult_SecondSaveChangesFails_ThrowsDatabaseUnavailable()
         {
             var perfiles = new List<perfiles>
-    {
-        new perfiles { id_usuario = 1, username = "Seth" }
-    };
+            {
+                new perfiles { id_usuario = 1, username = "Seth" }
+            };
 
             var saveCount = 0;
 
             var mockDb = new Mock<IApplicationDbContext>();
 
             mockDb.Setup(db => db.partidas)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
 
             mockDb.Setup(db => db.participantes_partida)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<participantes_partida>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<participantes_partida>()).Object);
 
             mockDb.Setup(db => db.perfiles)
-                  .Returns(MockDbSetHelper.CreateMockSet(perfiles).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(perfiles).Object);
 
             mockDb.Setup(db => db.SaveChanges())
-                  .Callback(() =>
-                  {
-                      saveCount++;
-                      if (saveCount == 2)
-                          throw new Exception("DB down");
-                  });
+                .Callback(() =>
+                {
+                    saveCount++;
+                    if (saveCount == 2)
+                    {
+                        throw new Exception("DB down");
+                    }
+                });
 
             var repo = new RepositoryMatches(() => mockDb.Object);
 
             Assert.True(
-               Assert.Throws<RepositoryValidationException>(() =>
-                   repo.SaveMatchResult(
-                       new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
-                       "Seth"
-                   )
-               ).Code == MessageCode.DatabaseUnavailable
-           );
-
+                Assert.Throws<RepositoryValidationException>(() =>
+                    repo.SaveMatchResult(
+                        new Dictionary<string, PlayerColor> { { "Seth", PlayerColor.Red } },
+                        "Seth"
+                    )
+                ).Code == MessageCode.DatabaseUnavailable
+            );
         }
 
         [Fact]
@@ -247,12 +240,13 @@ namespace DamasChinas_Tests.logic
             var mockDb = new Mock<IApplicationDbContext>();
 
             mockDb.Setup(db => db.partidas)
-                  .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
+                .Returns(MockDbSetHelper.CreateMockSet(new List<partidas>()).Object);
 
             mockDb.Setup(db => db.SaveChanges())
-                  .Throws(new DbEntityValidationException());
+                .Throws(new DbEntityValidationException());
 
             var repo = new RepositoryMatches(() => mockDb.Object);
+
             Assert.True(
                 Assert.Throws<RepositoryValidationException>(() =>
                     repo.SaveMatchResult(
@@ -262,5 +256,5 @@ namespace DamasChinas_Tests.logic
                 ).Code == MessageCode.UnknownError
             );
         }
-        }
     }
+}
