@@ -19,16 +19,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://172.20.10.13:8000/LoginService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8000/LoginService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="LoginService1.wsdl" MetadataType="Wsdl" ID="86894204-19fd-430b-8f02-2587520b971d" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?wsdl" />
-    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="58bd93db-e5a6-450c-900e-a0dd208fcd58" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?disco" />
-    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="a95f0b78-10be-44b3-8da3-2faa5f58e7af" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?xsd=xsd0" />
-    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="fce2812a-df04-4a05-ab9c-898334a6d848" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?xsd=xsd1" />
-    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="6ecae262-ffd8-4ab4-ab4e-58b8b6d692bc" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?xsd=xsd2" />
-    <MetadataFile FileName="item8.xsd" MetadataType="Schema" ID="9ebf6a29-c86c-446c-9543-64ccd66e516c" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?xsd=xsd3" />
-    <MetadataFile FileName="item9.xsd" MetadataType="Schema" ID="986b1132-4b00-41d8-8e0e-8a06c433a870" SourceId="1" SourceUrl="http://172.20.10.13:8000/LoginService/?xsd=xsd4" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="0c662f2e-f095-4a6b-8841-e797d88555c8" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd2" />
+    <MetadataFile FileName="LoginService1.wsdl" MetadataType="Wsdl" ID="a1d65d28-8d68-40ec-b8da-675f6d3149be" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?wsdl" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="2f17b3b8-86a3-43a0-a499-332f130a5a9c" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd3" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="0bc2522e-4621-4d0a-9aff-1a5c3c730e0b" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd0" />
+    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="e7d0124f-8ab0-4735-b6c4-1834b0e7355d" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?disco" />
+    <MetadataFile FileName="item8.xsd" MetadataType="Schema" ID="ab89922b-ffab-428f-91f4-7ae0da757aac" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd1" />
+    <MetadataFile FileName="item9.xsd" MetadataType="Schema" ID="c25b525c-1305-458e-a6f1-b806345fd993" SourceId="1" SourceUrl="http://localhost:8000/LoginService/?xsd=xsd4" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

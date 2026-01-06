@@ -113,7 +113,6 @@ namespace DamasChinas_Server.Services
             {
                 if (_hasLeft)
                 {
-
                     return;
                 }
 
@@ -122,17 +121,25 @@ namespace DamasChinas_Server.Services
                     return;
                 }
 
-                _hasLeft = true;
                 _log.Warn($"[MatchService] Channel closed/faulted for user={_username}, lobby={_lobbyCode}");
 
                 _manager.HandlePlayerDisconnect(_lobbyCode, _username);
             }
+            catch (CommunicationException ex)
+            {
+                _log.Error($"[MatchService] {MessageCode.ServerUnavailable} on channel closed/faulted user={_username} lobby={_lobbyCode}", ex);
+            }
+            catch (TimeoutException ex)
+            {
+                _log.Error($"[MatchService] {MessageCode.NetworkLatency} on channel closed/faulted user={_username} lobby={_lobbyCode}", ex);
+            }
             catch
             {
-                _log.Warn($"[MatchService] Channel closed/faulted for user={_username}, lobby={_lobbyCode}");
-
+                _log.Warn($"[MatchService] {MessageCode.UnknownError} on channel closed/faulted user={_username} lobby={_lobbyCode}");
             }
         }
+
+
     }
 }
 

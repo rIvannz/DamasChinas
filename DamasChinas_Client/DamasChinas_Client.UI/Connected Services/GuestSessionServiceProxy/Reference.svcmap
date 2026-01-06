@@ -19,13 +19,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://172.20.10.13:8009/GuestSessionService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8009/GuestSessionService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="1b0c33d7-701b-4f6d-b557-7dfcfae73a60" SourceId="1" SourceUrl="http://172.20.10.13:8009/GuestSessionService/?xsd=xsd1" />
-    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="6e47fce5-b93d-451a-a50f-8c4e5fa4dea8" SourceId="1" SourceUrl="http://172.20.10.13:8009/GuestSessionService/?disco" />
-    <MetadataFile FileName="item21.xsd" MetadataType="Schema" ID="aca955cd-cca8-406c-a4b5-4b532932b7f2" SourceId="1" SourceUrl="http://172.20.10.13:8009/GuestSessionService/?xsd=xsd0" />
-    <MetadataFile FileName="GuestSessionService1.wsdl" MetadataType="Wsdl" ID="c041b7e5-3cd3-41ea-b801-a42515a48b75" SourceId="1" SourceUrl="http://172.20.10.13:8009/GuestSessionService/?wsdl" />
+    <MetadataFile FileName="GuestSessionService.wsdl" MetadataType="Wsdl" ID="c5b553b8-aca7-4518-83b3-06a9f0787b40" SourceId="1" SourceUrl="http://localhost:8009/GuestSessionService/?wsdl" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="2eebb9e9-168c-4997-8aac-4c34e8a77837" SourceId="1" SourceUrl="http://localhost:8009/GuestSessionService/?xsd=xsd0" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="eb496200-a203-4d6d-bf2c-eb3302982b26" SourceId="1" SourceUrl="http://localhost:8009/GuestSessionService/?disco" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="0eeaa909-b023-4d73-a92a-024931b0a282" SourceId="1" SourceUrl="http://localhost:8009/GuestSessionService/?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

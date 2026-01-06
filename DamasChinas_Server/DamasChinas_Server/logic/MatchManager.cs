@@ -1,20 +1,23 @@
-﻿using System;
+﻿using DamasChinas_Server.Common;
+using DamasChinas_Server.Dtos;
+using DamasChinas_Server.Game;
+using DamasChinas_Server.Interfaces;
+using DamasChinas_Server.logic;
+using DamasChinas_Server.Services;
+using DamasChinas_Shared.Contracts.Dtos;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using DamasChinas_Server.Common;
-using DamasChinas_Server.Dtos;
-using DamasChinas_Server.Game;
-using DamasChinas_Server.Interfaces;
-using DamasChinas_Server.Services;
-using DamasChinas_Server.logic;
-using DamasChinas_Shared.Contracts.Dtos;
+using System.Threading;
 
 namespace DamasChinas_Server.Logic
 {
     public sealed class MatchManager
     {
+        private const int DisconnectGraceSeconds = 20;
+
         private static readonly Lazy<MatchManager> _instance =
             new Lazy<MatchManager>(() => new MatchManager());
 
@@ -71,6 +74,13 @@ namespace DamasChinas_Server.Logic
             }
 
             match.Callbacks[username] = callback;
+
+            match.DisconnectedUsers.TryRemove(username, out _);
+
+            CancelPendingRemoval(match, username);
+
+            _log.Info($"[MatchManager] {MessageCode.PlayerReconnected} user={username} lobby={lobbyCode}");
+            BroadcastPlayerReconnectedSafe(username, match);
         }
 
         public void ApplyMove(MoveRequestDto req)
@@ -127,7 +137,67 @@ namespace DamasChinas_Server.Logic
 
         public void HandlePlayerDisconnect(int lobbyCode, string username)
         {
-            RemovePlayer(lobbyCode, username);
+            if (!_matches.TryGetValue(lobbyCode, out var match))
+            {
+                return;
+            }
+
+            if (!match.UserColorMap.ContainsKey(username))
+            {
+                return;
+            }
+
+            match.DisconnectedUsers[username] = true;
+
+            _log.Warn($"[MatchManager] {MessageCode.PlayerTemporarilyDisconnected} user={username} lobby={lobbyCode}");
+            BroadcastPlayerTemporarilyDisconnectedSafe(username, match);
+
+            if (match.PendingRemovals.ContainsKey(username))
+            {
+                return;
+            }
+
+            var cts = new CancellationTokenSource();
+            if (!match.PendingRemovals.TryAdd(username, cts))
+            {
+                return;
+            }
+
+            System.Threading.Tasks.Task.Run(async () =>
+            {
+                try
+                {
+                    await System.Threading.Tasks.Task
+                        .Delay(TimeSpan.FromSeconds(DisconnectGraceSeconds), cts.Token)
+                        .ConfigureAwait(false);
+
+                    RemovePlayer(lobbyCode, username);
+
+                    _log.Info($"[MatchManager] {MessageCode.PlayerRemovedAfterDisconnect} user={username} lobby={lobbyCode}");
+                    BroadcastPlayerRemovedAfterTimeoutSafe(username, match);
+                }
+                catch (OperationCanceledException)
+                {
+                    _log.Info($"[MatchManager] disconnect timer canceled (reconnected) user={username} lobby={lobbyCode}");
+                }
+                catch (ObjectDisposedException)
+                {
+                    _log.Info($"[MatchManager] disconnect timer disposed user={username} lobby={lobbyCode}");
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    _log.Error($"[MatchManager] {MessageCode.UnknownError} invalid delay for disconnect timer user={username} lobby={lobbyCode}");
+                }
+                finally
+                {
+                    if (match.PendingRemovals.TryRemove(username, out var removedCts))
+                    {
+                        try { removedCts.Dispose(); } catch { }
+                    }
+
+                    match.DisconnectedUsers.TryRemove(username, out _);
+                }
+            });
         }
 
         public void RemovePlayer(int lobbyCode, string username)
@@ -137,36 +207,58 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
+            CleanupDisconnectTracking(match, username);
+
             if (!match.UserColorMap.TryGetValue(username, out var color))
             {
                 return;
             }
 
-            bool wasHost = string.Equals(
-                match.HostUsername,
-                username,
-                StringComparison.OrdinalIgnoreCase);
-
-         
             if (match.UserColorMap.Count == 2)
             {
-                
-                match.Callbacks.TryRemove(username, out _);
-                match.UserColorMap.Remove(username);
+                RemovePlayerFromTwoPlayerMatch(lobbyCode, username, match);
+                return;
+            }
 
-                string winner = match.UserColorMap.Keys.FirstOrDefault();
-                if (string.IsNullOrWhiteSpace(winner))
-                {
-                    _matches.TryRemove(lobbyCode, out _);
-                    return;
-                }
+            RemovePlayerFromMultiPlayerMatch(lobbyCode, username, match, color);
+        }
 
-                BroadcastGameOverSafe(winner, match);
-                SaveMatchResult(match, winner);
+        private static void CleanupDisconnectTracking(ActiveMatch match, string username)
+        {
+            CancelPendingRemoval(match, username);
+            match.DisconnectedUsers.TryRemove(username, out _);
+        }
 
+        private static void CancelPendingRemoval(ActiveMatch match, string username)
+        {
+            if (match.PendingRemovals.TryRemove(username, out var cts))
+            {
+                try { cts.Cancel(); } catch { }
+                try { cts.Dispose(); } catch { }
+            }
+        }
+
+        private void RemovePlayerFromTwoPlayerMatch(int lobbyCode, string username, ActiveMatch match)
+        {
+            match.Callbacks.TryRemove(username, out _);
+            match.UserColorMap.Remove(username);
+
+            string winner = match.UserColorMap.Keys.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(winner))
+            {
                 _matches.TryRemove(lobbyCode, out _);
                 return;
             }
+
+            BroadcastGameOverSafe(winner, match);
+            SaveMatchResult(match, winner);
+
+            _matches.TryRemove(lobbyCode, out _);
+        }
+
+        private void RemovePlayerFromMultiPlayerMatch(int lobbyCode, string username, ActiveMatch match, PlayerColor color)
+        {
+            bool wasHost = string.Equals(match.HostUsername, username, StringComparison.OrdinalIgnoreCase);
 
             match.Game.RemovePlayer(color);
 
@@ -175,13 +267,158 @@ namespace DamasChinas_Server.Logic
 
             BroadcastPlayerLeftSafe(username, match);
 
-            if (wasHost && match.UserColorMap.Count > 0)
-            {
-                match.HostUsername = match.UserColorMap.Keys.First();
-                _log.Info($"[MatchManager] Host changed to {match.HostUsername}");
-            }
+            UpdateHostIfNeeded(match, wasHost);
 
             BroadcastBoardStateSafe(lobbyCode, match);
+        }
+
+        private void UpdateHostIfNeeded(ActiveMatch match, bool wasHost)
+        {
+            if (!wasHost)
+            {
+                return;
+            }
+
+            if (match.UserColorMap.Count <= 0)
+            {
+                return;
+            }
+
+            match.HostUsername = match.UserColorMap.Keys.First();
+            _log.Info($"[MatchManager] Host changed to {match.HostUsername}");
+        }
+
+        private void BroadcastPlayerTemporarilyDisconnectedSafe(string username, ActiveMatch match)
+        {
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnErrorOccurred($"DISCONNECTED::{username}");
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on DISCONNECTED user={entry.Key}");
+                }
+            }
+        }
+
+        private void BroadcastPlayerReconnectedSafe(string username, ActiveMatch match)
+        {
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnErrorOccurred($"RECONNECTED::{username}");
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on RECONNECTED user={entry.Key}");
+                }
+            }
+        }
+
+        private void BroadcastPlayerRemovedAfterTimeoutSafe(string username, ActiveMatch match)
+        {
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnErrorOccurred($"REMOVED::{username}");
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on REMOVED user={entry.Key}");
+                }
+            }
+        }
+
+        private void BroadcastBoardStateSafe(int lobbyCode, ActiveMatch match)
+        {
+            var state = GetMatchState(lobbyCode);
+
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnPlayerMoved(new TurnChangeDto { BoardState = state });
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on BroadcastBoardState user={entry.Key} lobby={lobbyCode}");
+                }
+            }
+        }
+
+        private void BroadcastPlayerLeftSafe(string usernameLeft, ActiveMatch match)
+        {
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnPlayerLeftMatch(usernameLeft);
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on OnPlayerLeftMatch user={entry.Key}");
+                }
+            }
+        }
+
+        private void BroadcastMoveSafe(int lobbyCode, string player, ActiveMatch match, HexCoordinate from, HexCoordinate to)
+        {
+            string next;
+            try
+            {
+                next = match.UserColorMap.First(x => x.Value == match.Game.CurrentTurn).Key;
+            }
+            catch
+            {
+                BroadcastBoardStateSafe(lobbyCode, match);
+                return;
+            }
+
+            var dto = new TurnChangeDto
+            {
+                PreviousPlayer = player,
+                NextPlayer = next,
+                MoveOrigin = new HexCoordinateDto { X = from.X, Y = from.Y, Z = from.Z },
+                MoveDestination = new HexCoordinateDto { X = to.X, Y = to.Y, Z = to.Z }
+            };
+
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnPlayerMoved(dto);
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on OnPlayerMoved user={entry.Key} lobby={lobbyCode}");
+                }
+            }
+        }
+
+        private void BroadcastGameOverSafe(string winner, ActiveMatch match)
+        {
+            foreach (var entry in match.Callbacks.ToArray())
+            {
+                try
+                {
+                    entry.Value.OnMatchEnded(winner);
+                }
+                catch
+                {
+                    match.Callbacks.TryRemove(entry.Key, out _);
+                    _log.Info($"[MatchManager] Removed dead callback on OnMatchEnded user={entry.Key}");
+                }
+            }
         }
 
         public MatchStateDto GetMatchState(int lobbyCode)
@@ -235,7 +472,6 @@ namespace DamasChinas_Server.Logic
                 return;
             }
 
-           
             if (match.Callbacks.TryGetValue(username, out var cb))
             {
                 try
@@ -257,7 +493,6 @@ namespace DamasChinas_Server.Logic
             foreach (var entry in _matches)
             {
                 var match = entry.Value;
-
                 if (match == null)
                 {
                     continue;
@@ -272,95 +507,6 @@ namespace DamasChinas_Server.Logic
             return -1;
         }
 
-      
-
-        private void BroadcastBoardStateSafe(int lobbyCode, ActiveMatch match)
-        {
-            var state = GetMatchState(lobbyCode);
-
-            foreach (var entry in match.Callbacks.ToArray())
-            {
-                try
-                {
-                    entry.Value.OnPlayerMoved(new TurnChangeDto { BoardState = state });
-                }
-                catch
-                {
-                    match.Callbacks.TryRemove(entry.Key, out _);
-                    _log.Info($"[MatchManager] Removed dead callback on BroadcastBoardState user={entry.Key} lobby={lobbyCode}");
-                }
-            }
-        }
-
-        private void BroadcastPlayerLeftSafe(string usernameLeft, ActiveMatch match)
-        {
-            foreach (var entry in match.Callbacks.ToArray())
-            {
-                try
-                {
-                    entry.Value.OnPlayerLeftMatch(usernameLeft);
-                }
-                catch
-                {
-                    match.Callbacks.TryRemove(entry.Key, out _);
-                    _log.Info($"[MatchManager] Removed dead callback on OnPlayerLeftMatch user={entry.Key}");
-                }
-            }
-        }
-
-        private void BroadcastMoveSafe(int lobbyCode, string player, ActiveMatch match,
-            HexCoordinate from, HexCoordinate to)
-        {
-            string next;
-            try
-            {
-                next = match.UserColorMap.First(x => x.Value == match.Game.CurrentTurn).Key;
-            }
-            catch
-            {
-               
-                BroadcastBoardStateSafe(lobbyCode, match);
-                return;
-            }
-
-            var dto = new TurnChangeDto
-            {
-                PreviousPlayer = player,
-                NextPlayer = next,
-                MoveOrigin = new HexCoordinateDto { X = from.X, Y = from.Y, Z = from.Z },
-                MoveDestination = new HexCoordinateDto { X = to.X, Y = to.Y, Z = to.Z }
-            };
-
-            foreach (var entry in match.Callbacks.ToArray())
-            {
-                try
-                {
-                    entry.Value.OnPlayerMoved(dto);
-                }
-                catch
-                {
-                    match.Callbacks.TryRemove(entry.Key, out _);
-                    _log.Info($"[MatchManager] Removed dead callback on OnPlayerMoved user={entry.Key} lobby={lobbyCode}");
-                }
-            }
-        }
-
-        private void BroadcastGameOverSafe(string winner, ActiveMatch match)
-        {
-            foreach (var entry in match.Callbacks.ToArray())
-            {
-                try
-                {
-                    entry.Value.OnMatchEnded(winner);
-                }
-                catch
-                {
-                    match.Callbacks.TryRemove(entry.Key, out _);
-                    _log.Info($"[MatchManager] Removed dead callback on OnMatchEnded user={entry.Key}");
-                }
-            }
-        }
-
         private sealed class ActiveMatch
         {
             public ChineseCheckersGame Game { get; }
@@ -368,12 +514,18 @@ namespace DamasChinas_Server.Logic
             public ConcurrentDictionary<string, IMatchCallback> Callbacks { get; }
             public string HostUsername { get; set; }
 
+            public ConcurrentDictionary<string, CancellationTokenSource> PendingRemovals { get; }
+            public ConcurrentDictionary<string, bool> DisconnectedUsers { get; }
+
             public ActiveMatch(ChineseCheckersGame game, Dictionary<string, PlayerColor> map, string host)
             {
                 Game = game;
                 UserColorMap = map;
                 HostUsername = host;
                 Callbacks = new ConcurrentDictionary<string, IMatchCallback>();
+
+                PendingRemovals = new ConcurrentDictionary<string, CancellationTokenSource>();
+                DisconnectedUsers = new ConcurrentDictionary<string, bool>();
             }
         }
     }

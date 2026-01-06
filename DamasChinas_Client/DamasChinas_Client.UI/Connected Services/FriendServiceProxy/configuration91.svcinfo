@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="MpPJjsNQflf9xAvSrp25BUbj9sbLQY8HGmOOTKM04ls=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="UEThOoIwhqd3PblDRQ6dOkNWuo+hICW0JKtBPy1oRYs=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IFriendService">
       <properties>
@@ -121,10 +121,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IFriendService" contract="FriendServiceProxy.IFriendService" bindingType="netTcpBinding" address="net.tcp://172.20.10.13:8740/FriendService/" bindingConfiguration="NetTcpBinding_IFriendService">
+    <endpoint name="NetTcpBinding_IFriendService" contract="FriendServiceProxy.IFriendService" bindingType="netTcpBinding" address="net.tcp://localhost:8740/FriendService/" bindingConfiguration="NetTcpBinding_IFriendService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://172.20.10.13:8740/FriendService/</serializedValue>
+          <serializedValue>net.tcp://localhost:8740/FriendService/</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

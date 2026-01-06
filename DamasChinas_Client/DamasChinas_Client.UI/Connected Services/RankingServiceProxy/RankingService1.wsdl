@@ -10,10 +10,10 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://172.20.10.13:8007/RankingService/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://172.20.10.13:8007/RankingService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
-      <xsd:import schemaLocation="http://172.20.10.13:8007/RankingService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://172.20.10.13:8007/RankingService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
+      <xsd:import schemaLocation="http://localhost:8007/RankingService/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8007/RankingService/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Common" />
+      <xsd:import schemaLocation="http://localhost:8007/RankingService/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8007/RankingService/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DamasChinas_Server.Dtos" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IRankingService_GetTop10Ranking_InputMessage">
@@ -50,9 +50,9 @@
   </wsdl:binding>
   <wsdl:service name="RankingService">
     <wsdl:port name="NetTcpBinding_IRankingService" binding="tns:NetTcpBinding_IRankingService">
-      <soap12:address location="net.tcp://172.20.10.13:8757/RankingService/" />
+      <soap12:address location="net.tcp://localhost:8757/RankingService/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://172.20.10.13:8757/RankingService/</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:8757/RankingService/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

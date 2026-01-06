@@ -19,16 +19,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://172.20.10.13:8001/SignInService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8001/SignInService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="9a60339f-cdfe-4e97-a66f-4d37e95e3fa7" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?xsd=xsd0" />
-    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="e4dd97e3-ccfe-441a-aa3c-75afe79edefd" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?disco" />
-    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="cfcf6108-eeb2-4828-b13c-c1781288027c" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?xsd=xsd1" />
-    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="a5bdc3c7-8ded-4d88-bb81-0bc7017755be" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?xsd=xsd2" />
-    <MetadataFile FileName="SingInService1.wsdl" MetadataType="Wsdl" ID="620e498f-e4ac-4454-814f-9da393bf8e2a" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?wsdl" />
-    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="eb8b681d-b90e-49b7-bb23-e204db1e6451" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?xsd=xsd4" />
-    <MetadataFile FileName="item6.xsd" MetadataType="Schema" ID="6d9f383b-d329-44d2-b392-78d21399da8b" SourceId="1" SourceUrl="http://172.20.10.13:8001/SignInService/?xsd=xsd3" />
+    <MetadataFile FileName="item11.xsd" MetadataType="Schema" ID="b05ecbeb-0f3b-4f7f-99d4-03f163f3c732" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd4" />
+    <MetadataFile FileName="item16.xsd" MetadataType="Schema" ID="2809555d-0c7a-4750-8ec0-542b3c2a8885" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd3" />
+    <MetadataFile FileName="item17.xsd" MetadataType="Schema" ID="b1d6c06a-b89f-4201-adfb-bd5ff9ae0499" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd2" />
+    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="a5083b3b-44f3-4943-8e98-ad6e5d96a1fa" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?disco" />
+    <MetadataFile FileName="SingInService1.wsdl" MetadataType="Wsdl" ID="6bfbaefd-abd9-4da1-9f2c-f9d233117d1e" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?wsdl" />
+    <MetadataFile FileName="item18.xsd" MetadataType="Schema" ID="06739414-d214-4778-b85f-f67d12008211" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd0" />
+    <MetadataFile FileName="item19.xsd" MetadataType="Schema" ID="4c14a5ae-bc74-44a6-ba3d-60b0118d618e" SourceId="1" SourceUrl="http://localhost:8001/SignInService/?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

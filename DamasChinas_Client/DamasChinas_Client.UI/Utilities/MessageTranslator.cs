@@ -85,6 +85,9 @@ namespace DamasChinas_Client.UI.Utilities
                 { "AlreadyFriends", MessageKeys.AlreadyFriends },
                 { "UserBlocked", MessageKeys.UserBlocked },
                 { "DatabaseUnavailable", MessageKeys.DatabaseUnavailable },
+                { "PlayerTemporarilyDisconnected", MessageKeys.StatusDisconnected }, 
+                { "PlayerReconnected", MessageKeys.StatusWaiting },                 
+                { "PlayerRemovedAfterDisconnect", MessageKeys.MatchRemovedAfterDisconnect },
 
 
             };

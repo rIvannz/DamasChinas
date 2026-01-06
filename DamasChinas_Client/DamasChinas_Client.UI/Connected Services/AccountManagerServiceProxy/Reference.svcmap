@@ -19,16 +19,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://172.20.10.13:8002/AccountManager/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8002/AccountManager/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="35d659f7-57b9-4d67-a0b5-181bbd34c5ad" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?xsd=xsd3" />
-    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="08616d69-fd46-4784-8793-9ea8bd88da25" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?xsd=xsd2" />
-    <MetadataFile FileName="item6.xsd" MetadataType="Schema" ID="3d53eaa4-b2b1-447b-8c85-79e8306bef7d" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?xsd=xsd1" />
-    <MetadataFile FileName="item10.xsd" MetadataType="Schema" ID="67aa8177-3902-4346-9088-bbb507b9d289" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?xsd=xsd0" />
-    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="59546ba9-3c9e-4af4-9ec7-64da7c0b00a7" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?disco" />
-    <MetadataFile FileName="item11.xsd" MetadataType="Schema" ID="b02ccff3-149e-4397-b251-7707411c99c9" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?xsd=xsd4" />
-    <MetadataFile FileName="AccountManager1.wsdl" MetadataType="Wsdl" ID="480cfa60-e6d6-4455-a121-92369461ecb2" SourceId="1" SourceUrl="http://172.20.10.13:8002/AccountManager/?wsdl" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="0a70fcff-96fb-4fb1-929e-e6c0cebc0042" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd0" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="8670a930-0098-4f34-af4a-625e27c11068" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd1" />
+    <MetadataFile FileName="item6.xsd" MetadataType="Schema" ID="30cfd407-5a13-426d-bfd8-fc8bca638033" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd4" />
+    <MetadataFile FileName="item10.xsd" MetadataType="Schema" ID="ea0857c1-7cf6-41ca-b467-dfa73172e65b" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd2" />
+    <MetadataFile FileName="item11.xsd" MetadataType="Schema" ID="21c5a498-04ac-44c0-bbae-f369ec438029" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?xsd=xsd3" />
+    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="54ee8312-3e15-4463-b18f-4f7924021e7a" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?disco" />
+    <MetadataFile FileName="AccountManager1.wsdl" MetadataType="Wsdl" ID="70f80398-1b78-436f-ba3e-a87853c0e496" SourceId="1" SourceUrl="http://localhost:8002/AccountManager/?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

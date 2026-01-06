@@ -194,6 +194,24 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
         DatabaseUnavailable = 2004,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseValidationFailed = 2005,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseUpdateFailed = 2006,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseConnectionLost = 2007,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseSqlTimeout = 2008,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseConfigurationMissing = 2009,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseAuthenticationFailed = 2010,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
         NetworkLatency = 2100,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -357,6 +375,18 @@ namespace DamasChinas_Client.UI.MatchServiceProxy {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RepositoryUserNotFound = 4028,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ServerUnavailabless = 7070,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerTemporarilyDisconnected = 4030,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerReconnected = 4031,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerRemovedAfterDisconnect = 4032,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         AvatarUpdateFailed = 5001,

@@ -3,7 +3,6 @@ using DamasChinas_Client.UI.LobbyServiceProxy;
 using DamasChinas_Client.UI.MatchServiceProxy;
 using DamasChinas_Client.UI.Utilities;
 using DamasChinas_Shared.Contracts.Dtos;
-using System.Windows.Media.Animation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,27 +14,30 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using AccountProxy = DamasChinas_Client.UI.AccountManagerServiceProxy;
 
 namespace DamasChinas_Client.UI.Pages
 {
-
-
     public partial class MatchRoom : Page
     {
-     
-
-
+        private const int ReconnectWindowSeconds = 20;
         private const int BoardRadius = 4;
 
         private const double HexSize = 32.0;
         private const double CenterX = 600.0;
         private const double CenterY = 600.0;
 
-
         private readonly int _lobbyCode;
         private readonly string _myUsername;
+
+        private bool _matchEnded;
+        private bool _isReconnecting;
+        private DateTime _reconnectDeadlineUtc;
+
+        private bool _wasRemovedByServer;
+        private string _removedReasonKey;
 
         private MatchServiceClient _proxy;
         private MatchCallbackHandler _callbackHandler;
@@ -46,14 +48,9 @@ namespace DamasChinas_Client.UI.Pages
         private Point? _selectedCoord;
         private string _currentPlayerTurn;
 
-        private bool _matchEnded;
-
-  
         public ObservableCollection<PlayerViewModel> Players { get; set; }
         private readonly Dictionary<string, Brush> _userColors;
         private readonly List<Brush> _availableColors;
-
- 
 
         public MatchRoom(int lobbyCode)
         {
@@ -84,15 +81,15 @@ namespace DamasChinas_Client.UI.Pages
             Unloaded += OnPageUnloaded;
         }
 
-
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
-
                 _matchEnded = false;
-                SoundManager.Initialize();
+                _wasRemovedByServer = false;
+                _removedReasonKey = null;
 
+                SoundManager.Initialize();
 
                 Players.Clear();
                 _userColors.Clear();
@@ -107,57 +104,423 @@ namespace DamasChinas_Client.UI.Pages
 
                 InitializeMatchConnection();
             }
-            catch 
+            catch
             {
                 MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
                 NavigateToMenu();
             }
         }
 
-
         private void OnPageUnloaded(object sender, RoutedEventArgs e)
         {
-            LobbySession.Manager.ChatMessageReceived -= OnChatMessageReceived;
             _matchEnded = true;
+            ClientSession.MarkIntentionalDisconnect();
 
             try
             {
-                
-                if (_proxy != null && _proxy.State == CommunicationState.Opened)
-                {
-                    try
-                    {
-                        _proxy.LeaveMatch(_lobbyCode, _myUsername);
-                    }
-                    catch
-                    {
-                        MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
-
-                    }
-                }
+                DetachChatEventsSafely();
+                LeaveMatchSafely();
             }
             finally
             {
-             
+                SafeDisposeProxyAndDetachEvents();
+                ClientSession.ResetIntentionalDisconnect();
+            }
+        }
+
+        private void DetachChatEventsSafely()
+        {
+            try
+            {
+                LobbySession.Manager.ChatMessageReceived -= OnChatMessageReceived;
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.DetachChatEventsSafely] Failed to detach ChatMessageReceived");
+            }
+        }
+
+        private void LeaveMatchSafely()
+        {
+            try
+            {
+                if (_proxy == null)
+                {
+                    return;
+                }
+
+                if (_proxy.State != CommunicationState.Opened)
+                {
+                    return;
+                }
+
+                _proxy.LeaveMatch(_lobbyCode, _myUsername);
+            }
+            catch (EndpointNotFoundException)
+            {
+                Debug.WriteLine("[MatchRoom.LeaveMatchSafely] EndpointNotFound");
+            }
+            catch (CommunicationException)
+            {
+                Debug.WriteLine("[MatchRoom.LeaveMatchSafely] CommunicationException");
+            }
+            catch (TimeoutException)
+            {
+                Debug.WriteLine("[MatchRoom.LeaveMatchSafely] TimeoutException");
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.LeaveMatchSafely] Unknown error");
+            }
+        }
+
+        private void SafeDisposeProxyAndDetachEvents()
+        {
+            MatchServiceClient proxy = _proxy;
+            _proxy = null;
+
+            try
+            {
+                if (proxy == null)
+                {
+                    return;
+                }
+
+                DetachProxyEventsSafely(proxy);
+                CloseOrAbortProxySafely(proxy);
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.SafeDisposeProxyAndDetachEvents] Unexpected error");
+            }
+        }
+
+        private void InitializeMatchConnection()
+        {
+            _callbackHandler = new MatchCallbackHandler(this);
+            var context = new InstanceContext(_callbackHandler);
+
+            _proxy = new MatchServiceClient(context);
+            AttachProxyEventsSafely(_proxy);
+
+            try
+            {
+                var result = _proxy.ConnectToMatch(_lobbyCode, _myUsername);
+
+                if (!result.Success)
+                {
+                    MessageHelper.ShowFromResult(result);
+                    return;
+                }
+
+                var state = _proxy.GetMatchState(_lobbyCode);
+                if (state != null)
+                {
+                    UpdateGameState(state);
+                }
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.InitializeMatchConnection] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.InitializeMatchConnection] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.InitializeMatchConnection] {ex.Message}");
+                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+            }
+        }
+
+        private void OnConnectionLost(object sender, EventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (_matchEnded || _isReconnecting)
+                {
+                    return;
+                }
+
+                if (ClientSession.IsIntentionalDisconnect)
+                {
+                    return;
+                }
+
+                _isReconnecting = true;
+                StartReconnectFlow();
+            }));
+        }
+
+        private async void StartReconnectFlow()
+        {
+            bool reconnected = false;
+
+            try
+            {
+                await Dispatcher.InvokeAsync(ShowReconnectingOverlay);
+
+                _reconnectDeadlineUtc = DateTime.UtcNow.AddSeconds(ReconnectWindowSeconds);
+
+                while (DateTime.UtcNow < _reconnectDeadlineUtc && !_wasRemovedByServer)
+                {
+                    UpdateReconnectCountdownUI();
+
+                    reconnected = await TryReconnectOnce().ConfigureAwait(false);
+                    if (reconnected)
+                    {
+                        return;
+                    }
+
+                    await Task.Delay(1000).ConfigureAwait(false);
+                }
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.StartReconnectFlow] {ex.Message}");
+            }
+            catch (CommunicationException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.StartReconnectFlow] {ex.Message}");
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.StartReconnectFlow] {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"[MatchRoom.StartReconnectFlow] {ex.Message}");
+            }
+            finally
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    HideReconnectingOverlay();
+                    _isReconnecting = false;
+                });
+            }
+
+            await Dispatcher.InvokeAsync(() =>
+            {
+                if (_wasRemovedByServer)
+                {
+                    MessageHelper.ShowPopup(
+                        _removedReasonKey ?? MessageKeys.MatchRemovedAfterDisconnect,
+                        PopupType.Warning);
+                }
+                else if (!reconnected)
+                {
+                    MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
+                }
+
+                CleanupAndExitAfterReconnectFail();
+                NavigateToMenu();
+            });
+        }
+
+
+
+        private void UpdateReconnectCountdownUI()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                int remaining = (int)Math.Ceiling((_reconnectDeadlineUtc - DateTime.UtcNow).TotalSeconds);
+                if (remaining < 0)
+                {
+                    remaining = 0;
+                }
+
                 try
                 {
-                    if (_proxy != null)
+                    if (txtReconnectCountdown != null)
                     {
-                        if (_proxy.State == CommunicationState.Faulted)
-                        {
-                            _proxy.Abort();
-                        }
-                        else
-                            _proxy.Close();
+                        txtReconnectCountdown.Text = remaining.ToString();
                     }
                 }
                 catch
                 {
-                    _proxy?.Abort();
+                    Debug.WriteLine("[MatchRoom.UpdateReconnectCountdownUI] txtReconnectCountdown not available");
                 }
+            }));
+        }
+
+        private void ShowReconnectingOverlay()
+        {
+            ReconnectingOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void HideReconnectingOverlay()
+        {
+            ReconnectingOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private async Task<bool> TryReconnectOnce()
+        {
+            if (_wasRemovedByServer)
+            {
+                return false;
+            }
+
+            MatchServiceClient newProxy = null;
+
+            try
+            {
+                var oldProxy = _proxy;
+                _proxy = null;
+
+                CloseAndDetachProxySafely(oldProxy);
+
+                _callbackHandler = new MatchCallbackHandler(this);
+                var context = new InstanceContext(_callbackHandler);
+
+                newProxy = new MatchServiceClient(context);
+                AttachProxyEventsSafely(newProxy);
+
+                var result = await Task.Run(() => newProxy.ConnectToMatch(_lobbyCode, _myUsername))
+                                      .ConfigureAwait(false);
+
+                if (result == null || !result.Success || _wasRemovedByServer)
+                {
+                    AbortProxySafely(newProxy);
+                    return false;
+                }
+
+                var state = await Task.Run(() => newProxy.GetMatchState(_lobbyCode))
+                                      .ConfigureAwait(false);
+
+                if (state != null)
+                {
+                    await Dispatcher.InvokeAsync(() => UpdateGameState(state));
+                }
+
+                _proxy = newProxy;
+
+                await Dispatcher.InvokeAsync(HideReconnectingOverlay);
+
+                return true;
+            }
+            catch
+            {
+                AbortProxySafely(newProxy);
+                return false;
             }
         }
 
+
+        private void AttachProxyEventsSafely(MatchServiceClient proxy)
+        {
+            try
+            {
+                if (proxy == null)
+                {
+                    return;
+                }
+
+                proxy.InnerChannel.Faulted += OnConnectionLost;
+                proxy.InnerChannel.Closed += OnConnectionLost;
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.AttachProxyEventsSafely] Failed");
+            }
+        }
+
+        private void DetachProxyEventsSafely(MatchServiceClient proxy)
+        {
+            try
+            {
+                if (proxy == null)
+                {
+                    return;
+                }
+
+                proxy.InnerChannel.Faulted -= OnConnectionLost;
+                proxy.InnerChannel.Closed -= OnConnectionLost;
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.DetachProxyEventsSafely] Failed");
+            }
+        }
+
+        private void CloseAndDetachProxySafely(MatchServiceClient proxy)
+        {
+            if (proxy == null)
+            {
+                return;
+            }
+
+            DetachProxyEventsSafely(proxy);
+            CloseOrAbortProxySafely(proxy);
+        }
+
+        private static void CloseOrAbortProxySafely(MatchServiceClient proxy)
+        {
+            try
+            {
+                if (proxy == null)
+                {
+                    return;
+                }
+
+                if (proxy.State == CommunicationState.Faulted)
+                {
+                    proxy.Abort();
+                    return;
+                }
+
+                proxy.Close();
+            }
+            catch
+            {
+                AbortProxySafely(proxy);
+            }
+        }
+
+        private static void AbortProxySafely(MatchServiceClient proxy)
+        {
+            try
+            {
+                proxy?.Abort();
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.AbortProxySafely] Abort failed");
+            }
+        }
+
+        private void CleanupAndExitAfterReconnectFail()
+        {
+            try
+            {
+                LobbySession.Manager.ChatMessageReceived -= OnChatMessageReceived;
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.CleanupAndExitAfterReconnectFail] Failed to detach chat");
+            }
+
+            try
+            {
+                LobbySession.Reset();
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.CleanupAndExitAfterReconnectFail] LobbySession.Reset failed");
+            }
+
+            try
+            {
+                _proxy?.Abort();
+            }
+            catch
+            {
+                Debug.WriteLine("[MatchRoom.CleanupAndExitAfterReconnectFail] Abort proxy failed");
+            }
+        }
 
         private void SetupPlayersMetadata()
         {
@@ -228,77 +591,6 @@ namespace DamasChinas_Client.UI.Pages
             return true;
         }
 
-
-
-
-        private void InitializeMatchConnection()
-        {
-            _callbackHandler = new MatchCallbackHandler(this);
-            var context = new InstanceContext(_callbackHandler);
-            _proxy = new MatchServiceClient(context);
-
-            _proxy.InnerChannel.Faulted += OnConnectionLost;
-            _proxy.InnerChannel.Closed += OnConnectionLost;
-
-            try
-            {
-                var result = _proxy.ConnectToMatch(_lobbyCode, _myUsername);
-
-                if (!result.Success)
-                {
-                    MessageHelper.ShowFromResult(result);
-                    return;
-                }
-
-                var state = _proxy.GetMatchState(_lobbyCode);
-                if (state != null)
-                {
-                    UpdateGameState(state);
-                }
-            }
-            catch (EndpointNotFoundException ex)
-            {
-                Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (CommunicationException ex)
-            {
-                Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-            catch (TimeoutException ex)
-            {
-                Debug.WriteLine($"[MatchRoom.InitializeMatchConection.fail] {ex.Message}");
-                MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-            }
-        
-        }
-
-        private void OnConnectionLost(object sender, EventArgs e)
-        {
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                if (_matchEnded)
-                    return;
-
-                _matchEnded = true;
-                ShowConnectionLostPopup();
-            }));
-        }
-
-        private void ShowConnectionLostPopup()
-        {
-            MessageHelper.ShowPopup(
-                MessageKeys.ServerUnavailable,
-                PopupType.Error
-            );
-
-            NavigateToMenu();
-        }
-
-
-
-
         private static List<(int X, int Y, int Z)> GenerateBoardCubeCoordinates()
         {
             var cells = new List<(int X, int Y, int Z)>();
@@ -346,8 +638,6 @@ namespace DamasChinas_Client.UI.Pages
             return cells;
         }
 
-
-
         private void DrawBoardBackground()
         {
             BoardCanvas.Children.Clear();
@@ -366,8 +656,7 @@ namespace DamasChinas_Client.UI.Pages
 
         private static void DrawPlayerLabels()
         {
-            Debug.WriteLine($"[MatchRoom.DrawPlayerLabels.fail]");
-
+            Debug.WriteLine("[MatchRoom.DrawPlayerLabels] Not implemented");
         }
 
         private static Point HexToPixel(int q, int r)
@@ -437,14 +726,18 @@ namespace DamasChinas_Client.UI.Pages
 
             var pop = new DoubleAnimationUsingKeyFrames();
             pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
-            pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.15, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(120)))
+            pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.15,KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(120)))
             {
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             });
-            pop.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(220)))
+
+            pop.KeyFrames.Add(new EasingDoubleKeyFrame(
+                1.0,
+                KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(220)))
             {
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
             });
+
 
             var group = (TransformGroup)marble.RenderTransform;
             var scale = (ScaleTransform)group.Children[0];
@@ -470,7 +763,6 @@ namespace DamasChinas_Client.UI.Pages
             scale.BeginAnimation(ScaleTransform.ScaleXProperty, pop);
             scale.BeginAnimation(ScaleTransform.ScaleYProperty, pop);
         }
-
 
         private void DrawHole(int q, int r)
         {
@@ -499,9 +791,9 @@ namespace DamasChinas_Client.UI.Pages
         {
             var point = new Point(q, r);
 
-            if (!_holesVisuals.TryGetValue(point, out var hole))
+            if (!_holesVisuals.TryGetValue(point, out _))
             {
-                Debug.WriteLine($"[MatchRoom.PlaceMarbel.fail] {hole}");
+                Debug.WriteLine("[MatchRoom.PlaceMarble] hole not found");
                 return;
             }
 
@@ -536,8 +828,6 @@ namespace DamasChinas_Client.UI.Pages
 
             _marblesVisuals[point] = marble;
         }
-
-
 
         private void UpdateGameState(MatchStateDto state)
         {
@@ -605,7 +895,6 @@ namespace DamasChinas_Client.UI.Pages
 
             if (_marblesVisuals.TryGetValue(from, out var marble))
             {
-          
                 SoundManager.PlayMoveEffect();
 
                 _marblesVisuals.Remove(from);
@@ -619,12 +908,10 @@ namespace DamasChinas_Client.UI.Pages
                     }
                     catch (CommunicationException ex)
                     {
-                        Debug.WriteLine($"[MatchRoom.HandlePlayerMoved.Animate.complete] {ex.Message}");
-                 
+                        Debug.WriteLine($"[MatchRoom.HandlePlayerMoved] {ex.Message}");
                     }
                 });
             }
-
 
             _currentPlayerTurn = turn.NextPlayer;
             UpdatePlayerTurnUI();
@@ -666,14 +953,103 @@ namespace DamasChinas_Client.UI.Pages
             icPlayers.Items.Refresh();
         }
 
-        public  void HandleError(string msgKey)
+        public void HandleError(string serverMsg)
         {
-            MessageHelper.ShowPopup(msgKey, PopupType.Warning);
+            if (string.IsNullOrWhiteSpace(serverMsg))
+            {
+                return;
+            }
+
+            if (!TryParseServerEvent(serverMsg, out string evt, out string user))
+            {
+                MessageHelper.ShowPopup(serverMsg, PopupType.Warning);
+                return;
+            }
+
+            if (evt == "DISCONNECTED")
+            {
+                HandleDisconnected(user);
+                return;
+            }
+
+            if (evt == "RECONNECTED")
+            {
+                HandleReconnected(user);
+                return;
+            }
+
+            if (evt == "REMOVED")
+            {
+                HandleRemoved(user);
+                return;
+            }
+
+            MessageHelper.ShowPopup(serverMsg, PopupType.Warning);
         }
 
+        private static bool TryParseServerEvent(string msg, out string evt, out string user)
+        {
+            evt = null;
+            user = null;
 
+            int idx = msg.IndexOf("::", StringComparison.Ordinal);
+            if (idx <= 0)
+            {
+                return false;
+            }
 
+            evt = msg.Substring(0, idx).Trim();
+            user = msg.Substring(idx + 2).Trim();
 
+            if (string.IsNullOrWhiteSpace(evt) || string.IsNullOrWhiteSpace(user))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void HandleDisconnected(string user)
+        {
+            var p = Players.FirstOrDefault(x =>
+                string.Equals(x.Username, user, StringComparison.OrdinalIgnoreCase));
+
+            if (p != null)
+            {
+                p.StatusText = MessageTranslator.GetLocalizedMessage(MessageKeys.StatusDisconnected);
+                icPlayers.Items.Refresh();
+            }
+
+            AddChatMessage("Sistema",
+                $"{user} {MessageTranslator.GetLocalizedMessage(MessageKeys.StatusDisconnected)}");
+        }
+
+        private void HandleReconnected(string user)
+        {
+            var p = Players.FirstOrDefault(x =>
+                string.Equals(x.Username, user, StringComparison.OrdinalIgnoreCase));
+
+            if (p != null)
+            {
+                p.StatusText = MessageTranslator.GetLocalizedMessage(MessageKeys.StatusWaiting);
+                icPlayers.Items.Refresh();
+            }
+
+            AddChatMessage("Sistema",
+                $"{user} {MessageTranslator.GetLocalizedMessage(MessageKeys.PlayerReconnected)}");
+        }
+
+        private void HandleRemoved(string user)
+        {
+            AddChatMessage("Sistema",
+                $"{user} {MessageTranslator.GetLocalizedMessage(MessageKeys.PlayerLeftMatch)}");
+
+            if (string.Equals(user, _myUsername, StringComparison.OrdinalIgnoreCase))
+            {
+                _wasRemovedByServer = true;
+                _removedReasonKey = MessageKeys.MatchRemovedAfterDisconnect;
+            }
+        }
 
         private void OnBoardClick(object sender, MouseButtonEventArgs e)
         {
@@ -733,7 +1109,6 @@ namespace DamasChinas_Client.UI.Pages
             _selectedCoord = null;
         }
 
-
         private MoveRequestDto CreateMoveRequest(Point origin, Point dest)
         {
             int ox = (int)origin.X;
@@ -771,8 +1146,7 @@ namespace DamasChinas_Client.UI.Pages
 
             try
             {
-               
-                var result = await System.Threading.Tasks.Task.Run(() => _proxy.MovePiece(req));
+                var result = await Task.Run(() => _proxy.MovePiece(req));
 
                 if (!result.Success)
                 {
@@ -781,42 +1155,38 @@ namespace DamasChinas_Client.UI.Pages
 
                 DeselectPiece();
             }
-      
             catch (EndpointNotFoundException ex)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-                Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
+                Debug.WriteLine($"[MatchRoom.SendMove] {ex.Message}");
                 NavigateToMenu();
             }
             catch (CommunicationException ex)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-                Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
+                Debug.WriteLine($"[MatchRoom.SendMove] {ex.Message}");
                 NavigateToMenu();
             }
             catch (TimeoutException ex)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
-                Debug.WriteLine($"[MatchRoom.SendMove.fail] {ex.Message}");
+                Debug.WriteLine($"[MatchRoom.SendMove] {ex.Message}");
                 NavigateToMenu();
             }
-
         }
-
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
-
             if (ClientSession.IsGuest)
             {
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
-                    PopupType.Info
-                );
+                    PopupType.Info);
+
                 txtChatInput.Clear();
                 return;
             }
- 
+
             string msg = txtChatInput.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(msg))
@@ -852,8 +1222,6 @@ namespace DamasChinas_Client.UI.Pages
             }));
         }
 
-
-
         private void OnLeaveMatchClick(object sender, RoutedEventArgs e)
         {
             if (MessageHelper.ShowConfirm("confirmExitLobby"))
@@ -877,7 +1245,6 @@ namespace DamasChinas_Client.UI.Pages
 
                 NavigateToMenu();
             }
-
         }
 
         private void OnBackToMenuClick(object sender, RoutedEventArgs e)
@@ -894,7 +1261,6 @@ namespace DamasChinas_Client.UI.Pages
                 Owner = main,
                 Content = new ConfiSound(),
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
-
                 Width = main?.ActualWidth ?? 1280,
                 Height = main?.ActualHeight ?? 720,
                 ResizeMode = ResizeMode.NoResize,
@@ -906,7 +1272,6 @@ namespace DamasChinas_Client.UI.Pages
             window.ShowDialog();
         }
 
-
         private void OnLanguageClick(object sender, RoutedEventArgs e)
         {
             var main = Application.Current.MainWindow;
@@ -916,7 +1281,6 @@ namespace DamasChinas_Client.UI.Pages
                 Owner = main,
                 Content = new SelectLanguage(),
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
-
                 Width = main?.ActualWidth ?? 1280,
                 Height = main?.ActualHeight ?? 720,
                 ResizeMode = ResizeMode.NoResize,
@@ -941,6 +1305,7 @@ namespace DamasChinas_Client.UI.Pages
                 {
                     Application.Current.MainWindow.Content = target;
                 }
+
                 return;
             }
 
@@ -965,7 +1330,6 @@ namespace DamasChinas_Client.UI.Pages
             }
         }
 
-
         public void HandleBanStatusUpdated(BanInfoDto banInfo)
         {
             if (banInfo == null || !banInfo.IsBanned)
@@ -987,11 +1351,12 @@ namespace DamasChinas_Client.UI.Pages
             catch
             {
                 try
-                { PendingBanNotificationStore.Save(banInfo);
-                } 
-                catch 
                 {
-                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail]");
+                    PendingBanNotificationStore.Save(banInfo);
+                }
+                catch
+                {
+                    Debug.WriteLine("[MatchRoom.HandleBanStatusUpdated] Save failed");
                 }
             }
             finally
@@ -1002,25 +1367,23 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 catch (EndpointNotFoundException ex)
                 {
-                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
+                    Debug.WriteLine($"[MatchRoom.HandleBanStatusUpdated] {ex.Message}");
                     MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
                 catch (CommunicationException ex)
                 {
-                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
+                    Debug.WriteLine($"[MatchRoom.HandleBanStatusUpdated] {ex.Message}");
                     MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
                 catch (TimeoutException ex)
                 {
-                    Debug.WriteLine($"[HandleBanStatusUpdated.SendMove.fail] {ex.Message}");
+                    Debug.WriteLine($"[MatchRoom.HandleBanStatusUpdated] {ex.Message}");
                     MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);
                 }
-
 
                 NavigateToMenu();
             }
         }
-
 
         private void OnReportPlayerInMatchClick(object sender, RoutedEventArgs e)
         {
@@ -1049,6 +1412,7 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
                     PopupType.Info);
+
                 return false;
             }
 
@@ -1063,6 +1427,7 @@ namespace DamasChinas_Client.UI.Pages
                 MessageHelper.ShowPopup(
                     MessageTranslator.GetLocalizedMessage(MessageKeys.GuestFeatureOnly),
                     PopupType.Info);
+
                 return false;
             }
 
@@ -1112,7 +1477,7 @@ namespace DamasChinas_Client.UI.Pages
                 }
                 catch
                 {
-                    MessageHelper.ShowPopup("error al mostrar razon reporte", PopupType.Error);
+                    MessageHelper.ShowPopup(MessageKeys.UnknownError, PopupType.Error);
                 }
 
                 window.Close();
@@ -1128,12 +1493,6 @@ namespace DamasChinas_Client.UI.Pages
             return popup.SelectedReasonKey;
         }
 
-
-
-
-
-
-
         public class PlayerViewModel
         {
             public string Username { get; set; }
@@ -1144,6 +1503,5 @@ namespace DamasChinas_Client.UI.Pages
             public Visibility IsTurnVisible { get; set; }
             public Visibility ReportVisibility { get; set; }
         }
-
     }
 }

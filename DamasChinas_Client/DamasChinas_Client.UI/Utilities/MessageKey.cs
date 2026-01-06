@@ -147,9 +147,13 @@ namespace DamasChinas_Client.UI.Utilities
         public const string UserBannedPermanent = "msg_UserBannedPermanent";
         public const string SessionExpired = "msg_SessionExpired";
 
+        public const string MatchRemovedAfterDisconnect = "msg_MatchRemovedAfterDisconnect";
+        public const string ReconnectingTitle = "reconnectingTitle";
+        public const string ReconnectingText = "reconnectingText";
 
 
         public const string ServerUnavalibleByDatabase = "msg_ServerDb";
+        public const string PlayerReconnected = "msg_PlayerReconnected";
 
 
 

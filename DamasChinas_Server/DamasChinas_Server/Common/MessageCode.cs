@@ -120,6 +120,9 @@
         ServerUnavailabless = 7070,
 
 
+        PlayerTemporarilyDisconnected = 4030,
+        PlayerReconnected = 4031,
+        PlayerRemovedAfterDisconnect = 4032,
 
 
 
