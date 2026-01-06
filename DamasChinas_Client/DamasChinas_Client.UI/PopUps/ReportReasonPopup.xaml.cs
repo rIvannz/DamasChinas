@@ -22,8 +22,6 @@ namespace DamasChinas_Client.UI.Popups
 
             if (string.IsNullOrWhiteSpace(key))
             {
-                // Si tienes un key tipo "msg_SelectReportReason", úsalo aquí.
-                // Por ahora lo dejamos sin reventar.
                 return;
             }
 

@@ -58,13 +58,21 @@ namespace DamasChinas_Client.UI.PopUps
             string titleKey;
 
             if (type == "success")
+            {
                 titleKey = "title_Success";
+            }
             else if (type == "error")
+            {
                 titleKey = "title_Error";
+            }
             else if (type == "warning")
+            {
                 titleKey = "title_Warning";
+            }
             else
+            {
                 titleKey = "title_Information";
+            }
 
             TitleText.Text = MessageTranslator.GetLocalizedMessage(titleKey);
 

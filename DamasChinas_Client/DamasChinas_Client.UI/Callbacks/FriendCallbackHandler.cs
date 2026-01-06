@@ -7,21 +7,13 @@ namespace DamasChinas_Client.UI.Callbacks
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
     public sealed class FriendCallbackHandler : IFriendServiceCallback
     {
-        // ================================================================
-        // EVENTOS PARA UI
-        // ================================================================
         public static event Action<string> FriendRequestReceivedEvent;
         public static event Action<string> FriendRequestAcceptedEvent;
         public static event Action<string> FriendRemovedEvent;
         public static event Action<string> UserBlockedYouEvent;
         public static event Action<string> UserUnblockedYouEvent;
-
-        // Refrescar lista al instante
         public static event Action FriendListUpdatedEvent;
 
-        // ================================================================
-        // MÉTODOS INVOCADOS POR EL SERVIDOR
-        // ================================================================
         public void FriendRequestReceived(string fromUsername)
         {
             FriendRequestReceivedEvent?.Invoke(fromUsername);

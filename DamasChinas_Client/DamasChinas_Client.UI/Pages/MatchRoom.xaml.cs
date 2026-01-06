@@ -781,7 +781,7 @@ namespace DamasChinas_Client.UI.Pages
 
                 DeselectPiece();
             }
-
+      
             catch (EndpointNotFoundException ex)
             {
                 MessageHelper.ShowPopup(MessageKeys.ServerUnavailable, PopupType.Error);

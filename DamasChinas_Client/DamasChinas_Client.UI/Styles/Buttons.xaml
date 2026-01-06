@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Estilo base de los botones del juego -->
     <Style x:Key="BaseGameButton" TargetType="Button">
         <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
         <Setter Property="FontSize" Value="18"/>
@@ -11,7 +10,6 @@
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
 
-        <!-- Fondo con textura de madera -->
         <Setter Property="Background">
             <Setter.Value>
                 <ImageBrush ImageSource="pack://application:,,,/DamasChinas_Client.UI;component/Assets/Backgrounds/wood-texture.png"
@@ -69,47 +67,40 @@
     </Style>
 
 
-    <!-- =================================================== -->
-    <!--   NUEVOS ESTILOS PARA POPUPS  -->
-    <!-- =================================================== -->
 
-
-    <!-- Botón primario para popups (confirmar / aceptar) -->
     <Style x:Key="PopupPrimaryButton"
            TargetType="Button"
            BasedOn="{StaticResource BaseGameButton}">
 
-        <!-- Más compacto -->
+       
         <Setter Property="Padding" Value="16,8"/>
         <Setter Property="FontSize" Value="16"/>
 
-        <!-- Fondo dorado (sin textura de madera) -->
+        
         <Setter Property="Background" Value="{DynamicResource MarbleYellowBrush}"/>
 
-        <!-- Texto oscuro para contrastar -->
+      
         <Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
 
-        <!-- Borde dorado -->
+   
         <Setter Property="BorderBrush" Value="{DynamicResource MarbleYellowBrush}"/>
     </Style>
 
 
-    <!-- Botón secundario para popups (cancelar / cerrar) -->
+    
     <Style x:Key="PopupSecondaryButton"
            TargetType="Button"
            BasedOn="{StaticResource BaseGameButton}">
 
-        <!-- Más compacto -->
+     
         <Setter Property="Padding" Value="16,8"/>
         <Setter Property="FontSize" Value="16"/>
 
-        <!-- Fondo gris oscuro (sin textura de madera) -->
+      
         <Setter Property="Background" Value="#222222"/>
 
-        <!-- Texto claro -->
         <Setter Property="Foreground" Value="{DynamicResource TextInverseBrush}"/>
 
-        <!-- Borde dorado -->
         <Setter Property="BorderBrush" Value="{DynamicResource MarbleYellowBrush}"/>
     </Style>
 

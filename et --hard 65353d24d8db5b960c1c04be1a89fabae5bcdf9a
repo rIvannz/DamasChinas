@@ -1,0 +1,1209 @@
+[33mcommit dfcab5c41effe679309b351496b9f12bb270baaa[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 9d83d2e fcbf2e7
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 16:33:38 2026 -0600
+
+    Arreglos
+
+[33mcommit 9d83d2e4c215b96047758cc2d1fba29aaca037a7[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 16:32:20 2026 -0600
+
+    Arreglos
+
+[33mcommit fcbf2e74a37ec0b5e551b1b250d0949cf4ca8071[m
+Merge: 1643533 f34bdb1
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 16:31:50 2026 -0600
+
+    arreglos
+
+[33mcommit 164353318a2b8ce94fa8beab9783eee04c30928e[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 16:30:55 2026 -0600
+
+    arreglos
+
+[33mcommit f34bdb10b800a3334c2c1a6afa2676f1cdba924b[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 16:21:59 2026 -0600
+
+    Arreglo para match huerfano
+
+[33mcommit 51f39128f9a1007a0ddf3852e04447f8205e7511[m
+Merge: 2269dfc 65353d2
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 15:59:13 2026 -0600
+
+    Arreglo de match
+
+[33mcommit 2269dfc6c468bb617569aa37538af4093f52f34b[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 15:57:44 2026 -0600
+
+    Arreglo de match
+
+[33mcommit 65353d24d8db5b960c1c04be1a89fabae5bcdf9a[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 15:56:54 2026 -0600
+
+    arreglo match
+
+[33mcommit 0e157abc2720eb2df865fc2e35cef7fe129b3a09[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 15:53:29 2026 -0600
+
+    arreglo match
+
+[33mcommit 907061b816fb0e1cc394742b3c5de5949432bee4[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 13:09:18 2026 -0600
+
+    revolucion
+
+[33mcommit f5b456e35581851e351dad4c24ec3596b48a4a20[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 11:36:51 2026 -0600
+
+    español y eliminacion de comentarios pruebas
+
+[33mcommit 202b9c05a585aec30359bd44a47ae1bc161f5f61[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 11:32:50 2026 -0600
+
+    español y eliminacion de comentarios pruebas
+
+[33mcommit 32245928d491a2f4afc6bbceddac4b66be33eb9b[m
+Merge: de34fb7 c6c39a4
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 11:23:37 2026 -0600
+
+    x
+
+[33mcommit de34fb76eee2155dbe81304df6d4b6870a59e41e[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 11:23:09 2026 -0600
+
+    x
+
+[33mcommit c6c39a40d7c629655dc69a530b5d298697b20039[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 11:22:49 2026 -0600
+
+    Arreglo de Telegram con base
+
+[33mcommit 38a379b21b8242a57e98c723513c8a29939450f2[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 11:14:15 2026 -0600
+
+    Evitando harcodeo de telegram
+
+[33mcommit 67be82553c7645d60ded1798ccabe454c770b221[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 11:07:21 2026 -0600
+
+    español y eliminacion de comentarios pruebas
+
+[33mcommit 814f65cd1666a75884a215177ea0634d178e0b63[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 10:58:14 2026 -0600
+
+    español y eliminacion de comentarios pruebas
+
+[33mcommit de9a5a635c331614266b165584c0c0c2e93bba14[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 09:48:23 2026 -0600
+
+    friends
+
+[33mcommit 626f50a7da546961616878d5eec6dfd0a3cb8853[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 08:45:03 2026 -0600
+
+    estandar de codificacion
+
+[33mcommit b7b4ae323de537dcdec387453a0b58847aac8158[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 08:37:11 2026 -0600
+
+    Apego a estandar
+
+[33mcommit 5376cb5e956038d16b793aadca6e403c4f0c1de4[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 08:08:27 2026 -0600
+
+    Arreglo de reportes
+
+[33mcommit 9442da3eef54355a157e11c9eefef7e262620466[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 07:53:30 2026 -0600
+
+    Regreso a version
+
+[33mcommit 88853cb1b4e0ed9aeb320b2d398b928bbd94a740[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 06:16:48 2026 -0600
+
+    Manejo de errores
+
+[33mcommit 4849f078e59afd0d0ea36b826a7fca15496d388a[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 05:47:28 2026 -0600
+
+    Reportes  y baneos
+
+[33mcommit 1d71951e529defc86965c9306e10ce7c6adbadee[m
+Merge: 9c39ea4 9632bcb
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 05:42:54 2026 -0600
+
+    documento de pruebas actualizado
+
+[33mcommit 9c39ea4091ea067c4b4e59a94a1ee81141908f71[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 05:42:28 2026 -0600
+
+    documento de pruebas actualizado
+
+[33mcommit 9632bcbb80a0710775c2f429cdd3610ed0f0f663[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 04:58:18 2026 -0600
+
+    Manejo de salidas
+
+[33mcommit 9210412b44478e0cc9452949094485ecbacf6465[m
+Merge: 07e2fee 580b434
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 03:53:40 2026 -0600
+
+    pruebas de el monitoreo de la bd
+
+[33mcommit 07e2feedc7c83365f060406bb26dba6340e33394[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 03:49:06 2026 -0600
+
+    arreglo de pruebas
+
+[33mcommit 580b43448960aee0c3f8601f81fcad04322d5f83[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 03:01:59 2026 -0600
+
+    Efectos de sonido
+
+[33mcommit 3e716be7abb4cabadb0ce43b73d044038caec66b[m
+Merge: 34f0b97 d89309f
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 02:41:15 2026 -0600
+
+    arreglo de pruebas
+
+[33mcommit 34f0b978d938a6de935b661daee0c7122a983d68[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 02:40:57 2026 -0600
+
+    arreglo de pruebas
+
+[33mcommit d89309f57fcc90caa9cf912b9164ba5d942581c6[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Jan 5 02:15:30 2026 -0600
+
+    Mejora en manejo de base de datos en excepciones
+
+[33mcommit 572fc8f13da13b526d66a0d7012976913adec658[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 01:44:23 2026 -0600
+
+    bot de telegram que notifica la caida
+
+[33mcommit ca5aa4dafc372f8c15e475ca8f17a9c76e4880aa[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 00:59:15 2026 -0600
+
+    arreglo errores
+
+[33mcommit 0b06807070bde3084746ae10977da9186a38f06b[m
+Merge: 4ae0cc9 1f99a3a
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 00:54:18 2026 -0600
+
+    arreglo login
+
+[33mcommit 4ae0cc95322d095c8f43380b6d47448023e3c000[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Jan 5 00:51:03 2026 -0600
+
+    arreglos login
+
+[33mcommit 1f99a3aa468b869f0e70a864e5a42e9648b97df7[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Jan 4 22:21:35 2026 -0600
+
+    Reducción de deuda
+
+[33mcommit 2ec799ae5d632b8afbb0a3d49011342447c6f0f6[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Jan 4 22:00:15 2026 -0600
+
+    Reducción de deuda
+
+[33mcommit 9d498de325f80775101e58d6db72e3e8a75b5ff8[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 20:20:34 2026 -0600
+
+    reduccion de deuda tecnica servidor 0 mins restantes
+
+[33mcommit e3ba5b47ab7c8dda3a387330ebcb36f18243501c[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Jan 4 20:11:12 2026 -0600
+
+    Reducción de deuda
+
+[33mcommit 70473f30c6396a862949be3565856d770d981641[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 20:09:25 2026 -0600
+
+    reduccion de deuda tecnica a 0 servidor
+
+[33mcommit 1f1ed3cf5e7cd1692714eda057a2a20ee7b3fd84[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 19:59:25 2026 -0600
+
+    reduccion de deuda tecnica servidor 15 mins restantes
+
+[33mcommit 6b1e052ab69105779cd7a2b5bd942c2aadf04ea2[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 19:27:14 2026 -0600
+
+    reduccion deuda tecnica 20 mins restantes
+
+[33mcommit a76ec77d6f5e27e684b987162c92836df026a848[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 14:00:27 2026 -0600
+
+    reduccion deuda tecnica Logica,utilidades,interfaces,pruebas,repositorios y arreglo de 4 hotspot security
+
+[33mcommit 17a922d28361c34951ef4c9a8202a71eb05dc759[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 03:05:22 2026 -0600
+
+    reduccion deuda tecnica SessionManager y SingInService
+
+[33mcommit 2a7ad0e8599211828cbf760082703316fab5c3ac[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 02:55:54 2026 -0600
+
+    reduccion deuda tecnica SingInService
+
+[33mcommit e04ba4de644c3884ab7dd876deef2ec4515e5a76[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 02:45:52 2026 -0600
+
+    reduccion deuda tecnica Email
+
+[33mcommit 775d903a9690b9a98df22303ef7a99b51bf16796[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 02:43:41 2026 -0600
+
+    reduccion deuda tecnica EmailSender
+
+[33mcommit 7b25bfda2d021739f8a4855d20334a469a14f591[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 02:27:04 2026 -0600
+
+    reduccion deuda tecnica dbGuardBehaviour
+
+[33mcommit a3d9e960193603d630a27556851f8b3a64f17360[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 02:22:53 2026 -0600
+
+    friendrepository reduccion deuda tecnica
+
+[33mcommit b3a1306d0f45d30017f3495919b53fb918304f88[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 01:48:39 2026 -0600
+
+    reduccion deuda tecnica globalsessionmanager
+
+[33mcommit 8d72711bb3eea9c161ba9303faceebd318ba2155[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 01:40:40 2026 -0600
+
+    MatchManager reduccion deuda tecnica
+
+[33mcommit 05a118ad4188eedcfe8459cc9a37ca039d882d78[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Jan 4 00:44:51 2026 -0600
+
+    reduccion deuda tecnica lobbymanager,repositoryreportes,rankingrepository,friendrepository
+
+[33mcommit b194641dbce60fd762c8956120f4305fd8204b8f[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Jan 3 21:52:33 2026 -0600
+
+    Arreglo de cambio de lenguaje
+
+[33mcommit 343b0df1e4a802e65a63dc500f0e87623a3f01c7[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Jan 3 21:46:39 2026 -0600
+
+    Arreglo de lenguaje
+
+[33mcommit 01bc0a78e574910a1bd03c183c275969f4c51324[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Jan 3 20:48:37 2026 -0600
+
+    redudccion de deuda tecnica de 6 dias a 2 horas e incporporacion del estandar
+
+[33mcommit bef10c68708e147cd917c293a7aa47c3bb2f31c0[m
+Merge: ba64203 c129cf6
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Jan 3 19:47:43 2026 -0600
+
+    x
+
+[33mcommit ba64203c2e800837fd6c46b93f1676fc9f6f6045[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Jan 3 19:47:18 2026 -0600
+
+    reduccion deuda tecnica
+
+[33mcommit c129cf6b5251dacbf946fc959c951f8d5111889d[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Jan 3 19:18:37 2026 -0600
+
+    Manejo de mensajes
+
+[33mcommit ed1833bc1fed42207f331ad67a55699b1da83dfd[m
+Merge: 4db210b f2ec547
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Jan 3 19:08:26 2026 -0600
+
+    reduccion de deuda tecnica
+
+[33mcommit 4db210b563af3a01c20f49b6d5d13ce0d0f32e3d[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Jan 3 19:07:43 2026 -0600
+
+    reduccion de deuda tecnica
+
+[33mcommit f2ec5479c8655b4dd9cf2d48dd86f71cdde62192[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Jan 3 19:01:30 2026 -0600
+
+    Caida de base
+
+[33mcommit 4deaab6a604b7b497e850a6dca014ade4313a05c[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Jan 3 12:52:21 2026 -0600
+
+    reduccion deuda
+
+[33mcommit 7e0c0d9faf0fc4383867ae17bb537d0d69323fb4[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Jan 3 02:10:24 2026 -0600
+
+    Jugador sin registrar
+
+[33mcommit 1132074a929726aea04b64a0c92eef003e21f221[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Jan 2 22:36:29 2026 -0600
+
+    De vuelta a la versión
+
+[33mcommit f91cf3cf5cebd44a67e636d0c7dd3a3879002552[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 31 17:56:29 2025 -0600
+
+    Eliminación de canales huerfanos
+
+[33mcommit 2af649bbce8d2b355f6cfe3af2dae33d13d409e6[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 31 17:05:28 2025 -0600
+
+    Arreglo de freeze al cerrar sesión
+
+[33mcommit 1271c87e8cc18693129d78f7b5417397f1c10674[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 31 15:21:08 2025 -0600
+
+    Arreglo de lobbys huerfanos por reportar a jugador
+
+[33mcommit 8d621542c8c30767a40b8266369f63ce4e3cdbf9[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 30 02:53:49 2025 -0600
+
+    Modificación de baneos en pre lobby y match
+
+[33mcommit 9af46489c7f0c2bff61e6f2d49481c7a75409eeb[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Dec 28 13:33:10 2025 -0600
+
+    log actualizado para detectar sqlerror, arreglo de letreros dobles, cierre el cliente al caer server o bd
+
+[33mcommit 8a0e5a4084f154b310b25a2267bb8b4cc1c8adc8[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Dec 28 01:07:51 2025 -0600
+
+    Ajuste de correos internacionalizados
+
+[33mcommit c6c83271232643e34cc58fa33484af8c5c65ff30[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Dec 27 23:25:01 2025 -0600
+
+    Se agregaron los idiomas portugues y frances
+
+[33mcommit 929d625158b50fc39a767017c82482ccefbeef7e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 16 11:01:54 2025 -0600
+
+    Eliminación de comentarios
+
+[33mcommit bb6a9b19636bfdf0785936d7e4ee8783878fd8c2[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 16 10:58:28 2025 -0600
+
+    Arreglo de regex
+
+[33mcommit d2fc22b2b4890a0294ad3700fd58c67cdb368939[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 16 03:25:53 2025 -0600
+
+    Funcionalidad de estadisticas corregida así como logica de fichas del juego y vista How To Play
+
+[33mcommit e5e3afa16342e0ae6e43077f2fbf090349413016[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 16 00:57:43 2025 -0600
+
+    Correción de turnos al desconectarse
+
+[33mcommit 59ec3ec8a43599d1e6dd6b72efe5d0e7daffe66e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 16 00:17:25 2025 -0600
+
+    Pequeñas correcciones de rango de caracteres
+
+[33mcommit a4df2457d096d547b541af91a1dfd24f66f2d566[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Dec 15 23:48:59 2025 -0600
+
+    Version local host y corrección de mensaje internacionalizado
+
+[33mcommit 79c8289427875b6ebe2bba75e0ef19b413d8db15[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Dec 15 09:16:21 2025 -0600
+
+    verificacioni maximo de caracteres / invitacion a partida por correo / reduccion deuda tecnica
+
+[33mcommit 93a295a87046654e39dcc48e56e0d0d1c63b0d68[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 06:52:43 2025 -0600
+
+    error en el commit anterior
+
+[33mcommit df1f65cb616cb0ad5ae75ea1765903b9070b6c19[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 06:51:48 2025 -0600
+
+    implementacion de recurso externo para la funcionalidad de correo evitando el hardcodeado de credenciales
+
+[33mcommit 9a5abc9dfa5cd8f81d1bc719a6b52687dff20f2a[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 05:44:04 2025 -0600
+
+    implementacion de forgot password, change pasword y arrelo de sing in / email
+
+[33mcommit ef656152efd0e5364ecc0aba4c167b6fe0584743[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 05:07:41 2025 -0600
+
+    modificacion para crear lobby error repositprio usuarios
+
+[33mcommit 9d282142dffe2a594ea6bc4d1d342cee18991501[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 03:46:27 2025 -0600
+
+    merge conflicto
+
+[33mcommit f333fdbab0abe1dabe40a5c633fdce354be975b2[m
+Merge: 1e35c08 096d475
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 03:03:24 2025 -0600
+
+    solucion de merges, contribucion al estandar
+
+[33mcommit 1e35c08cfe87157ca897c59a556e35b125436dcc[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Dec 11 02:52:06 2025 -0600
+
+    pruebas logica reportes
+
+[33mcommit 096d4752533982c9398c1b7e38f37cff37a7bfd7[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Dec 11 02:48:43 2025 -0600
+
+    Cambios para estandar
+
+[33mcommit 8561c14b4e363e15bce07cffdec6606573451463[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Dec 11 02:27:46 2025 -0600
+
+    Cambio de mensajes
+
+[33mcommit 079c175ae9d5ccf637f783ada104ca5f15df981a[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Dec 11 01:09:56 2025 -0600
+
+    URLS agregados e instrucciones de constraseña
+
+[33mcommit d0e8f37fa0b8325b39dd0fc04895199896a833fa[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 10 23:46:04 2025 -0600
+
+    Bug de ventanas al salir de partida
+
+[33mcommit 926a417750e2c588bf4837659425b903a9d94175[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 10 16:25:05 2025 -0600
+
+    Ajuste en jugabilidad cuando existe desconexión
+
+[33mcommit 8fe182be1dadbeca3674dcd9613f22c8b2695622[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 10 03:54:44 2025 -0600
+
+    Actualizacion en vivo de solicitudes y eliminaciones
+
+[33mcommit 405447ef626204967cd3d0ffb866334c80d7f9e5[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 10 00:47:04 2025 -0600
+
+    Ajuste en solicitudes de amistad
+
+[33mcommit bdc8ae71d31e13d469e96be401043b00d75420f7[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Dec 10 00:02:24 2025 -0600
+
+    Actualización dinamica de eliminación de jugadores, y botones de eliminar y bloquear actualizados
+
+[33mcommit b422d3e2db142239f48b0ed0fb51fc2d68b8531f[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Dec 9 16:17:09 2025 -0600
+
+    Ajustes en la page de ranking
+
+[33mcommit 3e1a67db2d2cfc406f6f235e03a477f4c7a8d2ba[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Dec 8 06:06:57 2025 -0600
+
+    Ajustes en Match Room para refactorización de fichas de tablero
+
+[33mcommit 66b72064c183c2dd33b961cbc84fbb2c799ca6bb[m
+Merge: 0ea7cc9 60e8301
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Dec 7 22:23:53 2025 -0600
+
+    Cambios en pre-lobby
+
+[33mcommit 0ea7cc946875a1e321d57ab9602b7e9acca93fed[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Dec 7 22:21:35 2025 -0600
+
+    Cambios en pre-lobby
+
+[33mcommit 60e83019092ccdfb55a8bf68b40237c04722631a[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Dec 7 16:01:27 2025 -0600
+
+    inyeccion de dependencias en ranking y pruebas
+
+[33mcommit 6db1400c0979929a76c9235fffb8944c8464504d[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Dec 7 15:50:22 2025 -0600
+
+     implementacion de inyeccion de dependencias ,elaboracion pruebas
+
+[33mcommit 0d51e9d950e0f32e5591007d2fc533be0140e037[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Dec 5 01:35:29 2025 -0600
+
+    Regreso a confiración local para conexion
+
+[33mcommit 6442071e25cbe51b985c3e39bdcf9f1c5893ad3d[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 29 23:16:44 2025 -0600
+
+    Version funcional del modulo de visualización del estado de amigos
+
+[33mcommit 1472a8ac7678f35b97406492b999474d5a51efe8[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 29 20:18:19 2025 -0600
+
+    Corrección de errores en avatares, ahora ys muestra y actualiza
+
+[33mcommit 1873be5811f053d93031b0371fe9ef07556cdf1e[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 29 19:21:41 2025 -0600
+
+    implementacion execute operation, lo4net en servicios y arreglo de log4net local
+
+[33mcommit 103bf4cfd900f2eca254dc533c808c58cbfce2de[m
+Merge: be7bac9 8b94a5b
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 29 18:12:44 2025 -0600
+
+    creacion log4net e implementacion en accountmanager
+
+[33mcommit be7bac9fc7fd87b9d3e2a1bba13d8e2c6a8c1fcc[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 29 18:11:50 2025 -0600
+
+    implementacion de log4net global y en accountmanager
+
+[33mcommit 8b94a5bfc31dbf32f530b6113150a77f70ae8a3e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 29 17:58:17 2025 -0600
+
+    Ajustes para la conectividad de amigos y solicitudes
+
+[33mcommit e3b6c218452f4ceb2a60cb81e6aa359f5ce4b13d[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 28 08:34:26 2025 -0600
+
+    Corección del modulo de amistad, y agregar nuevos mensajes
+
+[33mcommit 5297b0ea0015afb2978bff94d23c1413c1dd3ace[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 28 08:14:12 2025 -0600
+
+    Corrección de manejo de excepciones para el manejo de solicitudes de amistad, y eliminación de comentarios
+
+[33mcommit 204f324fccaf6c3f52ad997b891b5b9beecd54a9[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 28 02:30:57 2025 -0600
+
+    Se ajusto el manejo de excepciones de FaultException<MessageCode a RepositoryValidationException con operationResult para evitar erorres de Comunicación WCF
+
+[33mcommit a07d5298e1ea2e69d25a3aa80e1c31729c1a4f84[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 28 01:21:36 2025 -0600
+
+    Se unificó el uso de PublicProfile con ClientSession, y Se agregó refresco automático del avatar al volver de SelectAvatar
+
+[33mcommit bf50e2e4a6e5ef4743e0416c42d2f2a99a4c2813[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 27 23:48:51 2025 -0600
+
+    Agregando página SelectAvatar
+
+[33mcommit 06c7267e76db3c6db9e1d80aef110cb2262da78f[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 27 23:48:22 2025 -0600
+
+    Usando versión remota de ProfilePlayer.xaml.cs
+
+[33mcommit 1cb5d46a2ee40144c1ad5e8503bdea6e833b78ef[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Nov 27 22:44:04 2025 -0600
+
+    arreglo solicitudes de amistad
+
+[33mcommit f4c3ea830aa27d7d4ee1d8382ce37485eb1af842[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Nov 27 22:36:47 2025 -0600
+
+    implementacion de current_Profile del lado del cliente en todas las ventanas
+
+[33mcommit afe5d107497e66b60c5864503a82a305c3f26a6b[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Nov 27 20:42:25 2025 -0600
+
+    Actualizacion namespaces / Estandar
+
+[33mcommit ee48621317b9e24779a17e95c5a97b23c498a88a[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 27 16:46:41 2025 -0600
+
+    Cambio de mensajes para que esten apegados a estandar en validator, selectLanguage, y soundManager
+
+[33mcommit 834200d184e2cfa6de2d94b6484dad33f536b2cb[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 27 09:55:37 2025 -0600
+
+    Corrección de loading board y arreglos para apegarse al estandar
+
+[33mcommit 4cf841454f0ca608a0bfe12a5b93f77a4dd146dd[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Nov 27 09:50:27 2025 -0600
+
+    Arreglo de nombres de variables / arreglos para apegarse al estandar
+
+[33mcommit fbce22a715200d3a935ad85c189a7fdf13fa5541[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Nov 27 09:20:50 2025 -0600
+
+    Arreglo chatservice, arreglo FriendService, Implementacion bloquear / eliminar amigo, implementacion viewuserprofile.
+
+[33mcommit 57ecdc9d02f328a93f1ccc4d971404b7d6ba054a[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Nov 26 01:43:20 2025 -0600
+
+    Se añadieron nuevos recursos para el manejo correcto de mensajes en excepciones
+
+[33mcommit ba4eefed094c913dbdd01132ff34bbdb34908901[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Nov 25 10:46:43 2025 -0600
+
+    Arreglo de la utilidad de validator por flujos no controlados faltantes
+
+[33mcommit aa3db95ec4d610d5645aac96db5e94a65727fd77[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Nov 25 00:26:44 2025 -0600
+
+    Se añadio el proyecto de DamasChinas_Shared para reglas compartidas por cliente y servidor
+
+[33mcommit 6035264426035fc6a4ddd324f8b39655707d11f1[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 24 15:49:43 2025 -0600
+
+    Ajustes
+
+[33mcommit 84970cc3c05a6601f3c613f3a0cf565ad563db14[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 24 15:39:42 2025 -0600
+
+    Correcion de errores
+
+[33mcommit deaa5060fe4d937a879c8b45b324920546d45dd9[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 24 15:19:00 2025 -0600
+
+    Corrección de friends repository
+
+[33mcommit e6d24dfa4333c68675432c9ba3f51ed947f1517b[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 24 14:56:05 2025 -0600
+
+    Ajustes en chatservice
+
+[33mcommit 139ee5f356f85c03f0edb769ecc43535e0353d7e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 24 12:34:30 2025 -0600
+
+    Ultima reducción de deuda
+
+[33mcommit feeb999d294ecb0520947d591671a2ae28bfe970[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 24 01:33:40 2025 -0600
+
+    Deuda de cliente en 0
+
+[33mcommit c016fb027e112bd640a4e34e9f73e353cb106d6e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sun Nov 23 23:19:49 2025 -0600
+
+    Reduccion deuda tecnica
+
+[33mcommit 71ad34f4fffe996d406700df7dd1baa5d67afe34[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 22 20:53:38 2025 -0600
+
+    Corrección de mensajeria para deuda técnica
+
+[33mcommit cc4a261cb1d8d07253e1f3afa0190461fe6017ca[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 22 19:49:59 2025 -0600
+
+    Corrección de flujo de ventanas
+
+[33mcommit e3f8c269034874bffaccfd3ea6e3a9e19136e24c[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 22 14:18:52 2025 -0600
+
+    reudccion deuda tecnica
+
+[33mcommit b3ce543e04dbb3be755b4e5a6cc7d7653ed563d3[m
+Merge: d8d80ca e2f7983
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 22 12:55:46 2025 -0600
+
+    Keep local version of FriendRepository.cs
+
+[33mcommit d8d80cab3431ab56401c6f0133bcf08f112d4bd9[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 22 12:52:53 2025 -0600
+
+    5 horas reduccion de deuda tecnica
+
+[33mcommit e2f7983675d692f63bb0d7459037b34415a0f71f[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Nov 21 20:09:27 2025 -0600
+
+    x
+
+[33mcommit bb8e5af9f1de684cb230255a8df17a5cebba9e7b[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 21 11:53:58 2025 -0600
+
+    Imagenes nuevas
+
+[33mcommit f8fef3bcb69b2bb419ed9edc70da7817349c00a8[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Nov 21 11:52:18 2025 -0600
+
+    x
+
+[33mcommit bb03fdd3567c1f2d3107b81d14381312846f09e7[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Nov 19 21:18:23 2025 -0600
+
+    Mejora en el manejo de mensajes
+
+[33mcommit 04fc06f6582a56ba883f6442fbb38e4d32776fd4[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Nov 18 10:22:59 2025 -0600
+
+    Eliminación de comentarios
+
+[33mcommit f721fdf4a65fd5fd6f3869fc534336d86100fb1e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Nov 18 09:57:50 2025 -0600
+
+    Update .gitignore to exclude SonarQube analysis folders
+
+[33mcommit 9eeef76bbbd080004455e98e9775ce3dea38dd5f[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Nov 17 20:26:48 2025 -0600
+
+    reporte avance
+
+[33mcommit 5930cb6982ab0b411f4faacd8223a3395419c76a[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Nov 17 19:50:42 2025 -0600
+
+    codigo verificaicon
+
+[33mcommit 36de15151777d7d5236219f9cce1e0b4d9c9fd45[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Nov 17 17:29:31 2025 -0600
+
+    Reporte 17 de noviembre
+
+[33mcommit c2f68bb7c07a4e06f3a2d221a6f7741a04a71a91[m
+Merge: 48c072c 4826b06
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Nov 16 15:34:49 2025 -0600
+
+    x
+
+[33mcommit 48c072cbbdb8fa08f1c0f85033e9e6c516b7f741[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sun Nov 16 15:33:04 2025 -0600
+
+    x
+
+[33mcommit 4826b06da380572d63892fd4a19f792cfe5bd791[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 15 22:01:04 2025 -0600
+
+    Se añadieron vistas de amigos
+
+[33mcommit 8a935cb49a74ba149029bf32b3e4c808adcac2ec[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 15 17:34:48 2025 -0600
+
+    x
+
+[33mcommit 946b4419f8749b7e86c98bf8bc9030fc1c012eb2[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Nov 15 18:18:15 2025 -0600
+
+    Actualización de vistas, creación de PopUps y nuevos estilos
+
+[33mcommit 666d49d3d128ef5167e1a5f055bbc8f66566a639[m
+Merge: fa6139e 17b4f58
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 15 12:04:34 2025 -0600
+
+    Resuelvo conflicto quedándome con la versión del remoto
+
+[33mcommit fa6139ef69f35f33fffe0e0ae8cba80ea1283dea[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Nov 15 12:03:44 2025 -0600
+
+    z
+
+[33mcommit 17b4f58e8e2c9b4eb07535d25c20680057ea36b5[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 7 11:57:25 2025 -0600
+
+    Agregar LobbySummary
+
+[33mcommit a6ad350ce6f50374884f53e0ae2895929617e462[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Nov 7 11:39:36 2025 -0600
+
+    eliminar numeros magicos y deuda tecnica correo
+
+[33mcommit b3d5de67e6f9ce10cf7306c76ce392a6b637dd73[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Nov 7 09:05:00 2025 -0600
+
+    game
+
+[33mcommit 690c7b559edfde3e9455d9927c6313703f8a7246[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Nov 7 08:11:21 2025 -0600
+
+    Vista de partida
+
+[33mcommit f0fda51d0a416339efece2b6a2a261395dfeedb2[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 6 18:47:13 2025 -0600
+
+    Jugabilidad actualizada
+
+[33mcommit 6eb866440c39b40f80a2024551d84705ca37923f[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 6 10:50:44 2025 -0600
+
+    Problemas
+
+[33mcommit a97ba2bf834e8c0b7b2bbfdc3ccd45615cbd570f[m
+Merge: 9834aa5 76b9e7f
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 6 10:44:50 2025 -0600
+
+    Resolución de conflictos en archivos svcmap (manteniendo versión remota)
+
+[33mcommit 76b9e7f57e4eb54630fe02d2f7ef8332f57ced65[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Nov 6 10:30:33 2025 -0600
+
+    reduccion deuda tecnica
+
+[33mcommit 9834aa5cbf06529173a56c570c367f8af67bdb98[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Nov 6 10:29:50 2025 -0600
+
+    Message Translator
+
+[33mcommit 62ea0c7818cdc2203237c29e8acc4f9a43b1eede[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Oct 31 11:51:06 2025 -0600
+
+    renombrado
+
+[33mcommit 373d355012b45ce0fb50105f675b272c3ea6b6d3[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Oct 31 11:34:01 2025 -0600
+
+    Actualizacion de servicio
+
+[33mcommit da20941aca4cb0cbe434f3a798345aa177c942f9[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 30 23:45:46 2025 -0600
+
+    Refactorización y actualización de servicio Lobby
+
+[33mcommit 20ed11e09e95a0739e6118ee070792fd50d7f9c1[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Oct 30 13:56:53 2025 -0600
+
+    bd
+
+[33mcommit 1ad1532813f66240e981fb97f564a3f46b5ac3c8[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Thu Oct 30 13:52:02 2025 -0600
+
+    incorporacion del estandar y reduccion deuda tecnica
+
+[33mcommit 0c28cbe37a16363a018deb264d65ec6a22ee8162[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Oct 24 12:03:09 2025 -0600
+
+    arreglo idioma host
+
+[33mcommit d6bf14b1652c8448e1e2f59ed17d49459cd69fd7[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Fri Oct 24 11:24:29 2025 -0600
+
+    cambio a ingles- estandar
+
+[33mcommit a04dfe456dd58f238a8a6bb07400711bae63417e[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 23 10:30:46 2025 -0600
+
+    Restauración de carpeta
+
+[33mcommit 6713ca62c98af25497f270b649f565cfac1d8712[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 23 10:02:20 2025 -0600
+
+    docs: corregir includes y estructura de documentación
+
+[33mcommit 443da0937150619fdf571cb6374857dfd5984fd0[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 23 09:42:54 2025 -0600
+
+    fix(ci): agregar environment github-pages al deploy
+
+[33mcommit ddb7d9a74f972076f17d947ae6a22ae5d0116fee[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 23 09:38:09 2025 -0600
+
+    ci: migrar a flujo moderno de GitHub Pages
+
+[33mcommit f9fdda3cc532a638867fe0ef30a6106ba1d4a118[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 23 09:27:28 2025 -0600
+
+    chore: eliminar cache de index.html antiguo
+
+[33mcommit e86c5553a76e2fbaaab7a46117128243820ac6bc[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Oct 22 23:15:05 2025 -0600
+
+    docs: agregar README con enlace a la documentación
+
+[33mcommit ad29cab0d1ef1e44cf975b288372048cfbc741b9[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Oct 22 23:08:02 2025 -0600
+
+    ci: habilitar build automático de documentación AsciiDoc
+
+[33mcommit 4fce7044a19ad0bc923b3f9af6bd7020e5bb14f9[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Oct 22 22:33:01 2025 -0600
+
+    cleanup: eliminar archivos innecesarios (.yml y .html)
+
+[33mcommit 5897b585b4e3c463252081539b4b014a82caa317[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Oct 22 22:30:38 2025 -0600
+
+    Reorganización de adoc
+
+[33mcommit 8526544d98823da5446175c37d6da0c217a75eb1[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Oct 22 22:24:24 2025 -0600
+
+    Actualización de adoc
+
+[33mcommit 17451af4a70fc58e19d2d3f3e444f711b8bf0b81[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Wed Oct 22 22:17:02 2025 -0600
+
+    docs: reemplazo de ReporteAvance por nueva estructura de documentación
+
+[33mcommit 6a1d2b6c39bfd10138ca2ea3ad11c5272a386b51[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Tue Oct 21 10:23:54 2025 -0600
+
+    Actualización completa: Lobby funcional, namespaces corregidos, PreLobby, ProfilePlayer y reporte AsciiDoc
+
+[33mcommit 29f66edf1881c675cec33bc69f7625a9c2979a22[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Mon Oct 20 23:20:03 2025 -0600
+
+    Limpieza de archivos temporales e integración de .gitignore en el servidor
+
+[33mcommit ade2cf747eb72d7fcf6fed2ad1cbcf4451aabfdb[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 20 14:25:37 2025 -0600
+
+    correccion errores y ASCII DOC
+
+[33mcommit d482467d97d2819735e4ec7619aad589aacff7c6[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 20 13:24:07 2025 -0600
+
+    mensajeria
+
+[33mcommit 53ccfe3717b373f775e67a4de75deff8cad23949[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 20 07:33:27 2025 -0600
+
+    interfaz amigos y mensajes
+
+[33mcommit cdbf049c4563c181adbb1587582867637ffa1eb9[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 13:50:42 2025 -0600
+
+    x
+
+[33mcommit 2857ada4a1b25772d36d1365d598aaf7bce38777[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 09:29:45 2025 -0600
+
+    implementacion de utilidades, actualizacion ASCII-DOC
+
+[33mcommit 0beb1c2b98791920fa387c234b3195e95b2d53d3[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 07:52:32 2025 -0600
+
+    implementacion de validator y correos
+
+[33mcommit 00fbfae51366feba8a1bb13908336b8fa98467ce[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 06:20:59 2025 -0600
+
+    reporte avance
+
+[33mcommit 7c6c68183b5a3d45f95875c148df7f786c1aa532[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 06:15:55 2025 -0600
+
+    correcion errores
+
+[33mcommit 962ff4222acc34f9b1a58379804279b192ec71cc[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 05:42:34 2025 -0600
+
+    Reporte Avance ASCII-DOC
+
+[33mcommit bc887d393fb7270e9799d302b102aeeb336d9a36[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 05:41:37 2025 -0600
+
+    correcion errores
+
+[33mcommit 47946fb3d35cea25f9cbb2408d4b1dc8210a2762[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Mon Oct 13 05:36:11 2025 -0600
+
+    server
+
+[33mcommit eb893d58d0e70affe3ecc9ba4055256fb13d02a8[m
+Author: seth-mr <cuentadesoportea@gmail.com>
+Date:   Sat Oct 11 22:05:25 2025 -0600
+
+    Base SingIn
+
+[33mcommit d8864872cbb282b35e36130216f8cc21f2d53907[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Sat Oct 11 14:57:23 2025 -0600
+
+    Modificación de ChangeData.xaml así como los recursos necesarios utilizados para la funcionalidad de esta
+
+[33mcommit aa0f3cf27635079933e806c1d601f4e0fa788ad2[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Fri Oct 10 14:07:41 2025 -0600
+
+    Reestructuración de rutas y elementos.
+    
+    Se añadieron los proyectos de la lógica del juego DamasChinas_Client.Logic así como el proyecto donde se desarrollarán las pruebas DamasChinas_Client.Test, reestructurando desde raíz el proyecto.
+
+[33mcommit a4f629830d6fbec424c414c2bd6cf492ca9309f8[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 9 23:22:58 2025 -0600
+
+    feat: iteración importante
+    Se realizó la mejora de interfaces gráficas, se reestructuró la organización del proyecto dividiéndolo por capas y se agregaron mejoras como música y cambio de lenguaje dinámico.
+
+[33mcommit 353a5a1f6e4b696afc8d539e6c107061c3376ea8[m
+Author: Ivan <ir811362@gmail.com>
+Date:   Thu Oct 9 09:51:36 2025 -0600
+
+    2da Iteración de Cliente
+    
+    Se realizaron ajustes considerables en la mejora de las interfaces, se agregaron tipos de letra, imágenes, iconos, musica entre algunos otros elementos.

@@ -3,9 +3,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!-- ========================================================= -->
-    <!--  GENERAL SYSTEM TEXTS                                     -->
-    <!-- ========================================================= -->
     <sys:String x:Key="back">Retour</sys:String>
     <sys:String x:Key="exit">Quitter</sys:String>
     <sys:String x:Key="ok">OK</sys:String>
@@ -37,7 +34,7 @@ et un caractère spécial (*, $, #).
     <sys:String x:Key="msg_ReportReasonLabel">Raison</sys:String>
     <sys:String x:Key="msg_ReportReasonUnknown">Inconnue</sys:String>
 
-    <!-- HOW TO PLAY -->
+
     <sys:String x:Key="howToPlayTitle">Comment jouer aux Dames Chinoises</sys:String>
 
     <sys:String x:Key="howToPlayIntroTitle">Introduction</sys:String>
@@ -87,9 +84,7 @@ Plusieurs sauts sont autorisés en un seul tour.
         Anticipez, créez de longues chaînes de sauts et évitez de bloquer vos propres pièces.
     </sys:String>
 
-    <!-- ========================================================= -->
-    <!-- ADD FRIENDS                                               -->
-    <!-- ========================================================= -->
+
     <sys:String x:Key="addFriend">Ajouter un ami</sys:String>
     <sys:String x:Key="pendingFriendRequests">Demandes d’amitié</sys:String>
 
@@ -98,7 +93,6 @@ Plusieurs sauts sont autorisés en un seul tour.
 
     <sys:String x:Key="msg_FriendUserNotFound">L’utilisateur que vous voulez ajouter est introuvable.</sys:String>
 
-    <!-- Friends module result messages -->
     <sys:String x:Key="msg_FriendRequestAccepted">Demande d’amitié acceptée correctement.</sys:String>
     <sys:String x:Key="msg_FriendRequestRejected">Demande d’amitié rejetée.</sys:String>
     <sys:String x:Key="msg_NoPendingRequests">
@@ -136,7 +130,6 @@ Plusieurs sauts sont autorisés en un seul tour.
         Impossible de terminer votre demande.
     </sys:String>
 
-    <!-- ===== INVITED USERS ===== -->
     <sys:String x:Key="msg_GuestProfile">Profil invité (non enregistré)</sys:String>
     <sys:String x:Key="msg_GuestNoEmail">Cet utilisateur n’a pas d’e-mail (invité)</sys:String>
     <sys:String x:Key="msg_GuestProfileUnavailable">Cet utilisateur n’est pas enregistré, profil limité</sys:String>
@@ -145,15 +138,10 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="guestProfileUnavailable">Cet utilisateur est un invité non enregistré. Seul son nom d’utilisateur est disponible. Inscrivez-vous pour activer les statistiques et un profil complet.</sys:String>
     <sys:String x:Key="guestNoEmail">Sans e-mail (invité)</sys:String>
 
-    <!-- FRIEND PROFILE -->
     <sys:String x:Key="friendProfile">Profil de l’ami</sys:String>
 
-    <!-- REMOVE FRIEND BUTTON -->
     <sys:String x:Key="removeFriend">Supprimer l’ami</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  MAIN MENU / CONFIGURATION                                -->
-    <!-- ========================================================= -->
     <sys:String x:Key="gameTitle">DAMAS CHINOISES</sys:String>
     <sys:String x:Key="sound">Son</sys:String>
     <sys:String x:Key="language">Langue</sys:String>
@@ -164,7 +152,6 @@ Plusieurs sauts sont autorisés en un seul tour.
         Sélectionnez une langue et appuyez sur Appliquer la langue.
     </sys:String>
 
-    <!-- MENU REGISTERED PLAYER -->
     <sys:String x:Key="createGame">Créer une partie</sys:String>
     <sys:String x:Key="joinParty">Rejoindre une partie</sys:String>
     <sys:String x:Key="howToPlay">Comment jouer</sys:String>
@@ -179,9 +166,6 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_GuestFeatureOnly">Cette fonctionnalité est disponible uniquement pour les utilisateurs enregistrés.</sys:String>
     <sys:String x:Key="msg_GuestStatsUnavailable">Les invités ne peuvent pas voir les statistiques.</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  SIGN IN / REGISTRATION                                   -->
-    <!-- ========================================================= -->
     <sys:String x:Key="signin">S’inscrire</sys:String>
     <sys:String x:Key="fillFields">Remplissez chacun des champs</sys:String>
     <sys:String x:Key="firstName">Prénom</sys:String>
@@ -194,23 +178,18 @@ Plusieurs sauts sont autorisés en un seul tour.
         Compte créé correctement. Vous pouvez jouer !
     </sys:String>
 
-    <!-- Local validations -->
     <sys:String x:Key="emptyCredentials">Les champs ne peuvent pas être vides.</sys:String>
     <sys:String x:Key="passwordDontMatchErrorMessage">Les mots de passe ne correspondent pas.</sys:String>
     <sys:String x:Key="passwordMax10Error">Le mot de passe doit contenir 10 caractères ou moins.</sys:String>
     <sys:String x:Key="emailError">L’e-mail doit avoir un format valide.</sys:String>
 
-    <!-- Buttons -->
     <sys:String x:Key="createAccount">Créer un compte</sys:String>
 
-    <!-- LOADING / PROGRESS -->
     <sys:String x:Key="loadingTitle">Chargement...</sys:String>
     <sys:String x:Key="loading_Login">Connexion...</sys:String>
     <sys:String x:Key="loading_Register">Création de votre compte...</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  PROFILE / USER DATA                                      -->
-    <!-- ========================================================= -->
+   
     <sys:String x:Key="yourProfile">VOTRE PROFIL</sys:String>
     <sys:String x:Key="fullName">Nom complet</sys:String>
     <sys:String x:Key="socialmedia">Réseaux sociaux</sys:String>
@@ -223,15 +202,12 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="deleteFriend">SUPPRIMER AMI</sys:String>
     <sys:String x:Key="blockUser">BLOQUER UTILISATEUR</sys:String>
 
-    <!-- LOGOUT CONFIRMATION -->
     <sys:String x:Key="title_Confirm">Confirmer</sys:String>
     <sys:String x:Key="msg_LogoutConfirm">Voulez-vous vous déconnecter ?</sys:String>
 
-    <!-- FRIENDS CONFIRMATION -->
     <sys:String x:Key="msg_BlockConfirm">Êtes-vous sûr de bloquer l’utilisateur ?</sys:String>
     <sys:String x:Key="msg_DeleteFriendConfirm">Êtes-vous sûr de supprimer votre ami ?</sys:String>
 
-    <!-- Change Data -->
     <sys:String x:Key="changeData">MODIFIER LES DONNÉES</sys:String>
     <sys:String x:Key="changeDataInstruction">Saisissez les nouvelles données dans les champs correspondants.</sys:String>
     <sys:String x:Key="saveChanges">Enregistrer les modifications</sys:String>
@@ -249,16 +225,13 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="usernameUpdated">Nom d’utilisateur mis à jour correctement.</sys:String>
     <sys:String x:Key="codeSentMessage">Code de vérification envoyé à votre e-mail.</sys:String>
 
-    <!-- Extra UI -->
     <sys:String x:Key="userProfile">Profil utilisateur</sys:String>
     <sys:String x:Key="chatError">Impossible d’ouvrir le chat.</sys:String>
     <sys:String x:Key="reviewRequest">Examiner la demande</sys:String>
     <sys:String x:Key="acceptRequest">Accepter la demande</sys:String>
     <sys:String x:Key="rejectRequest">Rejeter la demande</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  LOGIN                                                    -->
-    <!-- ========================================================= -->
+
     <sys:String x:Key="login">Se connecter</sys:String>
     <sys:String x:Key="loginErrorMessage">Nom d’utilisateur ou mot de passe incorrect.</sys:String>
     <sys:String x:Key="playasGuest">Jouer en tant qu’invité</sys:String>
@@ -266,9 +239,6 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="welcome">Bienvenue à DAMAS CHINOISES</sys:String>
     <sys:String x:Key="loadMain">Charger</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  PRE-LOBBY / GAME LIST                                    -->
-    <!-- ========================================================= -->
     <sys:String x:Key="preLobby">Pré-lobby</sys:String>
     <sys:String x:Key="availableGames">Parties disponibles</sys:String>
     <sys:String x:Key="refresh">Actualiser</sys:String>
@@ -280,7 +250,6 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="errorLoadingLobbies">Erreur lors du chargement des parties publiques.</sys:String>
     <sys:String x:Key="joiningLobbyError">Impossible de rejoindre la partie sélectionnée.</sys:String>
 
-    <!-- ===== LOBBY / PRELOBBY ===== -->
     <sys:String x:Key="msg_LobbyCodeUnknown">Code inconnu</sys:String>
     <sys:String x:Key="msg_ReportReasonLobby">Signalé depuis le lobby</sys:String>
 
@@ -293,9 +262,6 @@ Plusieurs sauts sont autorisés en un seul tour.
 
     <sys:String x:Key="msg_ErrorStartingGame">Impossible de démarrer la partie</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  LOBBY / GAME                                             -->
-    <!-- ========================================================= -->
     <sys:String x:Key="friendsList">Amis</sys:String>
     <sys:String x:Key="membersList">Membres</sys:String>
     <sys:String x:Key="invite">Inviter</sys:String>
@@ -323,7 +289,6 @@ Plusieurs sauts sont autorisés en un seul tour.
 
     <sys:String x:Key="lobbyLeft">Vous avez quitté le lobby.</sys:String>
 
-    <!-- Baneos -->
     <sys:String x:Key="ban_temp_10m">Vous avez été banni temporairement pendant 10 minutes en raison de signalements accumulés.</sys:String>
     <sys:String x:Key="ban_temp_1h">Vous avez été banni temporairement pendant 1 heure en raison de signalements accumulés.</sys:String>
     <sys:String x:Key="ban_permanent">Vous avez été banni définitivement en raison d’un grand nombre de signalements.</sys:String>
@@ -346,9 +311,6 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_CellOccupied">La case de destination est occupée.</sys:String>
     <sys:String x:Key="msg_MoveNotAllowed">Mouvement non autorisé.</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  POPUPS                                                   -->
-    <!-- ========================================================= -->
     <sys:String x:Key="verificationCodeTitle">CODE DE VÉRIFICATION</sys:String>
     <sys:String x:Key="verificationCodeInstruction">
         Saisissez le code envoyé à votre e-mail pour terminer votre inscription.
@@ -360,29 +322,23 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="processCompletedTitle">Processus terminé</sys:String>
     <sys:String x:Key="processCompletedInstruction">Votre inscription a été effectuée correctement.</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  RESULT MESSAGES (SERVER / MESSAGECODE)                   -->
-    <!-- ========================================================= -->
     <sys:String x:Key="msg_ChatServerUnavailable">Le serveur de chat n’est pas disponible.</sys:String>
     <sys:String x:Key="msg_ChatCommunicationError">Une erreur de communication s’est produite dans le chat.</sys:String>
     <sys:String x:Key="msg_UserBanned">Vous êtes banni. Vous ne pouvez pas jouer pour le moment.</sys:String>
     <sys:String x:Key="msg_UserBannedUntil">Vous êtes banni jusqu’au : {0}. Vous ne pouvez pas jouer pour le moment.</sys:String>
     <sys:String x:Key="msg_UserBannedPermanent">Vous êtes banni définitivement. Vous ne pouvez pas jouer pour le moment.</sys:String>
 
-    <!-- Resultados generales -->
     <sys:String x:Key="msg_Success">Opération effectuée correctement.</sys:String>
     <sys:String x:Key="msg_LoginInvalidCredentials">Nom d’utilisateur ou mot de passe incorrect.</sys:String>
     <sys:String x:Key="msg_UserDuplicateEmail">L’e-mail est déjà enregistré.</sys:String>
     <sys:String x:Key="msg_UserNotFound">Utilisateur introuvable.</sys:String>
 
-    <!-- Lobby / Partidas -->
     <sys:String x:Key="msg_MatchCreationFailed">Impossible de créer la partie.</sys:String>
     <sys:String x:Key="msg_LobbyNotFound">Partie introuvable.</sys:String>
     <sys:String x:Key="msg_LobbyInactive">Cette partie n’est plus active.</sys:String>
     <sys:String x:Key="msg_LobbyUserBanned">Vous êtes banni de cette partie.</sys:String>
     <sys:String x:Key="msg_LobbyClosed">La partie a été fermée par l’hôte.</sys:String>
 
-    <!-- Backend / servidor -->
     <sys:String x:Key="msg_ServerUnavailable">Le serveur a eu une interruption.</sys:String>
     <sys:String x:Key="msg_DatabaseUnavailable">
         Une erreur inattendue s&#39;est produite.
@@ -391,11 +347,9 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_NetworkLatency">Une latence réseau a été détectée.</sys:String>
     <sys:String x:Key="msg_UnknownError">Une erreur inattendue s’est produite. Réessayez.</sys:String>
 
-    <!-- Recuperación / cambios -->
     <sys:String x:Key="msg_PasswordUpdated">Mot de passe mis à jour correctement.</sys:String>
     <sys:String x:Key="msg_PasswordChangeSuccess">Votre mot de passe a été mis à jour correctement.</sys:String>
 
-    <!-- Funciones no disponibles -->
     <sys:String x:Key="msg_FeatureUnavailable">Cette fonctionnalité n’est pas encore disponible.</sys:String>
     <sys:String x:Key="msg_RankingUnavailable">
         Pour le moment, nous ne pouvons pas afficher le classement des joueurs.
@@ -403,7 +357,6 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_SocialUrlMissing">Aucun lien de réseau social n’a été ajouté.</sys:String>
     <sys:String x:Key="msg_UrlOpenError">Pour le moment, nous ne pouvons pas ouvrir le lien.</sys:String>
 
-    <!-- Navegación / módulos -->
     <sys:String x:Key="msg_ProfileChangeError">Impossible d’ouvrir l’écran de modification des données.</sys:String>
     <sys:String x:Key="msg_FriendRemoved">Ami supprimé correctement.</sys:String>
     <sys:String x:Key="msg_ChatComingSoon">La fonctionnalité de chat sera disponible bientôt.</sys:String>
@@ -417,20 +370,15 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_SessionExpired">Votre session a expiré. Veuillez vous reconnecter.</sys:String>
 
 
-    <!-- Verificación de código -->
     <sys:String x:Key="msg_EmptyVerificationCode">Veuillez saisir le code de vérification.</sys:String>
     <sys:String x:Key="msg_VerificationSuccess">La vérification s’est terminée correctement.</sys:String>
     <sys:String x:Key="msg_InvalidVerificationCode">Le code de vérification est incorrect.</sys:String>
     <sys:String x:Key="msg_VerificationCodeExpired">Le code de vérification a expiré.</sys:String>
     <sys:String x:Key="msg_VerificationCodeNotFound">Aucun code de vérification n’a été généré pour cet e-mail.</sys:String>
 
-    <!-- Email / recuperación -->
     <sys:String x:Key="msg_EmptyEmail">L’e-mail ne peut pas être vide.</sys:String>
     <sys:String x:Key="msg_RecoveryCodeSent">Nous vous avons envoyé un code de vérification.</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  TITLES                                                   -->
-    <!-- ========================================================= -->
     <sys:String x:Key="title_Success">Succès</sys:String>
     <sys:String x:Key="title_Warning">Avertissement</sys:String>
     <sys:String x:Key="title_Error">Erreur</sys:String>
@@ -439,15 +387,9 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="forgotPasswordTitle">Mot de passe oublié</sys:String>
     <sys:String x:Key="newPassword">Nouveau mot de passe</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  SOUND MODULE                                             -->
-    <!-- ========================================================= -->
     <sys:String x:Key="msg_SoundSettingsUpdated">Paramètres audio mis à jour correctement.</sys:String>
     <sys:String x:Key="msg_SoundSettingsError">Impossible de mettre à jour les paramètres audio.</sys:String>
 
-    <!-- ========================================================= -->
-    <!--  UNIVERSAL / VALIDATION CODES (GENÉRICOS)                 -->
-    <!-- ========================================================= -->
     <sys:String x:Key="msg_EmptyCredentials">Les champs ne peuvent pas être vides.</sys:String>
     <sys:String x:Key="msg_PasswordsDontMatch">Les mots de passe ne correspondent pas.</sys:String>
     <sys:String x:Key="msg_InvalidPassword">Le mot de passe ne respecte pas les exigences.</sys:String>
@@ -458,19 +400,17 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_UserProfileNotFound">Profil utilisateur introuvable.</sys:String>
     <sys:String x:Key="msg_FriendsLoadError">Impossible de charger la liste d’amis.</sys:String>
 
-    <!-- Chat / navigation -->
     <sys:String x:Key="msg_ChatOpenError">Impossible d’ouvrir le chat.</sys:String>
     <sys:String x:Key="msg_ChatUnavailable">Le chat n’est pas disponible pour le moment.</sys:String>
     <sys:String x:Key="msg_NavigationError">Une erreur s’est produite pendant la navigation.</sys:String>
 
-    <!-- Verification -->
+   
     <sys:String x:Key="msg_CodeSendingError">Erreur lors de l’envoi du code de vérification.</sys:String>
     <sys:String x:Key="msg_CodeSentSuccessfully">Code de vérification envoyé correctement.</sys:String>
 
-    <!-- Sound -->
     <sys:String x:Key="msg_SoundVolumeInvalid">Valeur de volume invalide.</sys:String>
 
-    <!-- General operations -->
+    
     <sys:String x:Key="msg_OperationInterrupted">L’opération a été interrompue en raison d’une validation échouée.</sys:String>
     <sys:String x:Key="msg_UserValidationError">Certaines de vos données ne sont pas valides. Vérifiez les champs.</sys:String>
     <sys:String x:Key="msg_HostDisconnected">
@@ -484,21 +424,15 @@ Plusieurs sauts sont autorisés en un seul tour.
         Le nom d’utilisateur ne peut pas être nul ni vide.
     </sys:String>
 
-    <!-- ========================================================= -->
-    <!--  VALIDATOR.cs — SERVER VALIDATION MESSAGES                -->
-    <!-- ========================================================= -->
-
-    <!-- NAME -->
+   
     <sys:String x:Key="msg_InvalidNameEmpty">Le prénom ne peut pas être vide.</sys:String>
     <sys:String x:Key="msg_InvalidNameLength">Le prénom doit contenir entre 2 et 50 caractères.</sys:String>
     <sys:String x:Key="msg_InvalidNameCharacters">Le prénom contient des caractères invalides.</sys:String>
 
-    <!-- USERNAME -->
     <sys:String x:Key="msg_InvalidUsernameEmpty">Le nom d’utilisateur ne peut pas être vide.</sys:String>
     <sys:String x:Key="msg_InvalidUsernameLength">Le nom d’utilisateur doit contenir entre 3 et 15 caractères.</sys:String>
     <sys:String x:Key="msg_InvalidUsernameCharacters">Le nom d’utilisateur contient des caractères invalides.</sys:String>
 
-    <!-- PASSWORD -->
     <sys:String x:Key="msg_InvalidPasswordEmpty">Le mot de passe ne peut pas être vide.</sys:String>
     <sys:String x:Key="msg_InvalidPasswordLength">Le mot de passe doit contenir au moins 8 caractères.</sys:String>
     <sys:String x:Key="msg_InvalidPasswordUppercase">Le mot de passe doit contenir au moins une lettre majuscule.</sys:String>
@@ -506,7 +440,6 @@ Plusieurs sauts sont autorisés en un seul tour.
     <sys:String x:Key="msg_InvalidPasswordDigit">Le mot de passe doit contenir au moins un chiffre.</sys:String>
     <sys:String x:Key="msg_InvalidPasswordSpecial">Le mot de passe doit contenir au moins un caractère spécial.</sys:String>
 
-    <!-- EMAIL -->
     <sys:String x:Key="msg_InvalidEmailEmpty">L’e-mail ne peut pas être vide.</sys:String>
     <sys:String x:Key="msg_InvalidEmailTooLong">L’e-mail est trop long.</sys:String>
     <sys:String x:Key="msg_InvalidEmailFormat">Le format de l’e-mail n’est pas valide.</sys:String>

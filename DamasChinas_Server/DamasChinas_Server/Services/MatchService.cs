@@ -75,17 +75,21 @@ namespace DamasChinas_Server.Services
             }
         }
 
-        public OperationResult MovePiece(MoveRequestDto move)
+        public OperationResult MovePiece(MoveRequestDto req)
         {
             try
             {
-                _manager.ApplyMove(move);
+                MatchManager.Instance.ApplyMove(req);
                 return OperationResult.Ok();
             }
-            catch (CommunicationException ex)
+            catch (RepositoryValidationException ex)
             {
-                _log.Warn($"Invalid move by {move.Username}: {ex.Message}");
-                return OperationResult.Fail(ex.Message, MessageCode.InvalidMove);
+                return OperationResult.Fail(ex.Code.ToString(), ex.Code);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("[MatchService.MovePiece] unexpected error", ex);
+                return OperationResult.Fail(MessageCode.UnknownError.ToString(), MessageCode.UnknownError);
             }
         }
 
